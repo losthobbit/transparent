@@ -32,6 +32,12 @@ namespace Transparent.Data.Models
         [MaxLength(100)]
         // Must be indexed and unique
         public string UserName { get; set; }
+        [Required]
+        [DataType(DataType.EmailAddress)]
+        [Display(Name = "Email")]
+        [MaxLength(100)]
+        // Must be indexed and unique
+        public string Email { get; set; }
     }
 
     public class RegisterExternalLoginModel
@@ -62,12 +68,17 @@ namespace Transparent.Data.Models
         public string ConfirmPassword { get; set; }
     }
 
-    public class LoginModel
+    public class LoginModel : IValidatableObject
     {
-        [Required]
         [Display(Name = "Name")]
         [MaxLength(100)]
         public string UserName { get; set; }
+
+        [Display(Name = "Email")]
+        [DataType(DataType.EmailAddress)]
+        [MaxLength(100)]
+        // Must be indexed and unique
+        public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -76,6 +87,15 @@ namespace Transparent.Data.Models
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (String.IsNullOrWhiteSpace(UserName) && String.IsNullOrWhiteSpace(Email))
+                yield return new ValidationResult(String.Format("{0} or {1} must be supplied.",
+                    this.GetAttributeFrom<DisplayAttribute>("UserName").Name,
+                    this.GetAttributeFrom<DisplayAttribute>("Email").Name), 
+                    new []{"UserName", "Email"});
+        }
     }
 
     public class RegisterModel
@@ -84,6 +104,13 @@ namespace Transparent.Data.Models
         [Display(Name = "Name")]
         [MaxLength(100)]
         public string UserName { get; set; }
+
+        [Required]
+        [Display(Name = "Email")]
+        [DataType(DataType.EmailAddress)]
+        [MaxLength(100)]
+        // Must be indexed and unique
+        public string Email { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]

@@ -13,9 +13,11 @@ namespace Transparent.Data.Migrations
                     {
                         UserId = c.Int(nullable: false, identity: true),
                         UserName = c.String(nullable: false, maxLength: 100),
+                        Email = c.String(nullable: false, maxLength: 100),
                     })
                 .PrimaryKey(t => t.UserId)
-                .Index(t => t.UserName, true);
+                .Index(t => t.UserName, unique:true)
+                .Index(t => t.Email, unique:true);
             
             CreateTable(
                 "dbo.Points",
@@ -46,7 +48,7 @@ namespace Transparent.Data.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         FkUserId = c.Int(nullable: false),
                         Heading = c.String(nullable: false, maxLength: 100),
-                        Body = c.String(nullable: false),
+                        Body = c.String(nullable: false, maxLength: 10000),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.UserProfile", t => t.FkUserId, cascadeDelete: true)

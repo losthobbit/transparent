@@ -11,7 +11,7 @@ namespace Transparent.Data.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201411221141381_InitialCreate"; }
+            get { return "201411221839164_Initial-Create"; }
         }
         
         string IMigrationMetadata.Source

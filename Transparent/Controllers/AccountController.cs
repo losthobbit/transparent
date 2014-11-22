@@ -35,13 +35,20 @@ namespace Transparent.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel model, string returnUrl)
         {
+            if(String.IsNullOrWhiteSpace(model.UserName) && !String.IsNullOrWhiteSpace(model.Email))
+                using(var db = new UsersContext())
+                {
+                    var userProfile = db.UserProfiles.SingleOrDefault(user => user.Email == model.Email);
+                    if(userProfile != null)
+                        model.UserName = userProfile.UserName;
+                };
             if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
             {
                 return RedirectToLocal(returnUrl);
             }
 
             // If we got this far, something failed, redisplay form
-            ModelState.AddModelError("", "The user name or password provided is incorrect.");
+            ModelState.AddModelError("", "The details provided are incorrect.");
             return View(model);
         }
 
@@ -79,7 +86,7 @@ namespace Transparent.Controllers
                 // Attempt to register the user
                 try
                 {
-                    WebSecurity.CreateUserAndAccount(model.UserName, model.Password);
+                    WebSecurity.CreateUserAndAccount(model.UserName, model.Password, new { Email = model.Email });
                     WebSecurity.Login(model.UserName, model.Password);
                     return RedirectToAction("Index", "Home");
                 }

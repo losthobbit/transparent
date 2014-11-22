@@ -56,12 +56,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="InitDatabase.cs" />
-    <Compile Include="Migrations\201411221141381_InitialCreate.cs" />
-    <Compile Include="Migrations\201411221141381_InitialCreate.Designer.cs">
-      <DependentUpon>201411221141381_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201411221839164_Initial-Create.cs" />
+    <Compile Include="Migrations\201411221839164_Initial-Create.Designer.cs">
+      <DependentUpon>201411221839164_Initial-Create.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\Extensions.cs" />
     <Compile Include="Models\Point.cs" />
     <Compile Include="Models\PointType.cs" />
     <Compile Include="Models\Ticket.cs" />
@@ -72,8 +73,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201411221141381_InitialCreate.resx">
-      <DependentUpon>201411221141381_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201411221839164_Initial-Create.resx">
+      <DependentUpon>201411221839164_Initial-Create.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
