@@ -4,6 +4,8 @@
     ViewBag.Title = "Create";
 }
 
+@Html.Partial("_MenuPartial")
+
 <h2>New question / suggestion</h2>
 
 @using (Html.BeginForm()) {
@@ -33,10 +35,6 @@
         </p>
     </fieldset>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

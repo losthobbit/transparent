@@ -1,0 +1,8 @@
+﻿@model Transparent.Data.Models.TicketsContainer
+
+@{
+    ViewBag.Title = "Newest";
+}
+
+@Html.Partial("_MenuPartial")
+@Html.Partial("_TicketListPartial", Model)

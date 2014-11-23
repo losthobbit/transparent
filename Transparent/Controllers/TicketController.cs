@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Transparent.Data.Models;
+using Transparent.Data.Queries;
 
 namespace Transparent.Controllers
 {
@@ -13,14 +14,30 @@ namespace Transparent.Controllers
     public class TicketController : Controller
     {
         private UsersContext db = new UsersContext();
+        private Tickets tickets;
+
+        public TicketController()
+        {
+            tickets = new Tickets(db.Tickets);
+        }
 
         //
         // GET: /Ticket/
 
-        public ActionResult Index()
+        public ActionResult Newest()
         {
-            var tickets = db.Tickets.Include(t => t.User);
-            return View(tickets.ToList());
+            return View(tickets.Newest());
+        }
+
+        public ActionResult Search()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Search(Search search)
+        {
+            return View(tickets.Search(search.SearchString));
         }
 
         //
@@ -54,9 +71,10 @@ namespace Transparent.Controllers
             if (ModelState.IsValid)
             {
                 ticket.User = db.UserProfiles.Single(userProfile => userProfile.UserName == User.Identity.Name);
+                ticket.CreatedDate = DateTime.UtcNow;
                 db.Tickets.Add(ticket);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", new { id = ticket.Id });
             }
 
             ViewBag.FkUserId = new SelectList(db.UserProfiles, "UserId", "UserName", ticket.FkUserId);
@@ -87,7 +105,7 @@ namespace Transparent.Controllers
             {
                 db.Entry(ticket).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", new { id = ticket.Id });
             }
             ViewBag.FkUserId = new SelectList(db.UserProfiles, "UserId", "UserName", ticket.FkUserId);
             return View(ticket);
@@ -115,7 +133,7 @@ namespace Transparent.Controllers
             Ticket ticket = db.Tickets.Find(id);
             db.Tickets.Remove(ticket);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Newest");
         }
 
         protected override void Dispose(bool disposing)

@@ -283,15 +283,18 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
-    <Content Include="Views\Ticket\Index.cshtml" />
+    <Content Include="Views\Ticket\Newest.cshtml" />
     <Content Include="Views\Ticket\Details.cshtml" />
     <Content Include="Views\Ticket\Create.cshtml" />
     <Content Include="Views\Ticket\Edit.cshtml" />
     <Content Include="Views\Ticket\Delete.cshtml" />
     <Content Include="Views\Ticket\_TicketListPartial.cshtml" />
+    <Content Include="Views\Ticket\_MenuPartial.cshtml" />
+    <Content Include="Views\Ticket\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

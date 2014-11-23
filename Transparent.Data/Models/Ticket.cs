@@ -27,5 +27,10 @@ namespace Transparent.Data.Models
         [MaxLength(10000)]
         [Required]
         public string Body { get; set; }
+
+        [DataType(DataType.Date)]
+        [Required]
+        // Must be indexed
+        public DateTime CreatedDate { get; set; }
     }
 }

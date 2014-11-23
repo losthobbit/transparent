@@ -187,6 +187,10 @@ ul#menu {
     text-align: right;
 }
 
+    ul#menu.left {
+        text-align: left;
+    }
+
     ul#menu li {
         display: inline;
         list-style: none;

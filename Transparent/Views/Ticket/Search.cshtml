@@ -1,0 +1,24 @@
+﻿@model Transparent.Data.Models.Search
+
+@{
+    ViewBag.Title = "Search";
+}
+
+@Html.Partial("_MenuPartial")
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Ticket</legend>
+
+        <div class="editor-field">
+            @Html.EditorFor(model => model.SearchString)
+            @Html.ValidationMessageFor(model => model.SearchString)
+        </div>
+
+        <input type="submit" value="Search" />
+    </fieldset>
+}
+
+@Html.Partial("_TicketListPartial", Model)
