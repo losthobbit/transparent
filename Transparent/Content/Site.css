@@ -1,4 +1,8 @@
-﻿html {
+﻿/* Custom */
+.actionLinkUI { float: left; margin-right: 2px; }
+
+/* MVC */
+html {
     background-color: #e2e2e2;
     margin: 0;
     padding: 0;

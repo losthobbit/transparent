@@ -39,5 +39,17 @@ namespace Transparent.Data.Queries
                           select ticket;
             return new Search { SearchString = searchString, Tickets = results };
         }
+
+        public int IncreaseRank(int ticketId)
+        {
+            var ticket = tickets.Single(t => t.Id == ticketId);
+            return ++ticket.Rank;
+        }
+
+        public int DecreaseRank(int ticketId)
+        {
+            var ticket = tickets.Single(t => t.Id == ticketId);
+            return --ticket.Rank;
+        }
     }
 }

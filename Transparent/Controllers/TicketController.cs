@@ -21,8 +21,32 @@ namespace Transparent.Controllers
             tickets = new Tickets(db.Tickets);
         }
 
-        //
-        // GET: /Ticket/
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public PartialViewResult _IncreaseRank(Ticket ticket)
+        {
+            // TODO: Ensure user has permission to increase rank
+            var newRank = tickets.IncreaseRank(ticket.Id);
+            db.SaveChanges();
+            ticket.Rank = newRank;
+            return PartialView("_RankPartial", ticket);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public PartialViewResult _DecreaseRank(Ticket ticket)
+        {
+            // TODO: Ensure user has permission to increase rank
+            var newRank = tickets.DecreaseRank(ticket.Id);
+            db.SaveChanges();
+            ticket.Rank = newRank;
+            return PartialView("_RankPartial", ticket);
+        }
+
+        public PartialViewResult _Rank(Ticket ticket)
+        {
+            return PartialView("_RankPartial", ticket);
+        }
 
         public ActionResult Newest()
         {

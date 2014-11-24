@@ -168,6 +168,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="HtmlExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -291,6 +292,7 @@
     <Content Include="Views\Ticket\_TicketListPartial.cshtml" />
     <Content Include="Views\Ticket\_MenuPartial.cshtml" />
     <Content Include="Views\Ticket\Search.cshtml" />
+    <Content Include="Views\Ticket\_RankPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -32,5 +32,11 @@ namespace Transparent.Data.Models
         [Required]
         // Must be indexed
         public DateTime CreatedDate { get; set; }
+
+        [Required]
+        // Must be indexed
+        public int Rank { get; set; }
+
+        public virtual ICollection<TicketUserRank> UserRanks { get; set; }
     }
 }

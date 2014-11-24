@@ -6,17 +6,33 @@
 
 @Html.Partial("_MenuPartial", Model)
 
-<h2>Details</h2>
+@*<script>
+    function IncreaseRank(ticketId) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("IncreaseRank")',
+            contentType: "application/json; charset=utf-8",
+            data: ticketId,
+            dataType: "json",
+            success: function () { alert('Success'); },
+            error: function () { alert('Failed'); }
+        });
+    }
+</script>*@
 
 <fieldset>
     <legend>Ticket</legend>
 
     <div class="display-field">
-        @Html.DisplayFor(model => model.Heading)
+        <h3>@Html.DisplayFor(model => model.Heading)</h3>
     </div>
-
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Body)
+    <div>
+        <div class="float-left" style="text-align:center">         
+            @Html.Action("_Rank", new Transparent.Data.Models.Ticket { Id = Model.Id, Rank = Model.Rank })
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.Body)
+        </div>
     </div>
 </fieldset>
 <p>

@@ -1,0 +1,23 @@
+﻿@model Transparent.Data.Models.Ticket
+
+<div id="rankPartial" class="display-field">
+@if (true)
+{
+    using (Ajax.BeginForm("_IncreaseRank", new AjaxOptions { UpdateTargetId = "rankPartial" }))
+    {
+@Html.AntiForgeryToken()
+@Html.HiddenFor(m => m.Id)
+    <button type="submit" class="ui-icon-triangle-1-n ui-icon" title="Increase rank">IncreaseRank</button>
+    }
+}
+    <h1 id="rank">@Html.DisplayFor(model => model.Rank)</h1>
+@if (true)
+{
+    using (Ajax.BeginForm("_DecreaseRank", new AjaxOptions { UpdateTargetId = "rankPartial" }))
+    {
+@Html.AntiForgeryToken()
+@Html.HiddenFor(m => m.Id)
+    <button type="submit" class="ui-icon-triangle-1-s ui-icon" title="Decrease rank">DecreaseRank</button>
+    }
+}
+</div>

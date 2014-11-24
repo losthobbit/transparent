@@ -19,6 +19,7 @@ namespace Transparent.Data.Models
         public DbSet<Point> Points { get; set; }
         public DbSet<PointType> PointTypes { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<TicketUserRank> TicketUserRanks { get; set; }
     }
 
     [Table("UserProfile")]

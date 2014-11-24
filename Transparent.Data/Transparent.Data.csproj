@@ -64,6 +64,14 @@
     <Compile Include="Migrations\201411231703350_AddedTableTicketColumnCreatedDate.Designer.cs">
       <DependentUpon>201411231703350_AddedTableTicketColumnCreatedDate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201411231826284_AddedTableTicketColumnRank.cs" />
+    <Compile Include="Migrations\201411231826284_AddedTableTicketColumnRank.Designer.cs">
+      <DependentUpon>201411231826284_AddedTableTicketColumnRank.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201411242146566_CreateTableTicketUserRank.cs" />
+    <Compile Include="Migrations\201411242146566_CreateTableTicketUserRank.Designer.cs">
+      <DependentUpon>201411242146566_CreateTableTicketUserRank.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Extensions.cs" />
@@ -71,6 +79,7 @@
     <Compile Include="Models\PointType.cs" />
     <Compile Include="Models\Search.cs" />
     <Compile Include="Models\Ticket.cs" />
+    <Compile Include="Models\TicketUserRank.cs" />
     <Compile Include="Queries\Tickets.cs" />
     <Compile Include="Models\TicketsContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -85,6 +94,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201411231703350_AddedTableTicketColumnCreatedDate.resx">
       <DependentUpon>201411231703350_AddedTableTicketColumnCreatedDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201411231826284_AddedTableTicketColumnRank.resx">
+      <DependentUpon>201411231826284_AddedTableTicketColumnRank.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201411242146566_CreateTableTicketUserRank.resx">
+      <DependentUpon>201411242146566_CreateTableTicketUserRank.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
