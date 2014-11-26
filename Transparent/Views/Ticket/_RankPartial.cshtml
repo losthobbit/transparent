@@ -1,7 +1,7 @@
-﻿@model Transparent.Data.Models.Ticket
+﻿@model Transparent.Data.Models.TicketAndUserRank
 
 <div id="rankPartial" class="display-field">
-@if (true)
+@if (Model.UserRank != Transparent.Data.Models.TicketRank.Up)
 {
     using (Ajax.BeginForm("_IncreaseRank", new AjaxOptions { UpdateTargetId = "rankPartial" }))
     {
@@ -11,7 +11,7 @@
     }
 }
     <h1 id="rank">@Html.DisplayFor(model => model.Rank)</h1>
-@if (true)
+@if (Model.UserRank != Transparent.Data.Models.TicketRank.Down)
 {
     using (Ajax.BeginForm("_DecreaseRank", new AjaxOptions { UpdateTargetId = "rankPartial" }))
     {

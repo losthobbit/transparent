@@ -11,10 +11,12 @@ namespace Transparent.Data.Queries
     public class Tickets
     {
         private DbSet<Ticket> tickets;
+        private DbSet<UserProfile> userProfiles;
 
-        public Tickets(DbSet<Ticket> tickets)
+        public Tickets(UsersContext dbContext)
         {
-            this.tickets = tickets;
+            this.tickets = dbContext.Tickets;
+            this.userProfiles = dbContext.UserProfiles;
         }
 
         public TicketsContainer Newest()
@@ -40,16 +42,42 @@ namespace Transparent.Data.Queries
             return new Search { SearchString = searchString, Tickets = results };
         }
 
-        public int IncreaseRank(int ticketId)
+        public Tuple<int, TicketRank> SetRank(int ticketId, TicketRank ticketRank, string userName)
         {
             var ticket = tickets.Single(t => t.Id == ticketId);
-            return ++ticket.Rank;
-        }
-
-        public int DecreaseRank(int ticketId)
-        {
-            var ticket = tickets.Single(t => t.Id == ticketId);
-            return --ticket.Rank;
+            var rankRecord = ticket.UserRanks.SingleOrDefault(rank => rank.User.UserName == userName);
+            if(rankRecord == null)
+            {
+                if(ticketRank != TicketRank.NotRanked)
+                {
+                    ticket.UserRanks.Add
+                    (
+                        new TicketUserRank
+                        { 
+                            Up = ticketRank == TicketRank.Up,
+                            User = userProfiles.Single(user => user.UserName == userName)
+                        }
+                    );
+                    ticket.Rank += (int)ticketRank;
+                }
+            }
+            else
+            {
+                if(ticketRank == TicketRank.NotRanked)
+                {
+                    ticket.UserRanks.Remove(rankRecord);
+                    ticket.Rank += rankRecord.Up ? -1 : 1;
+                }
+                else
+                {
+                    if(rankRecord.Up && ticketRank == TicketRank.Down || !rankRecord.Up && ticketRank == TicketRank.Up)
+                    {
+                        rankRecord.Up = !rankRecord.Up;
+                        ticket.Rank += (int)ticketRank * 2;
+                    }
+                }
+            }
+            return new Tuple<int, TicketRank>(ticket.Rank, ticketRank);
         }
     }
 }

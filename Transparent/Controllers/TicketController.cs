@@ -18,32 +18,34 @@ namespace Transparent.Controllers
 
         public TicketController()
         {
-            tickets = new Tickets(db.Tickets);
+            tickets = new Tickets(db);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public PartialViewResult _IncreaseRank(Ticket ticket)
+        public PartialViewResult _IncreaseRank(TicketAndUserRank ticket)
         {
-            // TODO: Ensure user has permission to increase rank
-            var newRank = tickets.IncreaseRank(ticket.Id);
-            db.SaveChanges();
-            ticket.Rank = newRank;
-            return PartialView("_RankPartial", ticket);
+            return SetRank(ticket, TicketRank.Up);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public PartialViewResult _DecreaseRank(Ticket ticket)
+        public PartialViewResult _DecreaseRank(TicketAndUserRank ticket)
         {
-            // TODO: Ensure user has permission to increase rank
-            var newRank = tickets.DecreaseRank(ticket.Id);
+            return SetRank(ticket, TicketRank.Down);
+        }
+
+        private PartialViewResult SetRank(TicketAndUserRank ticket, TicketRank ticketRank)
+        {
+            // TODO: Ensure user has permission to change rank
+            var newRank = tickets.SetRank(ticket.Id, ticketRank, User.Identity.Name);
             db.SaveChanges();
-            ticket.Rank = newRank;
+            ticket.Rank = newRank.Item1;
+            ticket.UserRank = newRank.Item2;
             return PartialView("_RankPartial", ticket);
         }
 
-        public PartialViewResult _Rank(Ticket ticket)
+        public PartialViewResult _Rank(TicketAndUserRank ticket)
         {
             return PartialView("_RankPartial", ticket);
         }
@@ -74,7 +76,7 @@ namespace Transparent.Controllers
             {
                 return HttpNotFound();
             }
-            return View(ticket);
+            return View(new TicketAndUserRank(ticket, ticket.GetTicketRank(User.Identity.Name)));
         }
 
         //

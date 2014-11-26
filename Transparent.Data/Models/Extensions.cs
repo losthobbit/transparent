@@ -14,5 +14,13 @@ namespace Transparent.Data.Models
             var property = instance.GetType().GetProperty(propertyName);
             return (T)property.GetCustomAttributes(attrType, false).First();
         }
+
+        public static TicketRank GetTicketRank(this Ticket ticket, string userName)
+        {
+            var rankRecord = ticket.UserRanks.SingleOrDefault(rank => rank.User.UserName == userName);
+            if (rankRecord == null)
+                return TicketRank.NotRanked;
+            return rankRecord.Up ? TicketRank.Up : TicketRank.Down;
+        }
     }
 }

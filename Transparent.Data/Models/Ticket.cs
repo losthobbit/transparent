@@ -8,34 +8,26 @@ using System.Threading.Tasks;
 
 namespace Transparent.Data.Models
 {
-    public class Ticket
+    public class Ticket : BaseTicket
     {
-        [Key]
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public Ticket()
+        {
+
+        }
+
+        public Ticket(int id, int rank):base(id, rank)
+        {
+        }
 
         [ForeignKey("User")]
         [Required]
         public int FkUserId { get; set; }
         public UserProfile User { get; set; }
 
-        [MaxLength(100)]
-        [Required]
-        public string Heading { get; set; }
-
-        [DataType(DataType.MultilineText)]
-        [MaxLength(10000)]
-        [Required]
-        public string Body { get; set; }
-
         [DataType(DataType.Date)]
         [Required]
         // Must be indexed
         public DateTime CreatedDate { get; set; }
-
-        [Required]
-        // Must be indexed
-        public int Rank { get; set; }
 
         public virtual ICollection<TicketUserRank> UserRanks { get; set; }
     }

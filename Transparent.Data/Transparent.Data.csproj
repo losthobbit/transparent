@@ -74,11 +74,14 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\BaseTicket.cs" />
     <Compile Include="Models\Extensions.cs" />
     <Compile Include="Models\Point.cs" />
     <Compile Include="Models\PointType.cs" />
     <Compile Include="Models\Search.cs" />
     <Compile Include="Models\Ticket.cs" />
+    <Compile Include="Models\TicketAndUserRank.cs" />
+    <Compile Include="Models\TicketRank.cs" />
     <Compile Include="Models\TicketUserRank.cs" />
     <Compile Include="Queries\Tickets.cs" />
     <Compile Include="Models\TicketsContainer.cs" />

@@ -1,24 +1,10 @@
-﻿@model Transparent.Data.Models.Ticket
+﻿@model Transparent.Data.Models.TicketAndUserRank
 
 @{
     ViewBag.Title = "Details";
 }
 
-@Html.Partial("_MenuPartial", Model)
-
-@*<script>
-    function IncreaseRank(ticketId) {
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("IncreaseRank")',
-            contentType: "application/json; charset=utf-8",
-            data: ticketId,
-            dataType: "json",
-            success: function () { alert('Success'); },
-            error: function () { alert('Failed'); }
-        });
-    }
-</script>*@
+@Html.Partial("_MenuPartial")
 
 <fieldset>
     <legend>Ticket</legend>
@@ -28,7 +14,7 @@
     </div>
     <div>
         <div class="float-left" style="text-align:center">         
-            @Html.Action("_Rank", new Transparent.Data.Models.Ticket { Id = Model.Id, Rank = Model.Rank })
+            @Html.Action("_Rank", Model)
         </div>
         <div class="display-field">
             @Html.DisplayFor(model => model.Body)

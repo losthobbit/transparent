@@ -23,7 +23,7 @@ namespace Transparent.Data.Models
         [ForeignKey("User")]
         [Required]
         public int FkUserId { get; set; }
-        public UserProfile User { get; set; }
+        public virtual UserProfile User { get; set; }
 
         /// <summary>
         /// True is up, False is down.  Null is not ranked.
