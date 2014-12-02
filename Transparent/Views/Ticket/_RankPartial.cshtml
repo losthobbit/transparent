@@ -1,23 +1,23 @@
 ﻿@model Transparent.Data.Models.TicketAndUserRank
 
 <div id="rankPartial" class="display-field">
-@if (Model.UserRank != Transparent.Data.Models.TicketRank.Up)
-{
-    using (Ajax.BeginForm("_IncreaseRank", new AjaxOptions { UpdateTargetId = "rankPartial" }))
+    @using (Ajax.BeginForm(Model.UserRank == Transparent.Data.Models.TicketRank.Up ? "_CancelRank" : "_IncreaseRank", new AjaxOptions { UpdateTargetId = "rankPartial" }))
     {
-@Html.AntiForgeryToken()
-@Html.HiddenFor(m => m.Id)
-    <button type="submit" class="ui-icon-triangle-1-n ui-icon" title="Increase rank">IncreaseRank</button>
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.Id)
+        var buttonClass = (Model.UserRank == Transparent.Data.Models.TicketRank.Up ? "ui-state-highlight " : "") + "ui-icon";
+        <div class="@buttonClass">
+            <button type="submit" class="ui-icon-triangle-1-n @buttonClass" title="Increase rank">IncreaseRank</button>
+        </div>
     }
-}
     <h1 id="rank">@Html.DisplayFor(model => model.Rank)</h1>
-@if (Model.UserRank != Transparent.Data.Models.TicketRank.Down)
-{
-    using (Ajax.BeginForm("_DecreaseRank", new AjaxOptions { UpdateTargetId = "rankPartial" }))
+    @using (Ajax.BeginForm(Model.UserRank == Transparent.Data.Models.TicketRank.Down ? "_CancelRank" : "_DecreaseRank", new AjaxOptions { UpdateTargetId = "rankPartial" }))
     {
-@Html.AntiForgeryToken()
-@Html.HiddenFor(m => m.Id)
-    <button type="submit" class="ui-icon-triangle-1-s ui-icon" title="Decrease rank">DecreaseRank</button>
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.Id)
+        var buttonClass = (Model.UserRank == Transparent.Data.Models.TicketRank.Down ? "ui-state-highlight " : "") + "ui-icon";
+        <div class="@buttonClass">
+            <button type="submit" class="ui-icon-triangle-1-s @buttonClass" title="Decrease rank">DecreaseRank</button>
+        </div>
     }
-}
 </div>

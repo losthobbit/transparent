@@ -35,6 +35,13 @@ namespace Transparent.Controllers
             return SetRank(ticket, TicketRank.Down);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public PartialViewResult _CancelRank(TicketAndUserRank ticket)
+        {
+            return SetRank(ticket, TicketRank.NotRanked);
+        }
+
         private PartialViewResult SetRank(TicketAndUserRank ticket, TicketRank ticketRank)
         {
             // TODO: Ensure user has permission to change rank
