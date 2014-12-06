@@ -6,7 +6,7 @@
 
 @Html.Partial("_MenuPartial")
 
-@using (Html.BeginForm()) {
+@using (Html.BeginForm("Search", "Ticket")) {
     @Html.ValidationSummary(true)
 
     <fieldset>

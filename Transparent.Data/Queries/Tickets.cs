@@ -19,17 +19,29 @@ namespace Transparent.Data.Queries
             this.userProfiles = dbContext.UserProfiles;
         }
 
-        public TicketsContainer Newest()
+        public TicketsContainer Newest(int pageIndex)
         {
             return new TicketsContainer
-            {
-                Tickets = from ticket in tickets
-                          orderby ticket.CreatedDate descending
-                          select ticket
-            };
+            (
+                from ticket in tickets
+                orderby ticket.CreatedDate descending
+                select ticket,
+                pageIndex
+            );
         }
 
-        public Search Search(string searchString)
+        public TicketsContainer HighestRanked(int pageIndex)
+        {
+            return new TicketsContainer
+            (
+                from ticket in tickets
+                orderby ticket.Rank descending
+                select ticket,
+                pageIndex
+            );
+        }
+
+        public Search Search(string searchString, int pageIndex)
         {
             if (String.IsNullOrWhiteSpace(searchString))
                 return null;
@@ -39,7 +51,7 @@ namespace Transparent.Data.Queries
                                ticket.Body.Contains(searchString)
                           orderby ticket.CreatedDate descending
                           select ticket;
-            return new Search { SearchString = searchString, Tickets = results };
+            return new Search(searchString, results, pageIndex);
         }
 
         public Tuple<int, TicketRank> SetRank(int ticketId, TicketRank ticketRank, string userName)

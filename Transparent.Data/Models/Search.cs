@@ -9,7 +9,9 @@ namespace Transparent.Data.Models
 {
     public class Search : TicketsContainer
     {
-        public Search()
+        private const string SearchStringKey = "S";
+
+        public Search():base()
         {
 
         }
@@ -19,8 +21,28 @@ namespace Transparent.Data.Models
 
         }
 
+        public Search(string searchString, IQueryable<Ticket> tickets): this(tickets)
+        {
+            this.SearchString = searchString;
+        }
+
+        public Search(string searchString, IQueryable<Ticket> tickets, int index): base(tickets, index)
+        {
+            this.SearchString = searchString;
+        }
+
         [Display(Name = "Text to search for")]
         [MaxLength(200)]
-        public string SearchString { get; set; }
+        public string SearchString 
+        {
+            get 
+            {
+                return GetValue(SearchStringKey);
+            }
+            set 
+            {
+                SetValue(SearchStringKey, value); 
+            }
+        }
     }
 }

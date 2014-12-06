@@ -57,20 +57,19 @@ namespace Transparent.Controllers
             return PartialView("_RankPartial", ticket);
         }
 
-        public ActionResult Newest()
+        public ActionResult Newest(TicketsContainer ticketsContainer)
         {
-            return View(tickets.Newest());
+            return View(tickets.Newest(ticketsContainer.PageIndex));
         }
 
-        public ActionResult Search()
+        public ActionResult HighestRanked(TicketsContainer ticketsContainer)
         {
-            return View();
+            return View(tickets.HighestRanked(ticketsContainer.PageIndex));
         }
 
-        [HttpPost]
         public ActionResult Search(Search search)
         {
-            return View(tickets.Search(search.SearchString));
+            return View(tickets.Search(search.SearchString, search.PageIndex));
         }
 
         //

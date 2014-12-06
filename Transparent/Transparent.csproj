@@ -293,6 +293,7 @@
     <Content Include="Views\Ticket\_MenuPartial.cshtml" />
     <Content Include="Views\Ticket\Search.cshtml" />
     <Content Include="Views\Ticket\_RankPartial.cshtml" />
+    <Content Include="Views\Ticket\HighestRanked.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
