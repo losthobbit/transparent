@@ -85,6 +85,14 @@
     <Compile Include="Migrations\201412071047013_UpdatedContext.Designer.cs">
       <DependentUpon>201412071047013_UpdatedContext.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201412071602280_AddTableUserTags.cs" />
+    <Compile Include="Migrations\201412071602280_AddTableUserTags.Designer.cs">
+      <DependentUpon>201412071602280_AddTableUserTags.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201412071603347_AddTableUserTagsColumnTotalPoints.cs" />
+    <Compile Include="Migrations\201412071603347_AddTableUserTagsColumnTotalPoints.Designer.cs">
+      <DependentUpon>201412071603347_AddTableUserTagsColumnTotalPoints.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\BaseTicket.cs" />
@@ -99,6 +107,7 @@
     <Compile Include="Models\TicketRank.cs" />
     <Compile Include="Models\TicketTag.cs" />
     <Compile Include="Models\TicketUserRank.cs" />
+    <Compile Include="Models\UserTag.cs" />
     <Compile Include="Queries\Tickets.cs" />
     <Compile Include="Models\TicketsContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -125,6 +134,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201412071047013_UpdatedContext.resx">
       <DependentUpon>201412071047013_UpdatedContext.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201412071602280_AddTableUserTags.resx">
+      <DependentUpon>201412071602280_AddTableUserTags.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201412071603347_AddTableUserTagsColumnTotalPoints.resx">
+      <DependentUpon>201412071603347_AddTableUserTagsColumnTotalPoints.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -22,6 +22,7 @@ namespace Transparent.Data.Models
         public IDbSet<Ticket> Tickets { get; set; }
         public IDbSet<TicketUserRank> TicketUserRanks { get; set; }
         public IDbSet<TicketTag> TicketTags { get; set; }
+        public IDbSet<UserTag> UserTags { get; set; }
     }
 
     [Table("UserProfile")]

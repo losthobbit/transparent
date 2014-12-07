@@ -9,22 +9,46 @@ using Transparent.Data.Models;
 
 namespace Transparent.Data.Queries
 {
+    /// <summary>
+    /// Contains methods for getting ticket queries.
+    /// </summary>
+    /// <remarks>
+    /// Can be a singleton.
+    /// </remarks>
     public class Tickets
     {
+        /// <summary>
+        /// One requires this number of total points on a tag in order to view it in My Queue or to change a ticket's rank.
+        /// </summary>
+        /// <remarks>
+        /// Can be a configurable setting.
+        /// </remarks>
+        public const int MinimumUserTagPointsToWorkOnTicketWithSameTag = 1;
+
         private IDbSet<Ticket> tickets;
         private IDbSet<UserProfile> userProfiles;
+        private IDbSet<TicketTag> ticketTags;
+        private IDbSet<UserTag> userTags;
 
-        public Tickets(IUsersContext dbContext)
+        public Tickets(IUsersContext usersContext)
         {
-            this.tickets = dbContext.Tickets;
-            this.userProfiles = dbContext.UserProfiles;
+            this.tickets = usersContext.Tickets;
+            this.userProfiles = usersContext.UserProfiles;
+            this.ticketTags = usersContext.TicketTags;
+            this.userTags = usersContext.UserTags;
         }
 
-        public TicketsContainer MyQueue(int pageIndex)
+        /// <summary>
+        /// Returns list of tickets that have the same tag as the user, allowing the user to rank them.
+        /// </summary>
+        public TicketsContainer MyQueue(int pageIndex, string userName)
         {
             return new TicketsContainer
             (
                 from ticket in tickets
+                join ticketTag in ticketTags on ticket equals ticketTag.Ticket
+                join userTag in userTags on ticketTag.Tag equals userTag.Tag
+                where userTag.User.UserName == userName && userTag.TotalPoints >= MinimumUserTagPointsToWorkOnTicketWithSameTag
                 orderby ticket.Rank descending
                 select ticket,
                 pageIndex

@@ -8,24 +8,21 @@ using System.Threading.Tasks;
 
 namespace Transparent.Data.Models
 {
-    /// <summary>
-    /// One for each time points were awarded for a particular tag.
-    /// </summary>
-    public class UserPoint
+    public class UserTag
     {
-        [Key]
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
+        [Key, Column(Order = 0)]
         [ForeignKey("User")]
+        [Required]
         public int FkUserId { get; set; }
         public UserProfile User { get; set; }
 
+        [Key, Column(Order = 1)]
         [ForeignKey("Tag")]
-        public int FkTag { get; set; }
-        public Tag Tag { get; set; }
+        [Required]
+        public int FkTagId { get; set; }
+        public virtual Tag Tag { get; set; }
 
         [Display(Name = "Points")]
-        public int Quantity { get; set; }
+        public int TotalPoints { get; set; }
     }
 }

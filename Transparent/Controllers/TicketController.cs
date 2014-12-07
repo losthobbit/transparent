@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using Transparent.Data.Interfaces;
 using Transparent.Data.Models;
 using Transparent.Data.Queries;
@@ -65,7 +66,7 @@ namespace Transparent.Controllers
 
         public ActionResult MyQueue(TicketsContainer ticketsContainer)
         {
-            return View(tickets.MyQueue(ticketsContainer.PageIndex));
+            return View(tickets.MyQueue(ticketsContainer.PageIndex, User.Identity.Name));
         }
 
         public ActionResult HighestRanked(TicketsContainer ticketsContainer)
