@@ -19,6 +19,17 @@ namespace Transparent.Data.Queries
             this.userProfiles = dbContext.UserProfiles;
         }
 
+        public TicketsContainer MyQueue(int pageIndex)
+        {
+            return new TicketsContainer
+            (
+                from ticket in tickets
+                orderby ticket.Rank descending
+                select ticket,
+                pageIndex
+            );
+        }
+
         public TicketsContainer Newest(int pageIndex)
         {
             return new TicketsContainer

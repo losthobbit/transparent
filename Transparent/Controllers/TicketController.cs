@@ -62,6 +62,11 @@ namespace Transparent.Controllers
             return View(tickets.Newest(ticketsContainer.PageIndex));
         }
 
+        public ActionResult MyQueue(TicketsContainer ticketsContainer)
+        {
+            return View(tickets.MyQueue(ticketsContainer.PageIndex));
+        }
+
         public ActionResult HighestRanked(TicketsContainer ticketsContainer)
         {
             return View(tickets.HighestRanked(ticketsContainer.PageIndex));
