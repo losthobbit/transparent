@@ -5,21 +5,23 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Globalization;
 using System.Web.Security;
+using Transparent.Data.Interfaces;
 
 namespace Transparent.Data.Models
 {
-    public class UsersContext : DbContext
+    public class UsersContext : DbContext, IUsersContext
     {
         public UsersContext()
             : base("DefaultConnection")
         {
         }
 
-        public DbSet<UserProfile> UserProfiles { get; set; }
-        public DbSet<Point> Points { get; set; }
-        public DbSet<PointType> PointTypes { get; set; }
-        public DbSet<Ticket> Tickets { get; set; }
-        public DbSet<TicketUserRank> TicketUserRanks { get; set; }
+        public IDbSet<UserProfile> UserProfiles { get; set; }
+        public IDbSet<UserPoint> UserPoints { get; set; }
+        public IDbSet<Tag> Tags { get; set; }
+        public IDbSet<Ticket> Tickets { get; set; }
+        public IDbSet<TicketUserRank> TicketUserRanks { get; set; }
+        public IDbSet<TicketTag> TicketTags { get; set; }
     }
 
     [Table("UserProfile")]

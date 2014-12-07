@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Transparent.Data.Interfaces;
 using Transparent.Data.Models;
 using Transparent.Data.Queries;
 
@@ -13,7 +14,7 @@ namespace Transparent.Controllers
     [Authorize]
     public class TicketController : Controller
     {
-        private UsersContext db = new UsersContext();
+        private IUsersContext db = new UsersContext();
         private Tickets tickets;
 
         public TicketController()
@@ -175,7 +176,10 @@ namespace Transparent.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            db.Dispose();
+            if (db is IDisposable)
+            {
+                ((IDisposable)db).Dispose();
+            }
             base.Dispose(disposing);
         }
     }

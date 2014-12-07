@@ -8,16 +8,19 @@ using System.Threading.Tasks;
 
 namespace Transparent.Data.Models
 {
-    public class Point
+    /// <summary>
+    /// Also known as a tag or category
+    /// </summary>
+    public class Tag
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        [ForeignKey("User")]
-        public int FkUserId { get; set; }
-        public UserProfile User { get; set; }
-        [ForeignKey("Type")]
-        public int FkPointType { get; set; }
-        public PointType Type { get; set; }
+
+        [Required]
+        [MaxLength(60)]
+        [Display(Name = "Tag")]
+        // Must be indexed
+        public string Name { get; set; }
     }
 }

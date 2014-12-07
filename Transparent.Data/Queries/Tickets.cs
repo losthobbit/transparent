@@ -4,16 +4,17 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Transparent.Data.Interfaces;
 using Transparent.Data.Models;
 
 namespace Transparent.Data.Queries
 {
     public class Tickets
     {
-        private DbSet<Ticket> tickets;
-        private DbSet<UserProfile> userProfiles;
+        private IDbSet<Ticket> tickets;
+        private IDbSet<UserProfile> userProfiles;
 
-        public Tickets(UsersContext dbContext)
+        public Tickets(IUsersContext dbContext)
         {
             this.tickets = dbContext.Tickets;
             this.userProfiles = dbContext.UserProfiles;

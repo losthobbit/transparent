@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="InitDatabase.cs" />
+    <Compile Include="Interfaces\IUsersContext.cs" />
     <Compile Include="Migrations\201411221839164_Initial-Create.cs" />
     <Compile Include="Migrations\201411221839164_Initial-Create.Designer.cs">
       <DependentUpon>201411221839164_Initial-Create.cs</DependentUpon>
@@ -76,18 +77,27 @@
     <Compile Include="Migrations\201411242146566_CreateTableTicketUserRank.Designer.cs">
       <DependentUpon>201411242146566_CreateTableTicketUserRank.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201412071043351_ChangedPointsToTags.cs" />
+    <Compile Include="Migrations\201412071043351_ChangedPointsToTags.Designer.cs">
+      <DependentUpon>201412071043351_ChangedPointsToTags.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201412071047013_UpdatedContext.cs" />
+    <Compile Include="Migrations\201412071047013_UpdatedContext.Designer.cs">
+      <DependentUpon>201412071047013_UpdatedContext.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\BaseTicket.cs" />
     <Compile Include="Models\Extensions.cs" />
     <Compile Include="Models\PagedList.cs" />
-    <Compile Include="Models\Point.cs" />
-    <Compile Include="Models\PointType.cs" />
+    <Compile Include="Models\UserPoint.cs" />
+    <Compile Include="Models\Tag.cs" />
     <Compile Include="Models\Search.cs" />
     <Compile Include="Models\Stateful.cs" />
     <Compile Include="Models\Ticket.cs" />
     <Compile Include="Models\TicketAndUserRank.cs" />
     <Compile Include="Models\TicketRank.cs" />
+    <Compile Include="Models\TicketTag.cs" />
     <Compile Include="Models\TicketUserRank.cs" />
     <Compile Include="Queries\Tickets.cs" />
     <Compile Include="Models\TicketsContainer.cs" />
@@ -109,6 +119,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201411242146566_CreateTableTicketUserRank.resx">
       <DependentUpon>201411242146566_CreateTableTicketUserRank.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201412071043351_ChangedPointsToTags.resx">
+      <DependentUpon>201412071043351_ChangedPointsToTags.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201412071047013_UpdatedContext.resx">
+      <DependentUpon>201412071047013_UpdatedContext.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
