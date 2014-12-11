@@ -55,6 +55,18 @@ namespace Transparent.Data.Queries
             );
         }
 
+        public TicketsContainer RaisedBy(int pageIndex, string userName)
+        {
+            return new TicketsContainer
+            (
+                from ticket in tickets
+                where ticket.User.UserName == userName
+                orderby ticket.CreatedDate descending
+                select ticket,
+                pageIndex
+            );
+        }
+
         public TicketsContainer Newest(int pageIndex)
         {
             return new TicketsContainer

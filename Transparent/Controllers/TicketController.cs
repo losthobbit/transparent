@@ -64,6 +64,11 @@ namespace Transparent.Controllers
             return View(tickets.Newest(ticketsContainer.PageIndex));
         }
 
+        public ActionResult RaisedByMe(TicketsContainer ticketsContainer)
+        {
+            return View(tickets.RaisedBy(ticketsContainer.PageIndex, User.Identity.Name));
+        }
+
         public ActionResult MyQueue(TicketsContainer ticketsContainer)
         {
             return View(tickets.MyQueue(ticketsContainer.PageIndex, User.Identity.Name));
