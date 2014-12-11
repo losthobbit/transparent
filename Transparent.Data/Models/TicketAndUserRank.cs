@@ -22,6 +22,7 @@ namespace Transparent.Data.Models
             UserRank = userRank;
             Heading = ticket.Heading;
             Body = ticket.Body;
+            TicketType = ticket.TicketType;
         }
     }
 }

@@ -37,5 +37,8 @@ namespace Transparent.Data.Models
         [MaxLength(10000)]
         [Required]
         public string Body { get; set; }
+
+        [Required(ErrorMessage = "Choose question or suggestion.")]
+        public TicketType TicketType { get; set; }
     }
 }

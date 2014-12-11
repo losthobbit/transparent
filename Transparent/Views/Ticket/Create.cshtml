@@ -14,6 +14,11 @@
     <fieldset>
         <legend>Ticket</legend>
 
+        <div class="editor-field">
+            @Html.EditorFor(model => model.TicketType, "RadioButtonsForEnum")
+            @Html.ValidationMessageFor(model => model.TicketType)
+        </div>
+
         <div class="editor-label">
             @Html.LabelFor(model => model.Heading)
         </div>

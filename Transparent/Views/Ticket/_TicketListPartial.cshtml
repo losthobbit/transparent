@@ -1,4 +1,5 @@
 ﻿@model Transparent.Data.Models.TicketsContainer
+@using Transparent.Extensions;
 
 @{
     if (Model != null)
@@ -6,10 +7,11 @@
         <table>
         @{foreach (var item in Model.PagedTickets)
         {
-        <tr>
+        <tr class="@item.TicketType.GetClass()">
             <td>
                 @Html.DisplayFor(modelItem => item.Rank)
             </td>
+            <td>@item.TicketType.GetChar()</td>
             <td>
                 @Html.DisplayFor(modelItem => item.Heading)
             </td>

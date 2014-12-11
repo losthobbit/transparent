@@ -1,6 +1,22 @@
 ﻿/* Custom */
 .actionLinkUI { float: left; margin-right: 2px; }
 
+.radioButtonForEnum, .radioButtonForEnum > label {
+    display: inline;
+}
+
+    .radioButtonForEnum > input {
+        width: 40px;
+    }
+
+.question {
+    color: #003300;
+}
+
+.suggestion {
+    color: #000066;
+}
+
 /* MVC */
 html {
     background-color: #e2e2e2;

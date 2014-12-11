@@ -98,7 +98,7 @@ namespace Transparent.Controllers
         public ActionResult Create()
         {
             ViewBag.FkUserId = new SelectList(db.UserProfiles, "UserId", "UserName");
-            return View();
+            return View(new Ticket());
         }
 
         //

@@ -18,7 +18,7 @@ namespace Transparent.Data.Queries
     public class Tickets
     {
         /// <summary>
-        /// One requires this number of total points on a tag in order to view it in My Queue or to change a ticket's rank.
+        /// One requires this number of total points on a tag in order to view it in My Queue.
         /// </summary>
         /// <remarks>
         /// Can be a configurable setting.
@@ -39,7 +39,7 @@ namespace Transparent.Data.Queries
         }
 
         /// <summary>
-        /// Returns list of tickets that have the same tag as the user, allowing the user to rank them.
+        /// Returns list of tickets that have the same tag as the user.
         /// </summary>
         public TicketsContainer MyQueue(int pageIndex, string userName)
         {

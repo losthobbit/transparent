@@ -1,0 +1,10 @@
+﻿@model Enum
+@foreach (var value in Enum.GetValues(Model.GetType()))
+{
+    var id = TagBuilder.CreateSanitizedId(string.Format(
+        "{0}_{1}_{2}", ViewData.TemplateInfo.HtmlFieldPrefix, Model.GetType(), value));
+    <div class="radioButtonForEnum">
+        @Html.RadioButton(string.Empty, value, value.Equals(Model), new { id })
+        @Html.Label(value.ToString(), new { @for = id })
+    </div>
+}
