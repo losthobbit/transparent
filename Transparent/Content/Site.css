@@ -1,4 +1,6 @@
 ﻿/* Custom */
+a { text-decoration:none }
+
 .actionLinkUI { float: left; margin-right: 2px; }
 
 .radioButtonForEnum, .radioButtonForEnum > label {
@@ -39,7 +41,6 @@ a {
     outline: none;
     padding-left: 3px;
     padding-right: 3px;
-    text-decoration: underline;
 }
 
     a:link, a:visited,
