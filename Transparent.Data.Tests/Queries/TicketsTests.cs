@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Transparent.Data.Interfaces;
+using Transparent.Data.Models;
 using Transparent.Data.Queries;
 using Transparent.Data.Tests.Helpers;
 
@@ -35,7 +36,7 @@ namespace Transparent.Data.Tests.Queries
             testData.StephensCriticalThinkingTag.TotalPoints = Tickets.MinimumUserTagPointsToWorkOnTicketWithSameTag;
 
             // Act
-            var ticketsContainer = target.MyQueue(0, testData.Stephen.UserName);
+            var ticketsContainer = target.MyQueue(new TicketsContainer(), testData.Stephen.UserName);
 
             // Assert
             ticketsContainer.PagedTickets.Single(ticket => ticket == testData.JoesCriticalThinkingTicket);
@@ -48,7 +49,7 @@ namespace Transparent.Data.Tests.Queries
             testData.StephensCriticalThinkingTag.TotalPoints = Tickets.MinimumUserTagPointsToWorkOnTicketWithSameTag - 1;
 
             // Act
-            var ticketsContainer = target.MyQueue(0, testData.Stephen.UserName);
+            var ticketsContainer = target.MyQueue(new TicketsContainer(), testData.Stephen.UserName);
 
             // Assert
             Assert.IsFalse(ticketsContainer.PagedTickets.Any(ticket => ticket == testData.JoesCriticalThinkingTicket));
@@ -58,7 +59,7 @@ namespace Transparent.Data.Tests.Queries
         public void MyQueue_with_ticket_and_user_without_same_tag_does_not_return_ticket()
         {
             // Act
-            var ticketsContainer = target.MyQueue(0, testData.Stephen.UserName);
+            var ticketsContainer = target.MyQueue(new TicketsContainer(), testData.Stephen.UserName);
 
             // Assert
             Assert.IsFalse(ticketsContainer.PagedTickets.Any(ticket => ticket == testData.JoesScubaDivingTicket));

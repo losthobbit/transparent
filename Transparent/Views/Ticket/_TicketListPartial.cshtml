@@ -1,40 +1,62 @@
 ﻿@model Transparent.Data.Models.TicketsContainer
 @using Transparent.Extensions;
+@using Transparent.Data.Models;
 
 @{
     if (Model != null)
     {      
-        <table>
-        @{foreach (var item in Model.PagedTickets)
-        {
-        <tr class="@item.TicketType.GetClass()">
-            <td>
-                @Html.DisplayFor(modelItem => item.Rank)
-            </td>
-            <td>@item.TicketType.GetChar()</td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Heading)
-            </td>
-            <td>
-                @*@Html.ActionLink("Edit", "Edit", new { id=item.Id }) |*@
-                @Html.ActionLinkUI(model => item.Id, "Details", "ui-icon-note")
-                @*@Html.ActionLink("Details", "Details", new { id=item.Id })*@ 
-                @*@Html.ActionLink("Delete", "Delete", new { id=item.Id })*@
-            </td>
-        </tr>
-        }}
-        </table>
-        for(var i=0; i < Model.PagedTickets.PageCount; i++)
-        {
-            if(i == Model.PagedTickets.PageIndex)
+        <section>
+            <header>
+                <ul id="menu" class="left">
+                @foreach(var ticketType in ModelViewExtensions.TicketTypeInfo)
+                {
+                    <li class="@ticketType.Type.GetClass()">
+                        @{
+                            if(Model.TicketType == ticketType.Type)
+                            {
+                                <b>@ticketType.PluralDisplayName</b>
+                            }
+                            else
+                            {
+                                @Html.ActionLink(ticketType.PluralDisplayName, ViewContext.RouteData.Values["action"].ToString(), Model.GetState(ticketType.Type));
+                            }
+                        }
+                    </li>
+                }
+                </ul>
+            </header>
+            <table>
+            @foreach (var item in Model.PagedTickets)
             {
-                <b>@(i+1)</b>
+            <tr class="@item.TicketType.GetClass()">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rank)
+                </td>
+                <td>@item.TicketType.GetChar()</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Heading)
+                </td>
+                <td>
+                    @*@Html.ActionLink("Edit", "Edit", new { id=item.Id }) |*@
+                    @Html.ActionLinkUI(model => item.Id, "Details", "ui-icon-note")
+                    @*@Html.ActionLink("Details", "Details", new { id=item.Id })*@ 
+                    @*@Html.ActionLink("Delete", "Delete", new { id=item.Id })*@
+                </td>
+            </tr>
             }
-            else
+            </table>
+            @for(var i=0; i < Model.PagedTickets.PageCount; i++)
             {
-                @Html.ActionLink((i + 1).ToString(), ViewContext.RouteData.Values["action"].ToString(), Model.GetState(i))            
+                if(i == Model.PagedTickets.PageIndex)
+                {
+                    <b>@(i+1)</b>
+                }
+                else
+                {
+                    @Html.ActionLink((i + 1).ToString(), ViewContext.RouteData.Values["action"].ToString(), Model.GetState(i))            
+                }
             }
-        }
+        </section>
     }
 }
 

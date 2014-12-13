@@ -26,9 +26,14 @@ namespace Transparent.Data.Models
             this.SearchString = searchString;
         }
 
-        public Search(string searchString, IQueryable<Ticket> tickets, int index): base(tickets, index)
+        public override IQueryable<Ticket> ApplyFilter(IQueryable<Ticket> tickets)
         {
-            this.SearchString = searchString;
+            return base.ApplyFilter
+            (
+                from ticket in tickets
+                where ticket.Heading.Contains(SearchString) || ticket.Body.Contains(SearchString)
+                select ticket
+            );
         }
 
         [Display(Name = "Text to search for")]

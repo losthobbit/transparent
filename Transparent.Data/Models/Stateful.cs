@@ -84,15 +84,22 @@ namespace Transparent.Data.Models
             StatePairs = statePairs;
         }
 
+        public int? GetNullableInt(string key)
+        {
+            int value;
+            var stringValue = GetValue(key);
+            return stringValue == null ? (int?)null : int.TryParse(stringValue, out value) ? value : 0;
+        }
+
         public int GetInt(string key)
         {
             int value;
             return int.TryParse(GetValue(key), out value) ? value : 0;
         }
 
-        public void SetInt(string key, int value)
+        public void SetValue(string key, int? value)
         {
-            SetValue(key, value.ToString());
+            SetValue(key, value == null ? null : value.Value.ToString());
         }
 
     }

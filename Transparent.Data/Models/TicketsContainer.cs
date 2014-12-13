@@ -10,6 +10,7 @@ namespace Transparent.Data.Models
     {
         private const int pageSize = 10;
         private const string PageIndexKey = "P";
+        private const string TicketTypeKey = "T";
 
         public PagedList<Ticket> PagedTickets { get; set; }
 
@@ -20,12 +21,25 @@ namespace Transparent.Data.Models
 
         public TicketsContainer(IQueryable<Ticket> tickets): this()
         {
-            PagedTickets.Initialize(tickets, 0);
+            Initialize(tickets);
         }
 
-        public TicketsContainer(IQueryable<Ticket> tickets, int index): this()
+        public TicketsContainer Initialize(IQueryable<Ticket> tickets)
         {
-            PagedTickets.Initialize(tickets, index);
+            PagedTickets.Initialize(tickets, PageIndex);
+            return this;
+        }
+
+        /// <summary>
+        /// Uses parameters, such as TicketType to apply a filter.
+        /// </summary>
+        /// <param name="tickets">Query to add filter to.</param>
+        /// <returns>Query with filter.</returns>
+        public virtual IQueryable<Ticket> ApplyFilter(IQueryable<Ticket> tickets)
+        {
+            if (TicketType == null)
+                return tickets;
+            return tickets.Where(ticket => ticket.TicketType == TicketType.Value);
         }
 
         public int PageIndex
@@ -36,7 +50,19 @@ namespace Transparent.Data.Models
             }
             set
             {
-                SetInt(PageIndexKey, value);
+                SetValue(PageIndexKey, value);
+            }
+        }
+
+        public TicketType? TicketType
+        {
+            get
+            {
+                return (TicketType?)GetNullableInt(TicketTypeKey);
+            }
+            set
+            {
+                SetValue(TicketTypeKey, (int?)value);
             }
         }
 
@@ -48,7 +74,19 @@ namespace Transparent.Data.Models
         public Stateful GetState(int pageIndex)
         {
             var stateful = GetState();
-            stateful.SetInt(PageIndexKey, pageIndex);
+            stateful.SetValue(PageIndexKey, pageIndex);
+            return stateful;
+        }
+
+        /// <summary>
+        /// Creates a generic TicketsContainer with a clone of the state and sets the TicketType of the cloned state.
+        /// </summary>
+        /// <param name="ticketType">The ticket type for the cloned state.</param>
+        /// <returns>A generic TicketsContainer with a clone of the state.</returns>
+        public Stateful GetState(TicketType? ticketType)
+        {
+            var stateful = GetState();
+            stateful.SetValue(TicketTypeKey, (int?)ticketType);
             return stateful;
         }
     }

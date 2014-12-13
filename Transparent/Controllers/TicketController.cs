@@ -61,27 +61,27 @@ namespace Transparent.Controllers
 
         public ActionResult Newest(TicketsContainer ticketsContainer)
         {
-            return View(tickets.Newest(ticketsContainer.PageIndex));
+            return View(tickets.Newest(ticketsContainer));
         }
 
         public ActionResult RaisedByMe(TicketsContainer ticketsContainer)
         {
-            return View(tickets.RaisedBy(ticketsContainer.PageIndex, User.Identity.Name));
+            return View(tickets.RaisedBy(ticketsContainer, User.Identity.Name));
         }
 
         public ActionResult MyQueue(TicketsContainer ticketsContainer)
         {
-            return View(tickets.MyQueue(ticketsContainer.PageIndex, User.Identity.Name));
+            return View(tickets.MyQueue(ticketsContainer, User.Identity.Name));
         }
 
         public ActionResult HighestRanked(TicketsContainer ticketsContainer)
         {
-            return View(tickets.HighestRanked(ticketsContainer.PageIndex));
+            return View(tickets.HighestRanked(ticketsContainer));
         }
 
         public ActionResult Search(Search search)
         {
-            return View(tickets.Search(search.SearchString, search.PageIndex));
+            return View(tickets.Search(search));
         }
 
         //

@@ -41,65 +41,58 @@ namespace Transparent.Data.Queries
         /// <summary>
         /// Returns list of tickets that have the same tag as the user.
         /// </summary>
-        public TicketsContainer MyQueue(int pageIndex, string userName)
+        public TicketsContainer MyQueue(TicketsContainer filter, string userName)
         {
-            return new TicketsContainer
+            return filter.Initialize
             (
-                from ticket in tickets
-                join ticketTag in ticketTags on ticket equals ticketTag.Ticket
-                join userTag in userTags on ticketTag.Tag equals userTag.Tag
-                where userTag.User.UserName == userName && userTag.TotalPoints >= MinimumUserTagPointsToWorkOnTicketWithSameTag
-                orderby ticket.Rank descending
-                select ticket,
-                pageIndex
+                filter.ApplyFilter
+                (
+                    from ticket in tickets
+                    join ticketTag in ticketTags on ticket equals ticketTag.Ticket
+                    join userTag in userTags on ticketTag.Tag equals userTag.Tag
+                    where userTag.User.UserName == userName && userTag.TotalPoints >= MinimumUserTagPointsToWorkOnTicketWithSameTag
+                    select ticket
+                ).OrderByDescending(ticket => ticket.Rank)                
             );
         }
 
-        public TicketsContainer RaisedBy(int pageIndex, string userName)
+        public TicketsContainer RaisedBy(TicketsContainer filter, string userName)
         {
-            return new TicketsContainer
+            return filter.Initialize
             (
-                from ticket in tickets
-                where ticket.User.UserName == userName
-                orderby ticket.CreatedDate descending
-                select ticket,
-                pageIndex
+                filter.ApplyFilter
+                (
+                    from ticket in tickets
+                    where ticket.User.UserName == userName
+                    select ticket
+                ).OrderByDescending(ticket => ticket.CreatedDate)
             );
         }
 
-        public TicketsContainer Newest(int pageIndex)
+        public TicketsContainer Newest(TicketsContainer filter)
         {
-            return new TicketsContainer
+            return filter.Initialize
             (
-                from ticket in tickets
-                orderby ticket.CreatedDate descending
-                select ticket,
-                pageIndex
+                filter.ApplyFilter(tickets).OrderByDescending(ticket => ticket.CreatedDate)
             );
         }
 
-        public TicketsContainer HighestRanked(int pageIndex)
+        public TicketsContainer HighestRanked(TicketsContainer filter)
         {
-            return new TicketsContainer
+            return filter.Initialize
             (
-                from ticket in tickets
-                orderby ticket.Rank descending
-                select ticket,
-                pageIndex
+                filter.ApplyFilter(tickets).OrderByDescending(ticket => ticket.Rank)
             );
         }
 
-        public Search Search(string searchString, int pageIndex)
+        public Search Search(Search filter)
         {
-            if (String.IsNullOrWhiteSpace(searchString))
+            if (String.IsNullOrWhiteSpace(filter.SearchString))
                 return null;
-            var results = from ticket in tickets
-                          where
-                               ticket.Heading.Contains(searchString) ||
-                               ticket.Body.Contains(searchString)
-                          orderby ticket.CreatedDate descending
-                          select ticket;
-            return new Search(searchString, results, pageIndex);
+            return (Search)filter.Initialize
+            (
+                filter.ApplyFilter(tickets).OrderByDescending(ticket => ticket.CreatedDate)
+            );
         }
 
         public Tuple<int, TicketRank> SetRank(int ticketId, TicketRank ticketRank, string userName)
