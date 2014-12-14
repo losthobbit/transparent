@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Transparent.Data.Interfaces;
 using Transparent.Data.Models;
+using Transparent.Data.Tests.Generic;
 
 namespace Transparent.Data.Tests.Helpers
 {
@@ -41,8 +42,8 @@ namespace Transparent.Data.Tests.Helpers
 
         public TestData ()
 	    {
-            JoesCriticalThinkingTicket = new Ticket { Id = 1, FkUserId = Joe.UserId, User = Joe, Heading = "Hello", Body = "My name is Joe" };
-            JoesScubaDivingTicket = new Ticket { Id = 2, FkUserId = Joe.UserId, User = Joe, Heading = "Scuba", Body = "I like to dive" };
+            JoesCriticalThinkingTicket = new Suggestion { Id = 1, FkUserId = Joe.UserId, User = Joe, Heading = "Hello", Body = "My name is Joe" };
+            JoesScubaDivingTicket = new Suggestion { Id = 2, FkUserId = Joe.UserId, User = Joe, Heading = "Scuba", Body = "I like to dive" };
 
             StephensCriticalThinkingTag = new UserTag
             {
@@ -98,6 +99,10 @@ namespace Transparent.Data.Tests.Helpers
                     }
                 }
             };
+            testData.UsersContext.Suggestions = new FakeDbSet<Suggestion>(testData.UsersContext.Tickets.OfType<Suggestion>());
+            testData.UsersContext.Questions = new FakeDbSet<Question>(testData.UsersContext.Tickets.OfType<Question>());
+            testData.UsersContext.Tests = new FakeDbSet<Test>(testData.UsersContext.Tickets.OfType<Test>());
+
             return testData;
         }
     }

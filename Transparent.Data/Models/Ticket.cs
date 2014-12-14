@@ -19,6 +19,9 @@ namespace Transparent.Data.Models
         {
         }
 
+        /// <summary>
+        /// The user that created the ticket
+        /// </summary>
         [ForeignKey("User")]
         [Required]
         public int FkUserId { get; set; }
@@ -30,5 +33,16 @@ namespace Transparent.Data.Models
         public DateTime CreatedDate { get; set; }
 
         public virtual ICollection<TicketUserRank> UserRanks { get; set; }
+
+        public static Ticket Create(TicketType ticketType)
+        {
+            switch (ticketType)
+            {
+                case TicketType.Question: return new Question();
+                case TicketType.Suggestion: return new Suggestion();
+                case TicketType.Test: return new Test();
+            }
+            throw new NotSupportedException("Unknown ticket type");
+        }
     }
 }

@@ -1,23 +1,24 @@
 ﻿@model Transparent.Data.Models.Ticket
-
-@{
-    ViewBag.Title = "Create";
-}
+@using Transparent.Extensions
+@using Transparent.Data.Models
 
 @Html.Partial("_MenuPartial")
 
-<h2>New question / suggestion</h2>
+<header>
+    <ul id="menu" class="left">
+    @foreach (var value in (TicketType[])Enum.GetValues(typeof(TicketType)))
+    {
+        <li>@(Model.TicketType == value ? MvcHtmlString.Create(value.DisplayName()) : Html.ActionLink(value.DisplayName(), "Create", new { TicketType = value }))</li>
+    }
+    </ul>
+</header>    
 
-@using (Html.BeginForm()) {
+@using (Html.BeginForm("Create" + Model.TicketType, "Ticket"))
+{
     @Html.ValidationSummary(true)
 
     <fieldset>
         <legend>Ticket</legend>
-
-        <div class="editor-field">
-            @Html.EditorFor(model => model.TicketType, "RadioButtonsForEnum")
-            @Html.ValidationMessageFor(model => model.TicketType)
-        </div>
 
         <div class="editor-label">
             @Html.LabelFor(model => model.Heading)

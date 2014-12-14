@@ -164,6 +164,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\TicketController.cs" />
     <Compile Include="Extensions\DataAnnotationsExtensions.cs" />
     <Compile Include="Extensions\ModelViewExtensions.cs" />

@@ -22,5 +22,11 @@ namespace Transparent.Data.Models
         [Display(Name = "Tag")]
         // Must be indexed
         public string Name { get; set; }
+
+        [Required]
+        [MaxLength(10000)]
+        [Display(Name = "Description")]
+        [DataType(DataType.Html)]
+        public string Description { get; set; }
     }
 }

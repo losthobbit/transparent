@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Transparent.Data.Models
 {
-    public class BaseTicket
+    public abstract class BaseTicket
     {
         public BaseTicket()
         {
@@ -38,7 +38,7 @@ namespace Transparent.Data.Models
         [Required]
         public string Body { get; set; }
 
-        [Required(ErrorMessage = "Choose question or suggestion.")]
-        public TicketType TicketType { get; set; }
+        [NotMapped()]
+        public virtual TicketType TicketType { get; protected set; }
     }
 }

@@ -5,14 +5,14 @@ namespace Transparent.Data.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Transparent.Data.Models.UsersContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<UsersContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(Transparent.Data.Models.UsersContext context)
+        protected override void Seed(UsersContext context)
         {
             //  This method will be called after migrating to the latest version.
 

@@ -18,6 +18,9 @@ namespace Transparent.Data.Interfaces
         IDbSet<TicketUserRank> TicketUserRanks { get; }
         IDbSet<TicketTag> TicketTags { get; }
         IDbSet<UserTag> UserTags { get; }
+        IDbSet<Test> Tests { get; }
+        IDbSet<Question> Questions { get; }
+        IDbSet<Suggestion> Suggestions { get; }
         int SaveChanges();
         DbEntityEntry Entry(object entity);
 

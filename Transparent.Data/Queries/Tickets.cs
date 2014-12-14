@@ -25,6 +25,7 @@ namespace Transparent.Data.Queries
         /// </remarks>
         public const int MinimumUserTagPointsToWorkOnTicketWithSameTag = 1;
 
+        private IUsersContext usersContext;
         private IDbSet<Ticket> tickets;
         private IDbSet<UserProfile> userProfiles;
         private IDbSet<TicketTag> ticketTags;
@@ -32,10 +33,24 @@ namespace Transparent.Data.Queries
 
         public Tickets(IUsersContext usersContext)
         {
+            this.usersContext = usersContext;
             this.tickets = usersContext.Tickets;
             this.userProfiles = usersContext.UserProfiles;
             this.ticketTags = usersContext.TicketTags;
             this.userTags = usersContext.UserTags;
+        }
+
+        private IQueryable<Ticket> TicketSet(TicketsContainer filter)
+        {
+            if (filter.TicketType == null)
+                return tickets;
+            switch (filter.TicketType.Value)
+            {
+                case TicketType.Question: return usersContext.Questions;
+                case TicketType.Suggestion: return usersContext.Suggestions;
+                case TicketType.Test: return usersContext.Tests;
+            }
+            throw new NotSupportedException("Unknown ticket type");
         }
 
         /// <summary>
@@ -47,7 +62,7 @@ namespace Transparent.Data.Queries
             (
                 filter.ApplyFilter
                 (
-                    from ticket in tickets
+                    from ticket in TicketSet(filter)
                     join ticketTag in ticketTags on ticket equals ticketTag.Ticket
                     join userTag in userTags on ticketTag.Tag equals userTag.Tag
                     where userTag.User.UserName == userName && userTag.TotalPoints >= MinimumUserTagPointsToWorkOnTicketWithSameTag
@@ -62,7 +77,7 @@ namespace Transparent.Data.Queries
             (
                 filter.ApplyFilter
                 (
-                    from ticket in tickets
+                    from ticket in TicketSet(filter)
                     where ticket.User.UserName == userName
                     select ticket
                 ).OrderByDescending(ticket => ticket.CreatedDate)
@@ -73,7 +88,7 @@ namespace Transparent.Data.Queries
         {
             return filter.Initialize
             (
-                filter.ApplyFilter(tickets).OrderByDescending(ticket => ticket.CreatedDate)
+                filter.ApplyFilter(TicketSet(filter)).OrderByDescending(ticket => ticket.CreatedDate)
             );
         }
 
@@ -81,7 +96,7 @@ namespace Transparent.Data.Queries
         {
             return filter.Initialize
             (
-                filter.ApplyFilter(tickets).OrderByDescending(ticket => ticket.Rank)
+                filter.ApplyFilter(TicketSet(filter)).OrderByDescending(ticket => ticket.Rank)
             );
         }
 
@@ -91,7 +106,7 @@ namespace Transparent.Data.Queries
                 return null;
             return (Search)filter.Initialize
             (
-                filter.ApplyFilter(tickets).OrderByDescending(ticket => ticket.CreatedDate)
+                filter.ApplyFilter(TicketSet(filter)).OrderByDescending(ticket => ticket.CreatedDate)
             );
         }
 

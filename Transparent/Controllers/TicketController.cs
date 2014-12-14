@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using Transparent.Data;
 using Transparent.Data.Interfaces;
 using Transparent.Data.Models;
 using Transparent.Data.Queries;
@@ -100,29 +101,47 @@ namespace Transparent.Controllers
         //
         // GET: /Ticket/Create
 
-        public ActionResult Create()
+        public ActionResult Create(TicketType ticketType = TicketType.Suggestion)
         {
             ViewBag.FkUserId = new SelectList(db.UserProfiles, "UserId", "UserName");
-            return View(new Ticket());
+            return View("Create", Ticket.Create(ticketType));
         }
 
         //
         // POST: /Ticket/Create
-
-        [HttpPost]
-        public ActionResult Create(Ticket ticket)
+        
+        private ActionResult Create<TTicket>(TTicket ticket, IDbSet<TTicket> dbSet)
+            where TTicket : Ticket
         {
             if (ModelState.IsValid)
             {
                 ticket.User = db.UserProfiles.Single(userProfile => userProfile.UserName == User.Identity.Name);
                 ticket.CreatedDate = DateTime.UtcNow;
-                db.Tickets.Add(ticket);
+                dbSet.Add(ticket);
                 db.SaveChanges();
                 return RedirectToAction("Details", new { id = ticket.Id });
             }
 
             ViewBag.FkUserId = new SelectList(db.UserProfiles, "UserId", "UserName", ticket.FkUserId);
             return View(ticket);
+        }
+
+        [HttpPost]
+        public ActionResult CreateQuestion(Question question)
+        {
+            return Create(question, db.Questions);
+        }
+
+        [HttpPost]
+        public ActionResult CreateSuggestion(Suggestion suggestion)
+        {
+            return Create(suggestion, db.Suggestions);
+        }
+
+        [HttpPost]
+        public ActionResult CreateTest(Test test)
+        {
+            return Create(test, db.Tests);
         }
 
         //

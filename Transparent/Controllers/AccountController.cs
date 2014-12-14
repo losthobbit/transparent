@@ -11,6 +11,7 @@ using WebMatrix.WebData;
 using Transparent.Filters;
 using Transparent.Data.Models;
 using System.Data.Linq;
+using Transparent.Data;
 
 namespace Transparent.Controllers
 {

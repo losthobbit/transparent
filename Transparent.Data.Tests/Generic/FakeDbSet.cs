@@ -27,6 +27,12 @@ namespace Transparent.Data.Tests.Generic
             _query = _data.AsQueryable();
         }
 
+        public FakeDbSet(IEnumerable<T> items)
+        {
+            _data = new ObservableCollection<T>(items);
+            _query = _data.AsQueryable();
+        }
+
         public virtual T Find(params object[] keyValues)
         {
             throw new NotImplementedException("Derive from FakeDbSet<T> and override Find");

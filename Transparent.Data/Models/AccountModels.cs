@@ -10,34 +10,6 @@ using Transparent.Data.Interfaces;
 
 namespace Transparent.Data.Models
 {
-    public class UsersContext : DbContext, IUsersContext
-    {
-        public UsersContext()
-            : base("DefaultConnection")
-        {
-        }
-
-        public IDbSet<UserProfile> UserProfiles { get; set; }
-        public IDbSet<UserPoint> UserPoints { get; set; }
-        public IDbSet<Tag> Tags { get; set; }
-        public IDbSet<Ticket> Tickets { get; set; }
-        public IDbSet<TicketUserRank> TicketUserRanks { get; set; }
-        public IDbSet<TicketTag> TicketTags { get; set; }
-        public IDbSet<UserTag> UserTags { get; set; }
-
-        /// <summary>
-        /// UserProfiles with eagerly loaded information.
-        /// </summary>
-        public IQueryable<UserProfile> FullUserProfiles 
-        {
-            get
-            {
-                // Eagerly load tag information associated with profiles
-                return ((DbSet<UserProfile>)UserProfiles).Include(profile => profile.Tags.Select(tag => tag.Tag));
-            }
-        }
-    }
-
     [Table("UserProfile")]
     public class UserProfile
     {

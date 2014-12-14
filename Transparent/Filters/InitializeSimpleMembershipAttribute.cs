@@ -5,6 +5,7 @@ using System.Threading;
 using System.Web.Mvc;
 using WebMatrix.WebData;
 using Transparent.Data.Models;
+using Transparent.Data;
 
 namespace Transparent.Filters
 {

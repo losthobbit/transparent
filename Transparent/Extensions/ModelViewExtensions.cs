@@ -33,6 +33,7 @@ namespace Transparent.Extensions
             {
                 case TicketType.Question: return "question";
                 case TicketType.Suggestion: return "suggestion";
+                case TicketType.Test: return "test";
             }
             throw new NotSupportedException("Unknown ticket type");
         }
@@ -43,6 +44,7 @@ namespace Transparent.Extensions
             {
                 case TicketType.Question: return "Q";
                 case TicketType.Suggestion: return "S";
+                case TicketType.Test: return "T";
             }
             throw new NotSupportedException("Unknown ticket type");
         }

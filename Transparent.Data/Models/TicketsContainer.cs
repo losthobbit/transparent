@@ -37,9 +37,7 @@ namespace Transparent.Data.Models
         /// <returns>Query with filter.</returns>
         public virtual IQueryable<Ticket> ApplyFilter(IQueryable<Ticket> tickets)
         {
-            if (TicketType == null)
-                return tickets;
-            return tickets.Where(ticket => ticket.TicketType == TicketType.Value);
+            return tickets;
         }
 
         public int PageIndex

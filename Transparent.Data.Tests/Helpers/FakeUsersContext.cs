@@ -22,6 +22,9 @@ namespace Transparent.Data.Tests.Helpers
             TicketUserRanks = new FakeDbSet<TicketUserRank>();
             TicketTags = new FakeDbSet<TicketTag>();
             UserTags = new FakeDbSet<UserTag>();
+            Tests = new FakeDbSet<Test>();
+            Questions = new FakeDbSet<Question>();
+            Suggestions = new FakeDbSet<Suggestion>();
         }
 
         public IDbSet<UserProfile> UserProfiles { get; private set; }
@@ -31,6 +34,9 @@ namespace Transparent.Data.Tests.Helpers
         public IDbSet<TicketUserRank> TicketUserRanks { get; private set; }
         public IDbSet<TicketTag> TicketTags { get; private set; }
         public IDbSet<UserTag> UserTags { get; private set; }
+        public IDbSet<Test> Tests { get; set; }
+        public IDbSet<Question> Questions { get; set; }
+        public IDbSet<Suggestion> Suggestions { get; set; }
 
         public IQueryable<UserProfile> FullUserProfiles
         {
