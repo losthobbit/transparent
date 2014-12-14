@@ -1,0 +1,42 @@
+﻿@model Transparent.Data.Models.UserProfile
+
+@{
+    ViewBag.Title = "User Profile";
+}
+
+@Html.Partial("_AccountMenuPartial")
+
+<fieldset>
+    <legend>UserProfile</legend>
+
+    <table>
+        <tr>
+            <td class="display-label">
+                 @Html.DisplayNameFor(model => model.UserName)
+            </td>
+            <td class="display-field">
+                @Html.DisplayFor(model => model.UserName)
+            </td>
+        </tr>
+        <tr>
+            <td class="display-label">
+                 @Html.DisplayNameFor(model => model.Email)
+            </td>
+            <td class="display-field">
+                @Html.DisplayFor(model => model.Email)
+            </td>
+        </tr>
+        @Html.DisplayFor(model => model.Tags)
+        <tr>
+            <td class="display-label">
+                 Total points
+            </td>
+            <td class="display-field">
+                @Model.Tags.Sum(tag => tag.TotalPoints)
+            </td>
+        </tr>
+    </table>
+</fieldset>
+<p>
+    @*@Html.ActionLink("Edit", "Edit", new { id=Model.UserId })*@
+</p>

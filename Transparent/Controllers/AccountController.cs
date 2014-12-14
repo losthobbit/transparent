@@ -10,6 +10,7 @@ using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
 using Transparent.Filters;
 using Transparent.Data.Models;
+using System.Data.Linq;
 
 namespace Transparent.Controllers
 {
@@ -127,6 +128,17 @@ namespace Transparent.Controllers
             }
 
             return RedirectToAction("Manage", new { Message = message });
+        }
+
+        // GET: /Account/UserProfile
+
+        public ActionResult UserProfile()
+        {
+            using(var db = new UsersContext())
+            {              
+                var userProfile = db.FullUserProfiles.Single(profile => profile.UserName == User.Identity.Name);
+                return View(userProfile);
+            }
         }
 
         //

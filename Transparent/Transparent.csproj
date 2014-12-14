@@ -43,6 +43,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -299,6 +300,9 @@
     <Content Include="Views\Ticket\MyQueue.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\RadioButtonsForEnum.cshtml" />
     <Content Include="Views\Ticket\RaisedByMe.cshtml" />
+    <Content Include="Views\Account\_AccountMenuPartial.cshtml" />
+    <Content Include="Views\Account\UserProfile.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\UserTag.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

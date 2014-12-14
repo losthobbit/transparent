@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Globalization;
+using System.Linq;
 using System.Web.Security;
 using Transparent.Data.Interfaces;
 
@@ -23,6 +24,18 @@ namespace Transparent.Data.Models
         public IDbSet<TicketUserRank> TicketUserRanks { get; set; }
         public IDbSet<TicketTag> TicketTags { get; set; }
         public IDbSet<UserTag> UserTags { get; set; }
+
+        /// <summary>
+        /// UserProfiles with eagerly loaded information.
+        /// </summary>
+        public IQueryable<UserProfile> FullUserProfiles 
+        {
+            get
+            {
+                // Eagerly load tag information associated with profiles
+                return ((DbSet<UserProfile>)UserProfiles).Include(profile => profile.Tags.Select(tag => tag.Tag));
+            }
+        }
     }
 
     [Table("UserProfile")]
@@ -42,6 +55,8 @@ namespace Transparent.Data.Models
         [MaxLength(100)]
         // Must be indexed and unique
         public string Email { get; set; }
+
+        public virtual ICollection<UserTag> Tags { get; set; }
     }
 
     public class RegisterExternalLoginModel

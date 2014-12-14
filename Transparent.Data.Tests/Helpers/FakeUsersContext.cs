@@ -32,6 +32,14 @@ namespace Transparent.Data.Tests.Helpers
         public IDbSet<TicketTag> TicketTags { get; private set; }
         public IDbSet<UserTag> UserTags { get; private set; }
 
+        public IQueryable<UserProfile> FullUserProfiles
+        {
+            get
+            {
+                return UserProfiles;
+            }
+        }
+
         public int SaveChanges()
         {
             return 0;

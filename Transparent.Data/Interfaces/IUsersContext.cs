@@ -20,5 +20,7 @@ namespace Transparent.Data.Interfaces
         IDbSet<UserTag> UserTags { get; }
         int SaveChanges();
         DbEntityEntry Entry(object entity);
+
+        IQueryable<UserProfile> FullUserProfiles { get; }
     }
 }
