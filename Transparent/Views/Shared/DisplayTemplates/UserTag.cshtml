@@ -1,7 +1,7 @@
 ﻿@model Transparent.Data.Models.UserTag
 <tr>
     <td class="display-label">
-        @Html.DisplayFor(model => model.Tag.Name)
+        @Html.ActionLink(Model.Tag.Name, "Details", "Tag", new { id = Model.Tag.Id }, new { })
     </td>
     <td class="display-field">
         @Html.DisplayFor(model => model.TotalPoints)

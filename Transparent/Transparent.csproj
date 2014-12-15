@@ -304,6 +304,7 @@
     <Content Include="Views\Account\_AccountMenuPartial.cshtml" />
     <Content Include="Views\Account\UserProfile.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\UserTag.cshtml" />
+    <Content Include="Views\Tag\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

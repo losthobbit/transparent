@@ -1,0 +1,15 @@
+﻿@model Transparent.Data.Models.Tag
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<fieldset>
+    <legend>Tag</legend>
+    <div class="display-field">
+        <h2>@Html.DisplayFor(model => model.Name)</h2>
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Description)
+    </div>
+</fieldset>

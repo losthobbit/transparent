@@ -23,6 +23,10 @@ a { text-decoration:none }
     color: #996600;
 }
 
+p {
+    text-align: justify;
+}
+
 /* MVC */
 html {
     background-color: #e2e2e2;
