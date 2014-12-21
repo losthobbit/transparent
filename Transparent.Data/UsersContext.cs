@@ -27,6 +27,7 @@ namespace Transparent.Data
         public IDbSet<Test> Tests { get; set; }
         public IDbSet<Question> Questions { get; set; }
         public IDbSet<Suggestion> Suggestions { get; set; }
+        public IDbSet<TagRelationship> TagRelationships { get; set; }
 
         /// <summary>
         /// UserProfiles with eagerly loaded information.

@@ -1,5 +1,5 @@
 ﻿<header>
-    <ul id="menu" class="left">
+    <ul id="menu" class="left main">
         @{var links = new []
             {
                 new []{ "My Queue", "MyQueue" },
@@ -12,7 +12,16 @@
         }
         @foreach(var link in links)
         {
-            <li>@(ViewBag.Title == link[0] ? MvcHtmlString.Create(link[0]) : Html.ActionLink(link[0], link[1], "Ticket"))</li>
+            <li>
+            @if (ViewBag.Title == link[0])
+            {
+                <b>@MvcHtmlString.Create(link[0])</b>
+            }
+            else
+            {
+                @Html.ActionLink(link[0], link[1], "Ticket");
+            }
+            </li>
         }
     </ul>
 </header>

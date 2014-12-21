@@ -12,40 +12,49 @@ a { text-decoration:none }
     }
 
 .question {
-    color: #003300;
+    
 }
 
 .suggestion {
-    color: #0000CC;
+    
 }
 
 .test {
-    color: #996600;
+    
 }
 
 p {
     text-align: justify;
 }
 
+header.main {
+    height:70px;
+    background-image: url(../Images/blue/left.png), url(../Images/blue/right.png);
+    background-position: left, right;
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+}
+
 /* MVC */
 html {
-    background-color: #e2e2e2;
+    background-image: url(../Images/border/topLeft.png),     url(../Images/border/topRight.png),     url(../Images/border/botLeft.png),     url(../Images/border/botRight.png),     url(../Images/border/top.png),     url(../Images/border/left.png),     url(../Images/border/right.png),     url(../Images/border/bot.png),     url(../Images/border/center.png);
+            
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat-x, repeat-y, repeat-y, repeat-x, repeat;    background-position: 0 0, right 0, 0 bottom, right bottom, 0 0, 0 0, right 0, 0 bottom, 0 0;
+    background-attachment: fixed;
     margin: 0;
     padding: 0;
 }
 
 body {
-    background-color: #fff;
     border-top: solid 10px #000;
-    color: #333;
-    font-size: .85em;
     font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
+    color: #e2e2e2; 
     margin: 0;
     padding: 0;
 }
 
 a {
-    color: #333;
+    color: #d3dcff;
     outline: none;
     padding-left: 3px;
     padding-right: 3px;
@@ -53,12 +62,16 @@ a {
 
     a:link, a:visited,
     a:active, a:hover {
-        color: #333;
+        color: #d3dcff;
     }
 
     a:hover {
-        background-color: #c7d1d6;
-    }
+    background-image: url(../Images/blue/selectVert.png);
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 3px;
+}
 
 header, footer, hgroup,
 nav, section {
@@ -128,13 +141,11 @@ h5, h6 {
 }
 
 #body {
-    background-color: #efeeef;
     clear: both;
     padding-bottom: 35px;
 }
 
     .main-content {
-        background: url("../Images/accent.png") no-repeat;
         padding-left: 10px;
         padding-top: 30px;
     }
@@ -144,7 +155,7 @@ h5, h6 {
     }
 
 header .content-wrapper {
-    padding-top: 20px; 
+    padding-top: 10px; 
 }
 
 footer {
@@ -182,7 +193,6 @@ footer {
 }
 
     #login a {
-        background-color: #d3dce0;
         margin-left: 10px;
         margin-right: 3px;
         padding: 2px 3px;
@@ -209,34 +219,53 @@ footer {
 /* menu
 ----------------------------------------------------------*/
 ul#menu {
-    font-size: 1.3em;
+    font-size: 1.1em;
     font-weight: 600;
     margin: 0 0 5px;
     padding: 0;
     text-align: right;
 }
 
+    ul#menu.subMenu {
+        font-size: 1em;
+        margin-top: 20px;
+    }
+
+        ul#menu.subMenu li {
+            margin-right: 20px;
+        }
+
     ul#menu.left {
         text-align: left;
     }
 
     ul#menu li {
+        padding: 5px;
         display: inline;
         list-style: none;
-        padding-left: 15px;
     }
 
         ul#menu li a {
-            background: none;
-            color: #999;
-            text-decoration: none;
+            padding: 5px;
+            color: #ccc;
+            background-color: rgba(255, 255, 255, 0.25);
+            border-radius: 3px;
         }
 
-        ul#menu li a:hover {
-            color: #333;
-            text-decoration: none;
+        ul#menu.main li a {
+            margin: 5px 20px 5px 0px;
         }
 
+        ul#menu li b {
+            padding: 5px;
+            color: #f00;
+            background-color: rgba(255, 255, 255, 0.25);
+            border-radius: 3px;
+        }
+
+        ul#menu.main li b {
+            margin: 5px 20px 5px 0px;
+        }
 
 /* page elements
 ----------------------------------------------------------*/
@@ -459,11 +488,11 @@ label.checkbox {
 
 input, textarea {
     border: 1px solid #e2e2e2;
-    background: #fff;
+    background-color: #D2D2D2;
+    border-radius: 3px;
     color: #333;
-    font-size: 1.2em;
-    margin: 5px 0 6px 0;
-    padding: 5px;
+    margin: 3px 0 3px 0;
+    padding: 2px;
     width: 300px;
 }
 
@@ -488,10 +517,9 @@ textarea {
         background-color: #d3dce0;
         border: 1px solid #787878;
         cursor: pointer;
-        font-size: 1.2em;
         font-weight: 600;
-        padding: 7px;
-        margin-right: 8px;
+        padding: 5px;
+        margin-right: 4px;
         width: auto;
     }
 

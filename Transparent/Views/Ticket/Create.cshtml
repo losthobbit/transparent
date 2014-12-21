@@ -2,13 +2,26 @@
 @using Transparent.Extensions
 @using Transparent.Data.Models
 
+@{
+    ViewBag.Title = "Create";
+}
+
 @Html.Partial("_MenuPartial")
 
 <header>
-    <ul id="menu" class="left">
+    <ul id="menu" class="left subMenu">
     @foreach (var value in (TicketType[])Enum.GetValues(typeof(TicketType)))
     {
-        <li>@(Model.TicketType == value ? MvcHtmlString.Create(value.DisplayName()) : Html.ActionLink(value.DisplayName(), "Create", new { TicketType = value }))</li>
+        <li>
+        @if(Model.TicketType == value)
+        {
+            <b>@MvcHtmlString.Create(value.DisplayName())</b>
+        }
+        else
+        {
+            @Html.ActionLink(value.DisplayName(), "Create", new { TicketType = value });
+        }
+        </li>
     }
     </ul>
 </header>    

@@ -59,6 +59,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="InitDatabase.cs" />
     <Compile Include="Interfaces\IUsersContext.cs" />
     <Compile Include="Migrations\201411221839164_Initial-Create.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Models\PagedList.cs" />
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\Suggestion.cs" />
+    <Compile Include="Models\TagRelationship.cs" />
     <Compile Include="Models\Test.cs" />
     <Compile Include="Models\TicketType.cs" />
     <Compile Include="Models\UserPoint.cs" />

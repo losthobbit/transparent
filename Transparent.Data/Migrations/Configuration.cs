@@ -21,17 +21,11 @@ using Transparent.Data.Models;
                 t => t.Name,
                 new Tag
                 {
-                    Name = "Democratic Intelligence",
-                    Description = "Use this tag for suggestions related to this site.<br/>" +
-                                    "Increase your points simply by using the site."
-                },
-                new Tag
-                {
                     Name = "Critical Thinking",
                     Description = "<p>The broad topic of critical thinking includes subjects like " +
                                     "the scientific method, open mindedness, logical fallacies, etc.  " +
                                     "Many books have been written on methods of thinking that have taken " +
-                                    "humans thousands of years to realize.  The application of critical " + 
+                                    "humans thousands of years to realize.  The application of critical " +
                                     "thinking is essential to this site in order to keep the information and decisions " +
                                     "as accurate and unbiased as possible.  All other tags are based upon this " +
                                     "one, meaning that until a person has studied critical thinking, they cannot " +
@@ -43,12 +37,12 @@ using Transparent.Data.Models;
                                     "that what you thought was logic, relied too heavily on your emotions.</p>" +
                                     "<p>In order to learn more about critical thinking, I'd recommend reading some (or all) of " +
                                     "the following books:</p><ul>" +
-                                    "<li><a href=\"http://www.schoolofthinking.org/software.pdf\">Software for your Brain</a>, or the updated version, " + 
+                                    "<li><a href=\"http://www.schoolofthinking.org/software.pdf\">Software for your Brain</a>, or the updated version, " +
                                     "English Thinking: The Three Methods, by Michael Hewitt-Gleeson</li>" +
                                     "<li>Your Deceptive Mind: A Scientific Guide to Critical Thinking Skills, by Steven Novella (audio book)</li>" +
                                     "<li><a href=\"http://www.youtube.com/watch?v=hGkfs9WU98s\">The Demon Haunted World</a> by Carl Sagan</li>" +
                                     "<li>Mistakes Were Made (but not by me) by Carol Tavris, Elliot Aronson</li>" +
-                                    "</ul>"+
+                                    "</ul>" +
                                     "There are also numerous videos and articles related to critical thinking on the internet.  Here are some examples:<br/>" +
                                     "Articles<br/>" +
                                     "<ul>" +
@@ -65,6 +59,67 @@ using Transparent.Data.Models;
                                     "</ul>" +
                                     "<p>Also, take a look at <a href=\"https://yourlogicalfallacyis.com/\">this website</a>, which lists 24 logical fallacies with examples.</p>"
 
+                },
+                new Tag
+                {
+                    Name = Constants.ApplicationName,
+                    Description = "Use this tag for questions and suggestions related to this system.<br/>" +
+                                    "Increase your points by using the site positively and volunteering."
+                },
+                new Tag
+                {
+                    Name = "Promotion",
+                    Description = "Use this tag for suggestions related to promotion of the goals of " + Constants.ApplicationName + "."
+                },
+                new Tag
+                {
+                    Name = "Social Systems",
+                    Description = "Use this tag for suggestions to improve social systems."
+                },
+                new Tag
+                {
+                    Name = "Health",
+                    Description = "Use this tag for suggestions relating to health."
+                },
+                new Tag
+                {
+                    Name = "Technology",
+                    Description = "Use this tag for suggestions relating to technology."
+                },
+                new Tag
+                {
+                    Name = "Education",
+                    Description = "Use this tag for suggestions relating to education."
+                },
+                new Tag
+                {
+                    Name = "Environment",
+                    Description = "Use this tag for suggestions relating to education."
+                },
+                new Tag
+                {
+                    Name = "Food",
+                    Description = "Use this tag for suggestions relating to food."
+                },
+                new Tag
+                {
+                    Name = "Water",
+                    Description = "Use this tag for suggestions relating to water."
+                },
+                new Tag
+                {
+                    Name = "Safety",
+                    Description = "Use this tag for suggestions relating to safety."
+                },
+                new Tag
+                {
+                    Name = "Peace",
+                    Description = "Use this tag for suggestions relating to peace."
+                },
+                new Tag
+                {
+                    Name = "Shelter",
+                    Description = "Use this tag for suggestions relating to shelter."
                 }
             );
         }

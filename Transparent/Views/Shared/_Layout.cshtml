@@ -10,7 +10,7 @@
         @Scripts.Render("~/bundles/modernizr")
     </head>
     <body>
-        <header>
+        <header class="main">
             <div class="content-wrapper">
                 <div class="float-left">
                     <p class="site-title">@Html.ActionLink("Transparent", "Index", "Home")</p>
@@ -35,10 +35,6 @@
                 @RenderBody()
             </section>
         </div>
-        <footer>
-            <div class="content-wrapper">
-            </div>
-        </footer>
 
         @Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/jqueryval")
