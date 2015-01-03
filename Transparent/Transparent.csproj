@@ -233,7 +233,13 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
+    <Content Include="Images\blue\blueLight.png" />
     <Content Include="Images\blue\left.png" />
+    <Content Include="Images\blue\right.png" />
+    <Content Include="Images\blue\select.png" />
+    <Content Include="Images\blue\selected.png" />
+    <Content Include="Images\blue\selectHoriz.png" />
+    <Content Include="Images\blue\selectVert.png" />
     <Content Include="Images\border\bot.png" />
     <Content Include="Images\border\botLeft.png" />
     <Content Include="Images\border\botRight.png" />

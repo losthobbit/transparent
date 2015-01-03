@@ -106,6 +106,10 @@
     <Compile Include="Migrations\201412141940043_MakeTicketTypeNotNullable.Designer.cs">
       <DependentUpon>201412141940043_MakeTicketTypeNotNullable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201501031555030_Unknown.cs" />
+    <Compile Include="Migrations\201501031555030_Unknown.Designer.cs">
+      <DependentUpon>201501031555030_Unknown.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\BaseTicket.cs" />
@@ -168,6 +172,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201412141940043_MakeTicketTypeNotNullable.resx">
       <DependentUpon>201412141940043_MakeTicketTypeNotNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501031555030_Unknown.resx">
+      <DependentUpon>201501031555030_Unknown.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
