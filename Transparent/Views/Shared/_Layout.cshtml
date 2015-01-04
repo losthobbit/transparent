@@ -8,6 +8,9 @@
         @Styles.Render("~/Content/css")
         @Styles.Render("~/Content/themes/base/css")
         @Scripts.Render("~/bundles/modernizr")
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/jqueryval")
+        @RenderSection("scripts", required: false)
     </head>
     <body>
         <header class="main">
@@ -35,9 +38,5 @@
                 @RenderBody()
             </section>
         </div>
-
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/jqueryval")
-        @RenderSection("scripts", required: false)
     </body>
 </html>
