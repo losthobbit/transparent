@@ -3,7 +3,7 @@ namespace Transparent.Data.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Unknown : DbMigration
+    public partial class CreateTableTagRelationships : DbMigration
     {
         public override void Up()
         {
@@ -15,8 +15,8 @@ namespace Transparent.Data.Migrations
                         FkChildId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => new { t.FkParentId, t.FkChildId })
-                .ForeignKey("dbo.Tags", t => t.FkParentId, cascadeDelete: false)
-                .ForeignKey("dbo.Tags", t => t.FkChildId, cascadeDelete: false)
+                .ForeignKey("dbo.Tags", t => t.FkParentId)
+                .ForeignKey("dbo.Tags", t => t.FkChildId)
                 .Index(t => t.FkParentId)
                 .Index(t => t.FkChildId);
             

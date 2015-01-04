@@ -27,7 +27,6 @@ namespace Transparent.Data
         public IDbSet<Test> Tests { get; set; }
         public IDbSet<Question> Questions { get; set; }
         public IDbSet<Suggestion> Suggestions { get; set; }
-        public IDbSet<TagRelationship> TagRelationships { get; set; }
 
         /// <summary>
         /// UserProfiles with eagerly loaded information.
@@ -49,6 +48,17 @@ namespace Transparent.Data
             .Map<Suggestion>(s => s.Requires("TicketType").HasValue((int)TicketType.Suggestion))
             .Map<Test>(t => t.Requires("TicketType").HasValue((int)TicketType.Test))
             .ToTable("dbo.Tickets");
+
+            modelBuilder.Entity<Tag>().
+              HasMany(c => c.Parents).
+              WithMany(p => p.Children).
+              Map(
+               m =>
+               {
+                   m.MapLeftKey("FkParentId");
+                   m.MapRightKey("FkChildId");
+                   m.ToTable("TagRelationships");
+               });
         }
     }
 }

@@ -106,9 +106,9 @@
     <Compile Include="Migrations\201412141940043_MakeTicketTypeNotNullable.Designer.cs">
       <DependentUpon>201412141940043_MakeTicketTypeNotNullable.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201501031555030_Unknown.cs" />
-    <Compile Include="Migrations\201501031555030_Unknown.Designer.cs">
-      <DependentUpon>201501031555030_Unknown.cs</DependentUpon>
+    <Compile Include="Migrations\201501041047137_CreateTableTagRelationships.cs" />
+    <Compile Include="Migrations\201501041047137_CreateTableTagRelationships.Designer.cs">
+      <DependentUpon>201501041047137_CreateTableTagRelationships.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
@@ -117,7 +117,6 @@
     <Compile Include="Models\PagedList.cs" />
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\Suggestion.cs" />
-    <Compile Include="Models\TagRelationship.cs" />
     <Compile Include="Models\Test.cs" />
     <Compile Include="Models\TicketType.cs" />
     <Compile Include="Models\UserPoint.cs" />
@@ -173,8 +172,8 @@
     <EmbeddedResource Include="Migrations\201412141940043_MakeTicketTypeNotNullable.resx">
       <DependentUpon>201412141940043_MakeTicketTypeNotNullable.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201501031555030_Unknown.resx">
-      <DependentUpon>201501031555030_Unknown.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201501041047137_CreateTableTagRelationships.resx">
+      <DependentUpon>201501041047137_CreateTableTagRelationships.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

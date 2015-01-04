@@ -25,7 +25,6 @@ namespace Transparent.Data.Tests.Helpers
             Tests = new FakeDbSet<Test>();
             Questions = new FakeDbSet<Question>();
             Suggestions = new FakeDbSet<Suggestion>();
-            TagRelationships = new FakeDbSet<TagRelationship>();
         }
 
         public IDbSet<UserProfile> UserProfiles { get; private set; }
@@ -38,7 +37,6 @@ namespace Transparent.Data.Tests.Helpers
         public IDbSet<Test> Tests { get; set; }
         public IDbSet<Question> Questions { get; set; }
         public IDbSet<Suggestion> Suggestions { get; set; }
-        public IDbSet<TagRelationship> TagRelationships { get; set; }
 
         public IQueryable<UserProfile> FullUserProfiles
         {

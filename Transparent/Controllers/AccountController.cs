@@ -44,7 +44,7 @@ namespace Transparent.Controllers
                     if(userProfile != null)
                         model.UserName = userProfile.UserName;
                 };
-            if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
+            if (ModelState.IsValid && model.UserName != null && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
             {
                 return RedirectToLocal(returnUrl);
             }

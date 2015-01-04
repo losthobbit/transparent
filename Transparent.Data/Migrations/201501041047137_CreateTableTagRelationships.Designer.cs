@@ -5,13 +5,13 @@ namespace Transparent.Data.Migrations
     using System.Data.Entity.Migrations.Infrastructure;
     using System.Resources;
     
-    public sealed partial class Unknown : IMigrationMetadata
+    public sealed partial class CreateTableTagRelationships : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Unknown));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(CreateTableTagRelationships));
         
         string IMigrationMetadata.Id
         {
-            get { return "201501031555030_Unknown"; }
+            get { return "201501041047137_CreateTableTagRelationships"; }
         }
         
         string IMigrationMetadata.Source
