@@ -13,12 +13,25 @@ namespace Transparent
     using Data;
     using Data.Models;
     using WebMatrix.WebData;
+    using Castle.Windsor;
+    using Castle.Windsor.Installer;
+    using Transparent.Windsor;
     
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
 
     public class MvcApplication : System.Web.HttpApplication
     {
+        private static IWindsorContainer container;
+
+        private static void BootstrapContainer()
+        {
+            container = new WindsorContainer()
+                .Install(FromAssembly.InThisApplication());
+            var controllerFactory = new WindsorControllerFactory(container.Kernel);
+            ControllerBuilder.Current.SetControllerFactory(controllerFactory);
+        }
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -30,6 +43,8 @@ namespace Transparent
             AuthConfig.RegisterAuth();
 
             InitializeDatabase();
+
+            BootstrapContainer();
         }
 
         private void InitializeDatabase()
@@ -40,6 +55,11 @@ namespace Transparent
             if (!WebSecurity.Initialized)
                 WebSecurity.InitializeDatabaseConnection("DefaultConnection",
                      "UserProfile", "UserId", "UserName", autoCreateTables: true);
+        }
+
+        protected void Application_End()
+        {
+            container.Dispose();
         }
     }
 }

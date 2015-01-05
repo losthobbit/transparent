@@ -49,6 +49,15 @@
             @Html.ValidationMessageFor(model => model.Body)
         </div>
 
+        <div class="editor-label">
+            @Html.LabelFor(model => model.TicketTags)
+        </div>
+        <div class="editor-field">
+            <select>
+                <option></option>
+            </select>
+        </div>
+
         <p>
             <input type="submit" value="Create" />
         </p>
