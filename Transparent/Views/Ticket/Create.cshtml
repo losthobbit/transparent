@@ -1,4 +1,4 @@
-﻿@model Transparent.Data.Models.Ticket
+﻿@model Transparent.Data.ViewModels.TicketViewModel
 @using Transparent.Extensions
 @using Transparent.Data.Models
 
@@ -34,23 +34,23 @@
         <legend>Ticket</legend>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.Heading)
+            @Html.LabelFor(model => model.Model.Heading)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.Heading)
-            @Html.ValidationMessageFor(model => model.Heading)
+            @Html.EditorFor(model => model.Model.Heading)
+            @Html.ValidationMessageFor(model => model.Model.Heading)
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.Body)
+            @Html.LabelFor(model => model.Model.Body)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.Body)
-            @Html.ValidationMessageFor(model => model.Body)
+            @Html.EditorFor(model => model.Model.Body)
+            @Html.ValidationMessageFor(model => model.Model.Body)
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.TicketTags)
+            @Html.LabelFor(model => model.Model.TicketTags)
         </div>
         <div class="editor-field">
             <select>

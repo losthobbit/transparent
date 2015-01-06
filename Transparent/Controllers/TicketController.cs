@@ -10,6 +10,7 @@ using Transparent.Data;
 using Transparent.Data.Interfaces;
 using Transparent.Data.Models;
 using Transparent.Data.Queries;
+using Transparent.Data.ViewModels;
 
 namespace Transparent.Controllers
 {
@@ -104,14 +105,14 @@ namespace Transparent.Controllers
         public ActionResult Create(TicketType ticketType = TicketType.Suggestion)
         {
             ViewBag.FkUserId = new SelectList(db.UserProfiles, "UserId", "UserName");
-            return View("Create", Ticket.Create(ticketType));
+            return View("Create", new TicketViewModel(ticketType));
         }
 
         //
         // POST: /Ticket/Create
         
         private ActionResult Create<TTicket>(TTicket ticket, IDbSet<TTicket> dbSet)
-            where TTicket : Ticket
+            where TTicket : Ticket, new()
         {
             if (ModelState.IsValid)
             {
@@ -127,21 +128,21 @@ namespace Transparent.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateQuestion(Question question)
+        public ActionResult CreateQuestion(TicketViewModel<Question> question)
         {
-            return Create(question, db.Questions);
+            return Create(question.Ticket, db.Questions);
         }
 
         [HttpPost]
-        public ActionResult CreateSuggestion(Suggestion suggestion)
+        public ActionResult CreateSuggestion(TicketViewModel<Suggestion> suggestion)
         {
-            return Create(suggestion, db.Suggestions);
+            return Create(suggestion.Ticket, db.Suggestions);
         }
 
         [HttpPost]
-        public ActionResult CreateTest(Test test)
+        public ActionResult CreateTest(TicketViewModel<Test> test)
         {
-            return Create(test, db.Tests);
+            return Create(test.Ticket, db.Tests);
         }
 
         //
