@@ -9,10 +9,12 @@ namespace Transparent.Data.Caches
 {
     using Models;
     using System.Data.Entity;
+    using System.Web;
 
     public class Tags : ITags
     {
         private readonly IUsersContext context;
+        private readonly Dictionary<int, IHtmlString> serializedTags = new Dictionary<int, IHtmlString>();
 
         private List<IndentedTag> indentedTags;
 
@@ -67,6 +69,42 @@ namespace Transparent.Data.Caches
             {
                 BuildIndentedTags(indent, tag);
             }
+        }
+
+        public class SerializableSubTag
+        {
+            private Tag tag;
+
+            public SerializableSubTag(Tag tag)
+            {
+                this.tag = tag;
+            }
+
+            public int Id { get { return tag.Id; } }
+            public string Name { get { return tag.Name; } }
+        }
+
+        public class SerializableTag: SerializableSubTag
+        {
+            public SerializableTag(Tag tag): base(tag)
+            {
+                Parents = tag.Parents.Select(parent => new SerializableSubTag(parent)).ToList();
+                Children = tag.Children.Select(child => new SerializableSubTag(child)).ToList();
+            }
+
+            public ICollection<SerializableSubTag> Parents { get; private set; }
+            public ICollection<SerializableSubTag> Children { get; private set; }
+        }
+
+        public IHtmlString SerializeTag(Tag tag)
+        {
+            IHtmlString json;
+            if (serializedTags.TryGetValue(tag.Id, out json))
+                return json;
+            var serializableTag = new SerializableTag(tag);
+            json = Common.JavaScriptRoutines.SerializeObject(serializableTag);
+            serializedTags.Add(tag.Id, json);
+            return json;
         }
     }
 }

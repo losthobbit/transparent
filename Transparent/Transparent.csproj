@@ -180,7 +180,6 @@
     </Compile>
     <Compile Include="HtmlExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Routines\JavaScript.cs" />
     <Compile Include="Windsor\Installer.cs" />
     <Compile Include="Windsor\WindsorControllerFactory.cs" />
   </ItemGroup>
@@ -283,6 +282,7 @@
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
+    <Content Include="Scripts\tags.boxes.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -346,6 +346,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Models\" />
+    <Folder Include="Routines\" />
     <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>

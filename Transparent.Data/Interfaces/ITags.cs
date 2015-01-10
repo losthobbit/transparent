@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Transparent.Data.Models;
 
 namespace Transparent.Data.Interfaces
@@ -25,5 +26,7 @@ namespace Transparent.Data.Interfaces
         /// Useful for building a tree view
         /// </remarks>
         IEnumerable<IndentedTag> IndentedTags { get; }
+
+        IHtmlString SerializeTag(Tag tag);
     }
 }

@@ -6,9 +6,9 @@ using System.IO;
 using System.Linq;
 using System.Web;
 
-namespace Transparent.Routines
+namespace Common
 {
-    public static class JavaScript
+    public static class JavaScriptRoutines
     {
         /// <summary>
         /// Serialize a POCO class for use as JSON in a view.
