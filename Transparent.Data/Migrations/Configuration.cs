@@ -9,7 +9,6 @@ namespace Transparent.Data.Migrations
 
     internal sealed class Configuration : DbMigrationsConfiguration<UsersContext>
     {
-        private const string CriticalThinkingTagName = "Critical Thinking";
         private const string BasicPsychologyTagName = "Basic Psychology";
 
         public Configuration()
@@ -32,7 +31,7 @@ namespace Transparent.Data.Migrations
 
             if (stephen != null)
             {
-                var criticalThinkingTag = context.Tags.Single(tag => tag.Name == CriticalThinkingTagName);
+                var criticalThinkingTag = context.Tags.Single(tag => tag.Name == Constants.CriticalThinkingTagName);
                 AddOrUpdateUserTagPoints(context, stephen, criticalThinkingTag, 30);
 
                 var applicationTag = context.Tags.Single(tag => tag.Name == Constants.ApplicationName);
@@ -58,7 +57,7 @@ namespace Transparent.Data.Migrations
         {
             var criticalThinkingTag = new Tag
             {
-                Name = CriticalThinkingTagName,
+                Name = Constants.CriticalThinkingTagName,
                 Description = "<p>The broad topic of critical thinking includes subjects like " +
                                 "the scientific method, open mindedness, logical fallacies, etc.  " +
                                 "Many books have been written on methods of thinking that have taken " +

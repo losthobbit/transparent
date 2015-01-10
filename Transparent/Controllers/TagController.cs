@@ -11,10 +11,11 @@ namespace Transparent.Controllers
 {
     public class TagController : Controller
     {
-        private IUsersContext db = new UsersContext();
+        private ITags tags;
 
-        public TagController()
+        public TagController(ITags tags)
         {
+            this.tags = tags;
         }
 
         //
@@ -22,7 +23,7 @@ namespace Transparent.Controllers
 
         public ActionResult Details(int id = 0)
         {
-            Tag tag = db.Tags.Find(id);
+            Tag tag = tags.Find(id);
             if (tag == null)
             {
                 return HttpNotFound();

@@ -9,5 +9,6 @@ namespace Transparent.Data
     public static class Constants
     {
         public const string ApplicationName = "Democratic Intelligence";
+        public const string CriticalThinkingTagName = "Critical Thinking";
     }
 }

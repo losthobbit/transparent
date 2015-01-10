@@ -20,7 +20,7 @@ namespace Transparent
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
 
-    public class MvcApplication : System.Web.HttpApplication
+    public class MvcApplication : System.Web.HttpApplication, IContainerAccessor
     {
         private static IWindsorContainer container;
 
@@ -60,6 +60,11 @@ namespace Transparent
         protected void Application_End()
         {
             container.Dispose();
+        }
+
+        public IWindsorContainer Container
+        {
+            get { return container; }
         }
     }
 }

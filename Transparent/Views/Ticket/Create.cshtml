@@ -1,6 +1,8 @@
 ﻿@model Transparent.Data.ViewModels.TicketViewModel
 @using Transparent.Extensions
 @using Transparent.Data.Models
+@using Castle.Windsor
+@using Common
 
 @{
     ViewBag.Title = "Create";
@@ -53,9 +55,18 @@
             @Html.LabelFor(model => model.Model.TicketTags)
         </div>
         <div class="editor-field">
-            <select>
-                <option></option>
-            </select>
+            @{
+                var container = ((IContainerAccessor)Context.ApplicationInstance).Container;
+                var tags = container.Resolve<Transparent.Data.Interfaces.ITags>();
+                // TODO: Load the tags into JSON, so that the select box can be repeated via JavaScript.
+                <select class="tags">
+                    <option value="-1">Not selected</option>
+                    @foreach(var tag in tags.IndentedTags)
+                    {
+                        <option value="@tag.Tag.Id">@Html.Raw(StringRoutines.Repeat("&nbsp;&nbsp;", tag.Indent) + tag.Tag.Name)</option>
+                    }
+                </select>
+            }
         </div>
 
         <p>

@@ -485,7 +485,7 @@ label.checkbox {
     display: inline;
 }
 
-input, textarea {
+input, textarea, select {
     border: 1px solid #e2e2e2;
     background-color: #D2D2D2;
     border-radius: 3px;
@@ -494,6 +494,10 @@ input, textarea {
     padding: 2px;
     width: 300px;
 }
+
+    select.tags {
+        width: auto;
+    }
 
 textarea {
     font-family: inherit;

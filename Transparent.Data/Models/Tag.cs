@@ -29,7 +29,7 @@ namespace Transparent.Data.Models
         [DataType(DataType.Html)]
         public string Description { get; set; }
 
-        public virtual ICollection<Tag> Parents { get; set; }
-        public virtual ICollection<Tag> Children { get; set; }
+        public ICollection<Tag> Parents { get; set; }
+        public ICollection<Tag> Children { get; set; }
     }
 }
