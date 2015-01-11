@@ -268,6 +268,7 @@
     <Content Include="Images\green\top-left.png" />
     <Content Include="Images\green\top-right.png" />
     <Content Include="Images\green\top.png" />
+    <Content Include="Scripts\general-0001.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -282,7 +283,7 @@
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
-    <Content Include="Scripts\tags.boxes.js" />
+    <Content Include="Scripts\tags.boxes-0001.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

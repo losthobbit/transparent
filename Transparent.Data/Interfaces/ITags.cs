@@ -11,7 +11,8 @@ namespace Transparent.Data.Interfaces
     public class IndentedTag
     {
         public int Indent { get; set; }
-        public Tag Tag { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 
     public interface ITags
@@ -26,6 +27,7 @@ namespace Transparent.Data.Interfaces
         /// Useful for building a tree view
         /// </remarks>
         IEnumerable<IndentedTag> IndentedTags { get; }
+        IHtmlString SerializedIndentedTags { get; }
 
         IHtmlString SerializeTag(Tag tag);
     }

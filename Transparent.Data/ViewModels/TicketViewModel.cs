@@ -120,5 +120,22 @@ namespace Transparent.Data.ViewModels
                 Model.FkUserId = value;
             }
         }
+
+        public int[] TicketTagIds
+        {
+            get
+            {
+                return Model.TicketTags == null ? new int[]{} : Model.TicketTags.Select(tag => tag.FkTagId).ToArray();
+            }
+            set
+            {
+                var ticketTags = new List<TicketTag>();                
+                foreach (var id in value.Distinct().Where(id => id >= 0))
+                {
+                    ticketTags.Add(new TicketTag { FkTagId = id, Ticket = Model });
+                }
+                Model.TicketTags = ticketTags;
+            }
+        }
     }
 }

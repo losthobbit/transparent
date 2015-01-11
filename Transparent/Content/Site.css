@@ -497,6 +497,7 @@ input, textarea, select {
 
     select.tags {
         width: auto;
+        margin-right: 10px;
     }
 
 textarea {

@@ -7,6 +7,7 @@ using Transparent.Data.Interfaces;
 
 namespace Transparent.Data.Caches
 {
+    using Common;
     using Models;
     using System.Data.Entity;
     using System.Web;
@@ -15,6 +16,7 @@ namespace Transparent.Data.Caches
     {
         private readonly IUsersContext context;
         private readonly Dictionary<int, IHtmlString> serializedTags = new Dictionary<int, IHtmlString>();
+        private IHtmlString serializedIndentedTags;
 
         private List<IndentedTag> indentedTags;
 
@@ -64,7 +66,7 @@ namespace Transparent.Data.Caches
                 indentedTags = new List<IndentedTag>();
                 current = Root;
             }
-            indentedTags.Add(new IndentedTag { Tag = current, Indent = indent++ });
+            indentedTags.Add(new IndentedTag { Id = current.Id, Name = current.Name, Indent = indent++ });
             foreach (var tag in current.Children.OrderBy(child => child.Children.Count()))
             {
                 BuildIndentedTags(indent, tag);
@@ -102,9 +104,20 @@ namespace Transparent.Data.Caches
             if (serializedTags.TryGetValue(tag.Id, out json))
                 return json;
             var serializableTag = new SerializableTag(tag);
-            json = Common.JavaScriptRoutines.SerializeObject(serializableTag);
+            json = JavaScriptRoutines.SerializeObject(serializableTag);
             serializedTags.Add(tag.Id, json);
             return json;
+        }
+
+
+        public IHtmlString SerializedIndentedTags
+        {
+            get 
+            {
+                if (serializedIndentedTags == null)
+                    serializedIndentedTags = JavaScriptRoutines.SerializeObject(IndentedTags);
+                return serializedIndentedTags;
+            }
         }
     }
 }

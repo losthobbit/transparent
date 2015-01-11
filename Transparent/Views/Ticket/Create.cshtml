@@ -54,21 +54,43 @@
         <div class="editor-label">
             @Html.LabelFor(model => model.Model.TicketTags)
         </div>
-        <div class="editor-field">
-            @{
-                var container = ((IContainerAccessor)Context.ApplicationInstance).Container;
-                var tags = container.Resolve<Transparent.Data.Interfaces.ITags>();
-                // TODO: Load the tags into JSON, so that the select box can be repeated via JavaScript.
-                <select class="tags">
-                    <option value="-1">Not selected</option>
-                    @foreach(var tag in tags.IndentedTags)
-                    {
-                        <option value="@tag.Tag.Id">@Html.Raw(StringRoutines.Repeat("&nbsp;&nbsp;", tag.Indent) + tag.Tag.Name)</option>
-                    }
-                </select>
-            }
+        <div class="editor-field" id="tagSelectors">
         </div>
+        @{
+            var container = ((IContainerAccessor)Context.ApplicationInstance).Container;
+            var tags = container.Resolve<Transparent.Data.Interfaces.ITags>();
+            <script>
+                var tagCount = 0;
 
+                function addTagSelector(div)
+                {
+                    var tags = @tags.SerializedIndentedTags;
+                    var selectElement = "<select name=\"TicketTagIds\" onchange=\"addTagSelectorIfRequired()\" class=\"tags\"><option value=\"-1\" selected>Not selected</option>";
+                    for (var i = 0; i < tags.length; i++) {
+                        var tag = tags[i];
+                        selectElement += "<option value=\"" + tag.id + "\">" + repeat("&nbsp;&nbsp;", tag.indent) + tag.name + "</option>";
+                    }
+                    selectElement += "</select>"
+                    div.append(selectElement);
+                }
+
+                function addTagSelectorIfRequired()
+                {
+                    var div = $("#tagSelectors");
+                    var selectElements = div.contents();
+                    for(var i = 0; i < selectElements.length; i++)
+                    {
+                        if(selectElements[i].value == -1)
+                            return;
+                    }
+                    addTagSelector(div);
+                }
+
+                $(function(){
+                    addTagSelectorIfRequired();
+                });
+            </script>
+        }
         <p>
             <input type="submit" value="Create" />
         </p>
