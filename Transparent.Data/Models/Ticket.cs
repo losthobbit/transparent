@@ -34,9 +34,6 @@ namespace Transparent.Data.Models
 
         public virtual ICollection<TicketUserRank> UserRanks { get; set; }
 
-        [Display(Name = "Tags")]
-        public virtual ICollection<TicketTag> TicketTags { get; set; }
-
         public static Ticket Create(TicketType ticketType)
         {
             switch (ticketType)

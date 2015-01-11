@@ -23,6 +23,7 @@ namespace Transparent.Data.Models
             Heading = ticket.Heading;
             Body = ticket.Body;
             TicketType = ticket.TicketType;
+            TicketTags = ticket.TicketTags;
         }
     }
 }

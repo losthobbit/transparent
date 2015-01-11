@@ -35,7 +35,18 @@ header.main {
     background-size: auto 100%;
 }
 
-/* MVC */
+a.tagDisplay {
+    float: left;
+    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 3px;
+    margin: 5px 5px 5px 0px;
+    padding: 3px 5px 3px 5px;
+}
+
+div {
+    margin-bottom: 5px;
+}
+
 html {
     background-image: url(../Images/border/topLeft.png),     url(../Images/border/topRight.png),     url(../Images/border/botLeft.png),     url(../Images/border/botRight.png),     url(../Images/border/top.png),     url(../Images/border/left.png),     url(../Images/border/right.png),     url(../Images/border/bot.png),     url(../Images/border/center.png);
             
@@ -86,6 +97,7 @@ mark {
 
 .float-left {
     float: left;
+    margin-right: 5px;
 }
 
 .float-right {
@@ -108,6 +120,7 @@ h4, h5, h6 {
 
 h1 {
     font-size: 2em;
+    margin-top: 0px;
 }
 
 h2 {
@@ -116,6 +129,7 @@ h2 {
 
 h3 {
     font-size: 1.2em;
+    margin-bottom: 15px;
 }
 
 h4 {
@@ -131,6 +145,13 @@ h5, h6 {
         text-decoration: none;
     }
 
+#rankPartial {
+    margin: 5px 10px 0px 10px;
+}
+
+    #rankPartial h1 {
+        margin-bottom: 8px;
+    }
 
 /* main layout
 ----------------------------------------------------------*/
@@ -239,7 +260,6 @@ ul#menu {
     }
 
     ul#menu li {
-        padding: 5px;
         display: inline;
         list-style: none;
     }

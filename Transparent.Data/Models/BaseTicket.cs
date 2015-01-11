@@ -40,5 +40,8 @@ namespace Transparent.Data.Models
 
         [NotMapped()]
         public virtual TicketType TicketType { get; protected set; }
+
+        [Display(Name = "Tags")]
+        public virtual ICollection<TicketTag> TicketTags { get; set; }
     }
 }
