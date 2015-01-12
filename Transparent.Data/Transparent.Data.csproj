@@ -141,6 +141,8 @@
     <Compile Include="Models\TicketsContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UsersContext.cs" />
+    <Compile Include="Validation\ISupportsMultipleTags.cs" />
+    <Compile Include="Validation\MaxTags.cs" />
     <Compile Include="ViewModels\TicketViewModel.cs" />
     <Compile Include="Windsor\Installer.cs" />
   </ItemGroup>

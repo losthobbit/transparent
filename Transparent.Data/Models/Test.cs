@@ -21,5 +21,13 @@ namespace Transparent.Data.Models
                 throw new NotSupportedException();
             }
         }
+
+        public override bool MultipleTags
+        {
+            get
+            {
+                return false;
+            }
+        }
     }
 }

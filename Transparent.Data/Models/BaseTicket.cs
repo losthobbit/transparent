@@ -5,10 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Transparent.Data.Validation;
 
 namespace Transparent.Data.Models
 {
-    public abstract class BaseTicket
+    public abstract class BaseTicket: ISupportsMultipleTags
     {
         public BaseTicket()
         {
@@ -42,6 +43,10 @@ namespace Transparent.Data.Models
         public virtual TicketType TicketType { get; protected set; }
 
         [Display(Name = "Tags")]
+        [MaxTags()]
         public virtual ICollection<TicketTag> TicketTags { get; set; }
+
+        [NotMapped()]
+        public virtual bool MultipleTags { get { return true; } }
     }
 }

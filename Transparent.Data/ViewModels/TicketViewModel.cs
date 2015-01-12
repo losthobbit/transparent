@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Transparent.Data.Models;
+using Transparent.Data.Validation;
 
 namespace Transparent.Data.ViewModels
 {
-    public class TicketViewModel<TModel>: TicketViewModel
+    public class TicketViewModel<TModel>: TicketViewModel, ISupportsMultipleTags
         where TModel : Ticket
     {
         public TModel Ticket { get { return (TModel)Model; } }
@@ -39,6 +40,11 @@ namespace Transparent.Data.ViewModels
         public TicketViewModel(Ticket model)
         {
             this.Model = model;
+        }
+
+        public bool MultipleTags
+        {
+            get { return Model.MultipleTags; }
         }
 
         public TicketType TicketType 
@@ -121,6 +127,7 @@ namespace Transparent.Data.ViewModels
             }
         }
 
+        [MaxTags()]
         public int[] TicketTagIds
         {
             get

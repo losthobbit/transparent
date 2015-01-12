@@ -65,7 +65,9 @@
                 function addTagSelector(div)
                 {
                     var tags = @tags.SerializedIndentedTags;
-                    var selectElement = "<select name=\"TicketTagIds\" onchange=\"addTagSelectorIfRequired()\" class=\"tags\"><option value=\"-1\" selected>Not selected</option>";
+                    var selectElement = "<select name=\"TicketTagIds\"";                    
+                    selectElement += "@Html.Raw(Model.MultipleTags ? " onchange=\\\"addTagSelectorIfRequired()\\\"" : "")";
+                    selectElement += " class=\"tags\"><option value=\"-1\" selected>Not selected</option>";
                     for (var i = 0; i < tags.length; i++) {
                         var tag = tags[i];
                         selectElement += "<option value=\"" + tag.id + "\">" + repeat("&nbsp;&nbsp;", tag.indent) + tag.name + "</option>";

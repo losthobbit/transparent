@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,18 @@ namespace Transparent.Data.Models
             if (rankRecord == null)
                 return TicketRank.NotRanked;
             return rankRecord.Up ? TicketRank.Up : TicketRank.Down;
+        }
+
+        public static int Count(this IEnumerable enumerable)
+        {
+            if (enumerable == null)
+                return 0;
+            int count = 0;
+            foreach (var item in enumerable)
+            {
+                ++count;
+            }
+            return count;
         }
     }
 }
