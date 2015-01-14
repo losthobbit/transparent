@@ -22,10 +22,17 @@ namespace Transparent.Data.Models
         public UserProfile User { get; set; }
 
         [ForeignKey("Tag")]
-        public int FkTag { get; set; }
+        public int FkTagId { get; set; }
         public Tag Tag { get; set; }
 
         [Display(Name = "Points")]
         public int Quantity { get; set; }
+
+        [ForeignKey("TestTaken")]
+        public int FkTestId { get; set; }
+        public Test TestTaken { get; set; }
+
+        [MaxLength(2000)]
+        public string Answer { get; set; }
     }
 }

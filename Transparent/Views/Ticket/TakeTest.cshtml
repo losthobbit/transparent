@@ -1,0 +1,57 @@
+﻿@model Transparent.Data.Models.Test
+
+@{
+    ViewBag.Title = "TakeTest";
+}
+
+<h2>TakeTest</h2>
+
+<fieldset>
+    <legend>Test</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.MultipleTags)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.MultipleTags)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.FkUserId)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.FkUserId)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CreatedDate)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedDate)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Rank)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Rank)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Heading)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Heading)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Body)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Body)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

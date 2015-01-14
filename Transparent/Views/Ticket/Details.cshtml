@@ -23,7 +23,7 @@
         <div>
             @foreach (var ticketTag in Model.TicketTags)
             {
-                <a class="tagDisplay" href="@Url.Action("Details", "Tag", new { id = ticketTag.FkTagId })">@ticketTag.Tag.Name</a>
+                <a class="button float-left" href="@Url.Action("Details", "Tag", new { id = ticketTag.FkTagId })">@ticketTag.Tag.Name</a>
             }
         </div>
     </div>

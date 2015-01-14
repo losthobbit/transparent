@@ -29,7 +29,7 @@ namespace Transparent.Data.Models
 
         [DataType(DataType.Date)]
         [Required]
-        // Must be indexed
+        [Index]
         public DateTime CreatedDate { get; set; }
 
         public virtual ICollection<TicketUserRank> UserRanks { get; set; }

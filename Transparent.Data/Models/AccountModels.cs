@@ -19,13 +19,14 @@ namespace Transparent.Data.Models
         [Required]
         [Display(Name = "Name")]
         [MaxLength(100)]
-        // Must be indexed and unique
+        [Index(IsUnique = true)]
         public string UserName { get; set; }
+
         [Required]
         [DataType(DataType.EmailAddress)]
         [Display(Name = "Email")]
         [MaxLength(100)]
-        // Must be indexed and unique
+        [Index(IsUnique = true)]
         public string Email { get; set; }
 
         public virtual ICollection<UserTag> Tags { get; set; }
@@ -68,7 +69,7 @@ namespace Transparent.Data.Models
         [Display(Name = "Email")]
         [DataType(DataType.EmailAddress)]
         [MaxLength(100)]
-        // Must be indexed and unique
+        [Index(IsUnique = true)]
         public string Email { get; set; }
 
         [Required]
@@ -100,7 +101,7 @@ namespace Transparent.Data.Models
         [Display(Name = "Email")]
         [DataType(DataType.EmailAddress)]
         [MaxLength(100)]
-        // Must be indexed and unique
+        [Index(IsUnique = true)]
         public string Email { get; set; }
 
         [Required]

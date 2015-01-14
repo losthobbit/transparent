@@ -20,7 +20,7 @@ namespace Transparent.Data.Models
         [Required]
         [MaxLength(60)]
         [Display(Name = "Tag")]
-        // Must be indexed
+        [Index(IsUnique = true)]
         public string Name { get; set; }
 
         [Required]

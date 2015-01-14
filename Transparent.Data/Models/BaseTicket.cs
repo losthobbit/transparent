@@ -27,7 +27,7 @@ namespace Transparent.Data.Models
         public int Id { get; set; }
 
         [Required]
-        // Must be indexed
+        [Index]
         public int Rank { get; set; }
 
         [MaxLength(100)]
@@ -39,6 +39,7 @@ namespace Transparent.Data.Models
         [Required]
         public string Body { get; set; }
 
+        // Specified in fluent API instead: 
         [NotMapped()]
         public virtual TicketType TicketType { get; protected set; }
 

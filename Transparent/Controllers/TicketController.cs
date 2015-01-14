@@ -145,6 +145,15 @@ namespace Transparent.Controllers
             return Create(test.Ticket, db.Tests);
         }
 
+        [HttpPost]
+        public ActionResult TakeTest(int tagId)
+        {
+            // find a random test that the user has not yet taken
+            var test = (Test)null;//tickets.GetRandomUntakenTest(tagId);
+
+            return View(test);
+        }
+
         //
         // GET: /Ticket/Edit/5
 

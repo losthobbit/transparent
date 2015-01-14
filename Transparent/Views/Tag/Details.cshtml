@@ -15,12 +15,23 @@
         var model = @tags.SerializeTag(Model);
         var actionUrl = "@Url.Action("Details", new { id = "" })";
         drawTags(model, actionUrl);
+
+        $("#takeTestButton").click(function(e) {
+            e.preventDefault();
+            TakeTestPrompt();
+        });
     });
+
+    function TakeTestPrompt() {
+        if(confirm("Taking a test deducts two points, which you get back when your answer is marked as good.\nAre you ready?"))
+            window.location.href = "@Url.Action("TakeTest", "Ticket", new { tagId = Model.Id })";
+    }
 </script>
 <fieldset>
     <legend>Tag</legend>
     <div class="display-field">
         <h2>@Html.DisplayFor(model => model.Name)</h2>
+        <a id="takeTestButton" class="button" onclick="TakeTestPrompt()">Take a test</a>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Description)

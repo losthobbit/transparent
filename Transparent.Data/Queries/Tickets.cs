@@ -30,6 +30,7 @@ namespace Transparent.Data.Queries
         private IDbSet<UserProfile> userProfiles;
         private IDbSet<TicketTag> ticketTags;
         private IDbSet<UserTag> userTags;
+        private IDbSet<Test> tests;
 
         public Tickets(IUsersContext usersContext)
         {
@@ -38,6 +39,7 @@ namespace Transparent.Data.Queries
             this.userProfiles = usersContext.UserProfiles;
             this.ticketTags = usersContext.TicketTags;
             this.userTags = usersContext.UserTags;
+            this.tests = usersContext.Tests;
         }
 
         private IQueryable<Ticket> TicketSet(TicketsContainer filter)
@@ -147,5 +149,14 @@ namespace Transparent.Data.Queries
             }
             return new Tuple<int, TicketRank>(ticket.Rank, ticketRank);
         }
+
+        //public Test GetRandomUntakenTest(int tagId, string userName)
+        //{
+        //    var untakenTest = from test in tests
+        //                      from order in 
+        //                           .Where(o => customer.CustomerId == o.CustomerId)
+        //                           .DefaultIfEmpty()
+        //                      select new { Customer = customer, Order = order }         
+        //}
     }
 }

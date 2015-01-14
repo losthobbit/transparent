@@ -1,15 +1,27 @@
 namespace Transparent.Data.Migrations
 {
     using System;
-    using System.Collections.Generic;
-    using System.Data.Entity;
-    using System.Data.Entity.Migrations;
-    using System.Linq;
-    using Transparent.Data.Models;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
+using System.Linq;
+using Transparent.Data.Models;
 
     internal sealed class Configuration : DbMigrationsConfiguration<UsersContext>
     {
         private const string BasicPsychologyTagName = "Basic Psychology";
+        private const string ShelterTagName = "Shelter";
+        private const string ArchitectureTagName = "Architecture";
+        private const string PromotionTagName = "Promotion";
+        private const string HealthTagName = "Health";
+        private const string TechnologyTagName = "Technology";
+        private const string EducationTagName = "Education";
+        private const string EnvironmentTagName = "Environment";
+        private const string FoodTagName = "Food";
+        private const string WaterTagName = "Water";
+        private const string SafetyTagName = "Safety";
+        private const string PeaceTagName = "Peace";
 
         public Configuration()
         {
@@ -21,11 +33,28 @@ namespace Transparent.Data.Migrations
             //  This method will be called after migrating to the latest version.
 
             AddTags(context);
-
-            SetupTestUser(context);
+            var testUser = SetupTestUser(context);
+            if (testUser != null)
+            {
+                CreateTests(context, testUser);
+            }
         }
 
-        private void SetupTestUser(UsersContext context)
+        private void CreateTests(UsersContext context, UserProfile testUser)
+        {
+            var criticalThinkingTag = context.Tags.Single(tag => tag.Name == Constants.CriticalThinkingTagName);
+            context.Tests.Add(new Test
+            {
+                User = testUser,
+                CreatedDate = DateTime.Now,
+                Heading = "Name the logical fallacy",
+                Body = "Name a logical fallacy in the following sentence:\n\n" +
+                    "I eat herbs because my grandfather ate herbs and lived for a hundred years.",
+                TicketTags = new Collection<TicketTag>{ new TicketTag{ Tag=criticalThinkingTag }}
+            });
+        }
+
+        private UserProfile SetupTestUser(UsersContext context)
         {
             var stephen = context.UserProfiles.SingleOrDefault(user => user.Email == "losthobbit@gmail.com");
 
@@ -40,6 +69,7 @@ namespace Transparent.Data.Migrations
                 var basicPsychologyTag = context.Tags.Single(tag => tag.Name == BasicPsychologyTagName);
                 AddOrUpdateUserTagPoints(context, stephen, basicPsychologyTag, 20);
             }
+            return stephen;
         }
 
         private void AddOrUpdateUserTagPoints(UsersContext context, UserProfile user, Tag tag, int totalPoints)
@@ -105,13 +135,13 @@ namespace Transparent.Data.Migrations
 
             var shelterTag = new Tag
             {
-                Name = "Shelter",
+                Name = ShelterTagName,
                 Description = "Use this tag for suggestions relating to shelter."
             };
 
             var architectureTag = new Tag
             {
-                Name = "Architecture",
+                Name = ArchitectureTagName,
                 Description = "Use this tag for suggestions relating to architecture."
             };
 
@@ -123,60 +153,52 @@ namespace Transparent.Data.Migrations
                 Description = "Use this tag for suggestions relating to basic psychology."
             };
 
-            var socialSystemsTag = new Tag
-            {
-                Name = "Social Systems",
-                Description = "Use this tag for suggestions to improve social systems."
-            };
-
-            basicPsychologyTag.Children = new List<Tag> { socialSystemsTag };
-
             var subTags = new List<Tag>()
             {
                 applicationTag,
                 new Tag
                 {
-                    Name = "Promotion",
+                    Name = PromotionTagName,
                     Description = "Use this tag for suggestions related to promotion of the goals of " + Constants.ApplicationName + "."
                 },
                 new Tag
                 {
-                    Name = "Health",
+                    Name = HealthTagName,
                     Description = "Use this tag for suggestions relating to health."
                 },
                 new Tag
                 {
-                    Name = "Technology",
+                    Name = TechnologyTagName,
                     Description = "Use this tag for suggestions relating to technology."
                 },
                 new Tag
                 {
-                    Name = "Education",
+                    Name = EducationTagName,
                     Description = "Use this tag for suggestions relating to education."
                 },
                 new Tag
                 {
-                    Name = "Environment",
+                    Name = EnvironmentTagName,
                     Description = "Use this tag for suggestions relating to education."
                 },
                 new Tag
                 {
-                    Name = "Food",
+                    Name = FoodTagName,
                     Description = "Use this tag for suggestions relating to food."
                 },
                 new Tag
                 {
-                    Name = "Water",
+                    Name = WaterTagName,
                     Description = "Use this tag for suggestions relating to water."
                 },
                 new Tag
                 {
-                    Name = "Safety",
+                    Name = SafetyTagName,
                     Description = "Use this tag for suggestions relating to safety."
                 },
                 new Tag
                 {
-                    Name = "Peace",
+                    Name = PeaceTagName,
                     Description = "Use this tag for suggestions relating to peace."
                 },
                 shelterTag,
