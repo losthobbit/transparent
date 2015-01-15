@@ -149,7 +149,7 @@ namespace Transparent.Controllers
         public ActionResult TakeTest(int tagId)
         {
             // find a random test that the user has not yet taken
-            var test = (Test)null;//tickets.GetRandomUntakenTest(tagId);
+            var test = tickets.GetRandomUntakenTest(tagId);
 
             return View(test);
         }

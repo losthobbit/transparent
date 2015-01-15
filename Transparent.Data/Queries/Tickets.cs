@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Transparent.Data.Interfaces;
 using Transparent.Data.Models;
+using Common;
 
 namespace Transparent.Data.Queries
 {
@@ -31,6 +32,7 @@ namespace Transparent.Data.Queries
         private IDbSet<TicketTag> ticketTags;
         private IDbSet<UserTag> userTags;
         private IDbSet<Test> tests;
+        private IDbSet<UserPoint> userPoints;
 
         public Tickets(IUsersContext usersContext)
         {
@@ -40,6 +42,7 @@ namespace Transparent.Data.Queries
             this.ticketTags = usersContext.TicketTags;
             this.userTags = usersContext.UserTags;
             this.tests = usersContext.Tests;
+            this.userPoints = usersContext.UserPoints;
         }
 
         private IQueryable<Ticket> TicketSet(TicketsContainer filter)
@@ -150,13 +153,21 @@ namespace Transparent.Data.Queries
             return new Tuple<int, TicketRank>(ticket.Rank, ticketRank);
         }
 
-        //public Test GetRandomUntakenTest(int tagId, string userName)
-        //{
-        //    var untakenTest = from test in tests
-        //                      from order in 
-        //                           .Where(o => customer.CustomerId == o.CustomerId)
-        //                           .DefaultIfEmpty()
-        //                      select new { Customer = customer, Order = order }         
-        //}
+        public IEnumerable<Test> GetUntakenTests(int tagId, string userName)
+        {    
+            var untakenTests = from test in tests
+                               where test.TicketTags.Any(tag => tag.FkTagId == tagId)
+                               from userPoint in userPoints
+                                    .Where(point => point.TestTaken == test && point.User.UserName == userName)
+                                    .DefaultIfEmpty()
+                               where userPoint == null
+                               select test;
+            return untakenTests;
+        }
+
+        public Test GetRandomUntakenTest(int tagId, string userName)
+        {
+            return GetUntakenTests(tagId, userName).Random();
+        }
     }
 }

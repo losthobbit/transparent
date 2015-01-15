@@ -39,7 +39,7 @@ namespace Transparent.Data.Tests.Queries
             var ticketsContainer = target.MyQueue(new TicketsContainer(), testData.Stephen.UserName);
 
             // Assert
-            ticketsContainer.PagedTickets.Single(ticket => ticket == testData.JoesCriticalThinkingTicket);
+            ticketsContainer.PagedTickets.Single(ticket => ticket == testData.JoesCriticalThinkingSuggestion);
         }
 
         [TestMethod]
@@ -52,7 +52,7 @@ namespace Transparent.Data.Tests.Queries
             var ticketsContainer = target.MyQueue(new TicketsContainer(), testData.Stephen.UserName);
 
             // Assert
-            Assert.IsFalse(ticketsContainer.PagedTickets.Any(ticket => ticket == testData.JoesCriticalThinkingTicket));
+            Assert.IsFalse(ticketsContainer.PagedTickets.Any(ticket => ticket == testData.JoesCriticalThinkingSuggestion));
         }
 
         [TestMethod]
@@ -62,9 +62,46 @@ namespace Transparent.Data.Tests.Queries
             var ticketsContainer = target.MyQueue(new TicketsContainer(), testData.Stephen.UserName);
 
             // Assert
-            Assert.IsFalse(ticketsContainer.PagedTickets.Any(ticket => ticket == testData.JoesScubaDivingTicket));
+            Assert.IsFalse(ticketsContainer.PagedTickets.Any(ticket => ticket == testData.JoesScubaDivingSuggestion));
         }
 
         #endregion MyQueue
+
+        #region GetUntakenTests
+
+        [TestMethod]
+        public void GetUntakenTests_returns_only_tests_that_match_the_tag()
+        {
+            // Arrange
+            var tag = testData.CriticalThinkingTag;
+            var userName = testData.Stephen.UserName;
+
+            // Act
+            var actualTests = target.GetUntakenTests(tag.Id, userName);
+
+            // Assert
+            Assert.IsTrue(actualTests.Any());
+            Assert.IsTrue(actualTests.All(test => test.TicketTags.Single().Tag == tag));
+        }
+
+        [TestMethod]
+        public void GetUntakenTests_returns_tests_that_have_not_been_taken_by_the_user()
+        {
+            // Arrange
+            var tag = testData.CriticalThinkingTag;
+            var userName = testData.Stephen.UserName;
+            var stephensPoints = testData.UsersContext.UserPoints.Where(userPoints => userPoints.User == testData.Stephen);
+            var testsStephenTook = stephensPoints.Select(point => point.TestTaken).Where(test => test != null).ToList();
+            Assert.IsTrue(testsStephenTook.Any());
+
+            // Act
+            var actualTests = target.GetUntakenTests(tag.Id, userName);
+
+            // Assert
+            Assert.IsTrue(actualTests.Any());
+            Assert.IsTrue(actualTests.All(test => !testsStephenTook.Contains(test)));
+        }
+
+        #endregion GetUntakenTest
     }
 }
