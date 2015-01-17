@@ -5,12 +5,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Transparent.Data.Models.Interfaces;
 
 namespace Transparent.Data.Models
 {
     /// <summary>
     /// One for each time points were awarded for a particular tag.
     /// </summary>
+    /// <remarks>
+    /// Also shows the details about a test that was started.
+    /// </remarks>
+    [MetadataType(typeof(IUserPoint))]
     public class UserPoint
     {
         [Key]
@@ -32,7 +37,6 @@ namespace Transparent.Data.Models
         public int FkTestId { get; set; }
         public Test TestTaken { get; set; }
 
-        [MaxLength(2000)]
         public string Answer { get; set; }
     }
 }

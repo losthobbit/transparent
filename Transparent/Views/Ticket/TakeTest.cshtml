@@ -1,57 +1,27 @@
-﻿@model Transparent.Data.Models.Test
+﻿@model Transparent.Data.ViewModels.TestAndAnswerViewModel
 
 @{
     ViewBag.Title = "TakeTest";
 }
 
-<h2>TakeTest</h2>
+<h2>Take a Test</h2>
 
+@Html.Partial("_DetailsPartial", Model.Test)
+
+@using (Html.BeginForm("TakeTest", "Ticket"))
+{
+    @Html.ValidationSummary(true)
 <fieldset>
     <legend>Test</legend>
-
+    @Html.HiddenFor(model => model.Test.Id)
     <div class="display-label">
-         @Html.DisplayNameFor(model => model.MultipleTags)
+        @Html.DisplayNameFor(model => model.Answer)
     </div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.MultipleTags)
+        @Html.EditorFor(model => model.Answer)
     </div>
-
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.FkUserId)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.FkUserId)
-    </div>
-
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.CreatedDate)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.CreatedDate)
-    </div>
-
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.Rank)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Rank)
-    </div>
-
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.Heading)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Heading)
-    </div>
-
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.Body)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Body)
-    </div>
+    <p>
+        <input type="submit" value="Submit" />
+    </p>
 </fieldset>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+}

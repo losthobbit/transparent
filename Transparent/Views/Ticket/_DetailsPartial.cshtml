@@ -1,0 +1,23 @@
+﻿@model Transparent.Data.Models.BaseTicket
+@using Transparent.Extensions;
+<fieldset class="@Model.TicketType.GetClass()">
+    <legend>Ticket</legend>
+
+    <div class="display-field">
+        <h3>@Html.DisplayFor(model => model.TicketType): @Html.DisplayFor(model => model.Heading)</h3>
+    </div>
+    <div>
+        <div class="float-left" style="text-align:center">         
+            @Html.Action("_Rank", Model)
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.Body)
+        </div>
+        <div>
+            @foreach (var ticketTag in Model.TicketTags)
+            {
+                <a class="button float-left" href="@Url.Action("Details", "Tag", new { id = ticketTag.FkTagId })">@ticketTag.Tag.Name</a>
+            }
+        </div>
+    </div>
+</fieldset>

@@ -29,5 +29,14 @@ namespace Transparent.Data.Models
                 return false;
             }
         }
+
+        [NotMapped()]
+        public int TagId
+        {
+            get
+            {
+                return TicketTags.Single().FkTagId;
+            }
+        }
     }
 }

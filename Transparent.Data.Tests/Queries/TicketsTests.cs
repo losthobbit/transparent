@@ -17,6 +17,7 @@ namespace Transparent.Data.Tests.Queries
         private Tickets target;
 
         private TestData testData;
+        private IConfiguration testConfiguration;
         private IUsersContext usersContext;
 
         [TestInitialize()]
@@ -24,7 +25,8 @@ namespace Transparent.Data.Tests.Queries
         {
             testData = TestData.Create();
             usersContext = testData.UsersContext;
-            target = new Tickets(usersContext);
+            testConfiguration = new TestConfig();
+            target = new Tickets(usersContext, testConfiguration);
         }
 
         #region MyQueue

@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IConfiguration.cs" />
     <Compile Include="JavaScriptRoutines.cs" />
     <Compile Include="LinqExtensions.cs" />
     <Compile Include="StringRoutines.cs" />

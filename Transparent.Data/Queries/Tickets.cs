@@ -34,7 +34,9 @@ namespace Transparent.Data.Queries
         private IDbSet<Test> tests;
         private IDbSet<UserPoint> userPoints;
 
-        public Tickets(IUsersContext usersContext)
+        private readonly IConfiguration configuration;
+
+        public Tickets(IUsersContext usersContext, IConfiguration configuration)
         {
             this.usersContext = usersContext;
             this.tickets = usersContext.Tickets;
@@ -43,6 +45,8 @@ namespace Transparent.Data.Queries
             this.userTags = usersContext.UserTags;
             this.tests = usersContext.Tests;
             this.userPoints = usersContext.UserPoints;
+
+            this.configuration = configuration;
         }
 
         private IQueryable<Ticket> TicketSet(TicketsContainer filter)
@@ -168,6 +172,47 @@ namespace Transparent.Data.Queries
         public Test GetRandomUntakenTest(int tagId, string userName)
         {
             return GetUntakenTests(tagId, userName).Random();
+        }
+
+        /// <summary>
+        /// Record that the user started the test and deduct points
+        /// </summary>
+        /// <param name="test">The test to start.</param>
+        /// <exception cref="NotSupportedException">Test already completed.</exception>
+        /// <exception cref="ArgumentNullException">Required argument is null.</exception>
+        public void StartTest(Test test, string userName)
+        {
+            if (test == null)
+                throw new ArgumentNullException("test");
+            var user = userProfiles.Single(userProfile => userProfile.UserName == userName);
+            var userPoint = userPoints.SingleOrDefault(point => point.FkTestId == test.Id && point.FkUserId == user.UserId);
+            if (userPoint == null)
+            {
+                userPoint = new UserPoint { FkTestId = test.Id, FkTagId = test.TagId, User = user, Quantity = - configuration.PointsToDeductWhenStartingTest};
+                userPoints.Add(userPoint);
+                usersContext.SaveChanges();
+            }
+            else
+            {
+                // Test already started
+                if (userPoint.Answer != null)
+                {
+                    // Test already completed
+                    throw new NotSupportedException("The test was already completed.  It cannot be taken again.");
+                }
+            }
+        }
+
+        /// <exception cref="NotSupportedException">Test not started or already completed.</exception>
+        public void AnswerTest(int testId, string answer, string userName)
+        {
+            var userPoint = userPoints.SingleOrDefault(point => point.FkTestId == testId && point.User.UserName == userName);
+            if (userPoint == null)
+                throw new NotSupportedException("The test has not started.  It cannot be answered.");
+            if (userPoint.Answer != null)
+                throw new NotSupportedException("The test has already been answered.  It cannot be answered again.");
+            userPoint.Answer = answer;
+            usersContext.SaveChanges();
         }
     }
 }

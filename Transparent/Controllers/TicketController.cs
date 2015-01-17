@@ -19,10 +19,14 @@ namespace Transparent.Controllers
     {
         private IUsersContext db = new UsersContext();
         private Tickets tickets;
+        private readonly IConfiguration configuration;
+        private readonly ITags tags;
 
-        public TicketController()
+        public TicketController(IConfiguration configuration, ITags tags)
         {
-            tickets = new Tickets(db);
+            this.configuration = configuration;
+            this.tags = tags;
+            tickets = new Tickets(db, configuration);
         }
 
         [HttpPost]
@@ -146,12 +150,27 @@ namespace Transparent.Controllers
         }
 
         [HttpPost]
+        public ActionResult TakeTest(TestAndAnswerViewModel testAndAnswerViewModel)
+        {
+            tickets.AnswerTest(testAndAnswerViewModel.Test.Id, testAndAnswerViewModel.Answer, User.Identity.Name);
+
+            var tag = tags.Find(testAndAnswerViewModel.Test.TicketTags.Single().FkTagId);
+
+            return RedirectToAction("Details", "Tag", tag);
+        }
+
+        [HttpGet]
         public ActionResult TakeTest(int tagId)
         {
             // find a random test that the user has not yet taken
-            var test = tickets.GetRandomUntakenTest(tagId);
+            var test = tickets.GetRandomUntakenTest(tagId, User.Identity.Name);
+            if (test == null)
+                throw new NotSupportedException("No more tests are available.");
 
-            return View(test);
+            // record that the user started the test and deduct points
+            tickets.StartTest(test, User.Identity.Name);
+
+            return View(new TestAndAnswerViewModel(test));
         }
 
         //

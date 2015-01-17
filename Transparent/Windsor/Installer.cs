@@ -2,8 +2,8 @@
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-//using Transparent.Interfaces;
-//using Transparent.Services;
+using Common.Interfaces;
+using Transparent.Services;
 
 namespace Transparent.Windsor
 {
@@ -12,8 +12,8 @@ namespace Transparent.Windsor
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             container.Register(
-                Classes.FromThisAssembly().BasedOn<IController>().LifestyleTransient()
-                //Component.For<IWindsorTest>().ImplementedBy<WindsorTest>().LifeStyle.Singleton
+                Classes.FromThisAssembly().BasedOn<IController>().LifestyleTransient(),
+                Component.For<IConfiguration>().ImplementedBy<Configuration>().LifeStyle.Singleton
             );
         }
     }
