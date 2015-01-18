@@ -16,7 +16,7 @@ namespace Transparent.Data.Queries
     /// <remarks>
     /// Can be a singleton.
     /// </remarks>
-    public class Tickets
+    public class Tickets: ITickets
     {
         /// <summary>
         /// One requires this number of total points on a tag in order to view it in My Queue.
@@ -167,6 +167,11 @@ namespace Transparent.Data.Queries
                                where userPoint == null
                                select test;
             return untakenTests;
+        }
+
+        public int CountUntakenTestsRemaining(int tagId, string userName)
+        {
+            return GetUntakenTests(tagId, userName).Count();
         }
 
         public Test GetRandomUntakenTest(int tagId, string userName)

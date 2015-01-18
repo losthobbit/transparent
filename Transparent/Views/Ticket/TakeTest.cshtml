@@ -11,9 +11,10 @@
 @using (Html.BeginForm("TakeTest", "Ticket"))
 {
     @Html.ValidationSummary(true)
-<fieldset>
+<fieldset class="long">
     <legend>Test</legend>
     @Html.HiddenFor(model => model.Test.Id)
+    @Html.HiddenFor(model => model.Test.TagId)
     <div class="display-label">
         @Html.DisplayNameFor(model => model.Answer)
     </div>

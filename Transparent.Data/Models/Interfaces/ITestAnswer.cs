@@ -9,6 +9,7 @@ namespace Transparent.Data.Models.Interfaces
 {
     public interface ITestAnswer
     {
+        [DataType(DataType.MultilineText)]
         [MaxLength(2000)]
         string Answer { get; set; }
     }

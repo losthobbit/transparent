@@ -515,15 +515,18 @@ input, textarea, select {
     width: 300px;
 }
 
+textarea {
+    height: 200px;
+}
+
+.long input, .long textarea {
+    width: 500px;
+}
+
     select.tags {
         width: auto;
         margin-right: 10px;
     }
-
-textarea {
-    font-family: inherit;
-    width: 500px;
-}
 
     input:focus, textarea:focus {
         border: 1px solid #7ac0da;

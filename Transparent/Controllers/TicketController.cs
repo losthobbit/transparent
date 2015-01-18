@@ -17,16 +17,17 @@ namespace Transparent.Controllers
     [Authorize]
     public class TicketController : Controller
     {
-        private IUsersContext db = new UsersContext();
-        private Tickets tickets;
+        private IUsersContext db;
+        private ITickets tickets;
         private readonly IConfiguration configuration;
         private readonly ITags tags;
 
-        public TicketController(IConfiguration configuration, ITags tags)
+        public TicketController(IConfiguration configuration, ITags tags, IUsersContext db, ITickets tickets)
         {
             this.configuration = configuration;
             this.tags = tags;
-            tickets = new Tickets(db, configuration);
+            this.db = db;
+            this.tickets = tickets;
         }
 
         [HttpPost]
@@ -154,9 +155,7 @@ namespace Transparent.Controllers
         {
             tickets.AnswerTest(testAndAnswerViewModel.Test.Id, testAndAnswerViewModel.Answer, User.Identity.Name);
 
-            var tag = tags.Find(testAndAnswerViewModel.Test.TicketTags.Single().FkTagId);
-
-            return RedirectToAction("Details", "Tag", tag);
+            return RedirectToAction("Details", "Tag", new { Id = testAndAnswerViewModel.Test.TagId });
         }
 
         [HttpGet]

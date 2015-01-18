@@ -1,10 +1,13 @@
 ﻿@model Transparent.Data.Models.Tag
 @using Castle.Windsor
+@using Transparent.Data.Interfaces
 
 @{
     ViewBag.Title = "Details";
     var container = ((IContainerAccessor)Context.ApplicationInstance).Container;
-    var tags = container.Resolve<Transparent.Data.Interfaces.ITags>();
+    var tags = container.Resolve<ITags>();
+    var tickets = container.Resolve<ITickets>();
+    var numberOfTests = tickets.CountUntakenTestsRemaining(Model.Id, User.Identity.Name);
 }
 
 <canvas id="tagDiagram" width="660" height="300" style="border:1px solid #FFFFFF;">
@@ -31,7 +34,14 @@
     <legend>Tag</legend>
     <div class="display-field">
         <h2>@Html.DisplayFor(model => model.Name)</h2>
-        <a id="takeTestButton" class="button" onclick="TakeTestPrompt()">Take a test</a>
+        @if(numberOfTests > 0)
+        {
+            <a id="takeTestButton" class="button">Take a test</a><text>(</text>@Html.Raw(numberOfTests)<text> remaining)</text>
+        }
+        else
+        {
+            <i>All tests have been taken.</i>
+        }
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Description)

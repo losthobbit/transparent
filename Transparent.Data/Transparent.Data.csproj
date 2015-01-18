@@ -73,6 +73,7 @@
     <Compile Include="InitDatabase.cs" />
     <Compile Include="Interfaces\IConfiguration.cs" />
     <Compile Include="Interfaces\ITags.cs" />
+    <Compile Include="Interfaces\ITickets.cs" />
     <Compile Include="Interfaces\IUsersContext.cs" />
     <Compile Include="Migrations\201501142036217_InitialCreate.cs" />
     <Compile Include="Migrations\201501142036217_InitialCreate.Designer.cs">

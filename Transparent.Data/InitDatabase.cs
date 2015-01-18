@@ -11,15 +11,6 @@ namespace Transparent.Data
 {
     using Models;
 
-    //public class InitDatabase : DropCreateDatabaseIfModelChanges<UsersContext>
-    //{
-    //    protected override void Seed(UsersContext context)
-    //    {
-    //        WebSecurity.InitializeDatabaseConnection("DefaultConnection",
-    //           "UserProfile", "UserId", "UserName", autoCreateTables: true);
-    //    }
-    //}
-
     public class InitDatabase<TContext> : IDatabaseInitializer<TContext> where TContext : DbContext
     {
         public void InitializeDatabase(TContext context)

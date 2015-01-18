@@ -35,7 +35,15 @@ namespace Transparent.Data.Models
         {
             get
             {
+                if (TicketTags == null)
+                    return -1;
                 return TicketTags.Single().FkTagId;
+            }
+            set
+            {
+                if(TicketTags == null)
+                    TicketTags = new List<TicketTag>();
+                TicketTags.Add( new TicketTag { FkTagId = value } );
             }
         }
     }
