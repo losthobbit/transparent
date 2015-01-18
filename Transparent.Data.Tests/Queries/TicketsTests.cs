@@ -8,6 +8,7 @@ using Transparent.Data.Interfaces;
 using Transparent.Data.Models;
 using Transparent.Data.Queries;
 using Transparent.Data.Tests.Helpers;
+using Common;
 
 namespace Transparent.Data.Tests.Queries
 {
@@ -41,7 +42,7 @@ namespace Transparent.Data.Tests.Queries
             var ticketsContainer = target.MyQueue(new TicketsContainer(), testData.Stephen.UserName);
 
             // Assert
-            ticketsContainer.PagedTickets.Single(ticket => ticket == testData.JoesCriticalThinkingSuggestion);
+            ticketsContainer.PagedList.Single(ticket => ticket == testData.JoesCriticalThinkingSuggestion);
         }
 
         [TestMethod]
@@ -54,7 +55,7 @@ namespace Transparent.Data.Tests.Queries
             var ticketsContainer = target.MyQueue(new TicketsContainer(), testData.Stephen.UserName);
 
             // Assert
-            Assert.IsFalse(ticketsContainer.PagedTickets.Any(ticket => ticket == testData.JoesCriticalThinkingSuggestion));
+            Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == testData.JoesCriticalThinkingSuggestion));
         }
 
         [TestMethod]
@@ -64,7 +65,7 @@ namespace Transparent.Data.Tests.Queries
             var ticketsContainer = target.MyQueue(new TicketsContainer(), testData.Stephen.UserName);
 
             // Assert
-            Assert.IsFalse(ticketsContainer.PagedTickets.Any(ticket => ticket == testData.JoesScubaDivingSuggestion));
+            Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == testData.JoesScubaDivingSuggestion));
         }
 
         #endregion MyQueue
@@ -105,5 +106,59 @@ namespace Transparent.Data.Tests.Queries
         }
 
         #endregion GetUntakenTest
+
+        #region TestsToBeMarked
+
+        [TestMethod]
+        public void TestsToBeMarked_returns_tests()
+        {
+            //Arrange
+
+            //Act
+            var actual = target.TestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
+
+            //Assert
+            Assert.IsTrue(actual.PagedList.Any());
+            Assert.IsTrue(actual.PagedList.All(item => item != null));
+            Assert.IsTrue(actual.PagedList.All(item => item.Test != null));
+        }
+
+        [TestMethod]
+        public void TestsToBeMarked_does_not_return_tests_answered_by_userName()
+        {
+            //Arrange
+
+            //Act
+            var actual = target.TestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
+
+            //Assert
+            Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.CriticalThinkingTestThatStephenTook));
+        }
+
+        [TestMethod]
+        public void TestsToBeMarked_returns_tests_that_have_not_been_marked()
+        {
+            //Arrange
+
+            //Act
+            var actual = target.TestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
+
+            //Assert
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void TestsToBeMarked_returns_only_tests_that_have_been_answered_completely()
+        {
+            //Arrange
+
+            //Act
+            var actual = target.TestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
+
+            //Assert
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

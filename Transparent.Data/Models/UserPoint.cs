@@ -33,10 +33,19 @@ namespace Transparent.Data.Models
         [Display(Name = "Points")]
         public int Quantity { get; set; }
 
+        // This section only applies to points that are gained or lost through taking a test
+        // I suppose it would have made more sense to have a class that inherited from UserPoint
+        // but I couldn't be bothered.  Feel free to refactor this.
+        #region Test points
+
         [ForeignKey("TestTaken")]
         public int FkTestId { get; set; }
         public Test TestTaken { get; set; }
 
         public string Answer { get; set; }
+
+        //public virtual Collection<TestMarking> TestMarkings { get; set; }
+
+        #endregion Test points
     }
 }

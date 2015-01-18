@@ -172,6 +172,15 @@ namespace Transparent.Controllers
             return View(new TestAndAnswerViewModel(test));
         }
 
+        /// <summary>
+        /// Get a list of tests that the user can mark.
+        /// </summary>
+        /// <returns>A list of tests that the user can mark.</returns>
+        public ActionResult MarkTests(AnsweredTests answeredTests)
+        {
+            return View(tickets.TestsToBeMarked(answeredTests, User.Identity.Name));
+        }
+
         //
         // GET: /Ticket/Edit/5
 

@@ -81,12 +81,14 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\AnsweredTests.cs" />
     <Compile Include="Models\BaseTicket.cs" />
     <Compile Include="Models\Extensions.cs" />
     <Compile Include="Models\Interfaces\ITestAnswer.cs" />
     <Compile Include="Models\Interfaces\IUserPoint.cs" />
     <Compile Include="Models\PagedList.cs" />
     <Compile Include="Models\Question.cs" />
+    <Compile Include="Models\StatefulPagedList.cs" />
     <Compile Include="Models\Suggestion.cs" />
     <Compile Include="Models\Test.cs" />
     <Compile Include="Models\TicketType.cs" />

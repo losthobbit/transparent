@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Transparent.Data.Interfaces;
 using Transparent.Data.Models;
 using Common;
+using Transparent.Data.ViewModels;
 
 namespace Transparent.Data.Queries
 {
@@ -218,6 +219,16 @@ namespace Transparent.Data.Queries
                 throw new NotSupportedException("The test has already been answered.  It cannot be answered again.");
             userPoint.Answer = answer;
             usersContext.SaveChanges();
+        }
+
+        public AnsweredTests TestsToBeMarked(AnsweredTests filter, string userName)
+        {
+            // TODO: check if this creates an inefficient query
+            var tests = from userPoint in userPoints
+                        where userPoint.User.UserName != userName
+                        select new TestAndAnswerViewModel { Test = userPoint.TestTaken, Answer = userPoint.Answer };
+
+            return new AnsweredTests(tests);
         }
     }
 }
