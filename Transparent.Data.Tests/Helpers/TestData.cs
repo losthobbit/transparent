@@ -42,6 +42,9 @@ namespace Transparent.Data.Tests.Helpers
             public Test CriticalThinkingTestThatJoeTook;
             public Test CriticalThinkingTestThatStephenTook;
             public Test ScubaDivingTestThatJoeTook;
+            public Test CriticalThinkingTestThatJoeTookThatHasBeenMarkedCompletely;
+            public Test CriticalThinkingTestThatJoeTookThatStephenMarked;
+            public Test CriticalThinkingTestThatJoeStarted;
 
             #endregion Tests
 
@@ -56,6 +59,16 @@ namespace Transparent.Data.Tests.Helpers
         public UserTag StephensCriticalThinkingTag;
 
         #endregion UserTags
+
+        #region TestMarkings
+
+        #endregion TestMarkings
+
+        #region UserPoints
+
+        public UserPoint PointForCriticalThinkingTestThatJoeTookThatStephenMarked;
+
+        #endregion UserPoints;
 
         public TestData ()
 	    {
@@ -74,6 +87,30 @@ namespace Transparent.Data.Tests.Helpers
                 Heading = "Another LF",
                 Body = "Are you a logical fallacy?"
             };
+            CriticalThinkingTestThatJoeTookThatHasBeenMarkedCompletely = new Test
+            {
+                Id = 204,
+                FkUserId = Admin.UserId,
+                User = Admin,
+                Heading = "Cognitive",
+                Body = "What is cognitive dissonance?"
+            };
+            CriticalThinkingTestThatJoeTookThatStephenMarked = new Test
+            {
+                Id = 205,
+                FkUserId = Admin.UserId,
+                User = Admin,
+                Heading = "Age",
+                Body = "What is your age?"
+            };
+            CriticalThinkingTestThatJoeStarted = new Test
+            {
+                Id = 206,
+                FkUserId = Admin.UserId,
+                User = Admin,
+                Heading = "Height",
+                Body = "How tall are you?"
+            };
 
             StephensCriticalThinkingTag = new UserTag
             {
@@ -82,6 +119,14 @@ namespace Transparent.Data.Tests.Helpers
                 Tag = CriticalThinkingTag,
                 FkTagId = CriticalThinkingTag.Id,
                 TotalPoints = 10
+            };
+
+            PointForCriticalThinkingTestThatJoeTookThatStephenMarked = new UserPoint
+            {
+                Id = 5, Answer = "42", Quantity = 1, FkTagId = CriticalThinkingTag.Id,
+                FkTestId = CriticalThinkingTestThatJoeTookThatStephenMarked.Id, FkUserId = Joe.UserId,
+                Tag = CriticalThinkingTag, TestTaken = CriticalThinkingTestThatJoeTookThatStephenMarked,
+                User = Joe
             };
         }
 
@@ -110,7 +155,9 @@ namespace Transparent.Data.Tests.Helpers
                     // Tests
                     testData.CriticalThinkingTestThatJoeTook,
                     testData.CriticalThinkingTestThatStephenTook,
-                    testData.ScubaDivingTestThatJoeTook
+                    testData.ScubaDivingTestThatJoeTook,
+                    testData.CriticalThinkingTestThatJoeTookThatHasBeenMarkedCompletely,
+                    testData.CriticalThinkingTestThatJoeTookThatStephenMarked
                 },
                 TicketTags =
                 {
@@ -137,6 +184,21 @@ namespace Transparent.Data.Tests.Helpers
                     new TicketTag
                     {
                         Ticket = testData.CriticalThinkingTestThatStephenTook, FkTicketId = testData.CriticalThinkingTestThatStephenTook.Id,
+                        Tag = testData.CriticalThinkingTag, FkTagId = testData.CriticalThinkingTag.Id
+                    },
+                    new TicketTag
+                    {
+                        Ticket = testData.CriticalThinkingTestThatJoeTookThatHasBeenMarkedCompletely, FkTicketId = testData.CriticalThinkingTestThatJoeTookThatHasBeenMarkedCompletely.Id,
+                        Tag = testData.CriticalThinkingTag, FkTagId = testData.CriticalThinkingTag.Id
+                    },
+                    new TicketTag
+                    {
+                        Ticket = testData.CriticalThinkingTestThatJoeTookThatStephenMarked, FkTicketId = testData.CriticalThinkingTestThatJoeTookThatStephenMarked.Id,
+                        Tag = testData.CriticalThinkingTag, FkTagId = testData.CriticalThinkingTag.Id
+                    },
+                    new TicketTag
+                    {
+                        Ticket = testData.CriticalThinkingTestThatJoeStarted, FkTicketId = testData.CriticalThinkingTestThatJoeStarted.Id,
                         Tag = testData.CriticalThinkingTag, FkTagId = testData.CriticalThinkingTag.Id
                     }
                 },
@@ -168,19 +230,52 @@ namespace Transparent.Data.Tests.Helpers
                     },
                     new UserPoint
                     {
-                        Id = 2, Answer = "Yes.", Quantity = 1, FkTagId = testData.CriticalThinkingTag.Id,
+                        Id = 3, Answer = "Yes.", Quantity = 1, FkTagId = testData.CriticalThinkingTag.Id,
                         FkTestId = testData.CriticalThinkingTestThatStephenTook.Id, FkUserId = testData.Stephen.UserId,
                         Tag = testData.CriticalThinkingTag, TestTaken = testData.CriticalThinkingTestThatStephenTook,
                         User = testData.Stephen
+                    },
+                    new UserPoint
+                    {
+                        Id = 4, Answer = "That thing.", Quantity = -1, FkTagId = testData.CriticalThinkingTag.Id,
+                        FkTestId = testData.CriticalThinkingTestThatJoeTookThatHasBeenMarkedCompletely.Id, FkUserId = testData.Joe.UserId,
+                        Tag = testData.CriticalThinkingTag, TestTaken = testData.CriticalThinkingTestThatJoeTookThatHasBeenMarkedCompletely,
+                        User = testData.Joe, MarkingComplete = true
+                    },
+                    testData.PointForCriticalThinkingTestThatJoeTookThatStephenMarked,
+                    new UserPoint
+                    {
+                        Id = 6, Answer = null, Quantity = -2, FkTagId = testData.CriticalThinkingTag.Id,
+                        FkTestId = testData.CriticalThinkingTestThatJoeStarted.Id, FkUserId = testData.Joe.UserId,
+                        Tag = testData.CriticalThinkingTag, TestTaken = testData.CriticalThinkingTestThatJoeStarted,
+                        User = testData.Joe
+                    }
+                },
+                TestMarkings =
+                {
+                    new TestMarking
+                    {
+                        FkUserId = testData.Stephen.UserId,
+                        User = testData.Stephen,
+                        FkUserPointId = 5,
+                        TestPoint = testData.PointForCriticalThinkingTestThatJoeTookThatStephenMarked,
+                        Passed = true
                     }
                 }
             };
+
             testData.UsersContext.Suggestions = new FakeDbSet<Suggestion>(testData.UsersContext.Tickets.OfType<Suggestion>());
             testData.UsersContext.Questions = new FakeDbSet<Question>(testData.UsersContext.Tickets.OfType<Question>());
             testData.UsersContext.Tests = new FakeDbSet<Test>(testData.UsersContext.Tickets.OfType<Test>());
+
             foreach (var ticket in testData.UsersContext.Tickets)
             {
                 ticket.TicketTags = testData.UsersContext.TicketTags.Where(ticketTag => ticketTag.Ticket == ticket).ToList();
+            }
+
+            foreach (var userPoint in testData.UsersContext.UserPoints)
+            {
+                userPoint.TestMarkings = testData.UsersContext.TestMarkings.Where(testMarking => testMarking.TestPoint == userPoint).ToList();
             }
 
             return testData;

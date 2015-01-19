@@ -226,6 +226,9 @@ namespace Transparent.Data.Queries
             // TODO: check if this creates an inefficient query
             var tests = from userPoint in userPoints
                         where userPoint.User.UserName != userName
+                        && !userPoint.MarkingComplete
+                        && userPoint.TestMarkings.All(marking => marking.User.UserName != userName)
+                        && userPoint.Answer != null
                         select new TestAndAnswerViewModel { Test = userPoint.TestTaken, Answer = userPoint.Answer };
 
             return new AnsweredTests(tests);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -44,7 +45,11 @@ namespace Transparent.Data.Models
 
         public string Answer { get; set; }
 
-        //public virtual Collection<TestMarking> TestMarkings { get; set; }
+        public virtual ICollection<TestMarking> TestMarkings { get; set; }
+
+        [Required]
+        [Index]
+        public bool MarkingComplete { get; set; }
 
         #endregion Test points
     }

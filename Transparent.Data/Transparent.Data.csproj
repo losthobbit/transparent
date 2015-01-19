@@ -79,6 +79,10 @@
     <Compile Include="Migrations\201501142036217_InitialCreate.Designer.cs">
       <DependentUpon>201501142036217_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201501192259183_AddedTestMarkingInfoToUserPoint.cs" />
+    <Compile Include="Migrations\201501192259183_AddedTestMarkingInfoToUserPoint.Designer.cs">
+      <DependentUpon>201501192259183_AddedTestMarkingInfoToUserPoint.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\AnsweredTests.cs" />
@@ -91,6 +95,7 @@
     <Compile Include="Models\StatefulPagedList.cs" />
     <Compile Include="Models\Suggestion.cs" />
     <Compile Include="Models\Test.cs" />
+    <Compile Include="Models\TestMarking.cs" />
     <Compile Include="Models\TicketType.cs" />
     <Compile Include="Models\UserPoint.cs" />
     <Compile Include="Models\Tag.cs" />
@@ -126,6 +131,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201501142036217_InitialCreate.resx">
       <DependentUpon>201501142036217_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501192259183_AddedTestMarkingInfoToUserPoint.resx">
+      <DependentUpon>201501192259183_AddedTestMarkingInfoToUserPoint.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

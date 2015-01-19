@@ -27,6 +27,7 @@ namespace Transparent.Data
         public IDbSet<Test> Tests { get; set; }
         public IDbSet<Question> Questions { get; set; }
         public IDbSet<Suggestion> Suggestions { get; set; }
+        public IDbSet<TestMarking> TestMarkings { get; set; }
 
         /// <summary>
         /// UserProfiles with eagerly loaded information.
@@ -42,8 +43,6 @@ namespace Transparent.Data
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<BaseTicket>().Ignore(e => e.TicketType);
-
             modelBuilder.Entity<Ticket>()
             .Map<Ticket>(t => t.Requires("TicketType").HasValue(-1))
             .Map<Question>(q => q.Requires("TicketType").HasValue((int)TicketType.Question))

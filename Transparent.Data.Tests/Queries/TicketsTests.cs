@@ -136,7 +136,7 @@ namespace Transparent.Data.Tests.Queries
         }
 
         [TestMethod]
-        public void TestsToBeMarked_returns_tests_that_have_not_been_marked()
+        public void TestsToBeMarked_returns_only_tests_that_they_have_not_marked()
         {
             //Arrange
 
@@ -144,7 +144,19 @@ namespace Transparent.Data.Tests.Queries
             var actual = target.TestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
 
             //Assert
-            throw new NotImplementedException();
+            Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.CriticalThinkingTestThatJoeTookThatStephenMarked));
+        }
+
+        [TestMethod]
+        public void TestsToBeMarked_returns_only_tests_that_have_not_been_completely_marked()
+        {
+            //Arrange
+
+            //Act
+            var actual = target.TestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
+
+            //Assert
+            Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.CriticalThinkingTestThatJoeTookThatHasBeenMarkedCompletely));
         }
 
         [TestMethod]
@@ -156,7 +168,7 @@ namespace Transparent.Data.Tests.Queries
             var actual = target.TestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
 
             //Assert
-            throw new NotImplementedException();
+            Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.CriticalThinkingTestThatJoeStarted));
         }
 
         #endregion
