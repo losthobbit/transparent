@@ -1,0 +1,13 @@
+﻿@model Transparent.Data.Models.StatefulPagedList
+
+@for(var i=0; i < Model.PageCount; i++)
+{
+    if(i == Model.PageIndex)
+    {
+        <b>@(i+1)</b>
+    }
+    else
+    {
+        @Html.ActionLink((i + 1).ToString(), ViewContext.RouteData.Values["action"].ToString(), Model.GetState(i))            
+    }
+}

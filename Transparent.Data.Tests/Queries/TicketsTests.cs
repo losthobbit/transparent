@@ -171,6 +171,18 @@ namespace Transparent.Data.Tests.Queries
             Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.CriticalThinkingTestThatJoeStarted));
         }
 
+        [TestMethod]
+        public void TestsToBeMarked_returns_only_tests_for_which_the_user_has_sufficient_points()
+        {
+            //Arrange
+
+            //Act
+            var actual = target.TestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
+
+            //Assert
+            Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.BungeeJumpingTestThatJoeTook));
+        }
+
         #endregion
     }
 }

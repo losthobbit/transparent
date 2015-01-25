@@ -12,8 +12,10 @@ namespace Transparent.Data.Tests.Helpers
         public TestConfig()
         {
             PointsToDeductWhenStartingTest = 2;
+            PointsRequiredToMarkTest = 5;
         }
 
         public int PointsToDeductWhenStartingTest { get; set; }
+        public int PointsRequiredToMarkTest { get; set; }
     }
 }

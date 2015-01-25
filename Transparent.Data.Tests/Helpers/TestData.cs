@@ -25,6 +25,7 @@ namespace Transparent.Data.Tests.Helpers
 
         public Tag CriticalThinkingTag = new Tag { Id = 1, Name = "Critical Thinking" };
         public Tag ScubaDivingTag = new Tag { Id = 2, Name = "Scuba Diving" };
+        public Tag BungeeJumpingTag = new Tag { Id = 3, Name = "Bungee Jumping" };
 
         #endregion Tags
 
@@ -45,6 +46,7 @@ namespace Transparent.Data.Tests.Helpers
             public Test CriticalThinkingTestThatJoeTookThatHasBeenMarkedCompletely;
             public Test CriticalThinkingTestThatJoeTookThatStephenMarked;
             public Test CriticalThinkingTestThatJoeStarted;
+            public Test BungeeJumpingTestThatJoeTook;
 
             #endregion Tests
 
@@ -111,6 +113,14 @@ namespace Transparent.Data.Tests.Helpers
                 Heading = "Height",
                 Body = "How tall are you?"
             };
+            BungeeJumpingTestThatJoeTook = new Test
+            {
+                Id = 207,
+                FkUserId = Admin.UserId,
+                User = Admin,
+                Heading = "Jumping",
+                Body = "How high do you jump from?"
+            };
 
             StephensCriticalThinkingTag = new UserTag
             {
@@ -118,7 +128,7 @@ namespace Transparent.Data.Tests.Helpers
                 FkUserId = Stephen.UserId,
                 Tag = CriticalThinkingTag,
                 FkTagId = CriticalThinkingTag.Id,
-                TotalPoints = 10
+                TotalPoints = 5
             };
 
             PointForCriticalThinkingTestThatJoeTookThatStephenMarked = new UserPoint
@@ -157,7 +167,8 @@ namespace Transparent.Data.Tests.Helpers
                     testData.CriticalThinkingTestThatStephenTook,
                     testData.ScubaDivingTestThatJoeTook,
                     testData.CriticalThinkingTestThatJoeTookThatHasBeenMarkedCompletely,
-                    testData.CriticalThinkingTestThatJoeTookThatStephenMarked
+                    testData.CriticalThinkingTestThatJoeTookThatStephenMarked,
+                    testData.BungeeJumpingTestThatJoeTook
                 },
                 TicketTags =
                 {
@@ -183,6 +194,11 @@ namespace Transparent.Data.Tests.Helpers
                     },
                     new TicketTag
                     {
+                        Ticket = testData.BungeeJumpingTestThatJoeTook, FkTicketId = testData.BungeeJumpingTestThatJoeTook.Id,
+                        Tag = testData.BungeeJumpingTag, FkTagId = testData.BungeeJumpingTag.Id
+                    },
+                    new TicketTag
+                    {
                         Ticket = testData.CriticalThinkingTestThatStephenTook, FkTicketId = testData.CriticalThinkingTestThatStephenTook.Id,
                         Tag = testData.CriticalThinkingTag, FkTagId = testData.CriticalThinkingTag.Id
                     },
@@ -205,6 +221,12 @@ namespace Transparent.Data.Tests.Helpers
                 UserTags =
                 {
                     testData.StephensCriticalThinkingTag,
+                    new UserTag 
+                    {
+                        User = testData.Stephen, FkUserId = testData.Stephen.UserId,
+                        Tag = testData.BungeeJumpingTag, FkTagId = testData.BungeeJumpingTag.Id,
+                        TotalPoints = 4
+                    },
                     new UserTag 
                     {
                         User = testData.Joe, FkUserId = testData.Joe.UserId,
@@ -248,6 +270,13 @@ namespace Transparent.Data.Tests.Helpers
                         Id = 6, Answer = null, Quantity = -2, FkTagId = testData.CriticalThinkingTag.Id,
                         FkTestId = testData.CriticalThinkingTestThatJoeStarted.Id, FkUserId = testData.Joe.UserId,
                         Tag = testData.CriticalThinkingTag, TestTaken = testData.CriticalThinkingTestThatJoeStarted,
+                        User = testData.Joe
+                    },
+                    new UserPoint
+                    {
+                        Id = 7, Answer = "Something.", Quantity = 1, FkTagId = testData.ScubaDivingTag.Id,
+                        FkTestId = testData.BungeeJumpingTestThatJoeTook.Id, FkUserId = testData.Joe.UserId,
+                        Tag = testData.BungeeJumpingTag, TestTaken = testData.BungeeJumpingTestThatJoeTook,
                         User = testData.Joe
                     }
                 },

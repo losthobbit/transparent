@@ -221,17 +221,37 @@ namespace Transparent.Data.Queries
             usersContext.SaveChanges();
         }
 
+        private int GetUserId(string userName)
+        {
+            return (from user in userProfiles
+                    where user.UserName == userName
+                    select user.UserId).Single();
+        }
+
         public AnsweredTests TestsToBeMarked(AnsweredTests filter, string userName)
         {
-            // TODO: check if this creates an inefficient query
-            var tests = from userPoint in userPoints
-                        where userPoint.User.UserName != userName
-                        && !userPoint.MarkingComplete
-                        && userPoint.TestMarkings.All(marking => marking.User.UserName != userName)
-                        && userPoint.Answer != null
-                        select new TestAndAnswerViewModel { Test = userPoint.TestTaken, Answer = userPoint.Answer };
+            var userId = GetUserId(userName);
 
-            return new AnsweredTests(tests);
+            var validTags = userTags
+                .Where(userTag => userTag.FkTagId == userId && userTag.TotalPoints >= configuration.PointsRequiredToMarkTest)
+                .Select(userTag => userTag.Tag);
+
+            var tests = from userPoint in userPoints
+                        where userPoint.FkUserId != userId
+                        && !userPoint.MarkingComplete
+                        && userPoint.TestMarkings.All(marking => marking.FkUserId != userId)
+                        && userPoint.Answer != null
+                        && validTags.Contains(userPoint.Tag) 
+                        select new TestAndAnswerViewModel { Test = userPoint.TestTaken, Answer = userPoint.Answer, Id = userPoint.Id };
+
+            return filter.Initialize
+            (
+                filter.ApplyFilter
+                (
+                    // TODO: check if this creates an inefficient query
+                    tests
+                ).OrderByDescending(test => test.Id)
+            );
         }
     }
 }

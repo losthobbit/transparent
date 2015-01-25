@@ -38,6 +38,7 @@ using Transparent.Data.Models;
             {
                 CreateTests(context, testUser);
             }
+            SetupTestUser2(context);
         }
 
         private void CreateTests(UsersContext context, UserProfile testUser)
@@ -70,6 +71,24 @@ using Transparent.Data.Models;
                 AddOrUpdateUserTagPoints(context, stephen, basicPsychologyTag, 20);
             }
             return stephen;
+        }
+
+        private UserProfile SetupTestUser2(UsersContext context)
+        {
+            var nerd = context.UserProfiles.SingleOrDefault(user => user.Email == "nerdsguide@gmail.com");
+
+            if (nerd != null)
+            {
+                var criticalThinkingTag = context.Tags.Single(tag => tag.Name == Constants.CriticalThinkingTagName);
+                AddOrUpdateUserTagPoints(context, nerd, criticalThinkingTag, 30);
+
+                var applicationTag = context.Tags.Single(tag => tag.Name == Constants.ApplicationName);
+                AddOrUpdateUserTagPoints(context, nerd, applicationTag, 40);
+
+                var basicPsychologyTag = context.Tags.Single(tag => tag.Name == BasicPsychologyTagName);
+                AddOrUpdateUserTagPoints(context, nerd, basicPsychologyTag, 20);
+            }
+            return nerd;
         }
 
         private void AddOrUpdateUserTagPoints(UsersContext context, UserProfile user, Tag tag, int totalPoints)

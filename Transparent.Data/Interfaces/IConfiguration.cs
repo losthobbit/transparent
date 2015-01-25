@@ -9,5 +9,6 @@ namespace Transparent.Data.Interfaces
     public interface IConfiguration
     {
         int PointsToDeductWhenStartingTest { get; set; }
+        int PointsRequiredToMarkTest { get; set; }
     }
 }

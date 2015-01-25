@@ -1,0 +1,23 @@
+﻿@model Transparent.Data.Models.AnsweredTests
+@using Transparent.Extensions;
+@using Transparent.Data.Models;
+
+@{
+    ViewBag.Title = "Mark Tests";
+}
+
+@Html.Partial("_MenuPartial")
+<section>
+    <table>
+    @foreach (var item in Model.PagedList)
+    {
+    <tr class="@item.Test.TicketType.GetClass()">
+        <td>@item.Test.TicketType.GetChar()</td>
+        <td>
+            @Html.ActionLink(item.Test.Heading, "MarkTest", new { id=item.Id })
+        </td>
+    </tr>
+    }
+    </table>
+    @Html.Partial("_PagesPartial", Model)
+</section>

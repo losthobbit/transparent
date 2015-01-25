@@ -6,17 +6,51 @@ using System.Threading.Tasks;
 
 namespace Transparent.Data.Models
 {
+    public abstract class StatefulPagedList : Stateful
+    {
+        protected const int pageSize = 10;
+        private const string PageIndexKey = "P";
+
+        protected StatefulPagedList()
+            : base()
+        {
+        }
+
+        public int PageIndex
+        {
+            get
+            {
+                return GetInt(PageIndexKey);
+            }
+            set
+            {
+                SetValue(PageIndexKey, value);
+            }
+        }
+
+        /// <summary>
+        /// Creates a generic TicketsContainer with a clone of the state and sets the PageIndex of the cloned state.
+        /// </summary>
+        /// <param name="pageIndex">The page index for the cloned state.</param>
+        /// <returns>A generic TicketsContainer with a clone of the state.</returns>
+        public Stateful GetState(int pageIndex)
+        {
+            var stateful = GetState();
+            stateful.SetValue(PageIndexKey, pageIndex);
+            return stateful;
+        }
+
+        public abstract int PageCount { get; }
+    }
+
     /// <summary>
     /// Used in views for viewing paged lists and keeping track of their page number and how they have been filtered.
     /// </summary>
     /// <typeparam name="TItem">The type of list item.</typeparam>
     /// <typeparam name="TContainer">The type of list.</typeparam>
-    public class StatefulPagedList<TItem, TContainer> : Stateful
+    public class StatefulPagedList<TItem, TContainer> : StatefulPagedList
         where TContainer : StatefulPagedList<TItem, TContainer>
     {
-        private const int pageSize = 10;
-        private const string PageIndexKey = "P";
-
         public StatefulPagedList()
             : base()
         {
@@ -47,28 +81,9 @@ namespace Transparent.Data.Models
             return items;
         }
 
-        public int PageIndex
+        public override int PageCount
         {
-            get
-            {
-                return GetInt(PageIndexKey);
-            }
-            set
-            {
-                SetValue(PageIndexKey, value);
-            }
-        }
-
-        /// <summary>
-        /// Creates a generic TicketsContainer with a clone of the state and sets the PageIndex of the cloned state.
-        /// </summary>
-        /// <param name="pageIndex">The page index for the cloned state.</param>
-        /// <returns>A generic TicketsContainer with a clone of the state.</returns>
-        public Stateful GetState(int pageIndex)
-        {
-            var stateful = GetState();
-            stateful.SetValue(PageIndexKey, pageIndex);
-            return stateful;
+            get { return PagedList.PageCount; }
         }
     }
 }

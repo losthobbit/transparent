@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Transparent.Data.Models.Interfaces
 {
+    /// <summary>
+    /// Contains reusable data annotations
+    /// </summary>
     public interface ITestAnswer
     {
         [DataType(DataType.MultilineText)]

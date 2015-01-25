@@ -26,7 +26,7 @@
                 </ul>
             </header>
             <table>
-            @foreach (var item in Model.PagedTickets)
+            @foreach (var item in Model.PagedList)
             {
             <tr class="@item.TicketType.GetClass()">
                 <td>
@@ -39,17 +39,7 @@
             </tr>
             }
             </table>
-            @for(var i=0; i < Model.PagedTickets.PageCount; i++)
-            {
-                if(i == Model.PagedTickets.PageIndex)
-                {
-                    <b>@(i+1)</b>
-                }
-                else
-                {
-                    @Html.ActionLink((i + 1).ToString(), ViewContext.RouteData.Values["action"].ToString(), Model.GetState(i))            
-                }
-            }
+            @Html.Partial("_PagesPartial", Model)
         </section>
     }
 }

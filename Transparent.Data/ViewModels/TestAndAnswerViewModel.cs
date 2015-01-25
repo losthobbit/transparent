@@ -26,5 +26,7 @@ namespace Transparent.Data.ViewModels
 
         [Required]
         public string Answer { get; set; }
+
+        public int Id { get; set; }
     }
 }
