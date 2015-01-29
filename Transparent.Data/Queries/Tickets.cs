@@ -8,6 +8,7 @@ using Transparent.Data.Interfaces;
 using Transparent.Data.Models;
 using Common;
 using Transparent.Data.ViewModels;
+using System.Security;
 
 namespace Transparent.Data.Queries
 {
@@ -228,21 +229,26 @@ namespace Transparent.Data.Queries
                     select user.UserId).Single();
         }
 
-        public AnsweredTests TestsToBeMarked(AnsweredTests filter, string userName)
+        public IQueryable<TestAndAnswerViewModel> TestsToBeMarked(string markersUserName, IQueryable<UserPoint> userPoints)
         {
-            var userId = GetUserId(userName);
+            var userId = GetUserId(markersUserName);
 
             var validTags = userTags
                 .Where(userTag => userTag.FkTagId == userId && userTag.TotalPoints >= configuration.PointsRequiredToMarkTest)
                 .Select(userTag => userTag.Tag);
 
-            var tests = from userPoint in userPoints
-                        where userPoint.FkUserId != userId
-                        && !userPoint.MarkingComplete
-                        && userPoint.TestMarkings.All(marking => marking.FkUserId != userId)
-                        && userPoint.Answer != null
-                        && validTags.Contains(userPoint.Tag) 
-                        select new TestAndAnswerViewModel { Test = userPoint.TestTaken, Answer = userPoint.Answer, Id = userPoint.Id };
+            return from userPoint in userPoints
+                where userPoint.FkUserId != userId
+                && !userPoint.MarkingComplete
+                && userPoint.TestMarkings.All(marking => marking.FkUserId != userId)
+                && userPoint.Answer != null
+                && validTags.Contains(userPoint.Tag)
+                select new TestAndAnswerViewModel { Test = userPoint.TestTaken, Answer = userPoint.Answer, Id = userPoint.Id };
+        }
+
+        public AnsweredTests TestsToBeMarked(AnsweredTests filter, string markersUserName)
+        {
+            var tests = TestsToBeMarked(markersUserName, userPoints);
 
             return filter.Initialize
             (
@@ -252,6 +258,19 @@ namespace Transparent.Data.Queries
                     tests
                 ).OrderByDescending(test => test.Id)
             );
+        }
+
+        /// <exception cref="SecurityException">The user may not mark the test.</exception>
+        public TestAndAnswerViewModel TestToBeMarked(int userPointId, string markersUserName)
+        {
+            try
+            {
+                return TestsToBeMarked(markersUserName, userPoints.Where(userPoint => userPoint.Id == userPointId)).Single();
+            }
+            catch (InvalidOperationException e)
+            {
+                throw new SecurityException("The user may not mark the test.", e);
+            }
         }
     }
 }

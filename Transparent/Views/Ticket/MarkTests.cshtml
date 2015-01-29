@@ -14,7 +14,7 @@
     <tr class="@item.Test.TicketType.GetClass()">
         <td>@item.Test.TicketType.GetChar()</td>
         <td>
-            @Html.ActionLink(item.Test.Heading, "MarkTest", new { id=item.Id })
+            @Html.ActionLink(item.Test.Heading, "MarkTest", new { userPointId=item.Id })
         </td>
     </tr>
     }

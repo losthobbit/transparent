@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,10 +8,12 @@ using Transparent.Data.Models;
 using Transparent.Data.Queries;
 using Transparent.Data.Tests.Helpers;
 using Common;
+using NUnit.Framework;
+using System.Security;
 
 namespace Transparent.Data.Tests.Queries
 {
-    [TestClass]
+    [TestFixture]
     public class TicketsTests
     {
         private Tickets target;
@@ -21,8 +22,8 @@ namespace Transparent.Data.Tests.Queries
         private IConfiguration testConfiguration;
         private IUsersContext usersContext;
 
-        [TestInitialize()]
-        public void Initialize()
+        [SetUp()]
+        public void SetUp()
         {
             testData = TestData.Create();
             usersContext = testData.UsersContext;
@@ -32,7 +33,7 @@ namespace Transparent.Data.Tests.Queries
 
         #region MyQueue
 
-        [TestMethod]
+        [Test]
         public void MyQueue_with_ticket_and_user_with_same_tag_and_more_than_or_equal_minimum_points_returns_ticket()
         {
             // Arrange
@@ -45,7 +46,7 @@ namespace Transparent.Data.Tests.Queries
             ticketsContainer.PagedList.Single(ticket => ticket == testData.JoesCriticalThinkingSuggestion);
         }
 
-        [TestMethod]
+        [Test]
         public void MyQueue_with_ticket_and_user_with_same_tag_and_less_than_minimum_points_does_not_return_ticket()
         {
             // Arrange
@@ -58,7 +59,7 @@ namespace Transparent.Data.Tests.Queries
             Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == testData.JoesCriticalThinkingSuggestion));
         }
 
-        [TestMethod]
+        [Test]
         public void MyQueue_with_ticket_and_user_without_same_tag_does_not_return_ticket()
         {
             // Act
@@ -72,7 +73,7 @@ namespace Transparent.Data.Tests.Queries
 
         #region GetUntakenTests
 
-        [TestMethod]
+        [Test]
         public void GetUntakenTests_returns_only_tests_that_match_the_tag()
         {
             // Arrange
@@ -87,7 +88,7 @@ namespace Transparent.Data.Tests.Queries
             Assert.IsTrue(actualTests.All(test => test.TicketTags.Single().Tag == tag));
         }
 
-        [TestMethod]
+        [Test]
         public void GetUntakenTests_returns_tests_that_have_not_been_taken_by_the_user()
         {
             // Arrange
@@ -109,7 +110,7 @@ namespace Transparent.Data.Tests.Queries
 
         #region TestsToBeMarked
 
-        [TestMethod]
+        [Test]
         public void TestsToBeMarked_returns_tests()
         {
             //Arrange
@@ -123,7 +124,7 @@ namespace Transparent.Data.Tests.Queries
             Assert.IsTrue(actual.PagedList.All(item => item.Test != null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestsToBeMarked_does_not_return_tests_answered_by_userName()
         {
             //Arrange
@@ -135,7 +136,7 @@ namespace Transparent.Data.Tests.Queries
             Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.CriticalThinkingTestThatStephenTook));
         }
 
-        [TestMethod]
+        [Test]
         public void TestsToBeMarked_returns_only_tests_that_they_have_not_marked()
         {
             //Arrange
@@ -147,7 +148,7 @@ namespace Transparent.Data.Tests.Queries
             Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.CriticalThinkingTestThatJoeTookThatStephenMarked));
         }
 
-        [TestMethod]
+        [Test]
         public void TestsToBeMarked_returns_only_tests_that_have_not_been_completely_marked()
         {
             //Arrange
@@ -159,7 +160,7 @@ namespace Transparent.Data.Tests.Queries
             Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.CriticalThinkingTestThatJoeTookThatHasBeenMarkedCompletely));
         }
 
-        [TestMethod]
+        [Test]
         public void TestsToBeMarked_returns_only_tests_that_have_been_answered_completely()
         {
             //Arrange
@@ -171,7 +172,7 @@ namespace Transparent.Data.Tests.Queries
             Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.CriticalThinkingTestThatJoeStarted));
         }
 
-        [TestMethod]
+        [Test]
         public void TestsToBeMarked_returns_only_tests_for_which_the_user_has_sufficient_points()
         {
             //Arrange
@@ -184,5 +185,57 @@ namespace Transparent.Data.Tests.Queries
         }
 
         #endregion
+
+        #region TestToBeMarked
+
+        [Test]
+        public void TestToBeMarked_returns_tests_which_are_returned_by_TestsToBeMarked()
+        {
+            //Arrange
+            var testList = target.TestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
+
+            foreach (var test in testList.PagedList)
+            {
+                //Act
+                var actual = target.TestToBeMarked(test.Id, testData.Stephen.UserName);
+
+                //Assert
+                Assert.AreEqual(test.Id, actual.Id);
+                Assert.AreEqual(test.Answer, actual.Answer);
+                Assert.AreEqual(test.Test.Body, actual.Test.Body);
+            }
+        }
+
+        [Test]
+        public void TestToBeMarked_with_test_not_in_the_list_of_tests_to_be_marked_throws_security_exception()
+        {
+            //Arrange
+            var invalidTests = new[]
+            {
+                testData.CriticalThinkingTestThatStephenTook,
+                testData.CriticalThinkingTestThatJoeTookThatStephenMarked,
+                testData.CriticalThinkingTestThatJoeTookThatHasBeenMarkedCompletely,
+                testData.CriticalThinkingTestThatJoeStarted,
+                testData.BungeeJumpingTestThatJoeTook
+            };
+
+            foreach (var test in invalidTests)
+            {
+                try
+                {
+                    //Act
+                    target.TestToBeMarked(test.Id, testData.Stephen.UserName);
+
+                    //Assert
+                    Assert.Fail("SecurityException expected.");
+                }
+                catch (SecurityException)
+                {
+                    // Success
+                }
+            }
+        }
+
+        #endregion TestToBeMarked
     }
 }

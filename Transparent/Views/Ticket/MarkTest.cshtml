@@ -1,0 +1,31 @@
+﻿@model Transparent.Data.ViewModels.TestAndAnswerViewModel
+
+@{
+    ViewBag.Title = "MarkTest";
+}
+
+<h2>Mark Test</h2>
+
+@Html.Partial("_DetailsPartial", Model.Test)
+
+@using (Html.BeginForm("MarkTest", "Ticket"))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+<fieldset class="long">
+    <legend>Test</legend>
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Test.Id)
+    @Html.HiddenFor(model => model.Test.TagId)
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Answer)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Answer)
+    </div>
+    <p>
+        <button name="passed" value="true">Pass</button>
+        <button name="passed" value="false">Fail</button>
+    </p>
+</fieldset>
+}

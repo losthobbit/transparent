@@ -27,6 +27,11 @@ namespace Transparent.Data.ViewModels
         [Required]
         public string Answer { get; set; }
 
+        /// <summary>
+        /// ID of UserPoint
+        /// </summary>
         public int Id { get; set; }
+
+        public bool? Passed { get; set; }
     }
 }

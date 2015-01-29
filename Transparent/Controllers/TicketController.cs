@@ -181,6 +181,20 @@ namespace Transparent.Controllers
             return View(tickets.TestsToBeMarked(answeredTests, User.Identity.Name));
         }
 
+        public ActionResult MarkTest(int userPointId)
+        {
+            var test = tickets.TestToBeMarked(userPointId, User.Identity.Name);
+
+            return View(test);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult MarkTest(TestAndAnswerViewModel testAndAnswer)
+        {
+            throw new NotImplementedException();
+        }
+
         //
         // GET: /Ticket/Edit/5
 

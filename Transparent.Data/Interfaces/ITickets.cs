@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Transparent.Data.Models;
+using Transparent.Data.ViewModels;
 
 namespace Transparent.Data.Interfaces
 {
@@ -34,6 +35,8 @@ namespace Transparent.Data.Interfaces
         /// <exception cref="NotSupportedException">Test not started or already completed.</exception>
         void AnswerTest(int testId, string answer, string userName);
 
-        AnsweredTests TestsToBeMarked(AnsweredTests filter, string userName);
+        AnsweredTests TestsToBeMarked(AnsweredTests filter, string markersUserName);
+
+        TestAndAnswerViewModel TestToBeMarked(int userPointId, string markersUserName);
     }
 }

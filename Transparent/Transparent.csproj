@@ -350,6 +350,7 @@
     <Content Include="Views\Ticket\_DetailsPartial.cshtml" />
     <Content Include="Views\Ticket\MarkTests.cshtml" />
     <Content Include="Views\Ticket\_PagesPartial.cshtml" />
+    <Content Include="Views\Ticket\MarkTest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
