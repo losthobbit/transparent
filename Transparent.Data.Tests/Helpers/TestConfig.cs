@@ -13,9 +13,11 @@ namespace Transparent.Data.Tests.Helpers
         {
             PointsToDeductWhenStartingTest = 2;
             PointsRequiredToMarkTest = 5;
+            CurrentSubGoal = "Increase the number of registered users.";
         }
 
         public int PointsToDeductWhenStartingTest { get; set; }
         public int PointsRequiredToMarkTest { get; set; }
+        public string CurrentSubGoal { get; set; }
     }
 }

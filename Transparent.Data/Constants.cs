@@ -10,5 +10,7 @@ namespace Transparent.Data
     {
         public const string ApplicationName = "Democratic Intelligence";
         public const string CriticalThinkingTagName = "Critical Thinking";
+
+        public const string Goal = "Increase happiness and unity worldwide";
     }
 }

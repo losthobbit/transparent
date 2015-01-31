@@ -1,27 +1,49 @@
-﻿@{
+﻿@using Transparent.Data
+@using Castle.Windsor
+@using Transparent.Data.Interfaces
+
+@{
+    var container = ((IContainerAccessor)Context.ApplicationInstance).Container;
+    var configuration = container.Resolve<IConfiguration>();
     ViewBag.Title = "About";
 }
 
 <hgroup class="title">
     <h1>@ViewBag.Title.</h1>
-    <h2>@ViewBag.Message</h2>
 </hgroup>
 
 <article>
     <p>
-        Winning the Peace Grand Challenge inspired me to create a prototype of the website that I suggested in my competition entry.
-        See <a href ="http://stephenrandom.blogspot.co.uk/2014/11/my-peace-grand-challenge-competition.html">my blog</a> for more details.
+        The idea for this website comes from the winning essay in the <a href="http://londonfuturists.com/previous-meetings/peace-grand-challenge/">Peace Grand Challenge</a>
+        on the subject "Innovative solutions for world peace, 2014-2034."  It is a prototype, but at the same time, it will be updated
+        whenever a suggestion about the site is accepted, and has the potential to become the final product.
     </p>
+    <p>
+        See <a href ="http://stephenrandom.blogspot.co.uk/2014/11/my-peace-grand-challenge-competition.html">my blog</a> for the winning 
+        essay, describing how this site works.
+    </p>
+    <p>
+        To summarize, the main aim of this site is <i>@Constants.Goal</i>, and the current subgoal, or stepping stone
+        towards the main goal is <i>@configuration.CurrentSubGoal</i>.
+    </p>
+    <p>
+        We need your help to achieve these goals, and you can help out by doing the following:
+    </p>
+    <ul>
+        <li>Raise awareness by talking, writing or making videos about this site.</li>
+        <li>
+            Learn, and @Html.ActionLink("take tests to increase your knowledge of the subjects on this site", "Details", "Tag").
+            The first subject to learn is @Html.ActionLink("critical thinking", "Details", "Tag").  Once you have mastered it
+            you can move on to @Html.ActionLink("other subjects", "Details", "Tag").
+        </li>
+        <li>Practise your knowledge by @Html.ActionLink("marking tests", "MarkTests", "Ticket") in your areas of expertise.</li>
+        <li>@Html.ActionLink("Increase and the rank of suggestions that you like.", "HighestRanked", "Ticket")</li>
+        <li>@Html.ActionLink("Post any suggestions", "Create", "Ticket"), which are not @Html.ActionLink("already on the site", "Search", "Ticket").</li>
+        <li>Give feedback on suggestions in your areas of expertise.</li>
+        <li>Vote for suggestions in your areas of expertise.</li>
+    </ul>
 </article>
 
 <aside>
-    <h3>Aside Title</h3>
-    <p>
-        Use this area to provide additional information.
-    </p>
-    <ul>
-        <li>@Html.ActionLink("Home", "Index", "Home")</li>
-        <li>@Html.ActionLink("About", "About", "Home")</li>
-        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-    </ul>
+
 </aside>

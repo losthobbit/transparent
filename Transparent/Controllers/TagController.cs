@@ -23,7 +23,7 @@ namespace Transparent.Controllers
 
         public ActionResult Details(int id = 0)
         {
-            Tag tag = tags.Find(id);
+            Tag tag = id == 0 ? tags.Root : tags.Find(id);
             if (tag == null)
             {
                 return HttpNotFound();

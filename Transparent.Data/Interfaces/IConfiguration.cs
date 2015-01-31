@@ -10,5 +10,6 @@ namespace Transparent.Data.Interfaces
     {
         int PointsToDeductWhenStartingTest { get; set; }
         int PointsRequiredToMarkTest { get; set; }
+        string CurrentSubGoal { get; set; }
     }
 }

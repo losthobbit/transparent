@@ -11,11 +11,13 @@ namespace Transparent.Data.Services
     {
         public int PointsToDeductWhenStartingTest { get; set; }
         public int PointsRequiredToMarkTest { get; set; }
+        public string CurrentSubGoal { get; set; }
 
         public Configuration(Common.Interfaces.IConfiguration configuration)
         {
             PointsToDeductWhenStartingTest = int.Parse(configuration.GetValue("PointsToDeductWhenStartingTest"));
             PointsRequiredToMarkTest = int.Parse(configuration.GetValue("PointsRequiredToMarkTest"));
+            CurrentSubGoal = configuration.GetValue("CurrentSubGoal");
         }
     }
 }

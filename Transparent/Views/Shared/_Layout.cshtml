@@ -1,8 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@using Transparent.Data
+@using Castle.Windsor
+@using Transparent.Data.Interfaces
+
+@{
+    var container = ((IContainerAccessor)Context.ApplicationInstance).Container;
+    var configuration = container.Resolve<IConfiguration>();
+}
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>@ViewBag.Title - My ASP.NET MVC Application</title>
+        <title>@ViewBag.Title - @Transparent.Data.Constants.ApplicationName</title>
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width" />
         @Styles.Render("~/Content/css")
@@ -15,22 +23,28 @@
     </head>
     <body>
         <header class="main">
+            <div class="top">
+                <div class="content-wrapper">
+                    <div class="float-left">
+                        <p class="site-title">@Html.ActionLink(Constants.ApplicationName, "Index", "Home")</p>
+                    </div>
+                    <div class="float-right">
+                        <section id="login">
+                            @Html.Partial("_LoginPartial")
+                        </section>
+                        <nav>
+                            <ul id="menu">
+                                <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                                <li>@Html.ActionLink("About", "About", "Home")</li>
+                                <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
             <div class="content-wrapper">
-                <div class="float-left">
-                    <p class="site-title">@Html.ActionLink("Transparent", "Index", "Home")</p>
-                </div>
-                <div class="float-right">
-                    <section id="login">
-                        @Html.Partial("_LoginPartial")
-                    </section>
-                    <nav>
-                        <ul id="menu">
-                            <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                            <li>@Html.ActionLink("About", "About", "Home")</li>
-                            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                        </ul>
-                    </nav>
-                </div>
+                <h3>@Html.ActionLink("Main goal: " + Constants.Goal + ".", "About", "Home")</h3>
+                @Html.ActionLink("Current subgoal: " + configuration.CurrentSubGoal + ".", "About", "Home")
             </div>
         </header>
         <div id="body">

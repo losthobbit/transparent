@@ -28,11 +28,6 @@ p {
 }
 
 header.main {
-    height:70px;
-    background-image: url(../Images/blue/left.png), url(../Images/blue/right.png);
-    background-position: left, right;
-    background-repeat: no-repeat;
-    background-size: auto 100%;
 }
 
 .button {
@@ -129,7 +124,8 @@ h2 {
 
 h3 {
     font-size: 1.2em;
-    margin-bottom: 15px;
+    margin-bottom: 2px;
+    margin-top: 12px;
 }
 
 h4 {
@@ -175,8 +171,16 @@ h5, h6 {
     }
 
 header .content-wrapper {
-    padding-top: 10px; 
 }
+
+    header .top {
+        padding-top: 10px; 
+        height:70px;
+        background-image: url(../Images/blue/left.png), url(../Images/blue/right.png);
+        background-position: left, right;
+        background-repeat: no-repeat;
+        background-size: auto 100%;
+    }
 
 footer {
     clear: both;
