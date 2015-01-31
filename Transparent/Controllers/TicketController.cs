@@ -178,12 +178,12 @@ namespace Transparent.Controllers
         /// <returns>A list of tests that the user can mark.</returns>
         public ActionResult MarkTests(AnsweredTests answeredTests)
         {
-            return View(tickets.TestsToBeMarked(answeredTests, User.Identity.Name));
+            return View(tickets.GetTestsToBeMarked(answeredTests, User.Identity.Name));
         }
 
         public ActionResult MarkTest(int userPointId)
         {
-            var test = tickets.TestToBeMarked(userPointId, User.Identity.Name);
+            var test = tickets.GetTestToBeMarked(userPointId, User.Identity.Name);
 
             return View(test);
         }
@@ -192,7 +192,9 @@ namespace Transparent.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult MarkTest(TestAndAnswerViewModel testAndAnswer)
         {
-            throw new NotImplementedException();
+            tickets.MarkTest(testAndAnswer.Id, testAndAnswer.Passed.Value, User.Identity.Name);
+
+            return RedirectToAction("MarkTests");
         }
 
         //

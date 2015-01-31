@@ -35,6 +35,7 @@ namespace Transparent.Data.Queries
         private IDbSet<UserTag> userTags;
         private IDbSet<Test> tests;
         private IDbSet<UserPoint> userPoints;
+        private IDbSet<TestMarking> testMarkings;
 
         private readonly IConfiguration configuration;
 
@@ -47,6 +48,7 @@ namespace Transparent.Data.Queries
             this.userTags = usersContext.UserTags;
             this.tests = usersContext.Tests;
             this.userPoints = usersContext.UserPoints;
+            this.testMarkings = usersContext.TestMarkings;
 
             this.configuration = configuration;
         }
@@ -229,26 +231,31 @@ namespace Transparent.Data.Queries
                     select user.UserId).Single();
         }
 
-        public IQueryable<TestAndAnswerViewModel> TestsToBeMarked(string markersUserName, IQueryable<UserPoint> userPoints)
+        public IQueryable<TestAndAnswerViewModel> GetTestsToBeMarked(string markersUserName, IQueryable<UserPoint> userPoints)
         {
-            var userId = GetUserId(markersUserName);
+            var markersUserId = GetUserId(markersUserName);
 
+            return GetTestsToBeMarked(markersUserId, userPoints);
+        }
+
+        public IQueryable<TestAndAnswerViewModel> GetTestsToBeMarked(int markersUserId, IQueryable<UserPoint> userPoints)
+        {
             var validTags = userTags
-                .Where(userTag => userTag.FkTagId == userId && userTag.TotalPoints >= configuration.PointsRequiredToMarkTest)
+                .Where(userTag => userTag.FkTagId == markersUserId && userTag.TotalPoints >= configuration.PointsRequiredToMarkTest)
                 .Select(userTag => userTag.Tag);
 
             return from userPoint in userPoints
-                where userPoint.FkUserId != userId
+                where userPoint.FkUserId != markersUserId
                 && !userPoint.MarkingComplete
-                && userPoint.TestMarkings.All(marking => marking.FkUserId != userId)
+                && userPoint.TestMarkings.All(marking => marking.FkUserId != markersUserId)
                 && userPoint.Answer != null
                 && validTags.Contains(userPoint.Tag)
                 select new TestAndAnswerViewModel { Test = userPoint.TestTaken, Answer = userPoint.Answer, Id = userPoint.Id };
         }
 
-        public AnsweredTests TestsToBeMarked(AnsweredTests filter, string markersUserName)
+        public AnsweredTests GetTestsToBeMarked(AnsweredTests filter, string markersUserName)
         {
-            var tests = TestsToBeMarked(markersUserName, userPoints);
+            var tests = GetTestsToBeMarked(markersUserName, userPoints);
 
             return filter.Initialize
             (
@@ -260,17 +267,43 @@ namespace Transparent.Data.Queries
             );
         }
 
+        /// <summary>
+        /// Gets the test and answer and validates that the user may mark the test.
+        /// </summary>
+        /// <param name="userPointId">The ID of the UserPoint record containing the answer to the test.</param>
         /// <exception cref="SecurityException">The user may not mark the test.</exception>
-        public TestAndAnswerViewModel TestToBeMarked(int userPointId, string markersUserName)
+        public TestAndAnswerViewModel GetTestToBeMarked(int userPointId, string markersUserName)
         {
             try
             {
-                return TestsToBeMarked(markersUserName, userPoints.Where(userPoint => userPoint.Id == userPointId)).Single();
+                return GetTestsToBeMarked(markersUserName, userPoints.Where(userPoint => userPoint.Id == userPointId)).Single();
             }
             catch (InvalidOperationException e)
             {
                 throw new SecurityException("The user may not mark the test.", e);
             }
+        }
+
+        /// <summary>
+        /// Marks a test.
+        /// </summary>
+        /// <param name="userPointId">The ID of the UserPoint record containing the answer to the test.</param>
+        /// <param name="passed">Whether the marker passed or failed the test</param>
+        /// <exception cref="SecurityException">The user may not mark the test.</exception>
+        public void MarkTest(int userPointId, bool passed, string markersUserName)
+        {
+            var markersUserId = GetUserId(markersUserName);
+            // Validate that the user may mark the test
+            try
+            {
+                GetTestsToBeMarked(markersUserId, userPoints.Where(point => point.Id == userPointId)).Single();
+            }
+            catch (InvalidOperationException e)
+            {
+                throw new SecurityException("The user may not mark the test.", e);
+            }
+            testMarkings.Add(new TestMarking { FkUserPointId = userPointId, FkUserId = markersUserId, Passed = passed });
+            usersContext.SaveChanges();
         }
     }
 }

@@ -116,7 +116,7 @@ namespace Transparent.Data.Tests.Queries
             //Arrange
 
             //Act
-            var actual = target.TestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
+            var actual = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
 
             //Assert
             Assert.IsTrue(actual.PagedList.Any());
@@ -130,7 +130,7 @@ namespace Transparent.Data.Tests.Queries
             //Arrange
 
             //Act
-            var actual = target.TestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
+            var actual = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
 
             //Assert
             Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.CriticalThinkingTestThatStephenTook));
@@ -142,7 +142,7 @@ namespace Transparent.Data.Tests.Queries
             //Arrange
 
             //Act
-            var actual = target.TestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
+            var actual = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
 
             //Assert
             Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.CriticalThinkingTestThatJoeTookThatStephenMarked));
@@ -154,7 +154,7 @@ namespace Transparent.Data.Tests.Queries
             //Arrange
 
             //Act
-            var actual = target.TestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
+            var actual = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
 
             //Assert
             Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.CriticalThinkingTestThatJoeTookThatHasBeenMarkedCompletely));
@@ -166,7 +166,7 @@ namespace Transparent.Data.Tests.Queries
             //Arrange
 
             //Act
-            var actual = target.TestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
+            var actual = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
 
             //Assert
             Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.CriticalThinkingTestThatJoeStarted));
@@ -178,7 +178,7 @@ namespace Transparent.Data.Tests.Queries
             //Arrange
 
             //Act
-            var actual = target.TestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
+            var actual = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
 
             //Assert
             Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.BungeeJumpingTestThatJoeTook));
@@ -192,12 +192,12 @@ namespace Transparent.Data.Tests.Queries
         public void TestToBeMarked_returns_tests_which_are_returned_by_TestsToBeMarked()
         {
             //Arrange
-            var testList = target.TestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
+            var testList = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
 
             foreach (var test in testList.PagedList)
             {
                 //Act
-                var actual = target.TestToBeMarked(test.Id, testData.Stephen.UserName);
+                var actual = target.GetTestToBeMarked(test.Id, testData.Stephen.UserName);
 
                 //Assert
                 Assert.AreEqual(test.Id, actual.Id);
@@ -224,7 +224,7 @@ namespace Transparent.Data.Tests.Queries
                 try
                 {
                     //Act
-                    target.TestToBeMarked(test.Id, testData.Stephen.UserName);
+                    target.GetTestToBeMarked(test.Id, testData.Stephen.UserName);
 
                     //Assert
                     Assert.Fail("SecurityException expected.");

@@ -44,14 +44,23 @@ using Transparent.Data.Models;
         private void CreateTests(UsersContext context, UserProfile testUser)
         {
             var criticalThinkingTag = context.Tags.Single(tag => tag.Name == Constants.CriticalThinkingTagName);
-            context.Tests.Add(new Test
+            context.Tests.AddOrUpdate(t => t.Body, new Test
             {
                 User = testUser,
                 CreatedDate = DateTime.Now,
                 Heading = "Name the logical fallacy",
                 Body = "Name a logical fallacy in the following sentence:\n\n" +
                     "I eat herbs because my grandfather ate herbs and lived for a hundred years.",
-                TicketTags = new Collection<TicketTag>{ new TicketTag{ Tag=criticalThinkingTag }}
+                TicketTags = new Collection<TicketTag>{ new TicketTag{ Tag = criticalThinkingTag }}
+            });
+            context.Tests.AddOrUpdate(t => t.Body, new Test
+            {
+                User = testUser,
+                CreatedDate = DateTime.Now,
+                Heading = "Name or explain the logical fallacy",
+                Body = "Name or explain a logical fallacy in the following:\n\n" +
+                    "Either chemotherapy or a miracle cured his cancer.  He didn't have chemotherapy.  Therefore it was a miracle.",
+                TicketTags = new Collection<TicketTag> { new TicketTag { Tag = criticalThinkingTag } }
             });
         }
 

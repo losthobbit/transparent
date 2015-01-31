@@ -35,8 +35,10 @@ namespace Transparent.Data.Interfaces
         /// <exception cref="NotSupportedException">Test not started or already completed.</exception>
         void AnswerTest(int testId, string answer, string userName);
 
-        AnsweredTests TestsToBeMarked(AnsweredTests filter, string markersUserName);
+        AnsweredTests GetTestsToBeMarked(AnsweredTests filter, string markersUserName);
 
-        TestAndAnswerViewModel TestToBeMarked(int userPointId, string markersUserName);
+        TestAndAnswerViewModel GetTestToBeMarked(int userPointId, string markersUserName);
+
+        void MarkTest(int userPointId, bool passed, string markersUserName);
     }
 }
