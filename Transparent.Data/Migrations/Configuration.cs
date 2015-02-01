@@ -101,7 +101,7 @@ namespace Transparent.Data.Migrations
             AddOrUpdateUserTagPoints(context, adminstrator, basicPsychologyTag, 20);
 
             if (!Roles.GetRolesForUser(adminName).Contains(Constants.AdministratorRole))
-                Roles.AddUsersToRoles(new[] {adminName}, new[] {Constants.AdministratorRole});
+                Roles.AddUserToRole(adminName, Constants.AdministratorRole);
 
             return adminstrator;
         }

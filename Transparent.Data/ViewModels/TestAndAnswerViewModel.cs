@@ -10,7 +10,7 @@ using Transparent.Data.Models.Interfaces;
 namespace Transparent.Data.ViewModels
 {
     [MetadataType(typeof(ITestAnswer))]
-    public class TestAndAnswerViewModel
+    public class TestAndAnswerViewModel: ITestAnswer
     {
         public TestAndAnswerViewModel()
         {

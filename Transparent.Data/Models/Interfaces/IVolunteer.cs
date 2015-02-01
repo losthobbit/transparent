@@ -17,6 +17,7 @@ namespace Transparent.Data.Models.Interfaces
         /// </summary>
         [DataType(DataType.MultilineText)]
         [MaxLength(2000)]
+        [Display(Name="Services that you would like to provide")]
         string Services { get; set; }
     }
 }

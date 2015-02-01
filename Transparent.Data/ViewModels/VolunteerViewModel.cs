@@ -8,7 +8,7 @@ using Transparent.Data.Models.Interfaces;
 
 namespace Transparent.Data.ViewModels
 {
-    [MetadataType(typeof(ITestAnswer))]
+    [MetadataType(typeof(IVolunteer))]
     public class VolunteerViewModel : IVolunteer
     {
         public bool Volunteer { get; set; }

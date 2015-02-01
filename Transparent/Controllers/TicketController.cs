@@ -253,15 +253,36 @@ namespace Transparent.Controllers
             return RedirectToAction("Newest");
         }
 
-        //public ActionResult Volunteer()
-        //{
-        //    //var test = db.UserProfiles
-                
-        //    //tickets.GetTestToBeMarked(userPointId, User.Identity.Name);
-        //    //User.r
+        [HttpGet]
+        public ActionResult Volunteer()
+        {
+            var volunteerViewModel = new VolunteerViewModel
+            {
+                Volunteer = User.IsInRole(Constants.VolunteerRole),
+                Services = db.UserProfiles.Single(user => user.UserName == User.Identity.Name).Services
+            };
 
-        //    return View(test);
-        //}
+            return View(volunteerViewModel);
+        }
+
+        [HttpPost]
+        public ActionResult Volunteer(VolunteerViewModel volunteerViewModel)
+        {
+            bool wasVolunteer = User.IsInRole(Constants.VolunteerRole);
+            if(volunteerViewModel.Volunteer && !wasVolunteer)
+            {
+                Roles.AddUserToRole(User.Identity.Name, Constants.VolunteerRole);
+            }
+            else
+                if(!volunteerViewModel.Volunteer && wasVolunteer)
+                {
+                    Roles.RemoveUserFromRole(User.Identity.Name, Constants.VolunteerRole);
+                }
+            db.UserProfiles.Single(user => user.UserName == User.Identity.Name).Services = volunteerViewModel.Services;
+            db.SaveChanges();
+
+            return View(volunteerViewModel);
+        }
 
         protected override void Dispose(bool disposing)
         {
