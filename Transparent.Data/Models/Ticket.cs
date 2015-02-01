@@ -27,11 +27,6 @@ namespace Transparent.Data.Models
         public int FkUserId { get; set; }
         public UserProfile User { get; set; }
 
-        [DataType(DataType.Date)]
-        [Required]
-        [Index]
-        public DateTime CreatedDate { get; set; }
-
         public virtual ICollection<TicketUserRank> UserRanks { get; set; }
 
         public static Ticket Create(TicketType ticketType)

@@ -28,13 +28,16 @@
             <table>
             @foreach (var item in Model.PagedList)
             {
-            <tr class="@item.TicketType.GetClass()">
+            <tr class="ticket @item.TicketType.GetClass()">
                 <td>
                     @Html.DisplayFor(modelItem => item.Rank)
                 </td>
                 <td>@item.TicketType.GetChar()</td>
                 <td>
                     @Html.ActionLink(item.Heading, "Details", new { id=item.Id })
+                </td>
+                <td class="metadata">
+                    @item.TextForCreated at @Html.DisplayFor(modelItem => item.CreatedDate)
                 </td>
             </tr>
             }

@@ -1,6 +1,6 @@
 ﻿@model Transparent.Data.Models.BaseTicket
 @using Transparent.Extensions;
-<fieldset class="@Model.TicketType.GetClass()">
+<fieldset class="ticket @Model.TicketType.GetClass()">
     <legend>Ticket</legend>
 
     <div class="display-field">
@@ -16,18 +16,23 @@
         <div class="display-field">
             @Html.DisplayFor(model => model.Body)
         </div>
-        <div>
-            @foreach (var ticketTag in Model.TicketTags)
-            {
-                if(ViewBag.EnableTagButton == null || ViewBag.EnableTagButton)
+        <div class="metadata">
+            <div>
+                @foreach (var ticketTag in Model.TicketTags)
                 {
-                    <a class="button float-left" href="@Url.Action("Details", "Tag", new { id = ticketTag.FkTagId })">@ticketTag.Tag.Name</a>
+                    if(ViewBag.EnableTagButton == null || ViewBag.EnableTagButton)
+                    {
+                        <a class="button float-left" href="@Url.Action("Details", "Tag", new { id = ticketTag.FkTagId })">@ticketTag.Tag.Name</a>
+                    }
+                    else
+                    {
+                        <a class="button float-left">@ticketTag.Tag.Name</a>
+                    }
                 }
-                else
-                {
-                    <a class="button float-left">@ticketTag.Tag.Name</a>
-                }
-            }
+            </div>
+            <div class="float-right">
+                @Model.TextForCreated at @Html.DisplayFor(model => model.CreatedDate)
+            </div>
         </div>
     </div>
 </fieldset>

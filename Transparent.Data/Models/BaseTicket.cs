@@ -26,6 +26,11 @@ namespace Transparent.Data.Models
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
+        [DataType(DataType.Date)]
+        [Required]
+        [Index]
+        public DateTime CreatedDate { get; set; }
+
         [Required]
         [Index]
         public int Rank { get; set; }
@@ -49,5 +54,8 @@ namespace Transparent.Data.Models
 
         [NotMapped()]
         public virtual bool MultipleTags { get { return true; } }
+
+        [NotMapped()]
+        public virtual string TextForCreated { get { return "Created"; } }
     }
 }

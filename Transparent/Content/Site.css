@@ -11,6 +11,12 @@ a { text-decoration:none }
         width: 40px;
     }
 
+.ticket .metadata {
+    font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
+    color: #d2d2d2; 
+    font-size: .8em;
+}
+
 .question {
     
 }

@@ -4,47 +4,22 @@
 
 <hgroup class="title">
     <h1>@ViewBag.Title.</h1>
-    <h2>@ViewBag.Message</h2>
 </hgroup>
 
-<section class="contact">
-    <header>
-        <h3>Phone</h3>
-    </header>
-    <p>
-        <span class="label">Main:</span>
-        <span>425.555.0100</span>
-    </p>
-    <p>
-        <span class="label">After Hours:</span>
-        <span>425.555.0199</span>
-    </p>
-</section>
+<script>
+    function generateEmailLink() {
+        return "<a href=\"mail" + "to" + ":los" + "tho" + "bbit" + "@@" + "gma" + "il." + "com\">los" + "tho" + "bbit" + "@@" + "gma" + "il." + "com</a>"
+    }
+</script>
 
-<section class="contact">
-    <header>
-        <h3>Email</h3>
-    </header>
+<article>
     <p>
-        <span class="label">Support:</span>
-        <span><a href="mailto:Support@example.com">Support@example.com</a></span>
+        As this website is designed to make group decisions, it doesn't make much sense to
+        have contact information here.  You can @Html.ActionLink("post a question or suggestion", "Create", "Ticket")
+        and you will be more likely to get a good answer than simply by emailing someone.
     </p>
     <p>
-        <span class="label">Marketing:</span>
-        <span><a href="mailto:Marketing@example.com">Marketing@example.com</a></span>
+        However, until this website becomes massively popular, it may make sense to contact 
+        Stephen directly.  If so, you can email him at <script>document.write(generateEmailLink())</script>.
     </p>
-    <p>
-        <span class="label">General:</span>
-        <span><a href="mailto:General@example.com">General@example.com</a></span>
-    </p>
-</section>
-
-<section class="contact">
-    <header>
-        <h3>Address</h3>
-    </header>
-    <p>
-        One Microsoft Way<br />
-        Redmond, WA 98052-6399
-    </p>
-</section>
+</article>

@@ -19,5 +19,13 @@ namespace Transparent.Data.Models
                 throw new NotSupportedException();
             }
         }
+
+        public override string TextForCreated
+        {
+            get
+            {
+                return "Asked";
+            }
+        }
     }
 }
