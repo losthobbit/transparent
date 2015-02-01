@@ -24,6 +24,17 @@ namespace Transparent.Data.Models
             return rankRecord.Up ? TicketRank.Up : TicketRank.Down;
         }
 
+        public static bool Any(this IEnumerable enumerable)
+        {
+            if (enumerable == null)
+                return false;
+            foreach (var item in enumerable)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public static int Count(this IEnumerable enumerable)
         {
             if (enumerable == null)

@@ -48,14 +48,14 @@ namespace Transparent.Data.Models
         [NotMapped()]
         public virtual TicketType TicketType { get; protected set; }
 
+        // No validation attributes, because this gets validated in the view model.
         [Display(Name = "Tags")]
-        [MaxTags()]
         public virtual ICollection<TicketTag> TicketTags { get; set; }
 
-        [NotMapped()]
+        [NotMapped]
         public virtual bool MultipleTags { get { return true; } }
 
-        [NotMapped()]
+        [NotMapped]
         public virtual string TextForCreated { get { return "Created"; } }
     }
 }

@@ -8,7 +8,7 @@ using Transparent.Data.Validation;
 
 namespace Transparent.Data.ViewModels
 {
-    public class TicketViewModel<TModel>: TicketViewModel, ISupportsMultipleTags
+    public class TicketViewModel<TModel>: TicketViewModel
         where TModel : Ticket
     {
         public TModel Ticket { get { return (TModel)Model; } }
@@ -29,7 +29,7 @@ namespace Transparent.Data.ViewModels
         }
     }
 
-    public class TicketViewModel
+    public class TicketViewModel: ISupportsMultipleTags
     {
         public Ticket Model { get; private set; }
 
@@ -127,7 +127,8 @@ namespace Transparent.Data.ViewModels
             }
         }
 
-        [MaxTags()]
+        [MaxTags]
+        [RequiresTags]
         public int[] TicketTagIds
         {
             get

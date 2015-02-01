@@ -53,6 +53,7 @@
 
         <div class="editor-label">
             @Html.LabelFor(model => model.Model.TicketTags)
+            @Html.ValidationMessageFor(model => model.TicketTagIds)
         </div>
         <div class="editor-field" id="tagSelectors">
         </div>
@@ -65,8 +66,10 @@
                 function addTagSelector(div)
                 {
                     var tags = @tags.SerializedIndentedTags;
-                    var selectElement = "<select name=\"TicketTagIds\"";                    
+                    var selectElement = "<select id=\"TicketTagIds\" name=\"TicketTagIds\"";                    
                     selectElement += "@Html.Raw(Model.MultipleTags ? " onchange=\\\"addTagSelectorIfRequired()\\\"" : "")";
+                    if(tagCount == 0)
+                        selectElement += "data-val=\"true\" data-val-requirestag=\"A tag is required.\" data-val-requirestag-param=\"whatever\"";
                     selectElement += " class=\"tags\"><option value=\"-1\" selected>Not selected</option>";
                     for (var i = 0; i < tags.length; i++) {
                         var tag = tags[i];
@@ -74,6 +77,7 @@
                     }
                     selectElement += "</select>"
                     div.append(selectElement);
+                    tagCount ++;
                 }
 
                 function addTagSelectorIfRequired()
@@ -90,6 +94,7 @@
 
                 $(function(){
                     addTagSelectorIfRequired();
+                    validateDynamicContent($("#TicketTagIds"));
                 });
             </script>
         }
@@ -97,8 +102,4 @@
             <input type="submit" value="Create" />
         </p>
     </fieldset>
-}
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
 }

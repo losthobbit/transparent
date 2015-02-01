@@ -12,6 +12,9 @@ namespace Transparent.Data.Validation
     /// <summary>
     /// Determines the maximum number of tags allowed.
     /// </summary>
+    /// <remarks>
+    /// Class must implement ISupportsMultipleTags
+    /// </remarks>
     [AttributeUsage(AttributeTargets.Property)]
     public class MaxTagsAttribute : ValidationAttribute
     {
