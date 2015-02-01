@@ -15,8 +15,7 @@ namespace Transparent.Data
     {
         public void InitializeDatabase(TContext context)
         {
-            WebSecurity.InitializeDatabaseConnection("DefaultConnection",
-               "UserProfile", "UserId", "UserName", autoCreateTables: true);
+            Security.InitializeDatabase();
         }
     }
 }

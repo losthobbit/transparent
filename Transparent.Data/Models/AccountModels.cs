@@ -7,11 +7,13 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Security;
 using Transparent.Data.Interfaces;
+using Transparent.Data.Models.Interfaces;
 
 namespace Transparent.Data.Models
 {
+    [MetadataType(typeof(IUserProfile))]
     [Table("UserProfile")]
-    public class UserProfile
+    public class UserProfile: IUserProfile
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
@@ -28,6 +30,8 @@ namespace Transparent.Data.Models
         [MaxLength(100)]
         [Index(IsUnique = true)]
         public string Email { get; set; }
+
+        public string Services { get; set; }
 
         public virtual ICollection<UserTag> Tags { get; set; }
     }

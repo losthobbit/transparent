@@ -69,7 +69,7 @@ namespace Transparent.Data.Queries
         /// <summary>
         /// Returns list of tickets that have the same tag as the user.
         /// </summary>
-        public TicketsContainer MyQueue(TicketsContainer filter, string userName)
+        public TicketsContainer MyQueue(TicketsContainer filter, int userId)
         {
             return filter.Initialize
             (
@@ -78,20 +78,20 @@ namespace Transparent.Data.Queries
                     from ticket in TicketSet(filter)
                     join ticketTag in ticketTags on ticket equals ticketTag.Ticket
                     join userTag in userTags on ticketTag.Tag equals userTag.Tag
-                    where userTag.User.UserName == userName && userTag.TotalPoints >= MinimumUserTagPointsToWorkOnTicketWithSameTag
+                    where userTag.FkUserId == userId && userTag.TotalPoints >= MinimumUserTagPointsToWorkOnTicketWithSameTag
                     select ticket
                 ).OrderByDescending(ticket => ticket.Rank)                
             );
         }
 
-        public TicketsContainer RaisedBy(TicketsContainer filter, string userName)
+        public TicketsContainer RaisedBy(TicketsContainer filter, int userId)
         {
             return filter.Initialize
             (
                 filter.ApplyFilter
                 (
                     from ticket in TicketSet(filter)
-                    where ticket.User.UserName == userName
+                    where ticket.FkUserId == userId
                     select ticket
                 ).OrderByDescending(ticket => ticket.CreatedDate)
             );
@@ -123,10 +123,10 @@ namespace Transparent.Data.Queries
             );
         }
 
-        public Tuple<int, TicketRank> SetRank(int ticketId, TicketRank ticketRank, string userName)
+        public Tuple<int, TicketRank> SetRank(int ticketId, TicketRank ticketRank, int userId)
         {
             var ticket = tickets.Single(t => t.Id == ticketId);
-            var rankRecord = ticket.UserRanks.SingleOrDefault(rank => rank.User.UserName == userName);
+            var rankRecord = ticket.UserRanks.SingleOrDefault(rank => rank.FkUserId == userId);
             if(rankRecord == null)
             {
                 if(ticketRank != TicketRank.NotRanked)
@@ -136,7 +136,7 @@ namespace Transparent.Data.Queries
                         new TicketUserRank
                         { 
                             Up = ticketRank == TicketRank.Up,
-                            User = userProfiles.Single(user => user.UserName == userName)
+                            User = userProfiles.Single(user => user.UserId == userId)
                         }
                     );
                     ticket.Rank += (int)ticketRank;
@@ -161,26 +161,26 @@ namespace Transparent.Data.Queries
             return new Tuple<int, TicketRank>(ticket.Rank, ticketRank);
         }
 
-        public IEnumerable<Test> GetUntakenTests(int tagId, string userName)
+        public IEnumerable<Test> GetUntakenTests(int tagId, int userId)
         {    
             var untakenTests = from test in tests
                                where test.TicketTags.Any(tag => tag.FkTagId == tagId)
                                from userPoint in userPoints
-                                    .Where(point => point.TestTaken == test && point.User.UserName == userName)
+                                    .Where(point => point.TestTaken == test && point.FkUserId == userId)
                                     .DefaultIfEmpty()
                                where userPoint == null
                                select test;
             return untakenTests;
         }
 
-        public int CountUntakenTestsRemaining(int tagId, string userName)
+        public int CountUntakenTestsRemaining(int tagId, int userId)
         {
-            return GetUntakenTests(tagId, userName).Count();
+            return GetUntakenTests(tagId, userId).Count();
         }
 
-        public Test GetRandomUntakenTest(int tagId, string userName)
+        public Test GetRandomUntakenTest(int tagId, int userId)
         {
-            return GetUntakenTests(tagId, userName).Random();
+            return GetUntakenTests(tagId, userId).Random();
         }
 
         /// <summary>
@@ -189,15 +189,15 @@ namespace Transparent.Data.Queries
         /// <param name="test">The test to start.</param>
         /// <exception cref="NotSupportedException">Test already completed.</exception>
         /// <exception cref="ArgumentNullException">Required argument is null.</exception>
-        public void StartTest(Test test, string userName)
+        public void StartTest(Test test, int userId)
         {
             if (test == null)
                 throw new ArgumentNullException("test");
-            var user = userProfiles.Single(userProfile => userProfile.UserName == userName);
-            var userPoint = userPoints.SingleOrDefault(point => point.FkTestId == test.Id && point.FkUserId == user.UserId);
+            var userPoint = userPoints.SingleOrDefault(point => point.FkTestId == test.Id && point.FkUserId == userId);
             if (userPoint == null)
             {
-                userPoint = new UserPoint { FkTestId = test.Id, FkTagId = test.TagId, User = user, Quantity = - configuration.PointsToDeductWhenStartingTest};
+                var user = userProfiles.Single(userProfile => userProfile.UserId == userId);
+                userPoint = new UserPoint { FkTestId = test.Id, FkTagId = test.TagId, User = user, Quantity = -configuration.PointsToDeductWhenStartingTest };
                 userPoints.Add(userPoint);
                 usersContext.SaveChanges();
             }
@@ -213,9 +213,9 @@ namespace Transparent.Data.Queries
         }
 
         /// <exception cref="NotSupportedException">Test not started or already completed.</exception>
-        public void AnswerTest(int testId, string answer, string userName)
+        public void AnswerTest(int testId, string answer, int userId)
         {
-            var userPoint = userPoints.SingleOrDefault(point => point.FkTestId == testId && point.User.UserName == userName);
+            var userPoint = userPoints.SingleOrDefault(point => point.FkTestId == testId && point.FkUserId == userId);
             if (userPoint == null)
                 throw new NotSupportedException("The test has not started.  It cannot be answered.");
             if (userPoint.Answer != null)
@@ -224,24 +224,10 @@ namespace Transparent.Data.Queries
             usersContext.SaveChanges();
         }
 
-        private int GetUserId(string userName)
-        {
-            return (from user in userProfiles
-                    where user.UserName == userName
-                    select user.UserId).Single();
-        }
-
-        public IQueryable<TestAndAnswerViewModel> GetTestsToBeMarked(string markersUserName, IQueryable<UserPoint> userPoints)
-        {
-            var markersUserId = GetUserId(markersUserName);
-
-            return GetTestsToBeMarked(markersUserId, userPoints);
-        }
-
         public IQueryable<TestAndAnswerViewModel> GetTestsToBeMarked(int markersUserId, IQueryable<UserPoint> userPoints)
         {
             var validTags = userTags
-                .Where(userTag => userTag.FkTagId == markersUserId && userTag.TotalPoints >= configuration.PointsRequiredToMarkTest)
+                .Where(userTag => userTag.FkUserId == markersUserId && userTag.TotalPoints >= configuration.PointsRequiredToMarkTest)
                 .Select(userTag => userTag.Tag);
 
             return from userPoint in userPoints
@@ -253,9 +239,9 @@ namespace Transparent.Data.Queries
                 select new TestAndAnswerViewModel { Test = userPoint.TestTaken, Answer = userPoint.Answer, Id = userPoint.Id };
         }
 
-        public AnsweredTests GetTestsToBeMarked(AnsweredTests filter, string markersUserName)
+        public AnsweredTests GetTestsToBeMarked(AnsweredTests filter, int markersUserId)
         {
-            var tests = GetTestsToBeMarked(markersUserName, userPoints);
+            var tests = GetTestsToBeMarked(markersUserId, userPoints);
 
             return filter.Initialize
             (
@@ -272,11 +258,11 @@ namespace Transparent.Data.Queries
         /// </summary>
         /// <param name="userPointId">The ID of the UserPoint record containing the answer to the test.</param>
         /// <exception cref="SecurityException">The user may not mark the test.</exception>
-        public TestAndAnswerViewModel GetTestToBeMarked(int userPointId, string markersUserName)
+        public TestAndAnswerViewModel GetTestToBeMarked(int userPointId, int markersUserId)
         {
             try
             {
-                return GetTestsToBeMarked(markersUserName, userPoints.Where(userPoint => userPoint.Id == userPointId)).Single();
+                return GetTestsToBeMarked(markersUserId, userPoints.Where(userPoint => userPoint.Id == userPointId)).Single();
             }
             catch (InvalidOperationException e)
             {
@@ -290,9 +276,8 @@ namespace Transparent.Data.Queries
         /// <param name="userPointId">The ID of the UserPoint record containing the answer to the test.</param>
         /// <param name="passed">Whether the marker passed or failed the test</param>
         /// <exception cref="SecurityException">The user may not mark the test.</exception>
-        public void MarkTest(int userPointId, bool passed, string markersUserName)
+        public void MarkTest(int userPointId, bool passed, int markersUserId)
         {
-            var markersUserId = GetUserId(markersUserName);
             // Validate that the user may mark the test
             try
             {

@@ -1,12 +1,14 @@
 namespace Transparent.Data.Migrations
 {
     using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
-using System.Linq;
-using Transparent.Data.Models;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Data.Entity;
+    using System.Data.Entity.Migrations;
+    using System.Linq;
+    using System.Web.Security;
+    using Transparent.Data.Models;
+    using WebMatrix.WebData;
 
     internal sealed class Configuration : DbMigrationsConfiguration<UsersContext>
     {
@@ -25,79 +27,106 @@ using Transparent.Data.Models;
 
         public Configuration()
         {
+            Security.InitializeDatabase();
             AutomaticMigrationsEnabled = false;
         }
 
         protected override void Seed(UsersContext context)
         {
             //  This method will be called after migrating to the latest version.
-
             AddTags(context);
-            var testUser = SetupTestUser(context);
-            if (testUser != null)
+            CreateRoles();
+            var administrator = SetupAdministrator(context);
+            if (administrator != null)
             {
-                CreateTests(context, testUser);
+                CreateTests(context, administrator);
             }
-            SetupTestUser2(context);
+            SetupTestUser(context);
+        }
+
+        private void CreateRoles()
+        {
+            if (!Roles.RoleExists(Constants.AdministratorRole))
+                Roles.CreateRole(Constants.AdministratorRole);
+            if (!Roles.RoleExists(Constants.VolunteerRole))
+                Roles.CreateRole(Constants.VolunteerRole);
         }
 
         private void CreateTests(UsersContext context, UserProfile testUser)
         {
             var criticalThinkingTag = context.Tags.Single(tag => tag.Name == Constants.CriticalThinkingTagName);
-            context.Tests.AddOrUpdate(t => t.Body, new Test
+            var body = "Name a logical fallacy in the following sentence:\n\n" +
+                    "I eat herbs because my grandfather ate herbs and lived for a hundred years.";
+            if(!context.Tests.Any(test => test.Body == body))
+                context.Tests.Add(new Test
+                {
+                    User = testUser,
+                    CreatedDate = DateTime.Now,
+                    Heading = "Name the logical fallacy",
+                    Body = body,
+                    TicketTags = new Collection<TicketTag> { new TicketTag { Tag = criticalThinkingTag } }
+                });
+            body = "Name or explain a logical fallacy in the following:\n\n" +
+                    "Either chemotherapy or a miracle cured his cancer.  He didn't have chemotherapy.  Therefore it was a miracle.";
+            if (!context.Tests.Any(test => test.Body == body))
+                context.Tests.AddOrUpdate(t => t.Body, new Test
+                {
+                    User = testUser,
+                    CreatedDate = DateTime.Now,
+                    Heading = "Name or explain the logical fallacy",
+                    Body = body,
+                    TicketTags = new Collection<TicketTag> { new TicketTag { Tag = criticalThinkingTag } }
+                });
+        }
+
+        private UserProfile SetupAdministrator(UsersContext context)
+        {
+            const string adminEmail = "losthobbit@gmail.com";
+            const string adminName = "Stephen Oberauer";
+            var adminstrator = context.UserProfiles.SingleOrDefault(user => user.Email == adminEmail);
+
+            if(adminstrator == null)
             {
-                User = testUser,
-                CreatedDate = DateTime.Now,
-                Heading = "Name the logical fallacy",
-                Body = "Name a logical fallacy in the following sentence:\n\n" +
-                    "I eat herbs because my grandfather ate herbs and lived for a hundred years.",
-                TicketTags = new Collection<TicketTag>{ new TicketTag{ Tag = criticalThinkingTag }}
-            });
-            context.Tests.AddOrUpdate(t => t.Body, new Test
-            {
-                User = testUser,
-                CreatedDate = DateTime.Now,
-                Heading = "Name or explain the logical fallacy",
-                Body = "Name or explain a logical fallacy in the following:\n\n" +
-                    "Either chemotherapy or a miracle cured his cancer.  He didn't have chemotherapy.  Therefore it was a miracle.",
-                TicketTags = new Collection<TicketTag> { new TicketTag { Tag = criticalThinkingTag } }
-            });
+                WebSecurity.CreateUserAndAccount(adminName, "password", new { Email = adminEmail });
+                adminstrator = context.UserProfiles.SingleOrDefault(user => user.Email == adminEmail);
+            }
+
+            var criticalThinkingTag = context.Tags.Single(tag => tag.Name == Constants.CriticalThinkingTagName);
+            AddOrUpdateUserTagPoints(context, adminstrator, criticalThinkingTag, 30);
+
+            var applicationTag = context.Tags.Single(tag => tag.Name == Constants.ApplicationName);
+            AddOrUpdateUserTagPoints(context, adminstrator, applicationTag, 40);
+
+            var basicPsychologyTag = context.Tags.Single(tag => tag.Name == BasicPsychologyTagName);
+            AddOrUpdateUserTagPoints(context, adminstrator, basicPsychologyTag, 20);
+
+            if (!Roles.GetRolesForUser(adminName).Contains(Constants.AdministratorRole))
+                Roles.AddUsersToRoles(new[] {adminName}, new[] {Constants.AdministratorRole});
+
+            return adminstrator;
         }
 
         private UserProfile SetupTestUser(UsersContext context)
         {
-            var stephen = context.UserProfiles.SingleOrDefault(user => user.Email == "losthobbit@gmail.com");
+            const string testEmail = "nerdsguide@gmail.com";
+            var testUser = context.UserProfiles.SingleOrDefault(user => user.Email == testEmail);
 
-            if (stephen != null)
+            if (testUser == null)
             {
-                var criticalThinkingTag = context.Tags.Single(tag => tag.Name == Constants.CriticalThinkingTagName);
-                AddOrUpdateUserTagPoints(context, stephen, criticalThinkingTag, 30);
-
-                var applicationTag = context.Tags.Single(tag => tag.Name == Constants.ApplicationName);
-                AddOrUpdateUserTagPoints(context, stephen, applicationTag, 40);
-
-                var basicPsychologyTag = context.Tags.Single(tag => tag.Name == BasicPsychologyTagName);
-                AddOrUpdateUserTagPoints(context, stephen, basicPsychologyTag, 20);
+                WebSecurity.CreateUserAndAccount("Nerd", "password", new { Email = testEmail });
+                testUser = context.UserProfiles.SingleOrDefault(user => user.Email == testEmail);
             }
-            return stephen;
-        }
 
-        private UserProfile SetupTestUser2(UsersContext context)
-        {
-            var nerd = context.UserProfiles.SingleOrDefault(user => user.Email == "nerdsguide@gmail.com");
+            var criticalThinkingTag = context.Tags.Single(tag => tag.Name == Constants.CriticalThinkingTagName);
+            AddOrUpdateUserTagPoints(context, testUser, criticalThinkingTag, 30);
 
-            if (nerd != null)
-            {
-                var criticalThinkingTag = context.Tags.Single(tag => tag.Name == Constants.CriticalThinkingTagName);
-                AddOrUpdateUserTagPoints(context, nerd, criticalThinkingTag, 30);
+            var applicationTag = context.Tags.Single(tag => tag.Name == Constants.ApplicationName);
+            AddOrUpdateUserTagPoints(context, testUser, applicationTag, 40);
 
-                var applicationTag = context.Tags.Single(tag => tag.Name == Constants.ApplicationName);
-                AddOrUpdateUserTagPoints(context, nerd, applicationTag, 40);
+            var basicPsychologyTag = context.Tags.Single(tag => tag.Name == BasicPsychologyTagName);
+            AddOrUpdateUserTagPoints(context, testUser, basicPsychologyTag, 20);
 
-                var basicPsychologyTag = context.Tags.Single(tag => tag.Name == BasicPsychologyTagName);
-                AddOrUpdateUserTagPoints(context, nerd, basicPsychologyTag, 20);
-            }
-            return nerd;
+            return testUser;
         }
 
         private void AddOrUpdateUserTagPoints(UsersContext context, UserProfile user, Tag tag, int totalPoints)

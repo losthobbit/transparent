@@ -13,16 +13,16 @@ namespace Transparent.Data.Interfaces
         /// <summary>
         /// Returns list of tickets that have the same tag as the user.
         /// </summary>
-        TicketsContainer MyQueue(TicketsContainer filter, string userName);
+        TicketsContainer MyQueue(TicketsContainer filter, int userId);
 
-        TicketsContainer RaisedBy(TicketsContainer filter, string userName);
+        TicketsContainer RaisedBy(TicketsContainer filter, int userId);
         TicketsContainer Newest(TicketsContainer filter);
         TicketsContainer HighestRanked(TicketsContainer filter);
         Search Search(Search filter);
-        Tuple<int, TicketRank> SetRank(int ticketId, TicketRank ticketRank, string userName);
-        IEnumerable<Test> GetUntakenTests(int tagId, string userName);
-        Test GetRandomUntakenTest(int tagId, string userName);
-        int CountUntakenTestsRemaining(int tagId, string userName);
+        Tuple<int, TicketRank> SetRank(int ticketId, TicketRank ticketRank, int userId);
+        IEnumerable<Test> GetUntakenTests(int tagId, int userId);
+        Test GetRandomUntakenTest(int tagId, int userId);
+        int CountUntakenTestsRemaining(int tagId, int userId);
 
         /// <summary>
         /// Record that the user started the test and deduct points
@@ -30,15 +30,15 @@ namespace Transparent.Data.Interfaces
         /// <param name="test">The test to start.</param>
         /// <exception cref="NotSupportedException">Test already completed.</exception>
         /// <exception cref="ArgumentNullException">Required argument is null.</exception>
-        void StartTest(Test test, string userName);
+        void StartTest(Test test, int userId);
 
         /// <exception cref="NotSupportedException">Test not started or already completed.</exception>
-        void AnswerTest(int testId, string answer, string userName);
+        void AnswerTest(int testId, string answer, int userId);
 
-        AnsweredTests GetTestsToBeMarked(AnsweredTests filter, string markersUserName);
+        AnsweredTests GetTestsToBeMarked(AnsweredTests filter, int markersUserId);
 
-        TestAndAnswerViewModel GetTestToBeMarked(int userPointId, string markersUserName);
+        TestAndAnswerViewModel GetTestToBeMarked(int userPointId, int markersUserId);
 
-        void MarkTest(int userPointId, bool passed, string markersUserName);
+        void MarkTest(int userPointId, bool passed, int markersUserId);
     }
 }

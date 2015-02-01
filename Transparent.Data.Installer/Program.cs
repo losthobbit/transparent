@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,9 +22,6 @@ namespace Transparent.Data.Installer
             Database.SetInitializer<UsersContext>(new InitDatabase<UsersContext>());
             UsersContext context = new UsersContext();
             context.Database.Initialize(false);
-            if (!WebSecurity.Initialized)
-                WebSecurity.InitializeDatabaseConnection("DefaultConnection",
-                     "UserProfile", "UserId", "UserName", autoCreateTables: true);
         }
     }
 }

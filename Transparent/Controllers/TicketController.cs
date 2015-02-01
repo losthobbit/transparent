@@ -11,6 +11,7 @@ using Transparent.Data.Interfaces;
 using Transparent.Data.Models;
 using Transparent.Data.Queries;
 using Transparent.Data.ViewModels;
+using WebMatrix.WebData;
 
 namespace Transparent.Controllers
 {
@@ -54,7 +55,7 @@ namespace Transparent.Controllers
         private PartialViewResult SetRank(TicketAndUserRank ticket, TicketRank ticketRank)
         {
             // TODO: Ensure user has permission to change rank
-            var newRank = tickets.SetRank(ticket.Id, ticketRank, User.Identity.Name);
+            var newRank = tickets.SetRank(ticket.Id, ticketRank, WebSecurity.CurrentUserId);
             db.SaveChanges();
             ticket.Rank = newRank.Item1;
             ticket.UserRank = newRank.Item2;
@@ -73,12 +74,12 @@ namespace Transparent.Controllers
 
         public ActionResult RaisedByMe(TicketsContainer ticketsContainer)
         {
-            return View(tickets.RaisedBy(ticketsContainer, User.Identity.Name));
+            return View(tickets.RaisedBy(ticketsContainer, WebSecurity.CurrentUserId));
         }
 
         public ActionResult MyQueue(TicketsContainer ticketsContainer)
         {
-            return View(tickets.MyQueue(ticketsContainer, User.Identity.Name));
+            return View(tickets.MyQueue(ticketsContainer, WebSecurity.CurrentUserId));
         }
 
         public ActionResult HighestRanked(TicketsContainer ticketsContainer)
@@ -153,7 +154,7 @@ namespace Transparent.Controllers
         [HttpPost]
         public ActionResult TakeTest(TestAndAnswerViewModel testAndAnswerViewModel)
         {
-            tickets.AnswerTest(testAndAnswerViewModel.Test.Id, testAndAnswerViewModel.Answer, User.Identity.Name);
+            tickets.AnswerTest(testAndAnswerViewModel.Test.Id, testAndAnswerViewModel.Answer, WebSecurity.CurrentUserId);
 
             return RedirectToAction("Details", "Tag", new { Id = testAndAnswerViewModel.Test.TagId });
         }
@@ -162,12 +163,12 @@ namespace Transparent.Controllers
         public ActionResult TakeTest(int tagId)
         {
             // find a random test that the user has not yet taken
-            var test = tickets.GetRandomUntakenTest(tagId, User.Identity.Name);
+            var test = tickets.GetRandomUntakenTest(tagId, WebSecurity.CurrentUserId);
             if (test == null)
                 throw new NotSupportedException("No more tests are available.");
 
             // record that the user started the test and deduct points
-            tickets.StartTest(test, User.Identity.Name);
+            tickets.StartTest(test, WebSecurity.CurrentUserId);
 
             return View(new TestAndAnswerViewModel(test));
         }
@@ -178,12 +179,12 @@ namespace Transparent.Controllers
         /// <returns>A list of tests that the user can mark.</returns>
         public ActionResult MarkTests(AnsweredTests answeredTests)
         {
-            return View(tickets.GetTestsToBeMarked(answeredTests, User.Identity.Name));
+            return View(tickets.GetTestsToBeMarked(answeredTests, WebSecurity.CurrentUserId));
         }
 
         public ActionResult MarkTest(int userPointId)
         {
-            var test = tickets.GetTestToBeMarked(userPointId, User.Identity.Name);
+            var test = tickets.GetTestToBeMarked(userPointId, WebSecurity.CurrentUserId);
 
             return View(test);
         }
@@ -192,7 +193,7 @@ namespace Transparent.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult MarkTest(TestAndAnswerViewModel testAndAnswer)
         {
-            tickets.MarkTest(testAndAnswer.Id, testAndAnswer.Passed.Value, User.Identity.Name);
+            tickets.MarkTest(testAndAnswer.Id, testAndAnswer.Passed.Value, WebSecurity.CurrentUserId);
 
             return RedirectToAction("MarkTests");
         }
@@ -251,6 +252,16 @@ namespace Transparent.Controllers
             db.SaveChanges();
             return RedirectToAction("Newest");
         }
+
+        //public ActionResult Volunteer()
+        //{
+        //    //var test = db.UserProfiles
+                
+        //    //tickets.GetTestToBeMarked(userPointId, User.Identity.Name);
+        //    //User.r
+
+        //    return View(test);
+        //}
 
         protected override void Dispose(bool disposing)
         {

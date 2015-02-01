@@ -39,7 +39,7 @@ namespace Transparent.Filters
                         }
                     }
 
-                    WebSecurity.InitializeDatabaseConnection("DefaultConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
+                    Security.InitializeDatabase();
                 }
                 catch (Exception ex)
                 {

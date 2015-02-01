@@ -40,7 +40,7 @@ namespace Transparent.Data.Tests.Queries
             testData.StephensCriticalThinkingTag.TotalPoints = Tickets.MinimumUserTagPointsToWorkOnTicketWithSameTag;
 
             // Act
-            var ticketsContainer = target.MyQueue(new TicketsContainer(), testData.Stephen.UserName);
+            var ticketsContainer = target.MyQueue(new TicketsContainer(), testData.Stephen.UserId);
 
             // Assert
             ticketsContainer.PagedList.Single(ticket => ticket == testData.JoesCriticalThinkingSuggestion);
@@ -53,7 +53,7 @@ namespace Transparent.Data.Tests.Queries
             testData.StephensCriticalThinkingTag.TotalPoints = Tickets.MinimumUserTagPointsToWorkOnTicketWithSameTag - 1;
 
             // Act
-            var ticketsContainer = target.MyQueue(new TicketsContainer(), testData.Stephen.UserName);
+            var ticketsContainer = target.MyQueue(new TicketsContainer(), testData.Stephen.UserId);
 
             // Assert
             Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == testData.JoesCriticalThinkingSuggestion));
@@ -63,7 +63,7 @@ namespace Transparent.Data.Tests.Queries
         public void MyQueue_with_ticket_and_user_without_same_tag_does_not_return_ticket()
         {
             // Act
-            var ticketsContainer = target.MyQueue(new TicketsContainer(), testData.Stephen.UserName);
+            var ticketsContainer = target.MyQueue(new TicketsContainer(), testData.Stephen.UserId);
 
             // Assert
             Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == testData.JoesScubaDivingSuggestion));
@@ -78,10 +78,10 @@ namespace Transparent.Data.Tests.Queries
         {
             // Arrange
             var tag = testData.CriticalThinkingTag;
-            var userName = testData.Stephen.UserName;
+            var userId = testData.Stephen.UserId;
 
             // Act
-            var actualTests = target.GetUntakenTests(tag.Id, userName);
+            var actualTests = target.GetUntakenTests(tag.Id, userId);
 
             // Assert
             Assert.IsTrue(actualTests.Any());
@@ -93,13 +93,13 @@ namespace Transparent.Data.Tests.Queries
         {
             // Arrange
             var tag = testData.CriticalThinkingTag;
-            var userName = testData.Stephen.UserName;
+            var userId = testData.Stephen.UserId;
             var stephensPoints = testData.UsersContext.UserPoints.Where(userPoints => userPoints.User == testData.Stephen);
             var testsStephenTook = stephensPoints.Select(point => point.TestTaken).Where(test => test != null).ToList();
             Assert.IsTrue(testsStephenTook.Any());
 
             // Act
-            var actualTests = target.GetUntakenTests(tag.Id, userName);
+            var actualTests = target.GetUntakenTests(tag.Id, userId);
 
             // Assert
             Assert.IsTrue(actualTests.Any());
@@ -116,7 +116,7 @@ namespace Transparent.Data.Tests.Queries
             //Arrange
 
             //Act
-            var actual = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
+            var actual = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserId);
 
             //Assert
             Assert.IsTrue(actual.PagedList.Any());
@@ -130,7 +130,7 @@ namespace Transparent.Data.Tests.Queries
             //Arrange
 
             //Act
-            var actual = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
+            var actual = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserId);
 
             //Assert
             Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.CriticalThinkingTestThatStephenTook));
@@ -142,7 +142,7 @@ namespace Transparent.Data.Tests.Queries
             //Arrange
 
             //Act
-            var actual = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
+            var actual = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserId);
 
             //Assert
             Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.CriticalThinkingTestThatJoeTookThatStephenMarked));
@@ -154,7 +154,7 @@ namespace Transparent.Data.Tests.Queries
             //Arrange
 
             //Act
-            var actual = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
+            var actual = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserId);
 
             //Assert
             Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.CriticalThinkingTestThatJoeTookThatHasBeenMarkedCompletely));
@@ -166,7 +166,7 @@ namespace Transparent.Data.Tests.Queries
             //Arrange
 
             //Act
-            var actual = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
+            var actual = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserId);
 
             //Assert
             Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.CriticalThinkingTestThatJoeStarted));
@@ -178,7 +178,7 @@ namespace Transparent.Data.Tests.Queries
             //Arrange
 
             //Act
-            var actual = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
+            var actual = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserId);
 
             //Assert
             Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.BungeeJumpingTestThatJoeTook));
@@ -192,12 +192,12 @@ namespace Transparent.Data.Tests.Queries
         public void TestToBeMarked_returns_tests_which_are_returned_by_TestsToBeMarked()
         {
             //Arrange
-            var testList = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserName);
+            var testList = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserId);
 
             foreach (var test in testList.PagedList)
             {
                 //Act
-                var actual = target.GetTestToBeMarked(test.Id, testData.Stephen.UserName);
+                var actual = target.GetTestToBeMarked(test.Id, testData.Stephen.UserId);
 
                 //Assert
                 Assert.AreEqual(test.Id, actual.Id);
@@ -224,7 +224,7 @@ namespace Transparent.Data.Tests.Queries
                 try
                 {
                     //Act
-                    target.GetTestToBeMarked(test.Id, testData.Stephen.UserName);
+                    target.GetTestToBeMarked(test.Id, testData.Stephen.UserId);
 
                     //Assert
                     Assert.Fail("SecurityException expected.");

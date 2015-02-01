@@ -17,7 +17,7 @@ namespace Transparent.Data.Models
     /// Also shows the details about a test that was started.
     /// </remarks>
     [MetadataType(typeof(IUserPoint))]
-    public class UserPoint
+    public class UserPoint: IUserPoint
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]

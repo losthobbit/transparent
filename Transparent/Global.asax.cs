@@ -52,9 +52,6 @@ namespace Transparent
             Database.SetInitializer<UsersContext>(new InitDatabase<UsersContext>());
             UsersContext context = new UsersContext();
             context.Database.Initialize(false);
-            if (!WebSecurity.Initialized)
-                WebSecurity.InitializeDatabaseConnection("DefaultConnection",
-                     "UserProfile", "UserId", "UserName", autoCreateTables: true);
         }
 
         protected void Application_End()
