@@ -224,11 +224,16 @@ namespace Transparent.Data.Queries
             usersContext.SaveChanges();
         }
 
+        private IQueryable<Tag> GetCompetentTags(int userId)
+        {
+            return userTags
+            .Where(userTag => userTag.FkUserId == userId && userTag.TotalPoints >= configuration.PointsRequiredToBeCompetent)
+            .Select(userTag => userTag.Tag);
+        }
+
         public IQueryable<TestAndAnswerViewModel> GetTestsToBeMarked(int markersUserId, IQueryable<UserPoint> userPoints)
         {
-            var validTags = userTags
-                .Where(userTag => userTag.FkUserId == markersUserId && userTag.TotalPoints >= configuration.PointsRequiredToMarkTest)
-                .Select(userTag => userTag.Tag);
+            var validTags = GetCompetentTags(markersUserId);
 
             return from userPoint in userPoints
                 where userPoint.FkUserId != markersUserId
@@ -289,6 +294,28 @@ namespace Transparent.Data.Queries
             }
             testMarkings.Add(new TestMarking { FkUserPointId = userPointId, FkUserId = markersUserId, Passed = passed });
             usersContext.SaveChanges();
+        }
+
+        public Ticket FindTicket(int id)
+        {
+            return usersContext.Tickets.Find(id);
+        }
+
+        private TicketDetailsViewModel.TagViewModel GetTicketTagInfo(TicketTag ticketTag, int ticketUserId, int userId, IEnumerable<Tag> competentTags)
+        {
+            return new TicketDetailsViewModel.TagViewModel
+            {
+                TagId = ticketTag.FkTagId,
+                UserCanValidate = !ticketTag.Verified && ticketTag.FkCreatedById != userId &&
+                    !(ticketTag.FkCreatedById == null && ticketUserId == userId) &&
+                    competentTags.Any(competentTag => competentTag.Id == ticketTag.FkTagId)
+            };
+        }
+
+        public IEnumerable<TicketDetailsViewModel.TagViewModel> GetTicketTagInfoList(Ticket ticket, int userId)
+        {
+            var competentTags = GetCompetentTags(userId).ToList();
+            return ticket.TicketTags.Select(ticketTag => GetTicketTagInfo(ticketTag, ticket.FkUserId, userId, competentTags)).ToList();
         }
     }
 }

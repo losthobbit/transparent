@@ -8,12 +8,12 @@ using Transparent.Data.Validation;
 
 namespace Transparent.Data.ViewModels
 {
-    public class TicketViewModel<TModel>: TicketViewModel
+    public class CreateTicketViewModel<TModel>: CreateTicketViewModel
         where TModel : Ticket
     {
         public TModel Ticket { get { return (TModel)Model; } }
 
-        public TicketViewModel(): base(GetTicketType())
+        public CreateTicketViewModel(): base(GetTicketType())
         {           
         }
 
@@ -29,15 +29,15 @@ namespace Transparent.Data.ViewModels
         }
     }
 
-    public class TicketViewModel: ISupportsMultipleTags
+    public class CreateTicketViewModel: ISupportsMultipleTags
     {
         public Ticket Model { get; private set; }
 
-        public TicketViewModel(TicketType ticketType): this(Ticket.Create(ticketType))
+        public CreateTicketViewModel(TicketType ticketType): this(Ticket.Create(ticketType))
         {
         }
 
-        public TicketViewModel(Ticket model)
+        public CreateTicketViewModel(Ticket model)
         {
             this.Model = model;
         }
@@ -124,6 +124,14 @@ namespace Transparent.Data.ViewModels
             set
             {
                 Model.FkUserId = value;
+            }
+        }
+
+        public TicketState State
+        {
+            get
+            {
+                return Model.State;
             }
         }
 

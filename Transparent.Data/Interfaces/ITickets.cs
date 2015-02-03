@@ -40,5 +40,9 @@ namespace Transparent.Data.Interfaces
         TestAndAnswerViewModel GetTestToBeMarked(int userPointId, int markersUserId);
 
         void MarkTest(int userPointId, bool passed, int markersUserId);
+
+        Ticket FindTicket(int id);
+
+        IEnumerable<TicketDetailsViewModel.TagViewModel> GetTicketTagInfoList(Ticket ticket, int userId);
     }
 }

@@ -115,6 +115,10 @@
     <Compile Include="Migrations\201502010009339_AddUserProfileTableVolunteerColumn.Designer.cs">
       <DependentUpon>201502010009339_AddUserProfileTableVolunteerColumn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201502012234413_AddStateAndTagVerification.cs" />
+    <Compile Include="Migrations\201502012234413_AddStateAndTagVerification.Designer.cs">
+      <DependentUpon>201502012234413_AddStateAndTagVerification.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\AnsweredTests.cs" />
@@ -130,13 +134,14 @@
     <Compile Include="Models\Suggestion.cs" />
     <Compile Include="Models\Test.cs" />
     <Compile Include="Models\TestMarking.cs" />
+    <Compile Include="Models\TicketState.cs" />
     <Compile Include="Models\TicketType.cs" />
     <Compile Include="Models\UserPoint.cs" />
     <Compile Include="Models\Tag.cs" />
     <Compile Include="Models\Search.cs" />
     <Compile Include="Models\Stateful.cs" />
     <Compile Include="Models\Ticket.cs" />
-    <Compile Include="Models\TicketAndUserRank.cs" />
+    <Compile Include="ViewModels\TicketDetailsViewModel.cs" />
     <Compile Include="Models\TicketRank.cs" />
     <Compile Include="Models\TicketTag.cs" />
     <Compile Include="Models\TicketUserRank.cs" />
@@ -151,7 +156,7 @@
     <Compile Include="Validation\MaxTagsAttribute.cs" />
     <Compile Include="Validation\RequiresTagsAttribute.cs" />
     <Compile Include="ViewModels\TestAndAnswerViewModel.cs" />
-    <Compile Include="ViewModels\TicketViewModel.cs" />
+    <Compile Include="ViewModels\CreateTicketViewModel.cs" />
     <Compile Include="ViewModels\VolunteerViewModel.cs" />
     <Compile Include="Windsor\Installer.cs" />
   </ItemGroup>
@@ -174,6 +179,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201502010009339_AddUserProfileTableVolunteerColumn.resx">
       <DependentUpon>201502010009339_AddUserProfileTableVolunteerColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502012234413_AddStateAndTagVerification.resx">
+      <DependentUpon>201502012234413_AddStateAndTagVerification.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -21,5 +21,14 @@ namespace Transparent.Data.Models
         [Required]
         public int FkTagId { get; set; }
         public virtual Tag Tag { get; set; }
+
+        /// <summary>
+        /// If null, assumed to be the Ticket's user ID
+        /// </summary>
+        [ForeignKey("CreatedBy")]
+        public int? FkCreatedById { get; set; }
+        public UserProfile CreatedBy { get; set; }
+
+        public bool Verified { get; set; }
     }
 }

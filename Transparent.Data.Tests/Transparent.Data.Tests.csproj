@@ -77,6 +77,10 @@
       <Project>{6ab956c6-5323-4f12-ac6d-7c2bcb8f4372}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Tests.Common\Tests.Common.csproj">
+      <Project>{67c81b95-b543-47b8-8a92-be9e51d9c06c}</Project>
+      <Name>Tests.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Transparent.Data\Transparent.Data.csproj">
       <Project>{2d93c988-7c3e-46ed-a7b6-fb47ad7ebf4c}</Project>
       <Name>Transparent.Data</Name>

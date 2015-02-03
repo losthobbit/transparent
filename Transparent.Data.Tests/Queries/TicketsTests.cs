@@ -10,6 +10,7 @@ using Transparent.Data.Tests.Helpers;
 using Common;
 using NUnit.Framework;
 using System.Security;
+using Tests.Common;
 
 namespace Transparent.Data.Tests.Queries
 {
@@ -237,5 +238,122 @@ namespace Transparent.Data.Tests.Queries
         }
 
         #endregion TestToBeMarked
+
+        #region GetTicketTagInfoList
+
+        private Ticket getTicketTagInfoList_Ticket;
+
+        private void ArrangeGetTicketInfoTagList(Relative userPointsForTag = Relative.GreaterThan)
+        {
+            testData.StephensCriticalThinkingTag.TotalPoints = testConfiguration.PointsRequiredToBeCompetent + (int)userPointsForTag;
+
+            getTicketTagInfoList_Ticket = new Ticket
+            {
+                User = testData.Joe,
+                FkUserId = testData.Joe.UserId,
+                TicketTags = new List<TicketTag>
+                {
+                    new TicketTag
+                    {
+                        Verified = false,
+                        CreatedBy = testData.Joe,
+                        FkCreatedById = testData.Joe.UserId,
+                        Tag = testData.CriticalThinkingTag,
+                        FkTagId = testData.CriticalThinkingTag.Id
+                    }
+                }
+            };
+        }
+
+        [TestCase(Relative.GreaterThan)]
+        [TestCase(Relative.EqualTo)]
+        public void GetTicketTagInfoList_not_verified_and_created_by_someone_else_and_user_has_competent_or_more_points_for_that_tag_returns_UserCanValidate_is_true(Relative userPointsForTag)
+        {
+            //Arrange
+            ArrangeGetTicketInfoTagList(userPointsForTag);
+
+            //Act
+            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, testData.Stephen.UserId).Single();
+
+            //Assert
+            Assert.AreEqual(getTicketTagInfoList_Ticket.TicketTags.Single().FkTagId, actual.TagId);
+            Assert.IsTrue(actual.UserCanValidate);
+        }
+
+        [Test]
+        public void GetTicketTagInfoList_not_verified_and_created_by_null_and_tickets_user_is_not_user_and_user_has_competent_or_more_points_for_that_tag_returns_UserCanValidate_is_true()
+        {
+            //Arrange
+            ArrangeGetTicketInfoTagList();
+            getTicketTagInfoList_Ticket.TicketTags.Single().CreatedBy = null;
+            getTicketTagInfoList_Ticket.TicketTags.Single().FkCreatedById = null;
+
+            //Act
+            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, testData.Stephen.UserId).Single();
+
+            //Assert
+            Assert.IsTrue(actual.UserCanValidate);
+        }
+
+        [Test]
+        public void GetTicketTagInfoList_verified_returns_UserCanValidate_is_false()
+        {
+            //Arrange
+            ArrangeGetTicketInfoTagList();
+            getTicketTagInfoList_Ticket.TicketTags.Single().Verified = true;
+
+            //Act
+            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, testData.Stephen.UserId).Single();
+
+            //Assert
+            Assert.IsFalse(actual.UserCanValidate);
+        }
+
+        [Test]
+        public void GetTicketTagInfoList_created_by_user_returns_UserCanValidate_is_false()
+        {
+            //Arrange
+            ArrangeGetTicketInfoTagList();
+            getTicketTagInfoList_Ticket.TicketTags.Single().CreatedBy = testData.Stephen;
+            getTicketTagInfoList_Ticket.TicketTags.Single().FkCreatedById = testData.Stephen.UserId;
+
+            //Act
+            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, testData.Stephen.UserId).Single();
+
+            //Assert
+            Assert.IsFalse(actual.UserCanValidate);
+        }
+
+        [Test]
+        public void GetTicketTagInfoList_created_by_null_and_ticket_user_is_user_returns_UserCanValidate_is_false()
+        {
+            //Arrange
+            ArrangeGetTicketInfoTagList();
+            getTicketTagInfoList_Ticket.TicketTags.Single().CreatedBy = null;
+            getTicketTagInfoList_Ticket.TicketTags.Single().FkCreatedById = null;
+            getTicketTagInfoList_Ticket.User = testData.Stephen;
+            getTicketTagInfoList_Ticket.FkUserId = testData.Stephen.UserId;
+
+            //Act
+            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, testData.Stephen.UserId).Single();
+
+            //Assert
+            Assert.IsFalse(actual.UserCanValidate);
+        }
+
+        [Test]
+        public void GetTicketTagInfoList_user_has_less_than_competent_points_for_that_tag_returns_UserCanValidate_is_false()
+        {
+            //Arrange
+            ArrangeGetTicketInfoTagList(Relative.LessThan);
+
+            //Act
+            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, testData.Stephen.UserId).Single();
+
+            //Assert
+            Assert.IsFalse(actual.UserCanValidate);
+        }
+
+        #endregion GetTicketTagInfoList
     }
 }

@@ -1,4 +1,4 @@
-﻿@model Transparent.Data.Models.TicketAndUserRank
+﻿@model Transparent.Data.ViewModels.TicketDetailsViewModel
 
 <div id="rankPartial" class="display-field">
     @using (Ajax.BeginForm(Model.UserRank == Transparent.Data.Models.TicketRank.Up ? "_CancelRank" : "_IncreaseRank", new AjaxOptions { UpdateTargetId = "rankPartial" }))

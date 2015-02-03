@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Transparent.Data.Models;
 
-namespace Transparent.Data.Models
+namespace Transparent.Data.ViewModels
 {
-    public class TicketAndUserRank : BaseTicket
+    public class TicketDetailsViewModel : BaseTicket
     {
         private Ticket ticket { get; set; }
 
         public TicketRank UserRank { get; set; }
 
-        public TicketAndUserRank()
+        public IEnumerable<TagViewModel> TagInfo { get; set; }
+
+        public TicketDetailsViewModel()
         {
 
         }
 
-        public TicketAndUserRank(Ticket ticket, TicketRank userRank)
+        public TicketDetailsViewModel(Ticket ticket, TicketRank userRank, IEnumerable<TagViewModel> tagInfo)
         {
             this.ticket = ticket;
             Id = ticket.Id;
@@ -28,6 +31,7 @@ namespace Transparent.Data.Models
             CreatedDate = ticket.CreatedDate;
             TicketType = ticket.TicketType;
             TicketTags = ticket.TicketTags;
+            TagInfo = tagInfo;
         }
 
         public override string TextForCreated
@@ -36,6 +40,12 @@ namespace Transparent.Data.Models
             {
                 return ticket.TextForCreated;
             }
+        }
+
+        public class TagViewModel
+        {
+            public int TagId { get; set; }
+            public bool UserCanValidate { get; set; }
         }
     }
 }

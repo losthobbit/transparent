@@ -7,7 +7,7 @@
     var container = ((IContainerAccessor)Context.ApplicationInstance).Container;
     var tags = container.Resolve<ITags>();
     var tickets = container.Resolve<ITickets>();
-    var numberOfTests = tickets.CountUntakenTestsRemaining(Model.Id, User.Identity.Name);
+    var numberOfTests = tickets.CountUntakenTestsRemaining(Model.Id, WebSecurity.CurrentUserId);
 }
 
 <canvas id="tagDiagram" width="660" height="300" style="border:1px solid #FFFFFF;">

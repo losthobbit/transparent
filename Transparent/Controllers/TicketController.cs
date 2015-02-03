@@ -9,6 +9,7 @@ using System.Web.Security;
 using Transparent.Data;
 using Transparent.Data.Interfaces;
 using Transparent.Data.Models;
+using Transparent.Data.ViewModels;
 using Transparent.Data.Queries;
 using Transparent.Data.ViewModels;
 using WebMatrix.WebData;
@@ -33,26 +34,26 @@ namespace Transparent.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public PartialViewResult _IncreaseRank(TicketAndUserRank ticket)
+        public PartialViewResult _IncreaseRank(TicketDetailsViewModel ticket)
         {
             return SetRank(ticket, TicketRank.Up);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public PartialViewResult _DecreaseRank(TicketAndUserRank ticket)
+        public PartialViewResult _DecreaseRank(TicketDetailsViewModel ticket)
         {
             return SetRank(ticket, TicketRank.Down);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public PartialViewResult _CancelRank(TicketAndUserRank ticket)
+        public PartialViewResult _CancelRank(TicketDetailsViewModel ticket)
         {
             return SetRank(ticket, TicketRank.NotRanked);
         }
 
-        private PartialViewResult SetRank(TicketAndUserRank ticket, TicketRank ticketRank)
+        private PartialViewResult SetRank(TicketDetailsViewModel ticket, TicketRank ticketRank)
         {
             // TODO: Ensure user has permission to change rank
             var newRank = tickets.SetRank(ticket.Id, ticketRank, WebSecurity.CurrentUserId);
@@ -62,7 +63,7 @@ namespace Transparent.Controllers
             return PartialView("_RankPartial", ticket);
         }
 
-        public PartialViewResult _Rank(TicketAndUserRank ticket)
+        public PartialViewResult _Rank(TicketDetailsViewModel ticket)
         {
             return PartialView("_RankPartial", ticket);
         }
@@ -97,12 +98,13 @@ namespace Transparent.Controllers
 
         public ActionResult Details(int id = 0)
         {
-            Ticket ticket = db.Tickets.Find(id);
+            Ticket ticket = tickets.FindTicket(id);
             if (ticket == null)
             {
                 return HttpNotFound();
             }
-            return View(new TicketAndUserRank(ticket, ticket.GetTicketRank(User.Identity.Name)));
+            return View(new TicketDetailsViewModel(ticket, ticket.GetTicketRank(User.Identity.Name), 
+                tickets.GetTicketTagInfoList(ticket, WebSecurity.CurrentUserId)));
         }
 
         //
@@ -111,7 +113,7 @@ namespace Transparent.Controllers
         public ActionResult Create(TicketType ticketType = TicketType.Suggestion)
         {
             ViewBag.FkUserId = new SelectList(db.UserProfiles, "UserId", "UserName");
-            return View("Create", new TicketViewModel(ticketType));
+            return View("Create", new CreateTicketViewModel(ticketType));
         }
 
         //
@@ -134,19 +136,19 @@ namespace Transparent.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateQuestion(TicketViewModel<Question> question)
+        public ActionResult CreateQuestion(CreateTicketViewModel<Question> question)
         {
             return Create(question.Ticket, db.Questions);
         }
 
         [HttpPost]
-        public ActionResult CreateSuggestion(TicketViewModel<Suggestion> suggestion)
+        public ActionResult CreateSuggestion(CreateTicketViewModel<Suggestion> suggestion)
         {
             return Create(suggestion.Ticket, db.Suggestions);
         }
 
         [HttpPost]
-        public ActionResult CreateTest(TicketViewModel<Test> test)
+        public ActionResult CreateTest(CreateTicketViewModel<Test> test)
         {
             return Create(test.Ticket, db.Tests);
         }

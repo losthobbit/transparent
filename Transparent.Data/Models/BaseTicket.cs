@@ -13,10 +13,10 @@ namespace Transparent.Data.Models
     {
         public BaseTicket()
         {
-
+            State = TicketState.Verification;
         }
 
-        public BaseTicket(int id, int rank)
+        public BaseTicket(int id, int rank): this()
         {
             Id = id;
             Rank = rank;
@@ -43,6 +43,10 @@ namespace Transparent.Data.Models
         [MaxLength(10000)]
         [Required]
         public string Body { get; set; }
+
+        [Required]
+        [Index]
+        public TicketState State { get; set; }
 
         // Specified in fluent API instead: 
         [NotMapped()]
