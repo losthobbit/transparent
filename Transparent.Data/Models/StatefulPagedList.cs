@@ -29,10 +29,10 @@ namespace Transparent.Data.Models
         }
 
         /// <summary>
-        /// Creates a generic TicketsContainer with a clone of the state and sets the PageIndex of the cloned state.
+        /// Creates a generic StatefulPagedList with a clone of the state and sets the PageIndex of the cloned state.
         /// </summary>
         /// <param name="pageIndex">The page index for the cloned state.</param>
-        /// <returns>A generic TicketsContainer with a clone of the state.</returns>
+        /// <returns>A generic StatefulPagedList with a clone of the state.</returns>
         public Stateful GetState(int pageIndex)
         {
             var stateful = GetState();

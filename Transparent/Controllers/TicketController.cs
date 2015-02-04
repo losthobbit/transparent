@@ -55,7 +55,6 @@ namespace Transparent.Controllers
 
         private PartialViewResult SetRank(TicketDetailsViewModel ticket, TicketRank ticketRank)
         {
-            // TODO: Ensure user has permission to change rank
             var newRank = tickets.SetRank(ticket.Id, ticketRank, WebSecurity.CurrentUserId);
             db.SaveChanges();
             ticket.Rank = newRank.Item1;
@@ -66,6 +65,11 @@ namespace Transparent.Controllers
         public PartialViewResult _Rank(TicketDetailsViewModel ticket)
         {
             return PartialView("_RankPartial", ticket);
+        }
+
+        public PartialViewResult _TicketTags(TicketDetailsViewModel ticket)
+        {
+            return PartialView("_TicketTagsPartial", ticket);
         }
 
         public ActionResult Newest(TicketsContainer ticketsContainer)

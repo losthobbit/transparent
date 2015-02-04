@@ -18,17 +18,7 @@
         </div>
         <div class="metadata">
             <div>
-                @foreach (var ticketTag in Model.TicketTags)
-                {
-                    if(ViewBag.EnableTagButton == null || ViewBag.EnableTagButton)
-                    {
-                        <a class="button float-left" href="@Url.Action("Details", "Tag", new { id = ticketTag.FkTagId })">@ticketTag.Tag.Name</a>
-                    }
-                    else
-                    {
-                        <a class="button float-left">@ticketTag.Tag.Name</a>
-                    }
-                }
+                @Html.Action("_TicketTags", Model)
             </div>
             <div class="float-right">
                 @Model.TextForCreated at @Html.DisplayFor(model => model.CreatedDate)

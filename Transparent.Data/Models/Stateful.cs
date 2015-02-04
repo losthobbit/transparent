@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Jil;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,11 +53,11 @@ namespace Transparent.Data.Models
             {
                 if (string.IsNullOrEmpty(State))
                     State = "[]";
-                return JsonConvert.DeserializeObject<List<StateKeyValuePair>>(State);
+                return JSON.Deserialize<List<StateKeyValuePair>>(State);
             }
             set
             {
-                State = JsonConvert.SerializeObject(value);
+                State = JSON.Serialize(value);
             }
         }
 
