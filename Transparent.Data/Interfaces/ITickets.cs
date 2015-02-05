@@ -43,6 +43,6 @@ namespace Transparent.Data.Interfaces
 
         Ticket FindTicket(int id);
 
-        IEnumerable<TicketDetailsViewModel.TagViewModel> GetTicketTagInfoList(Ticket ticket, int userId);
+        IEnumerable<TicketTagViewModel> GetTicketTagInfoList(Ticket ticket, int userId);
     }
 }

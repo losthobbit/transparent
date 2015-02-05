@@ -148,6 +148,7 @@
     <Compile Include="Models\Search.cs" />
     <Compile Include="Models\Stateful.cs" />
     <Compile Include="Models\Ticket.cs" />
+    <Compile Include="ViewModels\TicketTagViewModel.cs" />
     <Compile Include="ViewModels\TicketDetailsViewModel.cs" />
     <Compile Include="Models\TicketRank.cs" />
     <Compile Include="Models\TicketTag.cs" />
@@ -164,6 +165,7 @@
     <Compile Include="Validation\RequiresTagsAttribute.cs" />
     <Compile Include="ViewModels\TestAndAnswerViewModel.cs" />
     <Compile Include="ViewModels\CreateTicketViewModel.cs" />
+    <Compile Include="ViewModels\TicketTagsViewModel.cs" />
     <Compile Include="ViewModels\VolunteerViewModel.cs" />
     <Compile Include="Windsor\Installer.cs" />
   </ItemGroup>

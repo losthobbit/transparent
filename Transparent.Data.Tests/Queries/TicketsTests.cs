@@ -277,7 +277,7 @@ namespace Transparent.Data.Tests.Queries
 
             //Assert
             Assert.AreEqual(getTicketTagInfoList_Ticket.TicketTags.Single().FkTagId, actual.TagId);
-            Assert.IsTrue(actual.UserCanValidate);
+            Assert.IsTrue(actual.UserMayVerify);
         }
 
         [Test]
@@ -292,7 +292,7 @@ namespace Transparent.Data.Tests.Queries
             var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, testData.Stephen.UserId).Single();
 
             //Assert
-            Assert.IsTrue(actual.UserCanValidate);
+            Assert.IsTrue(actual.UserMayVerify);
         }
 
         [Test]
@@ -306,7 +306,7 @@ namespace Transparent.Data.Tests.Queries
             var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, testData.Stephen.UserId).Single();
 
             //Assert
-            Assert.IsFalse(actual.UserCanValidate);
+            Assert.IsFalse(actual.UserMayVerify);
         }
 
         [Test]
@@ -321,7 +321,7 @@ namespace Transparent.Data.Tests.Queries
             var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, testData.Stephen.UserId).Single();
 
             //Assert
-            Assert.IsFalse(actual.UserCanValidate);
+            Assert.IsFalse(actual.UserMayVerify);
         }
 
         [Test]
@@ -338,7 +338,7 @@ namespace Transparent.Data.Tests.Queries
             var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, testData.Stephen.UserId).Single();
 
             //Assert
-            Assert.IsFalse(actual.UserCanValidate);
+            Assert.IsFalse(actual.UserMayVerify);
         }
 
         [Test]
@@ -351,7 +351,7 @@ namespace Transparent.Data.Tests.Queries
             var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, testData.Stephen.UserId).Single();
 
             //Assert
-            Assert.IsFalse(actual.UserCanValidate);
+            Assert.IsFalse(actual.UserMayVerify);
         }
 
         #endregion GetTicketTagInfoList

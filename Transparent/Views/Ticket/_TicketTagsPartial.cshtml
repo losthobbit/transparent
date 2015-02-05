@@ -1,18 +1,16 @@
-﻿@model Transparent.Data.ViewModels.TicketDetailsViewModel 
-<!-- TODO: Make the Model a simpler class, perhaps just IEnumerable<TagViewModel>, but with additional info on TagViewModel -->
+﻿@model Transparent.Data.ViewModels.TicketTagsViewModel 
 <div id="ticketTagsPartial" class="display-field">
-@foreach (var ticketTag in Model.TicketTags)
+@foreach (var ticketTag in Model.TagInfo)
 {
-    if(ViewBag.EnableTagButton == null || ViewBag.EnableTagButton) // TODO: FIX -> THIS NO LONGER WORKS!
+    if (Model.EnableTagButton)
     {
-        <a class="button float-left" href="@Url.Action("Details", "Tag", new { id = ticketTag.FkTagId })">@ticketTag.Tag.Name</a>
+        <a class="button float-left" href="@Url.Action("Details", "Tag", new { id = ticketTag.TagId })">@ticketTag.Name</a>
     }
     else
     {
-        <a class="button float-left">@ticketTag.Tag.Name</a>
-    }
-    var verifyable = Model.TagInfo != null && Model.TagInfo.Any(tagInfo => tagInfo.TagId == ticketTag.FkTagId && tagInfo.UserCanValidate);
-    if (verifyable)
+        <a class="button float-left">@ticketTag.Name</a>
+    }    
+    if (ticketTag.UserMayVerify)
     {
         <div class="float-left">
             <button type="submit" class="ui-icon-close ui-icon" title="Delete tag">DeleteTag</button>

@@ -18,7 +18,7 @@
         </div>
         <div class="metadata">
             <div>
-                @Html.Action("_TicketTags", Model)
+                @Html.Action("_TicketTags", new Transparent.Data.ViewModels.TicketTagsViewModel(Model, ViewBag.EnableTagButton == null || ViewBag.EnableTagButton))
             </div>
             <div class="float-right">
                 @Model.TextForCreated at @Html.DisplayFor(model => model.CreatedDate)

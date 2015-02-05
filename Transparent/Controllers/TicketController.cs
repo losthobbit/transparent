@@ -67,7 +67,7 @@ namespace Transparent.Controllers
             return PartialView("_RankPartial", ticket);
         }
 
-        public PartialViewResult _TicketTags(TicketDetailsViewModel ticket)
+        public PartialViewResult _TicketTags(TicketTagsViewModel ticket)
         {
             return PartialView("_TicketTagsPartial", ticket);
         }

@@ -13,14 +13,14 @@ namespace Transparent.Data.ViewModels
 
         public TicketRank UserRank { get; set; }
 
-        public IEnumerable<TagViewModel> TagInfo { get; set; }
+        public IEnumerable<TicketTagViewModel> TagInfo { get; set; }
 
         public TicketDetailsViewModel()
         {
 
         }
 
-        public TicketDetailsViewModel(Ticket ticket, TicketRank userRank, IEnumerable<TagViewModel> tagInfo)
+        public TicketDetailsViewModel(Ticket ticket, TicketRank userRank, IEnumerable<TicketTagViewModel> tagInfo)
         {
             this.ticket = ticket;
             Id = ticket.Id;
@@ -40,12 +40,6 @@ namespace Transparent.Data.ViewModels
             {
                 return ticket.TextForCreated;
             }
-        }
-
-        public class TagViewModel
-        {
-            public int TagId { get; set; }
-            public bool UserCanValidate { get; set; }
         }
     }
 }

@@ -301,18 +301,18 @@ namespace Transparent.Data.Queries
             return usersContext.Tickets.Find(id);
         }
 
-        private TicketDetailsViewModel.TagViewModel GetTicketTagInfo(TicketTag ticketTag, int ticketUserId, int userId, IEnumerable<Tag> competentTags)
+        private TicketTagViewModel GetTicketTagInfo(TicketTag ticketTag, int ticketUserId, int userId, IEnumerable<Tag> competentTags)
         {
-            return new TicketDetailsViewModel.TagViewModel
+            return new TicketTagViewModel
             {
                 TagId = ticketTag.FkTagId,
-                UserCanValidate = !ticketTag.Verified && ticketTag.FkCreatedById != userId &&
+                UserMayVerify = !ticketTag.Verified && ticketTag.FkCreatedById != userId &&
                     !(ticketTag.FkCreatedById == null && ticketUserId == userId) &&
                     competentTags.Any(competentTag => competentTag.Id == ticketTag.FkTagId)
             };
         }
 
-        public IEnumerable<TicketDetailsViewModel.TagViewModel> GetTicketTagInfoList(Ticket ticket, int userId)
+        public IEnumerable<TicketTagViewModel> GetTicketTagInfoList(Ticket ticket, int userId)
         {
             var competentTags = GetCompetentTags(userId).ToList();
             return ticket.TicketTags.Select(ticketTag => GetTicketTagInfo(ticketTag, ticket.FkUserId, userId, competentTags)).ToList();
