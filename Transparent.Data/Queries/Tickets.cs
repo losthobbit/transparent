@@ -136,7 +136,7 @@ namespace Transparent.Data.Queries
                         new TicketUserRank
                         { 
                             Up = ticketRank == TicketRank.Up,
-                            User = userProfiles.Single(user => user.UserId == userId)
+                            FkUserId = userId
                         }
                     );
                     ticket.Rank += (int)ticketRank;
@@ -158,6 +158,7 @@ namespace Transparent.Data.Queries
                     }
                 }
             }
+            usersContext.SaveChanges();
             return new Tuple<int, TicketRank>(ticket.Rank, ticketRank);
         }
 

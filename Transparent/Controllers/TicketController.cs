@@ -11,7 +11,6 @@ using Transparent.Data.Interfaces;
 using Transparent.Data.Models;
 using Transparent.Data.ViewModels;
 using Transparent.Data.Queries;
-using Transparent.Data.ViewModels;
 using WebMatrix.WebData;
 
 namespace Transparent.Controllers
@@ -34,29 +33,9 @@ namespace Transparent.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public PartialViewResult _IncreaseRank(TicketDetailsViewModel ticket)
+        public PartialViewResult _SetRank(TicketDetailsViewModel ticket)
         {
-            return SetRank(ticket, TicketRank.Up);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public PartialViewResult _DecreaseRank(TicketDetailsViewModel ticket)
-        {
-            return SetRank(ticket, TicketRank.Down);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public PartialViewResult _CancelRank(TicketDetailsViewModel ticket)
-        {
-            return SetRank(ticket, TicketRank.NotRanked);
-        }
-
-        private PartialViewResult SetRank(TicketDetailsViewModel ticket, TicketRank ticketRank)
-        {
-            var newRank = tickets.SetRank(ticket.Id, ticketRank, WebSecurity.CurrentUserId);
-            db.SaveChanges();
+            var newRank = tickets.SetRank(ticket.Id, ticket.NewRank, WebSecurity.CurrentUserId);
             ticket.Rank = newRank.Item1;
             ticket.UserRank = newRank.Item2;
             return PartialView("_RankPartial", ticket);
@@ -107,7 +86,7 @@ namespace Transparent.Controllers
             {
                 return HttpNotFound();
             }
-            return View(new TicketDetailsViewModel(ticket, ticket.GetTicketRank(User.Identity.Name), 
+            return View(new TicketDetailsViewModel(ticket, ticket.GetTicketRank(WebSecurity.CurrentUserId), 
                 tickets.GetTicketTagInfoList(ticket, WebSecurity.CurrentUserId)));
         }
 
@@ -128,7 +107,7 @@ namespace Transparent.Controllers
         {
             if (ModelState.IsValid)
             {
-                ticket.User = db.UserProfiles.Single(userProfile => userProfile.UserName == User.Identity.Name);
+                ticket.FkUserId = WebSecurity.CurrentUserId;
                 ticket.CreatedDate = DateTime.UtcNow;
                 dbSet.Add(ticket);
                 db.SaveChanges();
@@ -202,61 +181,6 @@ namespace Transparent.Controllers
             tickets.MarkTest(testAndAnswer.Id, testAndAnswer.Passed.Value, WebSecurity.CurrentUserId);
 
             return RedirectToAction("MarkTests");
-        }
-
-        //
-        // GET: /Ticket/Edit/5
-
-        public ActionResult Edit(int id = 0)
-        {
-            Ticket ticket = db.Tickets.Find(id);
-            if (ticket == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.FkUserId = new SelectList(db.UserProfiles, "UserId", "UserName", ticket.FkUserId);
-            return View(ticket);
-        }
-
-        //
-        // POST: /Ticket/Edit/5
-
-        [HttpPost]
-        public ActionResult Edit(Ticket ticket)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(ticket).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Details", new { id = ticket.Id });
-            }
-            ViewBag.FkUserId = new SelectList(db.UserProfiles, "UserId", "UserName", ticket.FkUserId);
-            return View(ticket);
-        }
-
-        //
-        // GET: /Ticket/Delete/5
-
-        public ActionResult Delete(int id = 0)
-        {
-            Ticket ticket = db.Tickets.Find(id);
-            if (ticket == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ticket);
-        }
-
-        //
-        // POST: /Ticket/Delete/5
-
-        [HttpPost, ActionName("Delete")]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Ticket ticket = db.Tickets.Find(id);
-            db.Tickets.Remove(ticket);
-            db.SaveChanges();
-            return RedirectToAction("Newest");
         }
 
         [HttpGet]

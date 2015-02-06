@@ -41,5 +41,7 @@ namespace Transparent.Data.ViewModels
                 return ticket.TextForCreated;
             }
         }
+
+        public TicketRank NewRank { get; set; }
     }
 }
