@@ -16,6 +16,11 @@ namespace Transparent.Data.ViewModels
         public int TicketId { get; set; }
         public IEnumerable<TicketTagViewModel> TagInfo { get; set; }
 
+        // Actions
+
+        public int? DeleteTagId { get; set; }
+        public int? VerifyTagId { get; set; }
+
         public TicketTagsViewModel()
         {
 
@@ -26,16 +31,7 @@ namespace Transparent.Data.ViewModels
             EnableTagButton = enableTagButton;
             TicketId = ticket.Id;
 
-            TagInfo = new List<TicketTagViewModel> (ticket.TicketTags.Select(ticketTag => new TicketTagViewModel { TagId = ticketTag.FkTagId, Name = ticketTag.Tag.Name }));
-
-            var ticketDetailsViewModel = ticket as TicketDetailsViewModel;
-            if (ticketDetailsViewModel != null && ticketDetailsViewModel.TagInfo != null)
-            {
-                foreach(var ticketTagViewModel in TagInfo)
-                {
-                    ticketTagViewModel.UserMayVerify = ticketDetailsViewModel.TagInfo.Any(tagInfo => tagInfo.TagId == ticketTagViewModel.TagId && tagInfo.UserMayVerify);
-                }
-            }
+            TagInfo = TicketTagViewModel.CreateList(ticket);
         }
     }
 }

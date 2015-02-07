@@ -16,7 +16,6 @@ using Transparent.Data;
 namespace Transparent.Controllers
 {
     [Authorize]
-    //[InitializeSimpleMembership]
     public class AccountController : Controller
     {
         //

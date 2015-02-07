@@ -1,21 +1,28 @@
 ﻿@model Transparent.Data.ViewModels.TicketTagsViewModel 
 <div id="ticketTagsPartial" class="display-field">
-@foreach (var ticketTag in Model.TagInfo)
+@using (Ajax.BeginForm("_VerifyTag", new AjaxOptions { UpdateTargetId = "ticketTagsPartial" }))
 {
-    if (Model.EnableTagButton)
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.TicketId)
+    @Html.HiddenFor(m => m.EnableTagButton)
+
+    foreach (var ticketTag in Model.TagInfo)
     {
-        <a class="button float-left" href="@Url.Action("Details", "Tag", new { id = ticketTag.TagId })">@ticketTag.Name</a>
+        if (Model.EnableTagButton)
+        {
+            <a class="button float-left" href="@Url.Action("Details", "Tag", new { id = ticketTag.TagId })">@ticketTag.Name</a>
+        }
+        else
+        {
+            <a class="button float-left">@ticketTag.Name</a>
+        }    
+        if (ticketTag.UserMayVerify)
+        {
+            <div class="float-left">
+                <button name="deleteTagId" class="ui-icon-close ui-icon" title="Delete tag" value="@ticketTag.TagId">DeleteTag</button>
+                <button name="verifyTagId" class="ui-icon-check ui-icon" title="Verify tag" value="@ticketTag.TagId">VerifyTag</button>                    
+            </div>
+        }   
     }
-    else
-    {
-        <a class="button float-left">@ticketTag.Name</a>
-    }    
-    if (ticketTag.UserMayVerify)
-    {
-        <div class="float-left">
-            <button type="submit" class="ui-icon-close ui-icon" title="Delete tag">DeleteTag</button>
-            <button type="submit" class="ui-icon-check ui-icon" title="Verify tag">VerifyTag</button>                    
-        </div>
-    }   
 }
 </div>

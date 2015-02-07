@@ -44,7 +44,7 @@ namespace Transparent.Tests.Controllers
         }
 
         [TestMethod]
-        public void Index_with_authenticated_request_redirects_to_newest_tickets()
+        public void Index_with_authenticated_request_redirects_to_highest_ranked_tickets()
         {
             // Arrange
             mockRequest.SetupGet(x => x.IsAuthenticated).Returns(true);
@@ -54,7 +54,7 @@ namespace Transparent.Tests.Controllers
 
             // Assert
             Assert.AreEqual("Ticket", result.RouteValues["controller"]);
-            Assert.AreEqual("Newest", result.RouteValues["action"]);
+            Assert.AreEqual("HighestRanked", result.RouteValues["action"]);
         }
 
         #endregion Index

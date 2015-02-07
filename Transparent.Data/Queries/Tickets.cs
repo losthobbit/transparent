@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Linq;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -313,10 +314,44 @@ namespace Transparent.Data.Queries
             };
         }
 
+        public IEnumerable<TicketTagViewModel> GetTicketTagInfoList(int ticketId, int userId)
+        {
+            return GetTicketTagInfoList(tickets.Single(ticket => ticket.Id == ticketId), userId);
+        }
+
         public IEnumerable<TicketTagViewModel> GetTicketTagInfoList(Ticket ticket, int userId)
         {
             var competentTags = GetCompetentTags(userId).ToList();
             return ticket.TicketTags.Select(ticketTag => GetTicketTagInfo(ticketTag, ticket.FkUserId, userId, competentTags)).ToList();
+        }
+
+        /// <exception cref="NotSupportedException">User may not verify tag.</exception>
+        private TicketTag GetVerifyableTicketTag(int ticketId, int tagId, int userId)
+        {
+            var ticket = FindTicket(ticketId);
+            var ticketTag = ticket.TicketTags.Single(tag => tag.FkTagId == tagId);
+            var ticketTagInfo = GetTicketTagInfo(ticketTag, ticket.FkUserId, userId, GetCompetentTags(userId));
+            if (!ticketTagInfo.UserMayVerify)
+            {
+                throw new NotSupportedException("User may not verify tag.");
+            }
+            return ticketTag;
+        }
+
+        /// <exception cref="NotSupportedException">User may not delete tag.</exception>
+        public void DeleteTicketTag(int ticketId, int tagId, int userId)
+        {
+            ticketTags.Remove(GetVerifyableTicketTag(ticketId, tagId, userId));
+            usersContext.SaveChanges();
+            // TODO: Some kind of event so that the ticket moves to the next stage when ready.
+        }
+
+        /// <exception cref="NotSupportedException">User may not verify tag.</exception>
+        public void VerifyTicketTag(int ticketId, int tagId, int userId)
+        {
+            GetVerifyableTicketTag(ticketId, tagId, userId).Verified = true;
+            usersContext.SaveChanges();
+            // TODO: Some kind of event so that the ticket moves to the next stage when ready.
         }
     }
 }

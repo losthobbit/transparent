@@ -51,6 +51,23 @@ namespace Transparent.Controllers
             return PartialView("_TicketTagsPartial", ticket);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public PartialViewResult _VerifyTag(TicketTagsViewModel ticket)
+        {
+            var userId = WebSecurity.CurrentUserId;
+            if (ticket.DeleteTagId != null)
+                tickets.DeleteTicketTag(ticket.TicketId, ticket.DeleteTagId.Value, userId);
+            else
+                if (ticket.VerifyTagId != null)
+                    tickets.VerifyTicketTag(ticket.TicketId, ticket.VerifyTagId.Value, userId);
+
+            // Probably the worst way to get this list... guess that happens when one codes past midnight.
+            ticket.TagInfo = TicketTagViewModel.CreateList(tickets.FindTicket(ticket.TicketId), tickets.GetTicketTagInfoList(ticket.TicketId, userId));
+
+            return _TicketTags(ticket);
+        }
+
         public ActionResult Newest(TicketsContainer ticketsContainer)
         {
             return View(tickets.Newest(ticketsContainer));

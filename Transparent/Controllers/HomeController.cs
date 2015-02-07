@@ -11,7 +11,7 @@ namespace Transparent.Controllers
         public ActionResult Index()
         {
             if (Request.IsAuthenticated)
-                return RedirectToAction("Newest", "Ticket");
+                return RedirectToAction("HighestRanked", "Ticket");
             return RedirectToAction("Login", "Account");
         }
 

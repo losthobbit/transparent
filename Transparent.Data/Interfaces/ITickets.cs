@@ -44,5 +44,12 @@ namespace Transparent.Data.Interfaces
         Ticket FindTicket(int id);
 
         IEnumerable<TicketTagViewModel> GetTicketTagInfoList(Ticket ticket, int userId);
+        IEnumerable<TicketTagViewModel> GetTicketTagInfoList(int ticketId, int userId);
+
+        /// <exception cref="NotSupportedException">User may not delete tag.</exception>
+        void DeleteTicketTag(int ticketId, int tagId, int userId);
+
+        /// <exception cref="NotSupportedException">User may not verify tag.</exception>
+        void VerifyTicketTag(int ticketId, int tagId, int userId);
     }
 }
