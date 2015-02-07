@@ -62,36 +62,8 @@
             var container = ((IContainerAccessor)Context.ApplicationInstance).Container;
             var tags = container.Resolve<Transparent.Data.Interfaces.ITags>();
             <script>
-                var tagCount = 0;
-
-                function addTagSelector(div)
-                {
-                    var tags = @tags.SerializedIndentedTags;
-                    var selectElement = "<select id=\"TicketTagIds\" name=\"TicketTagIds\"";                    
-                    selectElement += "@Html.Raw(Model.MultipleTags ? " onchange=\\\"addTagSelectorIfRequired()\\\"" : "")";
-                    if(tagCount == 0)
-                        selectElement += "data-val=\"true\" data-val-requirestag=\"A tag is required.\" data-val-requirestag-param=\"whatever\"";
-                    selectElement += " class=\"tags\"><option value=\"-1\" selected>Not selected</option>";
-                    for (var i = 0; i < tags.length; i++) {
-                        var tag = tags[i];
-                        selectElement += "<option value=\"" + tag.id + "\">" + repeat("&nbsp;&nbsp;", tag.indent) + tag.name + "</option>";
-                    }
-                    selectElement += "</select>"
-                    div.append(selectElement);
-                    tagCount ++;
-                }
-
-                function addTagSelectorIfRequired()
-                {
-                    var div = $("#tagSelectors");
-                    var selectElements = div.contents();
-                    for(var i = 0; i < selectElements.length; i++)
-                    {
-                        if(selectElements[i].value == -1)
-                            return;
-                    }
-                    addTagSelector(div);
-                }
+                var tags = @(tags.SerializedIndentedTags);
+                var enableAdd = @Json.Encode(Model.MultipleTags);
 
                 $(function(){
                     addTagSelectorIfRequired();

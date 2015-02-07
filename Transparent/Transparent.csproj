@@ -272,6 +272,7 @@
     <Content Include="Images\green\top-left.png" />
     <Content Include="Images\green\top-right.png" />
     <Content Include="Images\green\top.png" />
+    <Content Include="Scripts\controls-0001.js" />
     <Content Include="Scripts\custom.validation-0001.js" />
     <Content Include="Scripts\general-0001.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
