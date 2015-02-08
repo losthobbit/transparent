@@ -5,7 +5,7 @@
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.TicketId)
     @Html.HiddenFor(m => m.EnableTagButton)
-
+   
     foreach (var ticketTag in Model.TagInfo)
     {
         if (Model.EnableTagButton)
@@ -23,6 +23,6 @@
                 <button name="verifyTagId" class="ui-icon-check ui-icon" title="Verify tag" value="@ticketTag.TagId">VerifyTag</button>                    
             </div>
         }   
-    }
+    } 
 }
 </div>

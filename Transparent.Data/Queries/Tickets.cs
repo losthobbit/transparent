@@ -14,10 +14,14 @@ using System.Security;
 namespace Transparent.Data.Queries
 {
     /// <summary>
-    /// Contains methods for getting ticket queries.
+    /// Contains methods for getting tickets.
     /// </summary>
     /// <remarks>
-    /// Can be a singleton.
+    /// This started as a way to get tickets, but has now become the way to get pretty much anything... basically a combination business and data service.
+    /// It may be worth renaming at some point.  There's no need to split into a business and data service, unless a different data source is required.
+    /// Probably should not be a singleton.  I'm not sure that injecting IUserContext is safe... I don't know if that guarantees a unique context per thread,
+    /// nor whether that matters or not.  I might also want to consider creating the context at the start of a transaction in case I save an interrupted
+    /// transaction.
     /// </remarks>
     public class Tickets: ITickets
     {
@@ -29,27 +33,13 @@ namespace Transparent.Data.Queries
         /// </remarks>
         public const int MinimumUserTagPointsToWorkOnTicketWithSameTag = 1;
 
-        private IUsersContext usersContext;
-        private IDbSet<Ticket> tickets;
-        private IDbSet<UserProfile> userProfiles;
-        private IDbSet<TicketTag> ticketTags;
-        private IDbSet<UserTag> userTags;
-        private IDbSet<Test> tests;
-        private IDbSet<UserPoint> userPoints;
-        private IDbSet<TestMarking> testMarkings;
+        private IUsersContext db;
 
         private readonly IConfiguration configuration;
 
-        public Tickets(IUsersContext usersContext, IConfiguration configuration)
+        public Tickets(IUsersContext db, IConfiguration configuration)
         {
-            this.usersContext = usersContext;
-            this.tickets = usersContext.Tickets;
-            this.userProfiles = usersContext.UserProfiles;
-            this.ticketTags = usersContext.TicketTags;
-            this.userTags = usersContext.UserTags;
-            this.tests = usersContext.Tests;
-            this.userPoints = usersContext.UserPoints;
-            this.testMarkings = usersContext.TestMarkings;
+            this.db = db;
 
             this.configuration = configuration;
         }
@@ -57,12 +47,12 @@ namespace Transparent.Data.Queries
         private IQueryable<Ticket> TicketSet(TicketsContainer filter)
         {
             if (filter.TicketType == null)
-                return tickets;
+                return db.Tickets;
             switch (filter.TicketType.Value)
             {
-                case TicketType.Question: return usersContext.Questions;
-                case TicketType.Suggestion: return usersContext.Suggestions;
-                case TicketType.Test: return usersContext.Tests;
+                case TicketType.Question: return db.Questions;
+                case TicketType.Suggestion: return db.Suggestions;
+                case TicketType.Test: return db.Tests;
             }
             throw new NotSupportedException("Unknown ticket type");
         }
@@ -77,8 +67,8 @@ namespace Transparent.Data.Queries
                 filter.ApplyFilter
                 (
                     from ticket in TicketSet(filter)
-                    join ticketTag in ticketTags on ticket equals ticketTag.Ticket
-                    join userTag in userTags on ticketTag.Tag equals userTag.Tag
+                    join ticketTag in db.TicketTags on ticket equals ticketTag.Ticket
+                    join userTag in db.UserTags on ticketTag.Tag equals userTag.Tag
                     where userTag.FkUserId == userId && userTag.TotalPoints >= MinimumUserTagPointsToWorkOnTicketWithSameTag
                     select ticket
                 ).OrderByDescending(ticket => ticket.Rank)                
@@ -126,7 +116,7 @@ namespace Transparent.Data.Queries
 
         public Tuple<int, TicketRank> SetRank(int ticketId, TicketRank ticketRank, int userId)
         {
-            var ticket = tickets.Single(t => t.Id == ticketId);
+            var ticket = db.Tickets.Single(t => t.Id == ticketId);
             var rankRecord = ticket.UserRanks.SingleOrDefault(rank => rank.FkUserId == userId);
             if(rankRecord == null)
             {
@@ -159,15 +149,15 @@ namespace Transparent.Data.Queries
                     }
                 }
             }
-            usersContext.SaveChanges();
+            db.SaveChanges();
             return new Tuple<int, TicketRank>(ticket.Rank, ticketRank);
         }
 
         public IEnumerable<Test> GetUntakenTests(int tagId, int userId)
-        {    
-            var untakenTests = from test in tests
+        {
+            var untakenTests = from test in db.Tests
                                where test.TicketTags.Any(tag => tag.FkTagId == tagId)
-                               from userPoint in userPoints
+                               from userPoint in db.UserPoints
                                     .Where(point => point.TestTaken == test && point.FkUserId == userId)
                                     .DefaultIfEmpty()
                                where userPoint == null
@@ -195,13 +185,13 @@ namespace Transparent.Data.Queries
         {
             if (test == null)
                 throw new ArgumentNullException("test");
-            var userPoint = userPoints.SingleOrDefault(point => point.FkTestId == test.Id && point.FkUserId == userId);
+            var userPoint = db.UserPoints.SingleOrDefault(point => point.FkTestId == test.Id && point.FkUserId == userId);
             if (userPoint == null)
             {
-                var user = userProfiles.Single(userProfile => userProfile.UserId == userId);
+                var user = db.UserProfiles.Single(userProfile => userProfile.UserId == userId);
                 userPoint = new UserPoint { FkTestId = test.Id, FkTagId = test.TagId, User = user, Quantity = -configuration.PointsToDeductWhenStartingTest };
-                userPoints.Add(userPoint);
-                usersContext.SaveChanges();
+                db.UserPoints.Add(userPoint);
+                db.SaveChanges();
             }
             else
             {
@@ -217,18 +207,18 @@ namespace Transparent.Data.Queries
         /// <exception cref="NotSupportedException">Test not started or already completed.</exception>
         public void AnswerTest(int testId, string answer, int userId)
         {
-            var userPoint = userPoints.SingleOrDefault(point => point.FkTestId == testId && point.FkUserId == userId);
+            var userPoint = db.UserPoints.SingleOrDefault(point => point.FkTestId == testId && point.FkUserId == userId);
             if (userPoint == null)
                 throw new NotSupportedException("The test has not started.  It cannot be answered.");
             if (userPoint.Answer != null)
                 throw new NotSupportedException("The test has already been answered.  It cannot be answered again.");
             userPoint.Answer = answer;
-            usersContext.SaveChanges();
+            db.SaveChanges();
         }
 
-        private IQueryable<Tag> GetCompetentTags(int userId)
+        public IQueryable<Tag> GetCompetentTags(int userId)
         {
-            return userTags
+            return db.UserTags
             .Where(userTag => userTag.FkUserId == userId && userTag.TotalPoints >= configuration.PointsRequiredToBeCompetent)
             .Select(userTag => userTag.Tag);
         }
@@ -248,7 +238,7 @@ namespace Transparent.Data.Queries
 
         public AnsweredTests GetTestsToBeMarked(AnsweredTests filter, int markersUserId)
         {
-            var tests = GetTestsToBeMarked(markersUserId, userPoints);
+            var tests = GetTestsToBeMarked(markersUserId, db.UserPoints);
 
             return filter.Initialize
             (
@@ -269,7 +259,7 @@ namespace Transparent.Data.Queries
         {
             try
             {
-                return GetTestsToBeMarked(markersUserId, userPoints.Where(userPoint => userPoint.Id == userPointId)).Single();
+                return GetTestsToBeMarked(markersUserId, db.UserPoints.Where(userPoint => userPoint.Id == userPointId)).Single();
             }
             catch (InvalidOperationException e)
             {
@@ -288,19 +278,19 @@ namespace Transparent.Data.Queries
             // Validate that the user may mark the test
             try
             {
-                GetTestsToBeMarked(markersUserId, userPoints.Where(point => point.Id == userPointId)).Single();
+                GetTestsToBeMarked(markersUserId, db.UserPoints.Where(point => point.Id == userPointId)).Single();
             }
             catch (InvalidOperationException e)
             {
                 throw new SecurityException("The user may not mark the test.", e);
             }
-            testMarkings.Add(new TestMarking { FkUserPointId = userPointId, FkUserId = markersUserId, Passed = passed });
-            usersContext.SaveChanges();
+            db.TestMarkings.Add(new TestMarking { FkUserPointId = userPointId, FkUserId = markersUserId, Passed = passed });
+            db.SaveChanges();
         }
 
         public Ticket FindTicket(int id)
         {
-            return usersContext.Tickets.Find(id);
+            return db.Tickets.Find(id);
         }
 
         private TicketTagViewModel GetTicketTagInfo(TicketTag ticketTag, int ticketUserId, int userId, IEnumerable<Tag> competentTags)
@@ -316,7 +306,7 @@ namespace Transparent.Data.Queries
 
         public IEnumerable<TicketTagViewModel> GetTicketTagInfoList(int ticketId, int userId)
         {
-            return GetTicketTagInfoList(tickets.Single(ticket => ticket.Id == ticketId), userId);
+            return GetTicketTagInfoList(db.Tickets.Single(ticket => ticket.Id == ticketId), userId);
         }
 
         public IEnumerable<TicketTagViewModel> GetTicketTagInfoList(Ticket ticket, int userId)
@@ -341,8 +331,8 @@ namespace Transparent.Data.Queries
         /// <exception cref="NotSupportedException">User may not delete tag.</exception>
         public void DeleteTicketTag(int ticketId, int tagId, int userId)
         {
-            ticketTags.Remove(GetVerifyableTicketTag(ticketId, tagId, userId));
-            usersContext.SaveChanges();
+            db.TicketTags.Remove(GetVerifyableTicketTag(ticketId, tagId, userId));
+            db.SaveChanges();
             // TODO: Some kind of event so that the ticket moves to the next stage when ready.
         }
 
@@ -350,7 +340,7 @@ namespace Transparent.Data.Queries
         public void VerifyTicketTag(int ticketId, int tagId, int userId)
         {
             GetVerifyableTicketTag(ticketId, tagId, userId).Verified = true;
-            usersContext.SaveChanges();
+            db.SaveChanges();
             // TODO: Some kind of event so that the ticket moves to the next stage when ready.
         }
     }

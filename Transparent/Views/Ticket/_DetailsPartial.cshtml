@@ -1,4 +1,5 @@
 ﻿@model Transparent.Data.Models.BaseTicket
+@using Castle.Windsor
 @using Transparent.Extensions;
 <fieldset class="ticket @Model.TicketType.GetClass()">
     <legend>Ticket</legend>
@@ -20,6 +21,26 @@
             <div>
                 @Html.Action("_TicketTags", new Transparent.Data.ViewModels.TicketTagsViewModel(Model, ViewBag.EnableTagButton == null || ViewBag.EnableTagButton))
             </div>
+            <div id="tagSelectors"></div>
+            @{
+                var container = ((IContainerAccessor)Context.ApplicationInstance).Container;
+                var tags = container.Resolve<Transparent.Data.Interfaces.ITags>();
+                var tickets = container.Resolve<Transparent.Data.Interfaces.ITickets>();
+                var competentTagIds = tickets.GetCompetentTags(WebSecurity.CurrentUserId).Select(tag => tag.Id).ToArray();
+            }
+            <script>
+                var tags = @(tags.SerializeAndIndentTags(competentTagIds));
+                var enableAdd = @Json.Encode(Model.MultipleTags);
+
+                $(function(){
+                    if(tags.length > 0)
+                    {
+                        // TODO: ENSURE THAT WE CAN'T ADD TO TEST IF TAG ALREADY EXISTS.
+                        new TagSelectors($("#tagSelectors"), enableAdd, true, tags);
+                        tagSelectors.addIfRequired();
+                    }
+                });
+            </script>  
             <div class="float-right">
                 @Model.TextForCreated at @Html.DisplayFor(model => model.CreatedDate)
             </div>

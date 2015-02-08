@@ -21,7 +21,7 @@ namespace Transparent.Data.Windsor
                 Component.For<IUsersContext>().ImplementedBy<UsersContext>().LifeStyle.Transient,
                 Component.For<ITags>().ImplementedBy<Tags>().LifeStyle.Singleton,
                 Component.For<IConfiguration>().ImplementedBy<Configuration>().LifeStyle.Singleton,
-                Component.For<ITickets>().ImplementedBy<Tickets>().LifeStyle.Singleton
+                Component.For<ITickets>().ImplementedBy<Tickets>().LifeStyle.Transient
             );
         }
     }

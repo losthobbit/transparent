@@ -54,22 +54,27 @@ namespace Transparent.Data.Caches
             get 
             {
                 if (indentedTags == null)
-                    BuildIndentedTags(0);
+                {
+                    indentedTags = new List<IndentedTag>();
+                    BuildIndentedTags(indentedTags);
+                }
                 return indentedTags;
             }
         }
 
-        private void BuildIndentedTags(int indent, Tag current = null)
+        private void BuildIndentedTags(ICollection<IndentedTag> indentedTags, int indent = 0, Tag current = null, IEnumerable<int> acceptableTagIds = null)
         {
             if (current == null)
-            {
-                indentedTags = new List<IndentedTag>();
+            {                
                 current = Root;
             }
-            indentedTags.Add(new IndentedTag { Id = current.Id, Name = current.Name, Indent = indent++ });
-            foreach (var tag in current.Children.OrderBy(child => child.Children.Count()))
+            if (acceptableTagIds == null || acceptableTagIds.Contains(current.Id))
             {
-                BuildIndentedTags(indent, tag);
+                indentedTags.Add(new IndentedTag { Id = current.Id, Name = current.Name, Indent = indent++ });
+                foreach (var tag in current.Children.OrderBy(child => child.Children.Count()))
+                {
+                    BuildIndentedTags(indentedTags, indent, tag, acceptableTagIds);
+                }
             }
         }
 
@@ -109,6 +114,14 @@ namespace Transparent.Data.Caches
             return json;
         }
 
+        public IHtmlString SerializeAndIndentTags(int[] tagIds)
+        {
+            if (!tagIds.Any())
+                return new HtmlString("[]");
+            var indentedTags = new List<IndentedTag>();
+            BuildIndentedTags(indentedTags, 0, null, tagIds);
+            return JavaScriptRoutines.SerializeObject(indentedTags);
+        }
 
         public IHtmlString SerializedIndentedTags
         {

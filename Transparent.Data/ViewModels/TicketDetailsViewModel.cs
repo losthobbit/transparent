@@ -10,6 +10,7 @@ namespace Transparent.Data.ViewModels
     public class TicketDetailsViewModel : BaseTicket
     {
         private Ticket ticket { get; set; }
+        private bool multipleTags { get; set; }
 
         public TicketRank UserRank { get; set; }
 
@@ -23,6 +24,7 @@ namespace Transparent.Data.ViewModels
         public TicketDetailsViewModel(Ticket ticket, TicketRank userRank, IEnumerable<TicketTagViewModel> tagInfo)
         {
             this.ticket = ticket;
+            multipleTags = ticket.MultipleTags;
             Id = ticket.Id;
             Rank = ticket.Rank;
             UserRank = userRank;
@@ -39,6 +41,14 @@ namespace Transparent.Data.ViewModels
             get
             {
                 return ticket.TextForCreated;
+            }
+        }
+
+        public override bool MultipleTags
+        {
+            get
+            {
+                return multipleTags;
             }
         }
 
