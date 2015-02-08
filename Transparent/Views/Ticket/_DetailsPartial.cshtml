@@ -36,7 +36,7 @@
                     if(tags.length > 0)
                     {
                         // TODO: ENSURE THAT WE CAN'T ADD TO TEST IF TAG ALREADY EXISTS.
-                        new TagSelectors($("#tagSelectors"), enableAdd, true, tags);
+                        new TagSelectors($("#tagSelectors"), enableAdd, true, tags, @Model.Id);
                         tagSelectors.addIfRequired();
                     }
                 });

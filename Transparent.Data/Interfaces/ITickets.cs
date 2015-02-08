@@ -52,6 +52,9 @@ namespace Transparent.Data.Interfaces
         /// <exception cref="NotSupportedException">User may not verify tag.</exception>
         void VerifyTicketTag(int ticketId, int tagId, int userId);
 
+        /// <exception cref="NotSupportedException">User may not add tag.</exception>
+        void AddTicketTag(int ticketId, int tagId, int userId);
+
         IQueryable<Tag> GetCompetentTags(int userId);
     }
 }

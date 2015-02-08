@@ -37,6 +37,7 @@ namespace Transparent.Data.Models
             {
                 if (TicketTags == null)
                     return -1;
+                // Will thrown an exception if there are no tags.  This is fine when the tags have not yet been validated.
                 return TicketTags.Single().FkTagId;
             }
             set

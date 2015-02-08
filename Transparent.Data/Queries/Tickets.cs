@@ -295,13 +295,18 @@ namespace Transparent.Data.Queries
 
         private TicketTagViewModel GetTicketTagInfo(TicketTag ticketTag, int ticketUserId, int userId, IEnumerable<Tag> competentTags)
         {
-            return new TicketTagViewModel
+            var info = new TicketTagViewModel
             {
-                TagId = ticketTag.FkTagId,
-                UserMayVerify = !ticketTag.Verified && ticketTag.FkCreatedById != userId &&
-                    !(ticketTag.FkCreatedById == null && ticketUserId == userId) &&
-                    competentTags.Any(competentTag => competentTag.Id == ticketTag.FkTagId)
+                TagId = ticketTag.FkTagId
             };
+
+            info.UserMayDelete = !ticketTag.Verified &&
+                competentTags.Any(competentTag => competentTag.Id == ticketTag.FkTagId);
+
+            info.UserMayVerify = info.UserMayDelete && ticketTag.FkCreatedById != userId && 
+                !(ticketTag.FkCreatedById == null && ticketUserId == userId);
+
+            return info;
         }
 
         public IEnumerable<TicketTagViewModel> GetTicketTagInfoList(int ticketId, int userId)
@@ -316,22 +321,40 @@ namespace Transparent.Data.Queries
         }
 
         /// <exception cref="NotSupportedException">User may not verify tag.</exception>
-        private TicketTag GetVerifyableTicketTag(int ticketId, int tagId, int userId)
+        private TicketTag GetTicketTag(int ticketId, int tagId, int userId, bool userDeletable, bool userVerifyable)
         {
+            // TODO: Ensure the state of the ticket is TicketState.Verification
             var ticket = FindTicket(ticketId);
-            var ticketTag = ticket.TicketTags.Single(tag => tag.FkTagId == tagId);
+            var ticketTag = ticket.TicketTags.First(tag => tag.FkTagId == tagId);
             var ticketTagInfo = GetTicketTagInfo(ticketTag, ticket.FkUserId, userId, GetCompetentTags(userId));
-            if (!ticketTagInfo.UserMayVerify)
+            if (userDeletable && !ticketTagInfo.UserMayDelete)
+            {
+                throw new NotSupportedException("User may not delete tag.");
+            }
+            if (userVerifyable && !ticketTagInfo.UserMayVerify)
             {
                 throw new NotSupportedException("User may not verify tag.");
             }
             return ticketTag;
         }
 
+        /// <exception cref="NotSupportedException">User may not verify tag.</exception>
+        private TicketTag GetVerifyableTicketTag(int ticketId, int tagId, int userId)
+        {
+            return GetTicketTag(ticketId, tagId, userId, false, true);
+        }
+
+        /// <exception cref="NotSupportedException">User may not delete tag.</exception>
+        private TicketTag GetDeleteableTicketTag(int ticketId, int tagId, int userId)
+        {
+            return GetTicketTag(ticketId, tagId, userId, true, false);
+        }
+
         /// <exception cref="NotSupportedException">User may not delete tag.</exception>
         public void DeleteTicketTag(int ticketId, int tagId, int userId)
         {
-            db.TicketTags.Remove(GetVerifyableTicketTag(ticketId, tagId, userId));
+            // TODO: Ensure the state of the ticket is TicketState.Verification
+            db.TicketTags.Remove(GetDeleteableTicketTag(ticketId, tagId, userId));
             db.SaveChanges();
             // TODO: Some kind of event so that the ticket moves to the next stage when ready.
         }
@@ -339,7 +362,21 @@ namespace Transparent.Data.Queries
         /// <exception cref="NotSupportedException">User may not verify tag.</exception>
         public void VerifyTicketTag(int ticketId, int tagId, int userId)
         {
+            // TODO: Ensure the state of the ticket is TicketState.Verification
             GetVerifyableTicketTag(ticketId, tagId, userId).Verified = true;
+            db.SaveChanges();
+            // TODO: Some kind of event so that the ticket moves to the next stage when ready.
+        }
+
+        /// <exception cref="NotSupportedException">User may not add tag.</exception>
+        public void AddTicketTag(int ticketId, int tagId, int userId)
+        {
+            // TODO: Ensure the state of the ticket is TicketState.Verification
+            if (!GetCompetentTags(userId).Any(tag => tag.Id == tagId))
+                throw new NotSupportedException("User may not add tag");
+
+            db.TicketTags.Add(new TicketTag { FkTicketId = ticketId, FkTagId = tagId, FkCreatedById = userId });
+
             db.SaveChanges();
             // TODO: Some kind of event so that the ticket moves to the next stage when ready.
         }

@@ -1,11 +1,26 @@
 ﻿var tagSelectors;
 
-function TagSelectors(container, enableAdd, ajax, tags) {
+// TagSelector class
+
+function TagSelector(element) {
+    this.element = element;
+    this.prevValue = element.value;
+}
+
+// TagSelectors class
+
+function TagSelectors(container, enableAdd, ajax, tags, ticketId) {
     this.container = container;
     this.enableAdd = enableAdd;
     this.ajax = ajax;
     this.tags = tags;
+    this.ticketId = ticketId;
+    this.tagSelectors = [];
     tagSelectors = this;
+}
+
+TagSelectors_onChange = function () {
+    tagSelectors.onChange(this);
 }
 
 TagSelectors.prototype.add = function (required) {
@@ -14,7 +29,7 @@ TagSelectors.prototype.add = function (required) {
     element.setAttribute("name", "TicketTagIds");
     var selectElement = $(element);
     if (this.enableAdd)
-        selectElement.change(this.onChange);
+        selectElement.change(TagSelectors_onChange);
     if (required)
         selectElement.attr({
             "data-val": "true",
@@ -25,25 +40,36 @@ TagSelectors.prototype.add = function (required) {
     selectElement.append($(document.createElement("option"))
         .attr("value", -1)
         .attr("selected", "selected")
-        .text("Not selected"));
+        .text("Add a tag"));
     for (var i = 0; i < this.tags.length; i++) {
         var tag = this.tags[i];
         selectElement.append($(document.createElement("option"))
             .attr("value",tag.id)
             .text(repeat("\xA0\xA0", tag.indent) + tag.name));
     }
+    this.tagSelectors.push(new TagSelector(element));
     this.container.append(selectElement);
 }
 
-TagSelectors.prototype.onChange = function (e) {
-    tagSelectors.addIfRequired();
+TagSelectors.prototype.onChange = function (element) {
+    if (this.ajax) {
+        var tagSelector = $.grep(this.tagSelectors, function (tagSelector, i) { return tagSelector.element == element })[0];
+        var request = { TicketId: this.ticketId, OldTagId: tagSelector.prevValue, NewTagId: tagSelector.element.value };
+        $.ajax({
+            type: "POST",
+            data: JSON.stringify(request),
+            url: "/TicketApi/UpdateTicketTag",
+            contentType: "application/json"
+        });
+        tagSelector.prevValue = element.value;
+    }
+    this.addIfRequired();
 }
 
 TagSelectors.prototype.addIfRequired = function () {
-    var selectElements = this.container.find("select");
-    for (var i = 0; i < selectElements.length; i++) {
-        if (selectElements[i].value == -1)
+    for (var i = 0; i < this.tagSelectors.length; i++) {
+        if (this.tagSelectors[i].element.value == -1)
             return;
     }
-    this.add(selectElements.length == 0);
+    this.add(this.tagSelectors.length == 0);
 }

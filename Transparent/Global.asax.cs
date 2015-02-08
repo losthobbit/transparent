@@ -16,6 +16,7 @@ namespace Transparent
     using Castle.Windsor;
     using Castle.Windsor.Installer;
     using Transparent.Windsor;
+    using System.Web.Http.Dispatcher;
     
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
@@ -28,6 +29,8 @@ namespace Transparent
         {
             container = new WindsorContainer()
                 .Install(FromAssembly.InThisApplication());
+
+            // Setup dependency injection of MVC controllers
             var controllerFactory = new WindsorControllerFactory(container.Kernel);
             ControllerBuilder.Current.SetControllerFactory(controllerFactory);
         }

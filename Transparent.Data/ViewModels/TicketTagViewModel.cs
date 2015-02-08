@@ -12,6 +12,7 @@ namespace Transparent.Data.ViewModels
         public int TagId { get; set; }
         public string Name { get; set; }
         public bool UserMayVerify { get; set; }
+        public bool UserMayDelete { get; set; }
 
         public static IEnumerable<TicketTagViewModel> CreateList(BaseTicket ticket, IEnumerable<TicketTagViewModel> source = null)
         {
