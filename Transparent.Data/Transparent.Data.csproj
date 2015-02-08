@@ -132,6 +132,7 @@
     <Compile Include="Models\AnsweredTests.cs" />
     <Compile Include="Models\BaseTicket.cs" />
     <Compile Include="Models\Extensions.cs" />
+    <Compile Include="Models\Interfaces\IBaseTicket.cs" />
     <Compile Include="Models\Interfaces\ITestAnswer.cs" />
     <Compile Include="Models\Interfaces\IUserPoint.cs" />
     <Compile Include="Models\Interfaces\IUserProfile.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="Models\Search.cs" />
     <Compile Include="Models\Stateful.cs" />
     <Compile Include="Models\Ticket.cs" />
+    <Compile Include="ViewModels\Interfaces\ICreateTicketViewModel.cs" />
     <Compile Include="ViewModels\TicketTagViewModel.cs" />
     <Compile Include="ViewModels\TicketDetailsViewModel.cs" />
     <Compile Include="Models\TicketRank.cs" />

@@ -16,7 +16,7 @@ namespace Transparent.Data.Models.Interfaces
         /// Services that the volunteer is willing to provide.
         /// </summary>
         [DataType(DataType.MultilineText)]
-        [MaxLength(2000)]
+        [StringLength(2000)]
         [Display(Name="Services that you would like to provide")]
         string Services { get; set; }
     }

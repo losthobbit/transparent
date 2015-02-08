@@ -13,6 +13,7 @@ namespace Transparent.Data.ViewModels
     public class TicketTagsViewModel
     {
         public bool EnableTagButton { get; set; }
+        public bool MultipleTags { get; set; }
         public int TicketId { get; set; }
         public IEnumerable<TicketTagViewModel> TagInfo { get; set; }
 
@@ -29,6 +30,7 @@ namespace Transparent.Data.ViewModels
         public TicketTagsViewModel(BaseTicket ticket, bool enableTagButton)
         {
             EnableTagButton = enableTagButton;
+            MultipleTags = ticket.MultipleTags;
             TicketId = ticket.Id;
 
             TagInfo = TicketTagViewModel.CreateList(ticket);

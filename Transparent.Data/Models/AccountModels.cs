@@ -20,14 +20,14 @@ namespace Transparent.Data.Models
         public int UserId { get; set; }
         [Required]
         [Display(Name = "Name")]
-        [MaxLength(100)]
+        [StringLength(100)]
         [Index(IsUnique = true)]
         public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.EmailAddress)]
         [Display(Name = "Email")]
-        [MaxLength(100)]
+        [StringLength(100)]
         [Index(IsUnique = true)]
         public string Email { get; set; }
 
@@ -67,12 +67,12 @@ namespace Transparent.Data.Models
     public class LoginModel : IValidatableObject
     {
         [Display(Name = "Name")]
-        [MaxLength(100)]
+        [StringLength(100)]
         public string UserName { get; set; }
 
         [Display(Name = "Email")]
         [DataType(DataType.EmailAddress)]
-        [MaxLength(100)]
+        [StringLength(100)]
         [Index(IsUnique = true)]
         public string Email { get; set; }
 
@@ -98,13 +98,13 @@ namespace Transparent.Data.Models
     {
         [Required]
         [Display(Name = "Name")]
-        [MaxLength(100)]
+        [StringLength(100)]
         public string UserName { get; set; }
 
         [Required]
         [Display(Name = "Email")]
         [DataType(DataType.EmailAddress)]
-        [MaxLength(100)]
+        [StringLength(100)]
         [Index(IsUnique = true)]
         public string Email { get; set; }
 

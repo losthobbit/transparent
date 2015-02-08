@@ -4,6 +4,7 @@
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.TicketId)
+    @Html.HiddenFor(m => m.MultipleTags)
     @Html.HiddenFor(m => m.EnableTagButton)
    
     foreach (var ticketTag in Model.TagInfo)
@@ -16,7 +17,7 @@
         {
             <a class="button float-left">@ticketTag.Name</a>
         }    
-        if (ticketTag.UserMayVerify)
+        if (Model.MultipleTags && ticketTag.UserMayVerify)
         {
             <div class="float-left">
                 <button name="deleteTagId" class="ui-icon-close ui-icon" title="Delete tag" value="@ticketTag.TagId">DeleteTag</button>

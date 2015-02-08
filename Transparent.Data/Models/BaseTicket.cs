@@ -5,11 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Transparent.Data.Models.Interfaces;
 using Transparent.Data.Validation;
 
 namespace Transparent.Data.Models
 {
-    public abstract class BaseTicket: ISupportsMultipleTags
+    [MetadataType(typeof(IBaseTicket))]
+    public abstract class BaseTicket: IBaseTicket, ISupportsMultipleTags
     {
         public BaseTicket()
         {
@@ -35,13 +37,8 @@ namespace Transparent.Data.Models
         [Index]
         public int Rank { get; set; }
 
-        [MaxLength(100)]
-        [Required]
         public string Heading { get; set; }
 
-        [DataType(DataType.MultilineText)]
-        [MaxLength(10000)]
-        [Required]
         public string Body { get; set; }
 
         [Required]

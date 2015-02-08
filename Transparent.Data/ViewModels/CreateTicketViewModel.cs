@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Transparent.Data.Models;
 using Transparent.Data.Validation;
+using Transparent.Data.ViewModels.Interfaces;
 
 namespace Transparent.Data.ViewModels
 {
@@ -29,7 +31,8 @@ namespace Transparent.Data.ViewModels
         }
     }
 
-    public class CreateTicketViewModel: ISupportsMultipleTags
+    [MetadataType(typeof(ICreateTicketViewModel))]
+    public class CreateTicketViewModel: ISupportsMultipleTags, ICreateTicketViewModel
     {
         public Ticket Model { get; private set; }
 

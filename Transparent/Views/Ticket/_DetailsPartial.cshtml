@@ -33,9 +33,8 @@
                 var enableAdd = @Json.Encode(Model.MultipleTags);
 
                 $(function(){
-                    if(tags.length > 0)
+                    if(tags.length > 0 && enableAdd)
                     {
-                        // TODO: ENSURE THAT WE CAN'T ADD TO TEST IF TAG ALREADY EXISTS.
                         new TagSelectors($("#tagSelectors"), enableAdd, true, tags, @Model.Id);
                         tagSelectors.addIfRequired();
                     }

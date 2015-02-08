@@ -37,7 +37,7 @@ namespace Transparent.Data.Models
         }
 
         [Display(Name = "Text to search for")]
-        [MaxLength(200)]
+        [StringLength(200)]
         public string SearchString 
         {
             get 

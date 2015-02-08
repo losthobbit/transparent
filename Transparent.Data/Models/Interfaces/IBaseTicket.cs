@@ -10,10 +10,15 @@ namespace Transparent.Data.Models.Interfaces
     /// <summary>
     /// Contains reusable data annotations
     /// </summary>
-    public interface ITestAnswer
+    public interface IBaseTicket
     {
+        [StringLength(100, ErrorMessage="The heading may not contain more than 100 characters.")]
+        [Required]
+        string Heading { get; set; }
+
         [DataType(DataType.MultilineText)]
-        [StringLength(2000)]
-        string Answer { get; set; }
+        [StringLength(10000, ErrorMessage="The body may not contain more than 10,000 characters.")]
+        [Required]
+        string Body { get; set; }
     }
 }
