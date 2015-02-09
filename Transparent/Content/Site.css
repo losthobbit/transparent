@@ -1,4 +1,8 @@
 ﻿/* Custom */
+.gap-above {
+    margin-top: 15px;
+}
+
 a { text-decoration:none }
 
 .actionLinkUI { float: left; margin-right: 2px; }
@@ -529,8 +533,12 @@ textarea {
     height: 200px;
 }
 
-.long input, .long textarea {
+input.long,.long input, .long textarea {
     width: 500px;
+}
+
+input.extraLong,.extraLong input, .extraLong textarea {
+    width: 835px;
 }
 
     select.tags {

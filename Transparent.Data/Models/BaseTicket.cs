@@ -15,7 +15,7 @@ namespace Transparent.Data.Models
     {
         public BaseTicket()
         {
-            State = TicketState.Verification;
+            State = StartingState;
         }
 
         public BaseTicket(int id, int rank): this()
@@ -58,5 +58,8 @@ namespace Transparent.Data.Models
 
         [NotMapped]
         public virtual string TextForCreated { get { return "Created"; } }
+
+        [NotMapped]
+        protected virtual TicketState StartingState { get { return TicketState.Verification; } }
     }
 }

@@ -47,5 +47,13 @@ namespace Transparent.Data.Models
                 TicketTags.Add( new TicketTag { FkTagId = value } );
             }
         }
+
+        protected override TicketState StartingState
+        {
+            get
+            {
+                return TicketState.Voting;
+            }
+        }
     }
 }
