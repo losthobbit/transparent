@@ -6,6 +6,8 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using System.Data.Entity;
+using Transparent.Data;
 
 namespace Transparent.PlaceHolder
 {
@@ -21,6 +23,15 @@ namespace Transparent.PlaceHolder
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            InitializeDatabase();
+        }
+
+        private void InitializeDatabase()
+        {
+            Database.SetInitializer<UsersContext>(new InitDatabase<UsersContext>());
+            UsersContext context = new UsersContext();
+            context.Database.Initialize(false);
         }
     }
 }

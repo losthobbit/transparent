@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Transparent.Data.Models.Subscription
+@{
     ViewBag.Title = "Democratic Intelligence";
 }
 
@@ -10,3 +11,27 @@
 <a href="https://www.facebook.com/democraticintelligence">Facebook</a>
 <a href="https://plus.google.com/u/0/communities/118433697403372101600">Google+</a>
 <a href="https://www.linkedin.com/groups/Xparent-8209220">LinkedIn</a>
+
+<p>Subscribe for email updates</p>
+
+@using (Html.BeginForm("Subscribe", "Home"))
+{
+    @Html.ValidationSummary(true)
+
+    <fieldset class="long">
+        <legend>Subscribe for email updates</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Email)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Email)
+            @Html.ValidationMessageFor(model => model.Email)
+        </div>
+        <p>
+            <input type="submit" value="Subscribe" />
+        </p>
+    </fieldset>
+}
+
+

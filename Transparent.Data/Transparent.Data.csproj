@@ -127,6 +127,10 @@
     <Compile Include="Migrations\201502012234413_AddStateAndTagVerification.Designer.cs">
       <DependentUpon>201502012234413_AddStateAndTagVerification.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201502221044570_AddSubscriptionsTable.cs" />
+    <Compile Include="Migrations\201502221044570_AddSubscriptionsTable.Designer.cs">
+      <DependentUpon>201502221044570_AddSubscriptionsTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\AnsweredTests.cs" />
@@ -140,6 +144,7 @@
     <Compile Include="Models\PagedList.cs" />
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\StatefulPagedList.cs" />
+    <Compile Include="Models\Subscription.cs" />
     <Compile Include="Models\Suggestion.cs" />
     <Compile Include="Models\Test.cs" />
     <Compile Include="Models\TestMarking.cs" />
@@ -194,6 +199,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201502012234413_AddStateAndTagVerification.resx">
       <DependentUpon>201502012234413_AddStateAndTagVerification.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502221044570_AddSubscriptionsTable.resx">
+      <DependentUpon>201502221044570_AddSubscriptionsTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
