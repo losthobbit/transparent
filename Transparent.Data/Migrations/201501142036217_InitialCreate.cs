@@ -7,6 +7,25 @@ namespace Transparent.Data.Migrations
     {
         public override void Up()
         {
+            // Because the UserProfile table already exists, I don't create it, but update it instead:
+
+            //CreateTable(
+            //    "dbo.UserProfile",
+            //    c => new
+            //    {
+            //        UserId = c.Int(nullable: false, identity: true),
+            //        UserName = c.String(nullable: false, maxLength: 100),
+            //        Email = c.String(nullable: false, maxLength: 100),
+            //    })
+            //    .PrimaryKey(t => t.UserId)
+            //    .Index(t => t.UserName, unique: true)
+            //    .Index(t => t.Email, unique: true);
+
+            AddColumn("dbo.UserProfile", "Email", c => c.String(nullable: false, maxLength: 100));
+            AlterColumn("dbo.UserProfile", "UserName", c => c.String(nullable: false, maxLength: 100));
+            CreateIndex("dbo.UserProfile", "UserName", unique: true);
+            CreateIndex("dbo.UserProfile", "Email", unique: true);
+
             CreateTable(
                 "dbo.Tickets",
                 c => new
@@ -48,19 +67,7 @@ namespace Transparent.Data.Migrations
                     })
                 .PrimaryKey(t => t.Id)
                 .Index(t => t.Name, unique: true);
-            
-            CreateTable(
-                "dbo.UserProfile",
-                c => new
-                    {
-                        UserId = c.Int(nullable: false, identity: true),
-                        UserName = c.String(nullable: false, maxLength: 100),
-                        Email = c.String(nullable: false, maxLength: 100),
-                    })
-                .PrimaryKey(t => t.UserId)
-                .Index(t => t.UserName, unique: true)
-                .Index(t => t.Email, unique: true);
-            
+                       
             CreateTable(
                 "dbo.UserTags",
                 c => new
@@ -158,10 +165,17 @@ namespace Transparent.Data.Migrations
             DropTable("dbo.UserPoints");
             DropTable("dbo.TicketUserRanks");
             DropTable("dbo.UserTags");
-            DropTable("dbo.UserProfile");
             DropTable("dbo.Tags");
             DropTable("dbo.TicketTags");
             DropTable("dbo.Tickets");
+
+            // Because the UserProfile table should still exist, I don't delete it, but update it instead:
+            //DropTable("dbo.UserProfile");
+
+            DropIndex("dbo.UserProfile", new[] { "Email" });
+            DropIndex("dbo.UserProfile", new[] { "UserName" });
+            AlterColumn("dbo.UserProfile", "UserName", c => c.String(nullable: false, maxLength: 56));
+            DropColumn("dbo.UserProfile", "Email");
         }
     }
 }

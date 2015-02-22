@@ -111,23 +111,33 @@
     <Compile Include="Interfaces\ITags.cs" />
     <Compile Include="Interfaces\ITickets.cs" />
     <Compile Include="Interfaces\IUsersContext.cs" />
-    <Compile Include="Migrations\201501142036217_InitialCreate.cs" />
+    <Compile Include="Migrations\201501142036217_InitialCreate.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Migrations\201501142036217_InitialCreate.Designer.cs">
       <DependentUpon>201501142036217_InitialCreate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201501192259183_AddedTestMarkingInfoToUserPoint.cs" />
+    <Compile Include="Migrations\201501192259183_AddedTestMarkingInfoToUserPoint.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Migrations\201501192259183_AddedTestMarkingInfoToUserPoint.Designer.cs">
       <DependentUpon>201501192259183_AddedTestMarkingInfoToUserPoint.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201502010009339_AddUserProfileTableVolunteerColumn.cs" />
+    <Compile Include="Migrations\201502010009339_AddUserProfileTableVolunteerColumn.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Migrations\201502010009339_AddUserProfileTableVolunteerColumn.Designer.cs">
       <DependentUpon>201502010009339_AddUserProfileTableVolunteerColumn.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201502012234413_AddStateAndTagVerification.cs" />
+    <Compile Include="Migrations\201502012234413_AddStateAndTagVerification.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Migrations\201502012234413_AddStateAndTagVerification.Designer.cs">
       <DependentUpon>201502012234413_AddStateAndTagVerification.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201502221044570_AddSubscriptionsTable.cs" />
+    <Compile Include="Migrations\201502221044570_AddSubscriptionsTable.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Migrations\201502221044570_AddSubscriptionsTable.Designer.cs">
       <DependentUpon>201502221044570_AddSubscriptionsTable.cs</DependentUpon>
     </Compile>
@@ -188,6 +198,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="SQL\CreateDatabase.sql" />
+    <Content Include="SQL\Reset.sql" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Migrations\201501142036217_InitialCreate.resx">
       <DependentUpon>201501142036217_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
@@ -203,9 +217,6 @@
     <EmbeddedResource Include="Migrations\201502221044570_AddSubscriptionsTable.resx">
       <DependentUpon>201502221044570_AddSubscriptionsTable.cs</DependentUpon>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="SQL\Reset.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
