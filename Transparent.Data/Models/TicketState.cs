@@ -6,8 +6,20 @@ using System.Threading.Tasks;
 
 namespace Transparent.Data.Models
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>
+    /// From Verification to Voting is considered "Public".
+    /// Accepted or InProgress is considered "Voluntary".
+    /// </remarks>
     public enum TicketState
     {
+        /// <summary>
+        /// Ticket has been created, but not yet published.
+        /// </summary>
+        Draft = 5,
+
         /// <summary>
         /// After a ticket has been created, competents have the ability to verify a ticket's tags and add new tags.
         /// </summary>
@@ -35,6 +47,21 @@ namespace Transparent.Data.Models
         /// <summary>
         /// The ticket has been either accepted or rejected.
         /// </summary>
-        Resolved = 40
+        Rejected = 40,
+
+        /// <summary>
+        /// The ticket has been either accepted or rejected.
+        /// </summary>
+        Accepted = 50,
+
+        /// <summary>
+        /// The ticket is being worked on.
+        /// </summary>
+        InProgress = 60,
+
+        /// <summary>
+        /// All work has been done on the ticket
+        /// </summary>
+        Completed = 70
     }
 }

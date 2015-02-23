@@ -34,11 +34,16 @@ namespace Transparent.Data.Tests.Queries
 
         #region MyQueue
 
+        private void ArrangeMyQueue()
+        {
+            testData.StephensCriticalThinkingTag.TotalPoints = Tickets.MinimumUserTagPointsToWorkOnTicketWithSameTag;
+        }
+
         [Test]
         public void MyQueue_with_ticket_and_user_with_same_tag_and_more_than_or_equal_minimum_points_returns_ticket()
         {
             // Arrange
-            testData.StephensCriticalThinkingTag.TotalPoints = Tickets.MinimumUserTagPointsToWorkOnTicketWithSameTag;
+            ArrangeMyQueue();
 
             // Act
             var ticketsContainer = target.MyQueue(new TicketsContainer(), testData.Stephen.UserId);
@@ -70,7 +75,119 @@ namespace Transparent.Data.Tests.Queries
             Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == testData.JoesScubaDivingSuggestion));
         }
 
+        [TestCase(TicketState.Verification)]
+        [TestCase(TicketState.Argument)]
+        [TestCase(TicketState.Voting)]
+        public void MyQueue_returns_tickets_in_public_state(TicketState ticketState)
+        {
+            // Arrange
+            ArrangeMyQueue();
+            testData.JoesCriticalThinkingSuggestion.State = ticketState;
+
+            // Act
+            var ticketsContainer = target.MyQueue(new TicketsContainer(), testData.Stephen.UserId);
+
+            // Assert
+            ticketsContainer.PagedList.Single(ticket => ticket == testData.JoesCriticalThinkingSuggestion);
+        }
+
+        [TestCase(TicketState.Draft)]
+        [TestCase(TicketState.Rejected)]
+        [TestCase(TicketState.Accepted)]
+        [TestCase(TicketState.InProgress)]
+        [TestCase(TicketState.Completed)]
+        public void MyQueue_does_not_return_tickets_in_non_public_state(TicketState ticketState)
+        {
+            // Arrange
+            ArrangeMyQueue();
+            testData.JoesCriticalThinkingSuggestion.State = ticketState;
+
+            // Act
+            var ticketsContainer = target.MyQueue(new TicketsContainer(), testData.Stephen.UserId);
+
+            // Assert
+            Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == testData.JoesCriticalThinkingSuggestion));
+        }
+
         #endregion MyQueue
+
+        #region HighestRanked
+
+        [TestCase(TicketState.Verification)]
+        [TestCase(TicketState.Argument)]
+        [TestCase(TicketState.Voting)]
+        public void HighestRanked_returns_tickets_in_public_state(TicketState ticketState)
+        {
+            // Arrange
+            testData.JoesScubaDivingSuggestion.State = ticketState;
+
+            // Act
+            var ticketsContainer = target.HighestRanked(new TicketsContainer());
+
+            // Assert
+            ticketsContainer.PagedList.Single(ticket => ticket == testData.JoesScubaDivingSuggestion);
+        }
+
+        [TestCase(TicketState.Draft)]
+        [TestCase(TicketState.Rejected)]
+        [TestCase(TicketState.Accepted)]
+        [TestCase(TicketState.InProgress)]
+        [TestCase(TicketState.Completed)]
+        public void HighestRanked_does_not_return_tickets_in_non_public_state(TicketState ticketState)
+        {
+            // Arrange
+            testData.JoesScubaDivingSuggestion.State = ticketState;
+
+            // Act
+            var ticketsContainer = target.HighestRanked(new TicketsContainer());
+
+            // Assert
+            Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == testData.JoesScubaDivingSuggestion));
+        }
+
+        #endregion HighestRanked
+
+        #region Newest
+
+        [TestCase(TicketState.Verification)]
+        [TestCase(TicketState.Argument)]
+        [TestCase(TicketState.Voting)]
+        public void Newest_returns_tickets_in_public_state(TicketState ticketState)
+        {
+            // Arrange
+            testData.JoesScubaDivingSuggestion.State = ticketState;
+
+            // Act
+            var ticketsContainer = target.Newest(new TicketsContainer());
+
+            // Assert
+            ticketsContainer.PagedList.Single(ticket => ticket == testData.JoesScubaDivingSuggestion);
+        }
+
+        [TestCase(TicketState.Draft)]
+        [TestCase(TicketState.Rejected)]
+        [TestCase(TicketState.Accepted)]
+        [TestCase(TicketState.InProgress)]
+        [TestCase(TicketState.Completed)]
+        public void Newest_does_not_return_tickets_in_non_public_state(TicketState ticketState)
+        {
+            // Arrange
+            testData.JoesScubaDivingSuggestion.State = ticketState;
+
+            // Act
+            var ticketsContainer = target.Newest(new TicketsContainer());
+
+            // Assert
+            Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == testData.JoesScubaDivingSuggestion));
+        }
+
+        #endregion Newest
+
+        #region Search
+
+
+
+        #endregion Search
 
         #region GetUntakenTests
 
