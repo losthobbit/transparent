@@ -533,8 +533,17 @@ textarea {
     height: 200px;
 }
 
+.fifth {
+    width: 70px;
+    margin-right: 0px;
+}
+
 input.long,.long input, .long textarea {
     width: 500px;
+}
+
+.fourFifths input {
+    width: 430px;
 }
 
 input.extraLong,.extraLong input, .extraLong textarea {

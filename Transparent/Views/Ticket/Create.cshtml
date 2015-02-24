@@ -33,21 +33,18 @@
 {
     @Html.ValidationSummary(true)
 
-    <fieldset class="long">
+    <fieldset class="long gap-above">
         <legend>Ticket</legend>
 
-        <div class="editor-label">
+        <div class="editor-label float-left fifth">
             @Html.LabelFor(model => model.Model.Heading)
         </div>
-        <div class="editor-field">
+        <div class="editor-field fourFifths">
             @Html.EditorFor(model => model.Model.Heading)
             @Html.ValidationMessageFor(model => model.Model.Heading)
         </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Model.Body)
-        </div>
-        <div class="editor-field">
+        <div class="editor-field gap-above">
             @Html.EditorFor(model => model.Model.Body)
             @Html.ValidationMessageFor(model => model.Model.Body)
         </div>

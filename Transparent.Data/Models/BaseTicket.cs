@@ -37,6 +37,7 @@ namespace Transparent.Data.Models
         [Index]
         public int Rank { get; set; }
 
+        [Display(Name="Title")]
         public string Heading { get; set; }
 
         public string Body { get; set; }
