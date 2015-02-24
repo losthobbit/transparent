@@ -185,7 +185,88 @@ namespace Transparent.Data.Tests.Queries
 
         #region Search
 
+        private Search searchFilter;
 
+        private void ArrangeSearch()
+        {
+            searchFilter = new Search
+            {
+                SearchString = "your"
+            };
+        }
+
+        [Test]
+        public void Search_with_search_term_in_body_returns_ticket()
+        {
+            //Arrange
+            ArrangeSearch();
+
+            //Act
+            var response = target.Search(searchFilter);
+
+            //Assert
+            response.PagedList.Single(ticket => ticket == testData.CriticalThinkingTestThatJoeTookThatStephenMarked);
+        }
+
+        [Test]
+        public void Search_without_search_term_in_body_does_not_return_ticket()
+        {
+            //Arrange
+            var filter = new Search
+            {
+                SearchString = "supercalafragilistic"
+            };
+
+            //Act
+            var response = target.Search(filter);
+
+            //Assert
+            Assert.IsFalse(response.PagedList.Any(ticket => ticket == testData.CriticalThinkingTestThatJoeTookThatStephenMarked));
+        }
+
+        [TestCase(TicketState.Verification)]
+        [TestCase(TicketState.Argument)]
+        [TestCase(TicketState.Voting)]
+        public void Search_returns_tests_in_public_state(TicketState ticketState)
+        {
+            // Arrange
+            ArrangeSearch();
+            testData.CriticalThinkingTestThatJoeTookThatStephenMarked.State = ticketState;
+
+            // Act
+            var response = target.Search(searchFilter);
+
+            // Assert
+            response.PagedList.Single(ticket => ticket == testData.CriticalThinkingTestThatJoeTookThatStephenMarked);
+        }
+
+        [TestCase(TicketState.Completed)]
+        public void Search_does_not_return_tests_which_have_been_completed(TicketState ticketState)
+        {
+            // Arrange
+            ArrangeSearch();
+            testData.CriticalThinkingTestThatJoeTookThatStephenMarked.State = ticketState;
+
+            // Act
+            var response = target.Search(searchFilter);
+
+            // Assert
+            Assert.IsFalse(response.PagedList.Any(ticket => ticket == testData.CriticalThinkingTestThatJoeTookThatStephenMarked));
+        }
+
+        [TestCase(TicketState.Draft)]
+        public void Search_does_not_return_tests_which_are_in_draft_state(TicketState ticketState)
+        {
+            // Arrange
+            ArrangeSearch();
+            testData.CriticalThinkingTestThatJoeTookThatStephenMarked.State = ticketState;
+
+            // Act
+            var response = target.Search(searchFilter);
+
+            // Assert
+            Assert.IsFalse(response.PagedList.Any(ticket => ticket == testData.CriticalThinkingTestThatJoeTookThatStephenMarked));
+        }
 
         #endregion Search
 

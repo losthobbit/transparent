@@ -13,6 +13,8 @@ using System.Security;
 
 namespace Transparent.Data.Queries
 {
+    using Extensions;
+
     /// <summary>
     /// Contains methods for getting tickets.
     /// </summary>
@@ -57,11 +59,6 @@ namespace Transparent.Data.Queries
             throw new NotSupportedException("Unknown ticket type");
         }
 
-        private IQueryable<Ticket> GetPublic(IQueryable<Ticket> tickets)
-        {
-            return tickets.Where(t => t.State >= TicketState.Verification && t.State <= TicketState.Voting);
-        }
-
         /// <summary>
         /// Returns list of tickets that have the same tag as the user.
         /// </summary>
@@ -71,7 +68,7 @@ namespace Transparent.Data.Queries
             (
                 filter.ApplyFilter
                 (
-                    from ticket in GetPublic(TicketSet(filter))
+                    from ticket in TicketSet(filter).GetPublic()
                     join ticketTag in db.TicketTags on ticket equals ticketTag.Ticket
                     join userTag in db.UserTags on ticketTag.Tag equals userTag.Tag
                     where userTag.FkUserId == userId && userTag.TotalPoints >= MinimumUserTagPointsToWorkOnTicketWithSameTag
@@ -97,7 +94,12 @@ namespace Transparent.Data.Queries
         {
             return filter.Initialize
             (
-                filter.ApplyFilter(GetPublic(TicketSet(filter))).OrderByDescending(ticket => ticket.CreatedDate)
+                filter.ApplyFilter
+                (
+                    TicketSet(filter)
+                    .GetPublic()
+                )
+                .OrderByDescending(ticket => ticket.CreatedDate)
             );
         }
 
@@ -105,7 +107,12 @@ namespace Transparent.Data.Queries
         {
             return filter.Initialize
             (
-                filter.ApplyFilter(GetPublic(TicketSet(filter))).OrderByDescending(ticket => ticket.Rank)
+                filter.ApplyFilter
+                (
+                    TicketSet(filter)
+                    .GetPublic()
+                )
+                .OrderByDescending(ticket => ticket.Rank)
             );
         }
 
@@ -115,7 +122,13 @@ namespace Transparent.Data.Queries
                 return null;
             return (Search)filter.Initialize
             (
-                filter.ApplyFilter(TicketSet(filter)).OrderByDescending(ticket => ticket.CreatedDate)
+                filter.ApplyFilter
+                (
+                    TicketSet(filter)
+                    .ExcludeComplete()
+                    .ExcludeDraft()
+                )
+                .OrderByDescending(ticket => ticket.CreatedDate)
             );
         }
 
