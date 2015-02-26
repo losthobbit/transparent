@@ -8,6 +8,7 @@
                 new []{ "Raised by Me", "RaisedByMe" },
                 new []{ "Search", "Search" },
                 new []{ "Create", "Create" },
+                new []{ "Knowledge", "Details", "Tag" },
                 new []{ "Mark Tests", "MarkTests" },
                 new []{ "Volunteer", "Volunteer" }
             };
@@ -21,7 +22,7 @@
             }
             else
             {
-                @Html.ActionLink(link[0], link[1], "Ticket");
+                @Html.ActionLink(link[0], link[1], link.Length > 2 ? link[2] : "Ticket");
             }
             </li>
         }

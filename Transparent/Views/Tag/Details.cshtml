@@ -3,10 +3,11 @@
 @using Transparent.Data.Interfaces
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Knowledge";
     var container = ((IContainerAccessor)Context.ApplicationInstance).Container;
     var tags = container.Resolve<ITags>();
     var tickets = container.Resolve<ITickets>();
+    var user = container.Resolve<IUser>();
     var numberOfTests = tickets.CountUntakenTestsRemaining(Model.Id, WebSecurity.CurrentUserId);
 }
 
@@ -34,6 +35,7 @@
     <legend>Tag</legend>
     <div class="display-field">
         <h2>@Html.DisplayFor(model => model.Name)</h2>
+        <p>You have @user.GetPointsForTag(WebSecurity.CurrentUserId, Model.Id) points for @Model.Name</p>
         @if(numberOfTests > 0)
         {
             <a id="takeTestButton" class="button">Take a test</a><text>(</text>@Html.Raw(numberOfTests)<text> remaining)</text>

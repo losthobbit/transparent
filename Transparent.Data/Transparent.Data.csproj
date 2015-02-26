@@ -111,6 +111,7 @@
     <Compile Include="Interfaces\IConfiguration.cs" />
     <Compile Include="Interfaces\ITags.cs" />
     <Compile Include="Interfaces\ITickets.cs" />
+    <Compile Include="Interfaces\IUser.cs" />
     <Compile Include="Interfaces\IUsersContext.cs" />
     <Compile Include="Migrations\201501142036217_InitialCreate.cs">
       <SubType>Code</SubType>
@@ -166,6 +167,7 @@
     <Compile Include="Models\Search.cs" />
     <Compile Include="Models\Stateful.cs" />
     <Compile Include="Models\Ticket.cs" />
+    <Compile Include="Queries\User.cs" />
     <Compile Include="ViewModels\Interfaces\ICreateTicketViewModel.cs" />
     <Compile Include="ViewModels\TicketTagViewModel.cs" />
     <Compile Include="ViewModels\TicketDetailsViewModel.cs" />
