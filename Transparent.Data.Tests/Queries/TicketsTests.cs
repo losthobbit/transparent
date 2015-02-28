@@ -553,5 +553,45 @@ namespace Transparent.Data.Tests.Queries
         }
 
         #endregion GetTicketTagInfoList
+
+        #region StartTest
+        
+        [TestCase(1)]
+        [TestCase(0)]
+        public void StartTest_with_points_higher_than_or_equal_to_required_points_deducts_points(int pointsAboveRequired)
+        {
+            //Arrange
+            testData.StephensCriticalThinkingTag.TotalPoints = testConfiguration.PointsRequiredBeforeDeductingPoints + pointsAboveRequired;
+
+            //Act
+            target.StartTest(testData.CriticalThinkingTestThatJoeTook, testData.Stephen.UserId);
+
+            //Assert
+            var newPoint = testData.UsersContext.UserPoints.Single(point =>
+                point.FkTagId == testData.CriticalThinkingTag.Id &&
+                point.FkTestId == testData.CriticalThinkingTestThatJoeTook.Id &&
+                point.User == testData.Stephen);
+            Assert.AreEqual(-testConfiguration.PointsToDeductWhenStartingTest, newPoint.Quantity);
+        }
+
+        [TestCase(1)]
+        [TestCase(2)]
+        public void StartTest_with_points_less_than_or_equal_to_required_points_deducts_points(int pointsBelowRequired)
+        {
+            //Arrange
+            testData.StephensCriticalThinkingTag.TotalPoints = testConfiguration.PointsRequiredBeforeDeductingPoints - pointsBelowRequired;
+
+            //Act
+            target.StartTest(testData.CriticalThinkingTestThatJoeTook, testData.Stephen.UserId);
+
+            //Assert
+            var newPoint = testData.UsersContext.UserPoints.Single(point =>
+                point.FkTagId == testData.CriticalThinkingTag.Id &&
+                point.FkTestId == testData.CriticalThinkingTestThatJoeTook.Id &&
+                point.User == testData.Stephen);
+            Assert.AreEqual(0, newPoint.Quantity);
+        }
+
+        #endregion StartTest
     }
 }

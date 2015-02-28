@@ -307,6 +307,14 @@ namespace Transparent.Data.Tests.Helpers
                 userPoint.TestMarkings = testData.UsersContext.TestMarkings.Where(testMarking => testMarking.TestPoint == userPoint).ToList();
             }
 
+            foreach (var userTag in testData.UsersContext.UserTags)
+            {
+                var user = testData.UsersContext.UserProfiles.Single(u => u.UserId == userTag.FkUserId);
+                if (user.Tags == null)
+                    user.Tags = new List<UserTag>();
+                user.Tags.Add(userTag);
+            }
+
             return testData;
         }
     }

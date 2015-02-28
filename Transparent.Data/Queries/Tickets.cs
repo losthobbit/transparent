@@ -207,7 +207,17 @@ namespace Transparent.Data.Queries
             if (userPoint == null)
             {
                 var user = db.UserProfiles.Single(userProfile => userProfile.UserId == userId);
-                userPoint = new UserPoint { FkTestId = test.Id, FkTagId = test.TagId, User = user, Quantity = -configuration.PointsToDeductWhenStartingTest };
+                userPoint = new UserPoint 
+                { 
+                    FkTestId = test.Id, 
+                    FkTagId = test.TagId, 
+                    User = user, 
+                };
+                var userTag = user.Tags.SingleOrDefault(tag => tag.FkTagId == test.TagId);
+                if(userTag.TotalPoints >= configuration.PointsRequiredBeforeDeductingPoints)
+                {
+                    userPoint.Quantity = -configuration.PointsToDeductWhenStartingTest;
+                }
                 db.UserPoints.Add(userPoint);
                 db.SaveChanges();
             }

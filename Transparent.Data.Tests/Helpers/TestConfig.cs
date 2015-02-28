@@ -11,13 +11,17 @@ namespace Transparent.Data.Tests.Helpers
     {
         public TestConfig()
         {
+            PointsRequiredBeforeDeductingPoints = 3;
             PointsToDeductWhenStartingTest = 2;
             PointsRequiredToBeCompetent = 5;
             CurrentSubGoal = "Increase the number of registered users.";
         }
 
-        public int PointsToDeductWhenStartingTest { get; set; }
-        public int PointsRequiredToBeCompetent { get; set; }
         public string CurrentSubGoal { get; set; }
+
+        public int PointsRequiredBeforeDeductingPoints { get; set; }
+        public int PointsToDeductWhenStartingTest { get; set; }
+
+        public int PointsRequiredToBeCompetent { get; set; }
     }
 }

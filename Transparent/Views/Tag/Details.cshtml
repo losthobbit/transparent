@@ -8,7 +8,9 @@
     var tags = container.Resolve<ITags>();
     var tickets = container.Resolve<ITickets>();
     var user = container.Resolve<IUser>();
+    var configuration = container.Resolve<IConfiguration>();
     var numberOfTests = tickets.CountUntakenTestsRemaining(Model.Id, WebSecurity.CurrentUserId);
+    var pointsForTag = user.GetPointsForTag(WebSecurity.CurrentUserId, Model.Id);
 }
 
 <canvas id="tagDiagram" width="660" height="300" style="border:1px solid #FFFFFF;">
@@ -22,20 +24,28 @@
 
         $("#takeTestButton").click(function(e) {
             e.preventDefault();
-            TakeTestPrompt();
+            var deductPoints = @Json.Encode(pointsForTag > configuration.PointsRequiredToBeCompetent);
+            if(deductPoints)
+                TakeTestPrompt();
+            else
+                TakeTest();
         });
     });
 
+    function TakeTest() {
+        window.location.href = "@Url.Action("TakeTest", "Ticket", new { tagId = Model.Id })";
+    }
+
     function TakeTestPrompt() {
-        if(confirm("Taking a test deducts two points, which you get back when your answer is marked as good.\nAre you ready?"))
-            window.location.href = "@Url.Action("TakeTest", "Ticket", new { tagId = Model.Id })";
+        if(confirm("Taking a test deducts @configuration.PointsToDeductWhenStartingTest points, which you get back when your answer is marked as good.\nAre you ready?"))
+            TakeTest();
     }
 </script>
 <fieldset>
     <legend>Tag</legend>
     <div class="display-field">
         <h2>@Html.DisplayFor(model => model.Name)</h2>
-        <p>You have @user.GetPointsForTag(WebSecurity.CurrentUserId, Model.Id) points for @Model.Name</p>
+        <p>You have @pointsForTag points for @Model.Name</p>
         @if(numberOfTests > 0)
         {
             <a id="takeTestButton" class="button">Take a test</a><text>(</text>@Html.Raw(numberOfTests)<text> remaining)</text>
