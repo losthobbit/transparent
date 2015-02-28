@@ -43,7 +43,7 @@ namespace Transparent
             var httpException = exception as HttpException;
             if (httpException != null)
             {
-                if (httpException.ErrorCode == 404 || httpException.ErrorCode == -2147467259)
+                if (httpException.ErrorCode == 404)
                 {
                     Response.Redirect("~/Home/PageNotFound");
                     return;

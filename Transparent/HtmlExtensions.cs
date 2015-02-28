@@ -93,4 +93,22 @@ public static class HtmlExtensions
 
         return MvcHtmlString.Create(a.ToString(TagRenderMode.Normal));
     }
+
+    private static string ConvertUrlsToLinks(this string msg)
+    {
+        string regex = @"((www\.|(http|https|ftp|news|file)+\:\/\/)[&#95;.a-z0-9-]+\.[a-z0-9\/&#95;:@=.+?,##%&~-]*[^.|\'|\# |!|\(|?|,| |>|<|;|\)])";
+        Regex r = new Regex(regex, RegexOptions.IgnoreCase);
+        return r.Replace(msg, "<a href=\"$1\" target=\"_blank\">$1</a>").Replace("href=\"www", "href=\"http://www");
+    }
+
+    /// <summary>
+    /// Converts text into HTML.  Newline characters become br tags and URLs become hyperlinks.
+    /// </summary>
+    /// <param name="text">Text to convert.</param>
+    /// <returns>HTML</returns>
+    public static MvcHtmlString TextToHtml(this HtmlHelper<string> htmlHelper, string text)
+    {
+        var html = text.Replace(Environment.NewLine, "<br/>").ConvertUrlsToLinks();
+        return MvcHtmlString.Create(html);
+    }
 }
