@@ -38,6 +38,16 @@ namespace Transparent.Controllers
             return View();
         }
 
+        public ActionResult PageNotFound()
+        {
+            return View();
+        }
+
+        public ActionResult Error()
+        {
+            return View();
+        }
+
         public PartialViewResult _Stats()
         {
             return PartialView("_StatsPartial", general.GetStats());

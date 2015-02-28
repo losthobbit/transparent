@@ -35,6 +35,23 @@ namespace Transparent
             ControllerBuilder.Current.SetControllerFactory(controllerFactory);
         }
 
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            Exception exception = Server.GetLastError();
+            // TODO: Add error logging
+            //System.Diagnostics.Debug.WriteLine(exception);
+            var httpException = exception as HttpException;
+            if (httpException != null)
+            {
+                if (httpException.ErrorCode == 404 || httpException.ErrorCode == -2147467259)
+                {
+                    Response.Redirect("~/Home/PageNotFound");
+                    return;
+                }
+            }
+            Response.Redirect("~/Home/Error");
+        }
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();

@@ -1,0 +1,9 @@
+﻿@{
+    ViewBag.Title = "PageNotFound";
+}
+
+@{
+    var image = new Random().Next(0, 2) == 0 ? "404.jpg" : "HidingCat.jpg";    
+}
+<img src="~/Images/large/@image" />
+
