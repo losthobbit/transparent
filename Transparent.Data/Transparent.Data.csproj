@@ -109,6 +109,7 @@
     <Compile Include="Extensions\TicketExtensions.cs" />
     <Compile Include="InitDatabase.cs" />
     <Compile Include="Interfaces\IConfiguration.cs" />
+    <Compile Include="Interfaces\IGeneral.cs" />
     <Compile Include="Interfaces\ITags.cs" />
     <Compile Include="Interfaces\ITickets.cs" />
     <Compile Include="Interfaces\IUser.cs" />
@@ -167,8 +168,10 @@
     <Compile Include="Models\Search.cs" />
     <Compile Include="Models\Stateful.cs" />
     <Compile Include="Models\Ticket.cs" />
+    <Compile Include="Queries\General.cs" />
     <Compile Include="Queries\User.cs" />
     <Compile Include="ViewModels\Interfaces\ICreateTicketViewModel.cs" />
+    <Compile Include="ViewModels\StatsViewModel.cs" />
     <Compile Include="ViewModels\TicketTagViewModel.cs" />
     <Compile Include="ViewModels\TicketDetailsViewModel.cs" />
     <Compile Include="Models\TicketRank.cs" />

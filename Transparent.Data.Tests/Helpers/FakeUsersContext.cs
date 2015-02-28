@@ -59,5 +59,9 @@ namespace Transparent.Data.Tests.Helpers
         {
             throw new NotImplementedException();
         }
+
+        public void Dispose()
+        {
+        }
     }
 }

@@ -9,6 +9,7 @@ using Transparent.Controllers;
 using Moq;
 using System.Web;
 using System.Web.Routing;
+using Transparent.Data.Interfaces;
 
 namespace Transparent.Tests.Controllers
 {
@@ -17,16 +18,18 @@ namespace Transparent.Tests.Controllers
     {
         private HomeController target;
         private Mock<HttpRequestBase> mockRequest;
+        private Mock<IGeneral> mockGeneral;
 
         [TestInitialize()]
         public void Initialize()
         {
             mockRequest = new Mock<HttpRequestBase>();
+            mockGeneral = new Mock<IGeneral>();
 
             var context = new Mock<HttpContextBase>();
             context.SetupGet(x => x.Request).Returns(mockRequest.Object);
 
-            target = new HomeController();
+            target = new HomeController(mockGeneral.Object);
             target.ControllerContext = new ControllerContext(context.Object, new RouteData(), target);
         }
 

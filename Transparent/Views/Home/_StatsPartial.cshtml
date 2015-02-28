@@ -1,0 +1,33 @@
+﻿@model Transparent.Data.ViewModels.StatsViewModel
+
+
+<div class="float-right">
+    <h3>Statistics</h3>
+    <table>
+        <tr>
+            <td>
+                 @Html.DisplayNameFor(model => model.RegisteredUsers)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.RegisteredUsers)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.SuggestionsCreated)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.SuggestionsCreated)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.SuggestionsImplemented)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.SuggestionsImplemented)
+            </td>
+        </tr>
+    </table>
+</div>
+

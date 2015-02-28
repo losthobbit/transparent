@@ -5,8 +5,11 @@
 @{
     var container = ((IContainerAccessor)Context.ApplicationInstance).Container;
     var configuration = container.Resolve<IConfiguration>();
+    var general = container.Resolve<IGeneral>();
     ViewBag.Title = "About";
 }
+
+@Html.Partial("_StatsPartial", general.GetStats())
 
 <hgroup class="title">
     <h1>@ViewBag.Title.</h1>

@@ -9,7 +9,7 @@ using Transparent.Data.Models;
 
 namespace Transparent.Data.Interfaces
 {
-    public interface IUsersContext
+    public interface IUsersContext: IDisposable
     {
         IDbSet<UserProfile> UserProfiles { get; }
         IDbSet<UserPoint> UserPoints { get; }

@@ -22,8 +22,12 @@ namespace Transparent.Data.Windsor
                 Component.For<ITags>().ImplementedBy<Tags>().LifeStyle.Singleton,
                 Component.For<IConfiguration>().ImplementedBy<Configuration>().LifeStyle.Singleton,
                 Component.For<ITickets>().ImplementedBy<Tickets>().LifeStyle.Transient,
-                Component.For<IUser>().ImplementedBy<User>().LifeStyle.Transient
+                Component.For<IUser>().ImplementedBy<User>().LifeStyle.Transient,
+                Component.For<IGeneral>().ImplementedBy<General>().LifeStyle.Singleton
             );
+
+            Func<IUsersContext> usersContextFactory = () => container.Resolve<IUsersContext>();
+            container.Register(Component.For<Func<IUsersContext>>().Instance(usersContextFactory));
         }
     }
 }

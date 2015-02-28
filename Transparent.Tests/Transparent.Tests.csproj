@@ -109,6 +109,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Transparent.Data\Transparent.Data.csproj">
+      <Project>{2d93c988-7c3e-46ed-a7b6-fb47ad7ebf4c}</Project>
+      <Name>Transparent.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Transparent\Transparent.csproj">
       <Project>{F96B683E-839C-43C1-80D2-00FB43CDCB4A}</Project>
       <Name>Transparent</Name>

@@ -3,11 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Transparent.Data.Interfaces;
+using Transparent.Data.ViewModels;
 
 namespace Transparent.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IGeneral general;
+
+        public HomeController(IGeneral general)
+        {
+            this.general = general;
+        }
+
         public ActionResult Index()
         {
             if (Request.IsAuthenticated)
@@ -27,6 +36,11 @@ namespace Transparent.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        public PartialViewResult _Stats()
+        {
+            return PartialView("_StatsPartial", general.GetStats());
         }
     }
 }
