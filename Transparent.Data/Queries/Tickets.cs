@@ -216,7 +216,7 @@ namespace Transparent.Data.Queries
                 var userTag = user.Tags.SingleOrDefault(tag => tag.FkTagId == test.TagId);
                 if(userTag.TotalPoints >= configuration.PointsRequiredBeforeDeductingPoints)
                 {
-                    userPoint.Quantity = -configuration.PointsToDeductWhenStartingTest;
+                    AddPoints(userPoint, userTag, -configuration.PointsToDeductWhenStartingTest);
                 }
                 db.UserPoints.Add(userPoint);
                 db.SaveChanges();
@@ -346,6 +346,18 @@ namespace Transparent.Data.Queries
         {
             var competentTags = GetCompetentTags(userId).ToList();
             return ticket.TicketTags.Select(ticketTag => GetTicketTagInfo(ticketTag, ticket.FkUserId, userId, competentTags)).ToList();
+        }
+
+        /// <summary>
+        /// Adds points to the UserPoint and UserTag.
+        /// </summary>
+        /// <remarks>
+        /// Does not call DbContext.SaveChanges.
+        /// </remarks>
+        private void AddPoints(UserPoint userPoint, UserTag userTag, int points)
+        {
+            userPoint.Quantity += points;
+            userTag.TotalPoints += points;
         }
 
         /// <exception cref="NotSupportedException">User may not verify tag.</exception>

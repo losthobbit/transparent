@@ -13,6 +13,8 @@ namespace Transparent.Data.Tests.Helpers
 {
     public class FakeUsersContext : IUsersContext
     {
+        public event Action<FakeUsersContext> SavedChanges;
+
         public FakeUsersContext()
         {
             UserProfiles = new FakeDbSet<UserProfile>();
@@ -52,6 +54,8 @@ namespace Transparent.Data.Tests.Helpers
 
         public int SaveChanges()
         {
+            if (SavedChanges != null)
+                SavedChanges(this);
             return 0;
         }
 

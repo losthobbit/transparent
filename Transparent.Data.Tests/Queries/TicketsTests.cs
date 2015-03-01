@@ -21,7 +21,7 @@ namespace Transparent.Data.Tests.Queries
 
         private TestData testData;
         private IConfiguration testConfiguration;
-        private IUsersContext usersContext;
+        private FakeUsersContext usersContext;
 
         [SetUp()]
         public void SetUp()
@@ -562,21 +562,46 @@ namespace Transparent.Data.Tests.Queries
         {
             //Arrange
             testData.StephensCriticalThinkingTag.TotalPoints = testConfiguration.PointsRequiredBeforeDeductingPoints + pointsAboveRequired;
+            int? actual = null;
+            usersContext.SavedChanges += context =>
+            {
+                var newPoint = context.UserPoints.Single(point =>
+                    point.FkTagId == testData.CriticalThinkingTag.Id &&
+                    point.FkTestId == testData.CriticalThinkingTestThatJoeTook.Id &&
+                    point.User == testData.Stephen);
+                actual = newPoint.Quantity;
+            };
 
             //Act
             target.StartTest(testData.CriticalThinkingTestThatJoeTook, testData.Stephen.UserId);
 
             //Assert
-            var newPoint = testData.UsersContext.UserPoints.Single(point =>
-                point.FkTagId == testData.CriticalThinkingTag.Id &&
-                point.FkTestId == testData.CriticalThinkingTestThatJoeTook.Id &&
-                point.User == testData.Stephen);
-            Assert.AreEqual(-testConfiguration.PointsToDeductWhenStartingTest, newPoint.Quantity);
+            Assert.AreEqual(-testConfiguration.PointsToDeductWhenStartingTest, actual.Value);
+        }
+
+        [TestCase(1)]
+        [TestCase(0)]
+        public void StartTest_with_points_higher_than_or_equal_to_required_points_deducts_points_from_user_tag_total(int pointsAboveRequired)
+        {
+            //Arrange
+            testData.StephensCriticalThinkingTag.TotalPoints = testConfiguration.PointsRequiredBeforeDeductingPoints + pointsAboveRequired;
+            var prevPoints = testData.StephensCriticalThinkingTag.TotalPoints;
+            var actualTotalPoints = prevPoints;
+            usersContext.SavedChanges += context =>
+            {
+                actualTotalPoints = testData.StephensCriticalThinkingTag.TotalPoints;
+            };
+
+            //Act
+            target.StartTest(testData.CriticalThinkingTestThatJoeTook, testData.Stephen.UserId);
+
+            //Assert
+            Assert.AreEqual(prevPoints - testConfiguration.PointsToDeductWhenStartingTest, actualTotalPoints);
         }
 
         [TestCase(1)]
         [TestCase(2)]
-        public void StartTest_with_points_less_than_or_equal_to_required_points_deducts_points(int pointsBelowRequired)
+        public void StartTest_with_points_less_than_or_equal_to_required_points_does_not_deduct_points(int pointsBelowRequired)
         {
             //Arrange
             testData.StephensCriticalThinkingTag.TotalPoints = testConfiguration.PointsRequiredBeforeDeductingPoints - pointsBelowRequired;

@@ -31,6 +31,12 @@ namespace Transparent.Data.Models
         public int FkTagId { get; set; }
         public Tag Tag { get; set; }
 
+        /// <summary>
+        /// Points for the specific event.
+        /// </summary>
+        /// <remarks>
+        /// These should not be set without also modifying the total points for the user tag.
+        /// </remarks>
         [Display(Name = "Points")]
         public int Quantity { get; set; }
 
