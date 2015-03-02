@@ -320,9 +320,8 @@ namespace Transparent.Data.Queries
             if (userPoint.TestMarkings.Count() >= configuration.MarkersRequiredPerTest)
             {
                 userPoint.MarkingComplete = true;
-                // Deduct points from markers
-                AddPoints(userPoint.TestMarkings.Select(marking => marking.FkUserId), userPoint.FkTagId, -configuration.PointsMarkersLoseForDisagreeingATestResult,
-                    PointReason.MarkedTest);
+
+                AdjustTestMarkersPoints(userPoint);
             }
             db.SaveChanges();
         }
@@ -357,6 +356,28 @@ namespace Transparent.Data.Queries
         {
             var competentTags = GetCompetentTags(userId).ToList();
             return ticket.TicketTags.Select(ticketTag => GetTicketTagInfo(ticketTag, ticket.FkUserId, userId, competentTags)).ToList();
+        }
+
+        /// <summary>
+        /// Adjust the points of a test marker, based on whether they agreed with the minority or majority.
+        /// </summary>
+        /// <param name="userPoint">The answered test.</param>
+        private void AdjustTestMarkersPoints(UserPoint userPoint)
+        {
+            var numberOfPasses = userPoint.TestMarkings.Count(marking => marking.Passed);
+            bool? testPassed = numberOfPasses * 2 == configuration.MarkersRequiredPerTest
+                ? (bool?)null
+                : numberOfPasses * 2 > configuration.MarkersRequiredPerTest;
+
+            // Deduct markers' points in the case of a tie, or minority
+            AddPoints(userPoint.TestMarkings
+                .Where(testMarking => testPassed == null || testMarking.Passed != testPassed.Value)
+                .Select(marking => marking.FkUserId), userPoint.FkTagId, -configuration.PointsMarkersLoseForDisagreeingATestResult, PointReason.MarkedTest);
+
+            // Increase markers' points in the case of a majority
+            AddPoints(userPoint.TestMarkings
+                .Where(testMarking => testPassed.HasValue && testMarking.Passed == testPassed.Value)
+                .Select(marking => marking.FkUserId), userPoint.FkTagId, configuration.PointsMarkersGainForAgreeingATestResult, PointReason.MarkedTest);
         }
 
         /// <summary>
