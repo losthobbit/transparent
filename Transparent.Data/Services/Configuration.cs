@@ -21,6 +21,10 @@ namespace Transparent.Data.Services
 
         public int PointsRequiredBeforeDeductingPoints { get; set; }
         public int PointsToDeductWhenStartingTest { get; set; }
+        public int PointsForPassingATest { get; set; }
+        public int MarkersRequiredPerTest { get; set; }
+        public int PointsMarkersGainForAgreeingATestResult { get; set; }
+        public int PointsMarkersLoseForDisagreeingATestResult { get; set; }
 
         #endregion Tests
 
@@ -30,10 +34,16 @@ namespace Transparent.Data.Services
 
         public Configuration(Common.Interfaces.IConfiguration configuration)
         {
+            CurrentSubGoal = configuration.GetValue("CurrentSubGoal");
+
             PointsRequiredBeforeDeductingPoints = int.Parse(configuration.GetValue("PointsRequiredBeforeDeductingPoints"));
             PointsToDeductWhenStartingTest = int.Parse(configuration.GetValue("PointsToDeductWhenStartingTest"));
+            PointsForPassingATest = int.Parse(configuration.GetValue("PointsForPassingATest"));
+            MarkersRequiredPerTest = int.Parse(configuration.GetValue("MarkersRequiredPerTest"));
+            PointsMarkersGainForAgreeingATestResult = int.Parse(configuration.GetValue("PointsMarkersGainForAgreeingATestResult"));
+            PointsMarkersLoseForDisagreeingATestResult = int.Parse(configuration.GetValue("PointsMarkersLoseForDisagreeingATestResult"));
+
             PointsRequiredToBeCompetent = int.Parse(configuration.GetValue("PointsRequiredToBeCompetent"));
-            CurrentSubGoal = configuration.GetValue("CurrentSubGoal");
         }
     }
 }

@@ -40,6 +40,8 @@ namespace Transparent.Data.Models
         [Display(Name = "Points")]
         public int Quantity { get; set; }
 
+        public PointReason Reason { get; set; }
+
         // This section only applies to points that are gained or lost through taking a test
         // I suppose it would have made more sense to have a class that inherited from UserPoint
         // but I couldn't be bothered.  Feel free to refactor this.

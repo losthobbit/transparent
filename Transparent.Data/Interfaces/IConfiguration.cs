@@ -12,6 +12,10 @@ namespace Transparent.Data.Interfaces
 
         int PointsRequiredBeforeDeductingPoints { get; set; }
         int PointsToDeductWhenStartingTest { get; set; }
+        int PointsForPassingATest { get; set; }
+        int MarkersRequiredPerTest { get; set; }
+        int PointsMarkersGainForAgreeingATestResult { get; set; }
+        int PointsMarkersLoseForDisagreeingATestResult { get; set; }
 
         int PointsRequiredToBeCompetent { get; set; }
     }

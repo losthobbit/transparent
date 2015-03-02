@@ -11,12 +11,15 @@ using Common;
 using NUnit.Framework;
 using System.Security;
 using Tests.Common;
+using Ploeh.AutoFixture;
 
 namespace Transparent.Data.Tests.Queries
 {
     [TestFixture]
     public class TicketsTests
     {
+        private Fixture fixture;
+
         private Tickets target;
 
         private TestData testData;
@@ -26,6 +29,8 @@ namespace Transparent.Data.Tests.Queries
         [SetUp()]
         public void SetUp()
         {
+            fixture = new Fixture();
+
             testData = TestData.Create();
             usersContext = testData.UsersContext;
             testConfiguration = new TestConfig();
@@ -436,6 +441,106 @@ namespace Transparent.Data.Tests.Queries
         }
 
         #endregion TestToBeMarked
+
+        #region MarkTest
+
+        UserPoint markTest_UserPoint;
+        List<UserProfile> markTest_Markers;
+        List<UserTag> markTest_Markers_UserTags;
+
+        private void ArrangeMarkTest(int markersRequiredPerTest = 2, int timesTestMarked = 1, int? fails = null)
+        {
+            markTest_Markers = new List<UserProfile>();
+            markTest_Markers_UserTags = new List<UserTag>();
+
+            testConfiguration.MarkersRequiredPerTest = markersRequiredPerTest;
+
+            markTest_UserPoint = testData.PointForCriticalThinkingTestThatJoeTookThatStephenMarked;
+            markTest_Markers_UserTags.Add(testData.AddUserTag(testData.Admin, testData.CriticalThinkingTag, testConfiguration.PointsRequiredToBeCompetent));
+            var testsMarked = 0;
+            while (markTest_UserPoint.TestMarkings.Count() < timesTestMarked)
+            {
+                var user = testData.CreateUser();
+                markTest_Markers_UserTags.Add(testData.AddUserTag(user, testData.CriticalThinkingTag, testConfiguration.PointsRequiredToBeCompetent));
+                target.MarkTest(markTest_UserPoint.Id, fails == null ? fixture.Create<bool>() : testsMarked >= fails.Value, user.UserId);
+                markTest_Markers.Add(user);
+                testsMarked++;
+            }
+        }
+
+        [TestCase(3)]
+        [TestCase(4)]
+        public void MarkTest_with_less_than_all_markers_leaves_MarkingComplete_as_false(int markersRequiredPerTest)
+        {
+            //Arrange
+            ArrangeMarkTest(markersRequiredPerTest, markersRequiredPerTest - 2);
+
+            //Act
+            target.MarkTest(markTest_UserPoint.Id, fixture.Create<bool>(), testData.Admin.UserId);
+
+            //Assert
+            Assert.IsFalse(markTest_UserPoint.MarkingComplete);
+        }
+
+        [TestCase(3)]
+        [TestCase(4)]
+        public void MarkTest_with_all_markers_sets_MarkingComplete_to_true(int markersRequiredPerTest)
+        {
+            //Arrange
+            ArrangeMarkTest(markersRequiredPerTest, markersRequiredPerTest - 1);
+            var actualMarkingComplete = markTest_UserPoint.MarkingComplete;
+            usersContext.SavedChanges += context =>
+            {
+                actualMarkingComplete = markTest_UserPoint.MarkingComplete;
+            };
+
+            //Act
+            target.MarkTest(markTest_UserPoint.Id, fixture.Create<bool>(), testData.Admin.UserId);
+
+            //Assert
+            Assert.IsTrue(actualMarkingComplete);
+        }
+
+        [TestCase(4)]
+        public void MarkTest_with_less_than_all_markers_leaves_markers_points_unchanged(int markersRequiredPerTest)
+        {
+            //Arrange
+            ArrangeMarkTest(markersRequiredPerTest, markersRequiredPerTest - 2, markersRequiredPerTest / 2);
+            var markersTagExpectedPoints = markTest_Markers_UserTags.Select(tag => tag.TotalPoints).ToList();
+            List<int> actualPoints = null;
+            usersContext.SavedChanges += context =>
+            {
+                actualPoints = markTest_Markers_UserTags.Select(tag => tag.TotalPoints).ToList();
+            };
+
+            //Act
+            target.MarkTest(markTest_UserPoint.Id, true, testData.Admin.UserId);
+
+            //Assert
+            CollectionAssert.AreEqual(markersTagExpectedPoints, actualPoints);
+        }
+
+        [TestCase(4, 5)]
+        public void MarkTest_with_all_markers_and_50_50_split_reduces_all_markers_points(int markersRequiredPerTest, int pointsToLose)
+        {
+            //Arrange
+            testConfiguration.PointsMarkersLoseForDisagreeingATestResult = pointsToLose;
+            ArrangeMarkTest(markersRequiredPerTest, markersRequiredPerTest - 1, markersRequiredPerTest / 2);
+            var markersTagExpectedPoints = markTest_Markers_UserTags.Select(tag => tag.TotalPoints - pointsToLose).ToList();
+            List<int> actualPoints = null;
+            usersContext.SavedChanges += context =>
+            {
+                actualPoints = markTest_Markers_UserTags.Select(tag => tag.TotalPoints).ToList();
+            };
+
+            //Act
+            target.MarkTest(markTest_UserPoint.Id, true, testData.Admin.UserId);
+
+            //Assert
+            CollectionAssert.AreEqual(markersTagExpectedPoints, actualPoints);
+        }
+
+        #endregion MarkTest
 
         #region GetTicketTagInfoList
 

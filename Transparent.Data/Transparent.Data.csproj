@@ -155,6 +155,7 @@
     <Compile Include="Models\Interfaces\IUserProfile.cs" />
     <Compile Include="Models\Interfaces\IVolunteer.cs" />
     <Compile Include="Models\PagedList.cs" />
+    <Compile Include="Models\PointReason.cs" />
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\StatefulPagedList.cs" />
     <Compile Include="Models\Subscription.cs" />

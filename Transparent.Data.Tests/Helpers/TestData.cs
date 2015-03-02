@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ploeh.AutoFixture;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,8 @@ namespace Transparent.Data.Tests.Helpers
 {
     public class TestData
     {
+        private Fixture fixture;
+
         public FakeUsersContext UsersContext { get; private set; }
 
         #region User Profiles
@@ -74,6 +77,8 @@ namespace Transparent.Data.Tests.Helpers
 
         public TestData ()
 	    {
+            fixture = new Fixture();
+
             JoesCriticalThinkingSuggestion = new Suggestion { Id = 1, FkUserId = Joe.UserId, User = Joe, Heading = "Hello", Body = "My name is Joe" };
             JoesScubaDivingSuggestion = new Suggestion { Id = 2, FkUserId = Joe.UserId, User = Joe, Heading = "Scuba", Body = "I like to dive" };
 
@@ -143,8 +148,8 @@ namespace Transparent.Data.Tests.Helpers
         public static TestData Create()
         {
             var testData = new TestData();
-            testData.UsersContext = new FakeUsersContext
-            {
+            var fakeContext = new FakeUsersContext
+            {               
                 Tags =
                 {
                     testData.CriticalThinkingTag,
@@ -292,30 +297,81 @@ namespace Transparent.Data.Tests.Helpers
                     }
                 }
             };
+            fakeContext.SavedChanges += obj => testData.ResolveRelationships();
+            testData.UsersContext = fakeContext;
 
-            testData.UsersContext.Suggestions = new FakeDbSet<Suggestion>(testData.UsersContext.Tickets.OfType<Suggestion>());
-            testData.UsersContext.Questions = new FakeDbSet<Question>(testData.UsersContext.Tickets.OfType<Question>());
-            testData.UsersContext.Tests = new FakeDbSet<Test>(testData.UsersContext.Tickets.OfType<Test>());
+            fakeContext.Suggestions = new FakeDbSet<Suggestion>(testData.UsersContext.Tickets.OfType<Suggestion>());
+            fakeContext.Questions = new FakeDbSet<Question>(testData.UsersContext.Tickets.OfType<Question>());
+            fakeContext.Tests = new FakeDbSet<Test>(testData.UsersContext.Tickets.OfType<Test>());
 
-            foreach (var ticket in testData.UsersContext.Tickets)
-            {
-                ticket.TicketTags = testData.UsersContext.TicketTags.Where(ticketTag => ticketTag.Ticket == ticket).ToList();
-            }
-
-            foreach (var userPoint in testData.UsersContext.UserPoints)
-            {
-                userPoint.TestMarkings = testData.UsersContext.TestMarkings.Where(testMarking => testMarking.TestPoint == userPoint).ToList();
-            }
-
-            foreach (var userTag in testData.UsersContext.UserTags)
-            {
-                var user = testData.UsersContext.UserProfiles.Single(u => u.UserId == userTag.FkUserId);
-                if (user.Tags == null)
-                    user.Tags = new List<UserTag>();
-                user.Tags.Add(userTag);
-            }
+            testData.ResolveRelationships();
 
             return testData;
+        }
+
+        public UserTag AddUserTag(UserProfile user, Tag tag, int points)
+        {
+            var userTag = new UserTag
+            {
+                FkTagId = tag.Id,
+                Tag = tag,
+                TotalPoints = points,
+                FkUserId = user.UserId,
+                User = user
+            };
+            if (user.Tags == null)
+                user.Tags = new List<UserTag>();
+            user.Tags.Add(userTag);
+            UsersContext.UserTags.Add(userTag);
+            return userTag;
+        }
+
+        public UserProfile CreateUser()
+        {
+            var user = new UserProfile
+            {
+                Email = fixture.Create<string>(),
+                Tags = new List<UserTag>(),
+                UserId = UsersContext.UserProfiles.Count() + 1,
+                Services = fixture.Create<string>(),
+                UserName = fixture.Create<string>()
+            };
+
+            UsersContext.UserProfiles.Add(user);
+            return user;
+        }
+
+        /// <summary>
+        /// Converts foreign key relationships into object relationships.
+        /// </summary>
+        /// <remarks>
+        /// Unfortunately this won't work if something's been deleted, 'cause this could just re-add it.
+        /// Also, if a foreign key relationship changes, this could also be undone.
+        /// </remarks>
+        public void ResolveRelationships()
+        {
+            foreach (var ticket in UsersContext.Tickets)
+            {
+                ticket.TicketTags = UsersContext.TicketTags.Where(ticketTag => ticketTag.Ticket == ticket).ToList();
+            }
+
+            foreach (var userPoint in UsersContext.UserPoints)
+            {
+                if(userPoint.TestMarkings != null)
+                    foreach (var testMarking in userPoint.TestMarkings)
+                    {
+                        testMarking.TestPoint = userPoint;
+                        testMarking.FkUserPointId = userPoint.Id;
+                        if (!UsersContext.TestMarkings.Contains(testMarking))
+                            UsersContext.TestMarkings.Add(testMarking);
+                    }
+                userPoint.TestMarkings = UsersContext.TestMarkings.Where(testMarking => testMarking.TestPoint == userPoint).ToList();
+            }
+
+            foreach (var user in UsersContext.UserProfiles)
+            {
+                user.Tags = UsersContext.UserTags.Where(userTag => userTag.FkUserId == user.UserId).ToList();
+            }
         }
     }
 }

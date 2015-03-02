@@ -212,6 +212,7 @@ namespace Transparent.Data.Queries
                     FkTestId = test.Id, 
                     FkTagId = test.TagId, 
                     User = user, 
+                    Reason = PointReason.TookTest
                 };
                 var userTag = user.Tags.SingleOrDefault(tag => tag.FkTagId == test.TagId);
                 if(userTag.TotalPoints >= configuration.PointsRequiredBeforeDeductingPoints)
@@ -304,15 +305,25 @@ namespace Transparent.Data.Queries
         public void MarkTest(int userPointId, bool passed, int markersUserId)
         {
             // Validate that the user may mark the test
+            IQueryable<UserPoint> answeredTestQuery;
             try
             {
-                GetTestsToBeMarked(markersUserId, db.UserPoints.Where(point => point.Id == userPointId)).Single();
+                answeredTestQuery = db.UserPoints.Where(point => point.Id == userPointId);
+                GetTestsToBeMarked(markersUserId, answeredTestQuery).Single();
             }
             catch (InvalidOperationException e)
             {
                 throw new SecurityException("The user may not mark the test.", e);
             }
-            db.TestMarkings.Add(new TestMarking { FkUserPointId = userPointId, FkUserId = markersUserId, Passed = passed });
+            var userPoint = answeredTestQuery.Single();
+            userPoint.TestMarkings.Add(new TestMarking { FkUserPointId = userPointId, FkUserId = markersUserId, Passed = passed });
+            if (userPoint.TestMarkings.Count() >= configuration.MarkersRequiredPerTest)
+            {
+                userPoint.MarkingComplete = true;
+                // Deduct points from markers
+                AddPoints(userPoint.TestMarkings.Select(marking => marking.FkUserId), userPoint.FkTagId, -configuration.PointsMarkersLoseForDisagreeingATestResult,
+                    PointReason.MarkedTest);
+            }
             db.SaveChanges();
         }
 
@@ -358,6 +369,44 @@ namespace Transparent.Data.Queries
         {
             userPoint.Quantity += points;
             userTag.TotalPoints += points;
+        }
+
+        /// <summary>
+        /// Adds points to the UserPoint and UserTag.
+        /// </summary>
+        /// <remarks>
+        /// Does not call DbContext.SaveChanges.
+        /// </remarks>
+        private void AddPoints(int userId, int tagId, int points, PointReason reason)
+        {
+            var userPoint = db.UserPoints.SingleOrDefault(point => point.FkUserId == userId && point.FkTagId == tagId);
+            if (userPoint == null)
+            {
+                userPoint = new UserPoint { FkUserId = userId, FkTagId = tagId, Reason = reason };
+                db.UserPoints.Add(userPoint);
+            }
+
+            var userTag = db.UserTags.SingleOrDefault(tag => tag.FkUserId == userId && tag.FkTagId == tagId);
+            if (userTag == null)
+            {
+                userTag = new UserTag { FkTagId = tagId, FkUserId = userId };
+                db.UserTags.Add(userTag);
+            }
+            AddPoints(userPoint, userTag, points);
+        }
+
+        /// <summary>
+        /// Adds points to the UserPoints and UserTags.
+        /// </summary>
+        /// <remarks>
+        /// Does not call DbContext.SaveChanges.
+        /// </remarks>
+        private void AddPoints(IEnumerable<int> userId, int tagId, int points, PointReason reason)
+        {
+            foreach (var user in userId)
+            {
+                AddPoints(user, tagId, points, reason);
+            }
         }
 
         /// <exception cref="NotSupportedException">User may not verify tag.</exception>
