@@ -319,9 +319,7 @@ namespace Transparent.Data.Queries
             userPoint.TestMarkings.Add(new TestMarking { FkUserPointId = userPointId, FkUserId = markersUserId, Passed = passed });
             if (userPoint.TestMarkings.Count() >= configuration.MarkersRequiredPerTest)
             {
-                userPoint.MarkingComplete = true;
-
-                AdjustTestMarkersPoints(userPoint);
+                TestMarkingCompleted(userPoint);
             }
             db.SaveChanges();
         }
@@ -359,25 +357,69 @@ namespace Transparent.Data.Queries
         }
 
         /// <summary>
-        /// Adjust the points of a test marker, based on whether they agreed with the minority or majority.
+        /// A test has been marked by the required number of markers.  Set the points.
         /// </summary>
-        /// <param name="userPoint">The answered test.</param>
-        private void AdjustTestMarkersPoints(UserPoint userPoint)
+        /// <param name="testAnswer">The answered test.</param>
+        private void TestMarkingCompleted(UserPoint testAnswer)
         {
-            var numberOfPasses = userPoint.TestMarkings.Count(marking => marking.Passed);
+            testAnswer.MarkingComplete = true;
+
+            var numberOfPasses = testAnswer.TestMarkings.Count(marking => marking.Passed);
             bool? testPassed = numberOfPasses * 2 == configuration.MarkersRequiredPerTest
                 ? (bool?)null
                 : numberOfPasses * 2 > configuration.MarkersRequiredPerTest;
 
+            AdjustTestTakersPoints(testAnswer, testPassed);
+
+            AdjustTestMarkersPoints(testAnswer, testPassed);
+        }
+
+        /// <summary>
+        /// Adjust the points of a user who took a test, based on whether or not they passed.
+        /// </summary>
+        private void AdjustTestTakersPoints(UserPoint testAnswer, bool? testPassed)
+        {
+            int pointsToAdd;
+            if (testPassed.HasValue)
+            {
+                if (testPassed.Value)
+                {
+                    pointsToAdd = configuration.PointsForPassingATest - testAnswer.Quantity;
+                }
+                else
+                {
+                    pointsToAdd = 0;
+                }
+            }
+            else
+            {
+                // 50 / 50 split - reset points
+                pointsToAdd = - testAnswer.Quantity;
+            }
+            if(pointsToAdd != 0)
+                AddPoints
+                (
+                    testAnswer,
+                    testAnswer.User.Tags.Single(userTag => userTag.FkTagId == testAnswer.FkTagId),
+                    pointsToAdd
+                );
+        }
+
+        /// <summary>
+        /// Adjust the points of a test marker, based on whether they agreed with the minority or majority.
+        /// </summary>
+        /// <param name="testAnswer">The answered test.</param>
+        private void AdjustTestMarkersPoints(UserPoint testAnswer, bool? testPassed)
+        {
             // Deduct markers' points in the case of a tie, or minority
-            AddPoints(userPoint.TestMarkings
+            AddPoints(testAnswer.TestMarkings
                 .Where(testMarking => testPassed == null || testMarking.Passed != testPassed.Value)
-                .Select(marking => marking.FkUserId), userPoint.FkTagId, -configuration.PointsMarkersLoseForDisagreeingATestResult, PointReason.MarkedTest);
+                .Select(marking => marking.FkUserId), testAnswer.FkTagId, -configuration.PointsMarkersLoseForDisagreeingATestResult, PointReason.MarkedTest);
 
             // Increase markers' points in the case of a majority
-            AddPoints(userPoint.TestMarkings
+            AddPoints(testAnswer.TestMarkings
                 .Where(testMarking => testPassed.HasValue && testMarking.Passed == testPassed.Value)
-                .Select(marking => marking.FkUserId), userPoint.FkTagId, configuration.PointsMarkersGainForAgreeingATestResult, PointReason.MarkedTest);
+                .Select(marking => marking.FkUserId), testAnswer.FkTagId, configuration.PointsMarkersGainForAgreeingATestResult, PointReason.MarkedTest);
         }
 
         /// <summary>

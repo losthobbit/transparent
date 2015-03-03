@@ -62,6 +62,7 @@ namespace Transparent.Data.Tests.Helpers
         #region UserTags
 
         public UserTag StephensCriticalThinkingTag;
+        public UserTag JoesCriticalThinkingTag;
 
         #endregion UserTags
 
@@ -134,6 +135,15 @@ namespace Transparent.Data.Tests.Helpers
                 Tag = CriticalThinkingTag,
                 FkTagId = CriticalThinkingTag.Id,
                 TotalPoints = 5
+            };
+
+            JoesCriticalThinkingTag = new UserTag
+            {
+                User = Joe,
+                FkUserId = Joe.UserId,
+                Tag = CriticalThinkingTag,
+                FkTagId = CriticalThinkingTag.Id,
+                TotalPoints = 3
             };
 
             PointForCriticalThinkingTestThatJoeTookThatStephenMarked = new UserPoint
@@ -226,6 +236,7 @@ namespace Transparent.Data.Tests.Helpers
                 UserTags =
                 {
                     testData.StephensCriticalThinkingTag,
+                    testData.JoesCriticalThinkingTag,
                     new UserTag 
                     {
                         User = testData.Stephen, FkUserId = testData.Stephen.UserId,
@@ -347,6 +358,7 @@ namespace Transparent.Data.Tests.Helpers
         /// <remarks>
         /// Unfortunately this won't work if something's been deleted, 'cause this could just re-add it.
         /// Also, if a foreign key relationship changes, this could also be undone.
+        /// Instead of this, perhaps I should handle events, like adding to a list.
         /// </remarks>
         public void ResolveRelationships()
         {

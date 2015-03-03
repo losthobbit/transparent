@@ -596,6 +596,74 @@ namespace Transparent.Data.Tests.Queries
             CollectionAssert.AreEqual(majorityExpectedPoints, actualPoints);
         }
 
+        [TestCase(5, 7, 2)]
+        public void MarkTest_with_all_markers_and_majority_of_markers_passed_increases_markers_points(int markersRequiredPerTest, int pointsToGain, int numberOfFails)
+        {
+            //Arrange
+            testConfiguration.PointsForPassingATest = pointsToGain;
+            ArrangeMarkTest(markersRequiredPerTest, markersRequiredPerTest - 1, numberOfFails);
+
+            var actualPoints = markTest_UserPoint.Quantity;
+            var totalPoints = testData.JoesCriticalThinkingTag.TotalPoints;
+            usersContext.SavedChanges += context =>
+            {
+                actualPoints = markTest_UserPoint.Quantity;
+                totalPoints = testData.JoesCriticalThinkingTag.TotalPoints;
+            };
+            var expectedPoints = pointsToGain;
+            // e.g. if total = 10, actualPoints = -2, and pointsToGain = 7, then expected total = 19
+            var expectedTotalPoints = totalPoints + pointsToGain - actualPoints;
+
+            //Act
+            target.MarkTest(markTest_UserPoint.Id, true, testData.Admin.UserId);
+
+            //Assert
+            Assert.AreEqual(expectedPoints, actualPoints);
+            Assert.AreEqual(expectedTotalPoints, totalPoints);
+        }
+
+        [TestCase(5, 3)]
+        public void MarkTest_with_all_markers_and_majority_of_markers_failed_doesnt_change_markers_points(int markersRequiredPerTest, int numberOfFails)
+        {
+            //Arrange
+            ArrangeMarkTest(markersRequiredPerTest, markersRequiredPerTest - 1, numberOfFails);
+
+            var expectedPoints = markTest_UserPoint.Quantity;
+            var expectedTotalPoints = testData.JoesCriticalThinkingTag.TotalPoints;
+
+            //Act
+            target.MarkTest(markTest_UserPoint.Id, true, testData.Admin.UserId);
+
+            //Assert
+            Assert.AreEqual(expectedPoints, markTest_UserPoint.Quantity);
+            Assert.AreEqual(expectedTotalPoints, testData.JoesCriticalThinkingTag.TotalPoints);
+        }
+
+        [TestCase(6, 3)]
+        public void MarkTest_with_all_markers_and_50_50_split_resets_markers_points(int markersRequiredPerTest, int numberOfFails)
+        {
+            //Arrange
+            ArrangeMarkTest(markersRequiredPerTest, markersRequiredPerTest - 1, numberOfFails);
+
+            var actualPoints = markTest_UserPoint.Quantity;
+            var totalPoints = testData.JoesCriticalThinkingTag.TotalPoints;
+            usersContext.SavedChanges += context =>
+            {
+                actualPoints = markTest_UserPoint.Quantity;
+                totalPoints = testData.JoesCriticalThinkingTag.TotalPoints;
+            };
+            var expectedPoints = 0;
+            // e.g. if total = 10, and actualPoints = -2, then expected total = 12
+            var expectedTotalPoints = totalPoints - actualPoints;
+
+            //Act
+            target.MarkTest(markTest_UserPoint.Id, true, testData.Admin.UserId);
+
+            //Assert
+            Assert.AreEqual(expectedPoints, actualPoints);
+            Assert.AreEqual(expectedTotalPoints, totalPoints);
+        }
+
         #endregion MarkTest
 
         #region GetTicketTagInfoList
