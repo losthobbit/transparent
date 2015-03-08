@@ -1,4 +1,8 @@
 ﻿/* Custom */
+td {
+    vertical-align:top
+}
+
 .gap-above {
     margin-top: 15px;
 }
