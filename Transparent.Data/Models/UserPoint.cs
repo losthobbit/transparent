@@ -25,11 +25,11 @@ namespace Transparent.Data.Models
 
         [ForeignKey("User")]
         public int FkUserId { get; set; }
-        public UserProfile User { get; set; }
+        public virtual UserProfile User { get; set; }
 
         [ForeignKey("Tag")]
         public int FkTagId { get; set; }
-        public Tag Tag { get; set; }
+        public virtual Tag Tag { get; set; }
 
         /// <summary>
         /// Points for the specific event.

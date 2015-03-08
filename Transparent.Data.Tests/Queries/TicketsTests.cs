@@ -785,6 +785,25 @@ namespace Transparent.Data.Tests.Queries
 
         #region StartTest
         
+        [Test]
+        public void StartTest_with_user_without_associated_tag_adds_tag_to_user()
+        {
+            //Arrange
+            UserTag stephensScubaDivingTag = null;
+            usersContext.SavedChanges += context =>
+            {
+                stephensScubaDivingTag = context.UserTags.SingleOrDefault(tag => 
+                    tag.FkTagId == testData.ScubaDivingTag.Id &&
+                    tag.FkUserId == testData.Stephen.UserId);
+            };
+
+            //Act
+            target.StartTest(testData.ScubaDivingTestThatJoeTook, testData.Stephen.UserId);
+
+            //Assert
+            Assert.IsNotNull(stephensScubaDivingTag);
+        }
+
         [TestCase(1)]
         [TestCase(0)]
         public void StartTest_with_points_higher_than_or_equal_to_required_points_deducts_points(int pointsAboveRequired)

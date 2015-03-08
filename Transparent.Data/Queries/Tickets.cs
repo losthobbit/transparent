@@ -215,6 +215,11 @@ namespace Transparent.Data.Queries
                     Reason = PointReason.TookTest
                 };
                 var userTag = user.Tags.SingleOrDefault(tag => tag.FkTagId == test.TagId);
+                if (userTag == null)
+                {
+                    userTag = new UserTag { FkTagId = test.TagId, FkUserId = user.UserId };
+                    db.UserTags.Add(userTag);
+                }
                 if(userTag.TotalPoints >= configuration.PointsRequiredBeforeDeductingPoints)
                 {
                     AddPoints(userPoint, userTag, -configuration.PointsToDeductWhenStartingTest);
@@ -414,12 +419,12 @@ namespace Transparent.Data.Queries
             // Deduct markers' points in the case of a tie, or minority
             AddPoints(testAnswer.TestMarkings
                 .Where(testMarking => testPassed == null || testMarking.Passed != testPassed.Value)
-                .Select(marking => marking.FkUserId), testAnswer.FkTagId, -configuration.PointsMarkersLoseForDisagreeingATestResult, PointReason.MarkedTest);
+                .Select(marking => marking.FkUserId), testAnswer.FkTagId, testAnswer.FkTestId, -configuration.PointsMarkersLoseForDisagreeingATestResult, PointReason.MarkedTest);
 
             // Increase markers' points in the case of a majority
             AddPoints(testAnswer.TestMarkings
                 .Where(testMarking => testPassed.HasValue && testMarking.Passed == testPassed.Value)
-                .Select(marking => marking.FkUserId), testAnswer.FkTagId, configuration.PointsMarkersGainForAgreeingATestResult, PointReason.MarkedTest);
+                .Select(marking => marking.FkUserId), testAnswer.FkTagId, testAnswer.FkTestId, configuration.PointsMarkersGainForAgreeingATestResult, PointReason.MarkedTest);
         }
 
         /// <summary>
@@ -440,12 +445,12 @@ namespace Transparent.Data.Queries
         /// <remarks>
         /// Does not call DbContext.SaveChanges.
         /// </remarks>
-        private void AddPoints(int userId, int tagId, int points, PointReason reason)
+        private void AddPoints(int userId, int tagId, int testId, int points, PointReason reason)
         {
-            var userPoint = db.UserPoints.SingleOrDefault(point => point.FkUserId == userId && point.FkTagId == tagId);
+            var userPoint = db.UserPoints.SingleOrDefault(point => point.FkUserId == userId && point.FkTagId == tagId && point.FkTestId == testId);
             if (userPoint == null)
             {
-                userPoint = new UserPoint { FkUserId = userId, FkTagId = tagId, Reason = reason };
+                userPoint = new UserPoint { FkUserId = userId, FkTagId = tagId, FkTestId = testId, Reason = reason };
                 db.UserPoints.Add(userPoint);
             }
 
@@ -464,11 +469,11 @@ namespace Transparent.Data.Queries
         /// <remarks>
         /// Does not call DbContext.SaveChanges.
         /// </remarks>
-        private void AddPoints(IEnumerable<int> userId, int tagId, int points, PointReason reason)
+        private void AddPoints(IEnumerable<int> userId, int tagId, int testId, int points, PointReason reason)
         {
             foreach (var user in userId)
             {
-                AddPoints(user, tagId, points, reason);
+                AddPoints(user, tagId, testId, points, reason);
             }
         }
 
