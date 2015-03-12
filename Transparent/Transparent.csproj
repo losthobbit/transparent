@@ -179,15 +179,20 @@
     <Compile Include="Extensions\DataAnnotationsExtensions.cs" />
     <Compile Include="Extensions\ModelViewExtensions.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
+    <Compile Include="Filters\PeriodicFilterAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HtmlExtensions.cs" />
+    <Compile Include="Interfaces\ITechnicalConfiguration.cs" />
     <Compile Include="Models\UpdateTicketTagRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Configuration.cs" />
+    <Compile Include="Services\TechnicalConfiguration.cs" />
     <Compile Include="Windsor\Installer.cs" />
+    <Compile Include="Windsor\WindsorActionInvoker.cs" />
     <Compile Include="Windsor\WindsorControllerFactory.cs" />
+    <Compile Include="Windsor\WindsorExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -366,7 +371,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Interfaces\" />
     <Folder Include="Routines\" />
   </ItemGroup>
   <ItemGroup>

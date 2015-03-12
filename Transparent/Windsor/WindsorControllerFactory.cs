@@ -28,7 +28,15 @@ namespace Transparent.Windsor
             {
                 throw new HttpException(404, string.Format("The controller for path '{0}' could not be found.", requestContext.HttpContext.Request.Path));
             }
-            return (IController)kernel.Resolve(controllerType);
+
+            var controller = kernel.Resolve(controllerType) as Controller;
+
+            if (controller != null)
+            {
+                controller.ActionInvoker = kernel.Resolve<IActionInvoker>();
+            }
+
+            return controller;
         }
     }
 }

@@ -5,6 +5,7 @@ using Castle.Windsor;
 using Common.Interfaces;
 using Transparent.Services;
 using System.Web.Http.Controllers;
+using Transparent.Interfaces;
 
 namespace Transparent.Windsor
 {
@@ -15,7 +16,10 @@ namespace Transparent.Windsor
             container.Register(
                 Classes.FromThisAssembly().BasedOn<IController>().LifestyleTransient(),
                 Classes.FromThisAssembly().BasedOn<IHttpController>().LifestyleTransient(),
-                Component.For<IConfiguration>().ImplementedBy<Configuration>().LifeStyle.Singleton
+                Component.For<IWindsorContainer>().Instance(container),
+                Component.For<IActionInvoker>().ImplementedBy<WindsorActionInvoker>().LifeStyle.Singleton,
+                Component.For<IConfiguration>().ImplementedBy<Configuration>().LifeStyle.Singleton,
+                Component.For<ITechnicalConfiguration>().ImplementedBy<TechnicalConfiguration>().LifeStyle.Singleton
             );
         }
     }

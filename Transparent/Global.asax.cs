@@ -28,7 +28,7 @@ namespace Transparent
         private static void BootstrapContainer()
         {
             container = new WindsorContainer()
-                .Install(FromAssembly.InThisApplication());
+                .Install(FromAssembly.InThisApplication(), FromAssembly.Containing<Common.Windsor.Installer>());
 
             // Setup dependency injection of MVC controllers
             var controllerFactory = new WindsorControllerFactory(container.Kernel);
