@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transparent.PlaceHolder", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Common", "Tests.Common\Tests.Common.csproj", "{67C81B95-B543-47B8-8A92-BE9E51D9C06C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeepAlive", "KeepAlive\KeepAlive.csproj", "{3F4A191A-55D7-49EA-B52A-7612E3333FCC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{67C81B95-B543-47B8-8A92-BE9E51D9C06C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67C81B95-B543-47B8-8A92-BE9E51D9C06C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67C81B95-B543-47B8-8A92-BE9E51D9C06C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F4A191A-55D7-49EA-B52A-7612E3333FCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F4A191A-55D7-49EA-B52A-7612E3333FCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F4A191A-55D7-49EA-B52A-7612E3333FCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F4A191A-55D7-49EA-B52A-7612E3333FCC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

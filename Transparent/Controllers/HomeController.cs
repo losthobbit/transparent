@@ -17,6 +17,16 @@ namespace Transparent.Controllers
             this.general = general;
         }
 
+        /// <summary>
+        /// Simple check to see that things are working.  Also useful to warm up the application and trigger
+        /// any timed events which need to run.
+        /// </summary>
+        [HttpGet]
+        public string Ping()
+        {
+            return "hello";
+        }
+
         public ActionResult Index()
         {
             if (Request.IsAuthenticated)
