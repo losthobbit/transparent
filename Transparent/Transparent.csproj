@@ -381,6 +381,10 @@
       <Project>{6ab956c6-5323-4f12-ac6d-7c2bcb8f4372}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Transparent.Business\Transparent.Business.csproj">
+      <Project>{e7778766-a3b2-4a80-96be-c1d498bdf280}</Project>
+      <Name>Transparent.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Transparent.Data\Transparent.Data.csproj">
       <Project>{2d93c988-7c3e-46ed-a7b6-fb47ad7ebf4c}</Project>
       <Name>Transparent.Data</Name>

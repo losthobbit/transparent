@@ -50,11 +50,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\Events\IEvent.cs" />
     <Compile Include="Interfaces\IConfiguration.cs" />
-    <Compile Include="Interfaces\IEventRunner.cs" />
+    <Compile Include="Interfaces\Events\IEventRunner.cs" />
     <Compile Include="JavaScriptRoutines.cs" />
     <Compile Include="LinqExtensions.cs" />
-    <Compile Include="Services\EventRunner.cs" />
+    <Compile Include="Services\Events\Event.cs" />
+    <Compile Include="Services\Events\EventRunner.cs" />
     <Compile Include="StringRoutines.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Windsor\Installer.cs" />

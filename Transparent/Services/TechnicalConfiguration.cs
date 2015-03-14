@@ -15,11 +15,11 @@ namespace Transparent.Services
         /// To improve performance, set a longer time.
         /// To have more frequent checks, reduce time.
         /// </remarks>
-        public TimeSpan MinTimeBetweenEvents { get; set; }
+        public TimeSpan MinEventInterval { get; set; }
 
         public TechnicalConfiguration(Common.Interfaces.IConfiguration configuration)
         {
-            MinTimeBetweenEvents = TimeSpan.Parse(configuration.GetValue("MinTimeBetweenEvents"));
+            MinEventInterval = TimeSpan.Parse(configuration.GetValue("MinEventInterval"));
         }
     }
 }

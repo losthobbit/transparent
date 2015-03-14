@@ -1,4 +1,5 @@
 ﻿using Common.Interfaces;
+using Common.Interfaces.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,12 +32,12 @@ namespace Transparent.Filters
             var doEvent = false;
 
             // Initial check so that I don't have to lock unless necessary
-            if (lastRun + TechnicalConfiguration.MinTimeBetweenEvents <= DateTime.Now)
+            if (lastRun + TechnicalConfiguration.MinEventInterval <= DateTime.Now)
             {
                 lock (_lock)
                 {
                     // In case it changed since the lock
-                    if (lastRun + TechnicalConfiguration.MinTimeBetweenEvents <= DateTime.Now)
+                    if (lastRun + TechnicalConfiguration.MinEventInterval <= DateTime.Now)
                     {
                         lastRun = DateTime.Now;
                         // Release the lock ASAP, rather than creating the thread inside the lock

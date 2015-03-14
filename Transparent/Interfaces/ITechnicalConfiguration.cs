@@ -8,6 +8,6 @@ namespace Transparent.Interfaces
 {
     public interface ITechnicalConfiguration
     {
-        TimeSpan MinTimeBetweenEvents { get; set; }
+        TimeSpan MinEventInterval { get; set; }
     }
 }

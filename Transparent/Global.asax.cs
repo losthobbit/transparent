@@ -17,6 +17,7 @@ namespace Transparent
     using Castle.Windsor.Installer;
     using Transparent.Windsor;
     using System.Web.Http.Dispatcher;
+    using Castle.MicroKernel.Resolvers.SpecializedResolvers;
     
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
@@ -24,16 +25,6 @@ namespace Transparent
     public class MvcApplication : System.Web.HttpApplication, IContainerAccessor
     {
         private static IWindsorContainer container;
-
-        private static void BootstrapContainer()
-        {
-            container = new WindsorContainer()
-                .Install(FromAssembly.InThisApplication(), FromAssembly.Containing<Common.Windsor.Installer>());
-
-            // Setup dependency injection of MVC controllers
-            var controllerFactory = new WindsorControllerFactory(container.Kernel);
-            ControllerBuilder.Current.SetControllerFactory(controllerFactory);
-        }
 
         protected void Application_Error(object sender, EventArgs e)
         {
@@ -65,6 +56,25 @@ namespace Transparent
             InitializeDatabase();
 
             BootstrapContainer();
+        }
+
+        private static void BootstrapContainer()
+        {
+            container = new WindsorContainer();
+            container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));
+
+            // Just a way of loading the assembly, so that its installer is called
+            Business.Windsor.Installer x;
+
+            container.Install
+            (
+                FromAssembly.InThisApplication(), 
+                FromAssembly.Containing<Common.Windsor.Installer>()
+            );
+
+            // Setup dependency injection of MVC controllers
+            var controllerFactory = new WindsorControllerFactory(container.Kernel);
+            ControllerBuilder.Current.SetControllerFactory(controllerFactory);
         }
 
         private void InitializeDatabase()
