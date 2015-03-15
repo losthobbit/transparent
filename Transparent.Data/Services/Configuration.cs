@@ -32,6 +32,18 @@ namespace Transparent.Data.Services
 
         #endregion Points
 
+        #region Progressing tickets
+
+        /// <summary>
+        /// Delay after tags have been validated before moving a ticket to the next state.
+        /// </summary>
+        /// <remarks>
+        /// This allows time for tags to be added.
+        /// </remarks>
+        public TimeSpan DelayAfterValidatingTags { get; set; }
+
+        #endregion Progressing tickets
+
         public Configuration(Common.Interfaces.IConfiguration configuration)
         {
             CurrentSubGoal = configuration.GetValue("CurrentSubGoal");
@@ -44,6 +56,8 @@ namespace Transparent.Data.Services
             PointsMarkersLoseForDisagreeingATestResult = int.Parse(configuration.GetValue("PointsMarkersLoseForDisagreeingATestResult"));
 
             PointsRequiredToBeCompetent = int.Parse(configuration.GetValue("PointsRequiredToBeCompetent"));
+
+            DelayAfterValidatingTags = TimeSpan.Parse(configuration.GetValue("DelayAfterValidatingTags"));
         }
     }
 }

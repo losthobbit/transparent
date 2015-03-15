@@ -10,6 +10,13 @@ namespace Transparent.Data.Models
 {
     public class Test : Ticket
     {
+        private static TicketState[] states = new[]
+        {
+            TicketState.Voting, 
+            TicketState.Rejected, 
+            TicketState.Completed
+        };
+
         public override TicketType TicketType
         {
             get
@@ -48,12 +55,9 @@ namespace Transparent.Data.Models
             }
         }
 
-        protected override TicketState StartingState
+        protected override IEnumerable<TicketState> States
         {
-            get
-            {
-                return TicketState.Voting;
-            }
+            get { return states; }
         }
     }
 }

@@ -21,6 +21,8 @@ namespace Transparent.Data.Tests.Helpers
             PointsMarkersLoseForDisagreeingATestResult = 1;
 
             PointsRequiredToBeCompetent = 5;
+
+            DelayAfterValidatingTags = TimeSpan.FromSeconds(2);
         }
 
         public string CurrentSubGoal { get; set; }
@@ -33,5 +35,7 @@ namespace Transparent.Data.Tests.Helpers
         public int PointsMarkersLoseForDisagreeingATestResult { get; set; }
 
         public int PointsRequiredToBeCompetent { get; set; }
+
+        public TimeSpan DelayAfterValidatingTags { get; set; }
     }
 }

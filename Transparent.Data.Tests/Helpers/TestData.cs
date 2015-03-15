@@ -248,6 +248,12 @@ namespace Transparent.Data.Tests.Helpers
                         User = testData.Joe, FkUserId = testData.Joe.UserId,
                         Tag = testData.ScubaDivingTag, FkTagId = testData.ScubaDivingTag.Id,
                         TotalPoints = 10
+                    },
+                    new UserTag 
+                    {
+                        User = testData.Admin, FkUserId = testData.Admin.UserId,
+                        Tag = testData.ScubaDivingTag, FkTagId = testData.ScubaDivingTag.Id,
+                        TotalPoints = 100
                     }
                 },
                 UserPoints =

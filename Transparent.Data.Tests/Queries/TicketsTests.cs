@@ -674,7 +674,7 @@ namespace Transparent.Data.Tests.Queries
         {
             testData.StephensCriticalThinkingTag.TotalPoints = testConfiguration.PointsRequiredToBeCompetent + (int)userPointsForTag;
 
-            getTicketTagInfoList_Ticket = new Ticket
+            getTicketTagInfoList_Ticket = new Suggestion
             {
                 User = testData.Joe,
                 FkUserId = testData.Joe.UserId,
@@ -866,5 +866,199 @@ namespace Transparent.Data.Tests.Queries
         }
 
         #endregion StartTest
+
+        #region Create
+       
+        [Test]
+        public void Create_with_valid_parameters_sets_ModifiedDate()
+        {
+            //Arrange
+            var ticket = new Question
+            {
+            };
+            Ticket actualTicket = null;
+            usersContext.SavedChanges += context =>
+            {
+                actualTicket = context.Tickets.Last();
+            };            
+
+            //Act
+            target.Create(ticket, testData.Stephen.UserId);
+
+            //Assert
+            Assert.GreaterOrEqual(actualTicket.ModifiedDate, DateTime.UtcNow.AddSeconds(-3));
+            Assert.LessOrEqual(actualTicket.ModifiedDate, DateTime.UtcNow);
+        }
+
+        #endregion Create
+
+        #region AddTicketTag
+
+        [Test]
+        public void AddTicketTag_with_valid_parameters_sets_ModifiedDate_on_ticket()
+        {
+            //Arrange
+            var ticket = testData.JoesScubaDivingSuggestion;
+            Ticket actualTicket = null;
+            usersContext.SavedChanges += context =>
+            {
+                actualTicket = ticket;
+            };
+
+            //Act
+            target.AddTicketTag(ticket.Id, testData.CriticalThinkingTag.Id, testData.Stephen.UserId);
+
+            //Assert
+            Assert.GreaterOrEqual(actualTicket.ModifiedDate, DateTime.UtcNow.AddSeconds(-3));
+            Assert.LessOrEqual(actualTicket.ModifiedDate, DateTime.UtcNow);
+        }
+
+        #endregion AddTicketTag
+
+        #region DeleteTicketTag
+
+        [Test]
+        public void DeleteTicketTag_with_valid_parameters_sets_ModifiedDate_on_ticket()
+        {
+            //Arrange
+            var ticket = testData.JoesScubaDivingSuggestion;
+            Ticket actualTicket = null;
+            usersContext.SavedChanges += context =>
+            {
+                actualTicket = ticket;
+            };
+
+            //Act
+            target.DeleteTicketTag(ticket.Id, testData.ScubaDivingTag.Id, testData.Admin.UserId);
+
+            //Assert
+            Assert.GreaterOrEqual(actualTicket.ModifiedDate, DateTime.UtcNow.AddSeconds(-3));
+            Assert.LessOrEqual(actualTicket.ModifiedDate, DateTime.UtcNow);
+        }
+
+        #endregion DeleteTicketTag
+
+        #region VerifyTicketTag
+
+        [Test]
+        public void VerifyTicketTag_with_valid_parameters_sets_ModifiedDate_on_ticket()
+        {
+            //Arrange
+            var ticket = testData.JoesScubaDivingSuggestion;
+            Ticket actualTicket = null;
+            usersContext.SavedChanges += context =>
+            {
+                actualTicket = ticket;
+            };
+
+            //Act
+            target.VerifyTicketTag(ticket.Id, testData.ScubaDivingTag.Id, testData.Admin.UserId);
+
+            //Assert
+            Assert.GreaterOrEqual(actualTicket.ModifiedDate, DateTime.UtcNow.AddSeconds(-3));
+            Assert.LessOrEqual(actualTicket.ModifiedDate, DateTime.UtcNow);
+        }
+
+        #endregion VerifyTicketTag
+
+        #region ProgressTicketsWithVerifiedTags
+
+        Ticket progressTicketsWithVerifiedTagsTicket;
+
+        private void ArrangeProgressTicketsWithVerifiedTags()
+        {
+            progressTicketsWithVerifiedTagsTicket = testData.JoesCriticalThinkingSuggestion;
+            progressTicketsWithVerifiedTagsTicket.State = TicketState.Verification;
+            progressTicketsWithVerifiedTagsTicket.TicketTags.ForEach(tag => tag.Verified = true);
+            testConfiguration.DelayAfterValidatingTags = TimeSpan.FromSeconds(10);
+            progressTicketsWithVerifiedTagsTicket.ModifiedDate = DateTime.UtcNow.AddSeconds(-11);
+        }
+
+        [Test]
+        public void ProgressTicketsWithVerifiedTags_with_verified_ticket_changes_ticket_state()
+        {
+            //Arrange
+            ArrangeProgressTicketsWithVerifiedTags();
+            TicketState? actualState = null;
+            DateTime? actualModifiedDate = null;
+            Action updateTicket = () =>
+            {
+                actualState = progressTicketsWithVerifiedTagsTicket.State;
+                actualModifiedDate = progressTicketsWithVerifiedTagsTicket.ModifiedDate;
+            };
+            updateTicket();
+            usersContext.SavedChanges += context => updateTicket();
+
+            //Act
+            target.ProgressTicketsWithVerifiedTags();
+
+            //Assert
+            Assert.AreNotEqual(TicketState.Verification, actualState.Value);
+            Assert.GreaterOrEqual(actualModifiedDate.Value, DateTime.UtcNow.AddSeconds(-3));
+            Assert.LessOrEqual(actualModifiedDate.Value, DateTime.UtcNow);
+        }
+
+        [Test]
+        public void ProgressTicketsWithVerifiedTags_with_unverified_ticket_does_not_change_ticket_state()
+        {
+            //Arrange
+            ArrangeProgressTicketsWithVerifiedTags();
+            progressTicketsWithVerifiedTagsTicket.State = TicketState.Draft;
+
+            //Act
+            target.ProgressTicketsWithVerifiedTags();
+
+            //Assert
+            Assert.AreEqual(TicketState.Draft, progressTicketsWithVerifiedTagsTicket.State);
+        }
+
+        [Test]
+        public void ProgressTicketsWithVerifiedTags_with_recently_modified_ticket_does_not_change_ticket_state()
+        {
+            //Arrange
+            ArrangeProgressTicketsWithVerifiedTags();
+            progressTicketsWithVerifiedTagsTicket.ModifiedDate = DateTime.UtcNow.AddSeconds(-8);
+
+            //Act
+            target.ProgressTicketsWithVerifiedTags();
+
+            //Assert
+            Assert.AreEqual(TicketState.Verification, progressTicketsWithVerifiedTagsTicket.State);
+        }
+
+        [Test]
+        public void ProgressTicketsWithVerifiedTags_with_ticket_without_tags_does_not_change_ticket_state()
+        {
+            //Arrange
+            ArrangeProgressTicketsWithVerifiedTags();
+            var tags = progressTicketsWithVerifiedTagsTicket.TicketTags.ToList();
+            progressTicketsWithVerifiedTagsTicket.TicketTags.Clear();
+            foreach(var tag in tags)
+            {
+                testData.UsersContext.TicketTags.Remove(tag);
+            }
+
+            //Act
+            target.ProgressTicketsWithVerifiedTags();
+
+            //Assert
+            Assert.AreEqual(TicketState.Verification, progressTicketsWithVerifiedTagsTicket.State);
+        }
+
+        [Test]
+        public void ProgressTicketsWithVerifiedTags_with_ticket_with_unverified_tag_does_not_change_ticket_state()
+        {
+            //Arrange
+            ArrangeProgressTicketsWithVerifiedTags();
+            progressTicketsWithVerifiedTagsTicket.TicketTags.Last().Verified = false;
+
+            //Act
+            target.ProgressTicketsWithVerifiedTags();
+
+            //Assert
+            Assert.AreEqual(TicketState.Verification, progressTicketsWithVerifiedTagsTicket.State);
+        }
+
+        #endregion ProgressTicketsWithVerifiedTags
     }
 }

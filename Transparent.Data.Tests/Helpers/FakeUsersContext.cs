@@ -20,7 +20,7 @@ namespace Transparent.Data.Tests.Helpers
             UserProfiles = new FakeDbSet<UserProfile>();
             UserPoints = new FakeDbSet<UserPoint>();
             Tags = new FakeDbSet<Tag>();
-            Tickets = new FakeDbSet<Ticket>();
+            Tickets = new FakeTicketDbSet();
             TicketUserRanks = new FakeDbSet<TicketUserRank>();
             TicketTags = new FakeDbSet<TicketTag>();
             UserTags = new FakeDbSet<UserTag>();

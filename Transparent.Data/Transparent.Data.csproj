@@ -148,6 +148,10 @@
     <Compile Include="Migrations\201503032306474_AddUserPointsTableReasonColumn.Designer.cs">
       <DependentUpon>201503032306474_AddUserPointsTableReasonColumn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201503151126377_AddTicketTableModifiedDateColumn.cs" />
+    <Compile Include="Migrations\201503151126377_AddTicketTableModifiedDateColumn.Designer.cs">
+      <DependentUpon>201503151126377_AddTicketTableModifiedDateColumn.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\AnsweredTests.cs" />
@@ -230,6 +234,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201503032306474_AddUserPointsTableReasonColumn.resx">
       <DependentUpon>201503032306474_AddUserPointsTableReasonColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503151126377_AddTicketTableModifiedDateColumn.resx">
+      <DependentUpon>201503151126377_AddTicketTableModifiedDateColumn.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

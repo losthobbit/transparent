@@ -12,9 +12,9 @@ namespace Transparent.Data.Queries
     /// </summary>
     /// <remarks>
     /// There's no need to split this into a business and data service, unless a different data source is required.
-    /// Probably should not be a singleton.  I'm not sure that injecting IUserContext is safe... I don't know if that guarantees a unique context per thread,
-    /// nor whether that matters or not.  I might also want to consider creating the context at the start of a transaction in case I save an interrupted
-    /// transaction.
+    /// This must be transient, because injecting IUserContext is not safe.
+    /// I might also want to consider creating the context at the start of a transaction in case I save an interrupted transaction.
+    /// See http://stackoverflow.com/questions/10585478/one-dbcontext-per-web-request-why
     /// </remarks>
     public class User: IUser
     {

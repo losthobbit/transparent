@@ -16,6 +16,10 @@ namespace KeepAlive
     {
         Stopwatch stopWatch = new Stopwatch();
 
+        double reducer = 0.5;
+        double increaser = 1.2;
+        double normalizer = 0.95;
+
         public Form1()
         {
             InitializeComponent();
@@ -40,25 +44,48 @@ namespace KeepAlive
             {
                 using (var client = new WebClient())
                 {
+                    WebException webException = null;
+                    string response;
                     stopWatch.Restart();
-                    var response = client.DownloadString(UrlTextBox.Text);
-                    stopWatch.Stop();
-                    Output(String.Format("Ping interval: {0}   Download time: {1}   Response: {2}",
-                        PingTimer.Interval, stopWatch.Elapsed, response));
-                    if (stopWatch.ElapsedMilliseconds > RequiredResponseTime)
+                    try
                     {
-                        PingTimer.Interval = (int)((float)PingTimer.Interval * 0.9);
+                        response = client.DownloadString(UrlTextBox.Text);
+                    }
+                    catch (WebException ex)
+                    {
+                        webException = ex;
+                        response = ex.Message;
+                    }
+                    stopWatch.Stop();
+                    Output(String.Format("Time: {0}  Ping interval: {1}   Download time: {2}   Response: {3}",
+                        DateTime.Now.TimeOfDay, PingTimer.Interval, stopWatch.Elapsed, response));
+                    if (webException != null || stopWatch.ElapsedMilliseconds > RequiredResponseTime)
+                    {
+                        PingTimer.Interval = (int)((double)PingTimer.Interval * reducer);
                     }
                     else
                     {
-                        PingTimer.Interval = (int)((float)PingTimer.Interval * 1.005);
+                        PingTimer.Interval = (int)((double)PingTimer.Interval * increaser);
                     }
                 }
+                Normalize(ref reducer);
+                Normalize(ref increaser);
             }
             finally
             {
                 PingTimer.Enabled = true;
             }
+        }
+
+        /// <summary>
+        /// Make the number closer to 1.
+        /// </summary>
+        /// <param name="value"></param>
+        private void Normalize(ref double value)
+        {
+            if (value == 1)
+                return;
+            value = 1 + (value - 1) * normalizer;
         }
 
         private void Output(string message)

@@ -30,13 +30,13 @@
         {
             this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.ResponseTimeTextBox = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.UrlTextBox = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.OutputTextBox = new System.Windows.Forms.TextBox();
             this.PingTimer = new System.Windows.Forms.Timer(this.components);
-            this.label1 = new System.Windows.Forms.Label();
-            this.ResponseTimeTextBox = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -52,6 +52,33 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(656, 64);
             this.panel1.TabIndex = 2;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(3, 35);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(143, 13);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Required response time (MS)";
+            // 
+            // ResponseTimeTextBox
+            // 
+            this.ResponseTimeTextBox.Location = new System.Drawing.Point(152, 32);
+            this.ResponseTimeTextBox.Name = "ResponseTimeTextBox";
+            this.ResponseTimeTextBox.Size = new System.Drawing.Size(50, 20);
+            this.ResponseTimeTextBox.TabIndex = 3;
+            this.ResponseTimeTextBox.Text = "5000";
+            this.ResponseTimeTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(29, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "URL";
             // 
             // UrlTextBox
             // 
@@ -86,35 +113,8 @@
             // PingTimer
             // 
             this.PingTimer.Enabled = true;
-            this.PingTimer.Interval = 30000;
+            this.PingTimer.Interval = 120000;
             this.PingTimer.Tick += new System.EventHandler(this.PingTimer_Tick);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(29, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "URL";
-            // 
-            // ResponseTimeTextBox
-            // 
-            this.ResponseTimeTextBox.Location = new System.Drawing.Point(152, 32);
-            this.ResponseTimeTextBox.Name = "ResponseTimeTextBox";
-            this.ResponseTimeTextBox.Size = new System.Drawing.Size(50, 20);
-            this.ResponseTimeTextBox.TabIndex = 3;
-            this.ResponseTimeTextBox.Text = "10000";
-            this.ResponseTimeTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 35);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(143, 13);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Required response time (MS)";
             // 
             // Form1
             // 

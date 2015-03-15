@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Transparent.Data.Interfaces;
 
 namespace Transparent.Business.Events
 {
@@ -14,14 +15,18 @@ namespace Transparent.Business.Events
     /// </summary>
     public class CompleteTagValidationEvent: Event
     {
-        public CompleteTagValidationEvent(IConfiguration configuration)
+        private readonly Func<ITickets> getTicketsService;
+
+        public CompleteTagValidationEvent(Common.Interfaces.IConfiguration configuration, Func<ITickets> getTicketsService)
             : base(TimeSpan.Parse(configuration.GetValue("CompleteTagValidationEventInterval")))
         {
+            this.getTicketsService = getTicketsService;
         }
 
         public override void Action()
         {
-            Debug.WriteLine("Checking if tag validation is complete.");
+            var tickets = getTicketsService();
+            tickets.ProgressTicketsWithVerifiedTags();
         }
     }
 }

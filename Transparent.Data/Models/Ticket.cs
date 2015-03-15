@@ -8,15 +8,22 @@ using System.Threading.Tasks;
 
 namespace Transparent.Data.Models
 {
-    public class Ticket : BaseTicket
+    public abstract class Ticket : BaseTicket
     {
-        public Ticket()
+        protected Ticket()
         {
-
+            Initialize();
         }
 
-        public Ticket(int id, int rank):base(id, rank)
+        protected Ticket(int id, int rank)
+            : base(id, rank)
         {
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            State = StartingState;
         }
 
         /// <summary>
@@ -39,5 +46,34 @@ namespace Transparent.Data.Models
             }
             throw new NotSupportedException("Unknown ticket type");
         }
+
+        /// <summary>
+        /// There can potentially be more than one state, e.g. after Voting.
+        /// This property should only be used when a state can only have one
+        /// next state.
+        /// </summary>
+        [NotMapped]
+        public TicketState? NextState
+        {
+            get
+            {
+                var found = false;
+                foreach (var state in States)
+                {
+                    if (found)
+                        return state;
+                    if (state == this.State)
+                        found = true;
+                }
+                // last state or this.State not found
+                return null;
+            }
+        }
+
+        [NotMapped]
+        protected abstract IEnumerable<TicketState> States { get; }
+
+        [NotMapped]
+        protected TicketState StartingState { get { return States.First(); } }
     }
 }

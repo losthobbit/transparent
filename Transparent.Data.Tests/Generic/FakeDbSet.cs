@@ -18,8 +18,8 @@ namespace Transparent.Data.Tests.Generic
     public class FakeDbSet<T> : IDbSet<T>
         where T : class
     {
-        ObservableCollection<T> _data;
-        IQueryable _query;
+        protected ObservableCollection<T> _data;
+        protected IQueryable _query;
 
         public FakeDbSet()
         {

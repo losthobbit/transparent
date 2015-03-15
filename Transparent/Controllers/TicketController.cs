@@ -119,15 +119,12 @@ namespace Transparent.Controllers
         //
         // POST: /Ticket/Create
         
-        private ActionResult Create<TTicket>(TTicket ticket, IDbSet<TTicket> dbSet)
+        private ActionResult Create<TTicket>(TTicket ticket)
             where TTicket : Ticket, new()
         {
             if (ModelState.IsValid)
             {
-                ticket.FkUserId = WebSecurity.CurrentUserId;
-                ticket.CreatedDate = DateTime.UtcNow;
-                dbSet.Add(ticket);
-                db.SaveChanges();
+                tickets.Create(ticket, WebSecurity.CurrentUserId);
                 return RedirectToAction("Details", new { id = ticket.Id });
             }
 
@@ -138,19 +135,19 @@ namespace Transparent.Controllers
         [HttpPost]
         public ActionResult CreateQuestion(CreateTicketViewModel<Question> question)
         {
-            return Create(question.Ticket, db.Questions);
+            return Create(question.Ticket);
         }
 
         [HttpPost]
         public ActionResult CreateSuggestion(CreateTicketViewModel<Suggestion> suggestion)
         {
-            return Create(suggestion.Ticket, db.Suggestions);
+            return Create(suggestion.Ticket);
         }
 
         [HttpPost]
         public ActionResult CreateTest(CreateTicketViewModel<Test> test)
         {
-            return Create(test.Ticket, db.Tests);
+            return Create(test.Ticket);
         }
 
         [HttpPost]

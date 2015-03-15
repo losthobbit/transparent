@@ -8,6 +8,13 @@ namespace Transparent.Data.Models
 {
     public class Question : Ticket
     {
+        private static TicketState[] states = new[]
+        {
+            TicketState.Verification,
+            TicketState.Argument,
+            TicketState.Voting
+        };
+
         public override TicketType TicketType
         {
             get
@@ -26,6 +33,11 @@ namespace Transparent.Data.Models
             {
                 return "Asked";
             }
+        }
+
+        protected override IEnumerable<TicketState> States
+        {
+            get { return states; }
         }
     }
 }

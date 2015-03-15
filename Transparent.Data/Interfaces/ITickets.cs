@@ -56,5 +56,14 @@ namespace Transparent.Data.Interfaces
         void AddTicketTag(int ticketId, int tagId, int userId);
 
         IQueryable<Tag> GetCompetentTags(int userId);
+
+        void Create(Ticket ticket, int userId);
+
+        #region Progress tickets
+
+        void ProgressTicketsWithVerifiedTags();
+
+        #endregion Progress tickets
+
     }
 }

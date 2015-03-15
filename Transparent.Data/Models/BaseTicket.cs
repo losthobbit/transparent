@@ -13,12 +13,12 @@ namespace Transparent.Data.Models
     [MetadataType(typeof(IBaseTicket))]
     public abstract class BaseTicket: IBaseTicket, ISupportsMultipleTags
     {
-        public BaseTicket()
+        protected BaseTicket()
         {
-            State = StartingState;
         }
 
-        public BaseTicket(int id, int rank): this()
+        protected BaseTicket(int id, int rank)
+            : this()
         {
             Id = id;
             Rank = rank;
@@ -46,6 +46,18 @@ namespace Transparent.Data.Models
         [Index]
         public TicketState State { get; set; }
 
+        /// <summary>
+        /// Date that information about the ticket was updated.
+        /// </summary>
+        /// <remarks>
+        /// This does not necessarily mean that the change occured in this class.
+        /// It could, for example mean that a tag has been verified.
+        /// </remarks>
+        [DataType(DataType.Date)]
+        [Required]
+        [Index]
+        public DateTime ModifiedDate { get; set; }
+
         // Specified in fluent API instead: 
         [NotMapped()]
         public virtual TicketType TicketType { get; protected set; }
@@ -59,8 +71,5 @@ namespace Transparent.Data.Models
 
         [NotMapped]
         public virtual string TextForCreated { get { return "Created"; } }
-
-        [NotMapped]
-        protected virtual TicketState StartingState { get { return TicketState.Verification; } }
     }
 }

@@ -21,9 +21,9 @@ namespace Transparent.Data.Queries
     /// <remarks>
     /// This started as a way to get tickets, but has now become the way to get pretty much anything... basically a combination business and data service.
     /// It may be worth renaming at some point.  There's no need to split into a business and data service, unless a different data source is required.
-    /// Probably should not be a singleton.  I'm not sure that injecting IUserContext is safe... I don't know if that guarantees a unique context per thread,
-    /// nor whether that matters or not.  I might also want to consider creating the context at the start of a transaction in case I save an interrupted
-    /// transaction.
+    /// This must be transient, because injecting IUserContext is not safe.
+    /// I might also want to consider creating the context at the start of a transaction in case I save an interrupted transaction.
+    /// See http://stackoverflow.com/questions/10585478/one-dbcontext-per-web-request-why
     /// </remarks>
     public class Tickets: ITickets
     {
@@ -57,6 +57,15 @@ namespace Transparent.Data.Queries
                 case TicketType.Test: return db.Tests;
             }
             throw new NotSupportedException("Unknown ticket type");
+        }
+
+        public void Create(Ticket ticket, int userId)
+        {
+            ticket.FkUserId = userId;
+            ticket.CreatedDate = DateTime.UtcNow;
+            ticket.ModifiedDate = DateTime.UtcNow;
+            db.Tickets.Add(ticket);
+            db.SaveChanges();
         }
 
         /// <summary>
@@ -361,6 +370,77 @@ namespace Transparent.Data.Queries
             return ticket.TicketTags.Select(ticketTag => GetTicketTagInfo(ticketTag, ticket.FkUserId, userId, competentTags)).ToList();
         }
 
+        /// <exception cref="NotSupportedException">User may not delete tag.</exception>
+        public void DeleteTicketTag(int ticketId, int tagId, int userId)
+        {
+            // TODO: Ensure the state of the ticket is TicketState.Verification
+            db.TicketTags.Remove(GetDeleteableTicketTag(ticketId, tagId, userId));
+            SetModifiedDate(ticketId);
+            db.SaveChanges();
+        }
+
+        /// <exception cref="NotSupportedException">User may not verify tag.</exception>
+        public void VerifyTicketTag(int ticketId, int tagId, int userId)
+        {
+            // TODO: Ensure the state of the ticket is TicketState.Verification
+            GetVerifyableTicketTag(ticketId, tagId, userId).Verified = true;
+            SetModifiedDate(ticketId);
+            db.SaveChanges();
+        }
+
+        /// <exception cref="NotSupportedException">User may not add tag.</exception>
+        public void AddTicketTag(int ticketId, int tagId, int userId)
+        {
+            // TODO: Ensure the state of the ticket is TicketState.Verification
+            if (!GetCompetentTags(userId).Any(tag => tag.Id == tagId))
+                throw new NotSupportedException("User may not add tag");
+
+            db.TicketTags.Add(new TicketTag { FkTicketId = ticketId, FkTagId = tagId, FkCreatedById = userId });
+            SetModifiedDate(ticketId);
+
+            db.SaveChanges();
+        }
+
+        // TODO: Consider putting these in a partial class?
+        #region Progress tickets
+
+        /// <summary>
+        /// Progresses tickets which are in the Verification state, and were last modified
+        /// the specified amount of time ago.
+        /// </summary>
+        public void ProgressTicketsWithVerifiedTags()
+        {
+            var lastModified = DateTime.UtcNow - configuration.DelayAfterValidatingTags;
+            var verifiedTickets = from ticket in db.Tickets
+                                  where ticket.State == TicketState.Verification &&
+                                  ticket.ModifiedDate <= lastModified && 
+                                  ticket.TicketTags.Any() &&
+                                  ticket.TicketTags.All(tag => tag.Verified)
+                                  select ticket;
+
+            foreach (var ticket in verifiedTickets)
+            {
+                SetNextState(ticket);
+            }
+            db.SaveChanges();
+        }
+
+        #endregion Progress tickets
+
+        private void SetNextState(Ticket ticket)
+        {
+            var state = ticket.NextState;
+            if (state == null)
+                throw new NotSupportedException("Ticket does not have a next state");
+            ticket.State = ticket.NextState.Value;
+            ticket.ModifiedDate = DateTime.UtcNow;
+        }
+
+        private void SetModifiedDate(int ticketId)
+        {
+            db.Tickets.Single(ticket => ticket.Id == ticketId).ModifiedDate = DateTime.UtcNow;
+        }
+
         /// <summary>
         /// A test has been marked by the required number of markers.  Set the points.
         /// </summary>
@@ -399,9 +479,9 @@ namespace Transparent.Data.Queries
             else
             {
                 // 50 / 50 split - reset points
-                pointsToAdd = - testAnswer.Quantity;
+                pointsToAdd = -testAnswer.Quantity;
             }
-            if(pointsToAdd != 0)
+            if (pointsToAdd != 0)
                 AddPoints
                 (
                     testAnswer,
@@ -505,37 +585,6 @@ namespace Transparent.Data.Queries
         private TicketTag GetDeleteableTicketTag(int ticketId, int tagId, int userId)
         {
             return GetTicketTag(ticketId, tagId, userId, true, false);
-        }
-
-        /// <exception cref="NotSupportedException">User may not delete tag.</exception>
-        public void DeleteTicketTag(int ticketId, int tagId, int userId)
-        {
-            // TODO: Ensure the state of the ticket is TicketState.Verification
-            db.TicketTags.Remove(GetDeleteableTicketTag(ticketId, tagId, userId));
-            db.SaveChanges();
-            // TODO: Some kind of event so that the ticket moves to the next stage when ready.
-        }
-
-        /// <exception cref="NotSupportedException">User may not verify tag.</exception>
-        public void VerifyTicketTag(int ticketId, int tagId, int userId)
-        {
-            // TODO: Ensure the state of the ticket is TicketState.Verification
-            GetVerifyableTicketTag(ticketId, tagId, userId).Verified = true;
-            db.SaveChanges();
-            // TODO: Some kind of event so that the ticket moves to the next stage when ready.
-        }
-
-        /// <exception cref="NotSupportedException">User may not add tag.</exception>
-        public void AddTicketTag(int ticketId, int tagId, int userId)
-        {
-            // TODO: Ensure the state of the ticket is TicketState.Verification
-            if (!GetCompetentTags(userId).Any(tag => tag.Id == tagId))
-                throw new NotSupportedException("User may not add tag");
-
-            db.TicketTags.Add(new TicketTag { FkTicketId = ticketId, FkTagId = tagId, FkCreatedById = userId });
-
-            db.SaveChanges();
-            // TODO: Some kind of event so that the ticket moves to the next stage when ready.
         }
     }
 }

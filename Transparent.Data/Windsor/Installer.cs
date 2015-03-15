@@ -28,6 +28,9 @@ namespace Transparent.Data.Windsor
 
             Func<IUsersContext> usersContextFactory = () => container.Resolve<IUsersContext>();
             container.Register(Component.For<Func<IUsersContext>>().Instance(usersContextFactory));
+
+            Func<ITickets> ticketsFactory = () => container.Resolve<ITickets>();
+            container.Register(Component.For<Func<ITickets>>().Instance(ticketsFactory));
         }
     }
 }
