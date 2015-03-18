@@ -71,5 +71,8 @@ namespace Transparent.Data.Models
 
         [NotMapped]
         public virtual string TextForCreated { get { return "Created"; } }
+
+        [NotMapped]
+        public virtual string TextForArgument { get { return "argument"; } }
     }
 }

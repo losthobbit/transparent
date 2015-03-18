@@ -29,6 +29,7 @@ namespace Transparent.Data.Services
         #endregion Tests
 
         public int PointsRequiredToBeCompetent { get; set; }
+        public int PointsRequiredToBeAnExpert { get; set; }
 
         #endregion Points
 
@@ -56,6 +57,7 @@ namespace Transparent.Data.Services
             PointsMarkersLoseForDisagreeingATestResult = int.Parse(configuration.GetValue("PointsMarkersLoseForDisagreeingATestResult"));
 
             PointsRequiredToBeCompetent = int.Parse(configuration.GetValue("PointsRequiredToBeCompetent"));
+            PointsRequiredToBeAnExpert = int.Parse(configuration.GetValue("PointsRequiredToBeAnExpert"));
 
             DelayAfterValidatingTags = TimeSpan.Parse(configuration.GetValue("DelayAfterValidatingTags"));
         }

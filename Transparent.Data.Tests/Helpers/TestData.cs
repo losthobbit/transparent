@@ -63,6 +63,8 @@ namespace Transparent.Data.Tests.Helpers
 
         public UserTag StephensCriticalThinkingTag;
         public UserTag JoesCriticalThinkingTag;
+        public UserTag JoesScubaDivingTag;
+        public UserTag AdminsScubaDivingTag;
 
         #endregion UserTags
 
@@ -144,6 +146,24 @@ namespace Transparent.Data.Tests.Helpers
                 Tag = CriticalThinkingTag,
                 FkTagId = CriticalThinkingTag.Id,
                 TotalPoints = 3
+            };
+
+            JoesScubaDivingTag = new UserTag
+            {
+                User = Joe,
+                FkUserId = Joe.UserId,
+                Tag = ScubaDivingTag,
+                FkTagId = ScubaDivingTag.Id,
+                TotalPoints = 10
+            };
+
+            AdminsScubaDivingTag = new UserTag
+            {
+                User = Admin,
+                FkUserId = Admin.UserId,
+                Tag = ScubaDivingTag,
+                FkTagId = ScubaDivingTag.Id,
+                TotalPoints = 100
             };
 
             PointForCriticalThinkingTestThatJoeTookThatStephenMarked = new UserPoint
@@ -243,18 +263,8 @@ namespace Transparent.Data.Tests.Helpers
                         Tag = testData.BungeeJumpingTag, FkTagId = testData.BungeeJumpingTag.Id,
                         TotalPoints = 4
                     },
-                    new UserTag 
-                    {
-                        User = testData.Joe, FkUserId = testData.Joe.UserId,
-                        Tag = testData.ScubaDivingTag, FkTagId = testData.ScubaDivingTag.Id,
-                        TotalPoints = 10
-                    },
-                    new UserTag 
-                    {
-                        User = testData.Admin, FkUserId = testData.Admin.UserId,
-                        Tag = testData.ScubaDivingTag, FkTagId = testData.ScubaDivingTag.Id,
-                        TotalPoints = 100
-                    }
+                    testData.JoesScubaDivingTag,
+                    testData.AdminsScubaDivingTag
                 },
                 UserPoints =
                 {

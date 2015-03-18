@@ -18,7 +18,12 @@ namespace KeepAlive
 
         double reducer = 0.5;
         double increaser = 1.2;
-        double normalizer = 0.95;
+
+        /// <summary>
+        /// Ratio at which number becomes closer to 1.  (lower number is faster)
+        /// </summary>
+        double upNormalizer = 0.98;
+        double downNormalizer = 0.99;
 
         public Form1()
         {
@@ -68,8 +73,8 @@ namespace KeepAlive
                         PingTimer.Interval = (int)((double)PingTimer.Interval * increaser);
                     }
                 }
-                Normalize(ref reducer);
-                Normalize(ref increaser);
+                Normalize(false, ref reducer);
+                Normalize(true, ref increaser);
             }
             finally
             {
@@ -81,11 +86,11 @@ namespace KeepAlive
         /// Make the number closer to 1.
         /// </summary>
         /// <param name="value"></param>
-        private void Normalize(ref double value)
+        private void Normalize(bool up, ref double value)
         {
             if (value == 1)
                 return;
-            value = 1 + (value - 1) * normalizer;
+            value = 1 + (value - 1) * (up ? upNormalizer : downNormalizer);
         }
 
         private void Output(string message)

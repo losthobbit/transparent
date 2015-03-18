@@ -1,4 +1,6 @@
 ﻿@model Transparent.Data.ViewModels.TicketDetailsViewModel
+@using Transparent.Models.Ticket;
+@using Common;
 
 @{
     ViewBag.Title = "Details";
@@ -7,3 +9,19 @@
 @Html.Partial("_MenuPartial")
 
 @Html.Partial("_DetailsPartial", Model)
+
+@if (Model.State == Transparent.Data.Models.TicketState.Discussion && Model.TagInfo.Any(info => info.UserIsExpert))
+{// TODO: Ensure that user has not already answered!
+    <input id="discussButton" type="button" value="Add @Model.TextForArgument.PrefixIndefiniteArticle()"/>
+    <div id="discussAnswer" style="display:none">
+        @Html.Action("_Discuss", new Discuss { FkTicketId = Model.Id, Caption = @Model.TextForArgument.CapitalizeFirstLetter() })
+    </div>
+    <script>
+        $(function () {
+            $("#discussButton").click(function (e) {
+                $("#discussButton").hide();
+                $("#discussAnswer").show("slow");
+            });
+        });
+    </script>    
+}

@@ -108,6 +108,12 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Extensions\TicketExtensions.cs" />
     <Compile Include="InitDatabase.cs" />
+    <Compile Include="Migrations\201503182143357_AddArgumentTable.cs" />
+    <Compile Include="Migrations\201503182143357_AddArgumentTable.Designer.cs">
+      <DependentUpon>201503182143357_AddArgumentTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Argument.cs" />
+    <Compile Include="Models\Interfaces\IArgument.cs" />
     <Compile Include="Interfaces\IConfiguration.cs" />
     <Compile Include="Interfaces\IGeneral.cs" />
     <Compile Include="Interfaces\ITags.cs" />
@@ -177,6 +183,7 @@
     <Compile Include="Models\Search.cs" />
     <Compile Include="Models\Stateful.cs" />
     <Compile Include="Models\Ticket.cs" />
+    <Compile Include="Models\KnowledgeLevel.cs" />
     <Compile Include="Queries\General.cs" />
     <Compile Include="Queries\User.cs" />
     <Compile Include="ViewModels\Interfaces\ICreateTicketViewModel.cs" />
@@ -237,6 +244,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201503151126377_AddTicketTableModifiedDateColumn.resx">
       <DependentUpon>201503151126377_AddTicketTableModifiedDateColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503182143357_AddArgumentTable.resx">
+      <DependentUpon>201503182143357_AddArgumentTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

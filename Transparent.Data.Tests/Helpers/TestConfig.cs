@@ -21,6 +21,7 @@ namespace Transparent.Data.Tests.Helpers
             PointsMarkersLoseForDisagreeingATestResult = 1;
 
             PointsRequiredToBeCompetent = 5;
+            PointsRequiredToBeAnExpert = 10;
 
             DelayAfterValidatingTags = TimeSpan.FromSeconds(2);
         }
@@ -35,6 +36,7 @@ namespace Transparent.Data.Tests.Helpers
         public int PointsMarkersLoseForDisagreeingATestResult { get; set; }
 
         public int PointsRequiredToBeCompetent { get; set; }
+        public int PointsRequiredToBeAnExpert { get; set; }
 
         public TimeSpan DelayAfterValidatingTags { get; set; }
     }

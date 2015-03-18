@@ -1,6 +1,12 @@
 ﻿@model Transparent.Data.Models.BaseTicket
 @using Castle.Windsor
 @using Transparent.Extensions;
+@{
+    var container = ((IContainerAccessor)Context.ApplicationInstance).Container;
+    var tags = container.Resolve<Transparent.Data.Interfaces.ITags>();
+    var tickets = container.Resolve<Transparent.Data.Interfaces.ITickets>();
+    var competentTagIds = tickets.GetCompetentTags(WebSecurity.CurrentUserId).Select(tag => tag.Id).ToArray();
+}
 <fieldset class="ticket @Model.TicketType.GetClass()">
     <legend>Ticket</legend>
 
@@ -22,12 +28,6 @@
                 @Html.Action("_TicketTags", new Transparent.Data.ViewModels.TicketTagsViewModel(Model, ViewBag.EnableTagButton == null || ViewBag.EnableTagButton))
             </div>
             <div id="tagSelectors"></div>
-            @{
-                var container = ((IContainerAccessor)Context.ApplicationInstance).Container;
-                var tags = container.Resolve<Transparent.Data.Interfaces.ITags>();
-                var tickets = container.Resolve<Transparent.Data.Interfaces.ITickets>();
-                var competentTagIds = tickets.GetCompetentTags(WebSecurity.CurrentUserId).Select(tag => tag.Id).ToArray();
-            }
             <script>
                 var tags = @(tags.SerializeAndIndentTags(competentTagIds));
                 var enableAdd = @Json.Encode(Model.MultipleTags);

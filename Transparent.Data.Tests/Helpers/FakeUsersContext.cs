@@ -29,6 +29,7 @@ namespace Transparent.Data.Tests.Helpers
             Suggestions = new FakeDbSet<Suggestion>();
             TestMarkings = new FakeDbSet<TestMarking>();
             Subscriptions = new FakeDbSet<Subscription>();
+            Arguments = new FakeDbSet<Argument>();
         }
 
         public IDbSet<UserProfile> UserProfiles { get; private set; }
@@ -43,6 +44,7 @@ namespace Transparent.Data.Tests.Helpers
         public IDbSet<Suggestion> Suggestions { get; set; }
         public IDbSet<TestMarking> TestMarkings { get; set; }
         public IDbSet<Subscription> Subscriptions { get; set; }
+        public IDbSet<Argument> Arguments { get; set; }
 
         public IQueryable<UserProfile> FullUserProfiles
         {

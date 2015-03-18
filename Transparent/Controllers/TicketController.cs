@@ -12,6 +12,7 @@ using Transparent.Data.Models;
 using Transparent.Data.ViewModels;
 using Transparent.Data.Queries;
 using WebMatrix.WebData;
+using Transparent.Models.Ticket;
 
 namespace Transparent.Controllers
 {
@@ -29,6 +30,23 @@ namespace Transparent.Controllers
             this.tags = tags;
             this.db = db;
             this.tickets = tickets;
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("_Discuss")]
+        public PartialViewResult Post_Discuss(Discuss discuss)
+        {
+            tickets.SetArgument(discuss.FkTicketId, WebSecurity.CurrentUserId, discuss.Body);
+
+            return PartialView("_DiscussPartial", discuss);
+        }
+
+        [HttpGet]
+        [ActionName("_Discuss")]
+        public PartialViewResult Get_Discuss(Discuss discuss)
+        {
+            return PartialView("_DiscussPartial", discuss);
         }
 
         [HttpPost]
@@ -63,7 +81,8 @@ namespace Transparent.Controllers
                     tickets.VerifyTicketTag(ticket.TicketId, ticket.VerifyTagId.Value, userId);
 
             // Probably the worst way to get this list... guess that happens when one codes past midnight.
-            ticket.TagInfo = TicketTagViewModel.CreateList(tickets.FindTicket(ticket.TicketId), tickets.GetTicketTagInfoList(ticket.TicketId, userId));
+            ticket.TagInfo = TicketTagViewModel.CreateList(tickets.FindTicket(ticket.TicketId), 
+                tickets.GetTicketTagInfoList(ticket.TicketId, userId));
 
             return _TicketTags(ticket);
         }

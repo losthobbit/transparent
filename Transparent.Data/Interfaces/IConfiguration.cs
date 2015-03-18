@@ -18,6 +18,7 @@ namespace Transparent.Data.Interfaces
         int PointsMarkersLoseForDisagreeingATestResult { get; set; }
 
         int PointsRequiredToBeCompetent { get; set; }
+        int PointsRequiredToBeAnExpert { get; set; }
 
         /// <summary>
         /// Delay after tags have been validated before moving a ticket to the next state.

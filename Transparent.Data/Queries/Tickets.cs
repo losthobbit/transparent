@@ -259,10 +259,29 @@ namespace Transparent.Data.Queries
             db.SaveChanges();
         }
 
+        /// <summary>
+        /// Gets tags that the user is competent in.
+        /// </summary>
+        /// <remarks>
+        /// For performance purposes, GetExpertTags and GetCompetentTags could be combined into one DB call.
+        /// </remarks>
         public IQueryable<Tag> GetCompetentTags(int userId)
         {
             return db.UserTags
             .Where(userTag => userTag.FkUserId == userId && userTag.TotalPoints >= configuration.PointsRequiredToBeCompetent)
+            .Select(userTag => userTag.Tag);
+        }
+
+        /// <summary>
+        /// Gets tags that the user is an expert in.
+        /// </summary>
+        /// <remarks>
+        /// For performance purposes, GetExpertTags and GetCompetentTags could be combined into one DB call.
+        /// </remarks>
+        public IQueryable<Tag> GetExpertTags(int userId)
+        {
+            return db.UserTags
+            .Where(userTag => userTag.FkUserId == userId && userTag.TotalPoints >= configuration.PointsRequiredToBeAnExpert)
             .Select(userTag => userTag.Tag);
         }
 
@@ -343,7 +362,8 @@ namespace Transparent.Data.Queries
             return db.Tickets.Find(id);
         }
 
-        private TicketTagViewModel GetTicketTagInfo(TicketTag ticketTag, int ticketUserId, int userId, IEnumerable<Tag> competentTags)
+        private TicketTagViewModel GetTicketTagInfo(TicketTag ticketTag, int ticketUserId, int userId,
+            IEnumerable<Tag> competentTags, IEnumerable<Tag> expertTags = null)
         {
             var info = new TicketTagViewModel
             {
@@ -356,6 +376,8 @@ namespace Transparent.Data.Queries
             info.UserMayVerify = info.UserMayDelete && ticketTag.FkCreatedById != userId && 
                 !(ticketTag.FkCreatedById == null && ticketUserId == userId);
 
+            info.UserIsExpert = expertTags != null && expertTags.Any(expertTag => expertTag.Id == ticketTag.FkTagId);
+
             return info;
         }
 
@@ -367,7 +389,9 @@ namespace Transparent.Data.Queries
         public IEnumerable<TicketTagViewModel> GetTicketTagInfoList(Ticket ticket, int userId)
         {
             var competentTags = GetCompetentTags(userId).ToList();
-            return ticket.TicketTags.Select(ticketTag => GetTicketTagInfo(ticketTag, ticket.FkUserId, userId, competentTags)).ToList();
+            var expertTags = GetExpertTags(userId).ToList();
+            return ticket.TicketTags.Select(ticketTag => 
+                GetTicketTagInfo(ticketTag, ticket.FkUserId, userId, competentTags, expertTags)).ToList();
         }
 
         /// <exception cref="NotSupportedException">User may not delete tag.</exception>
@@ -396,6 +420,31 @@ namespace Transparent.Data.Queries
                 throw new NotSupportedException("User may not add tag");
 
             db.TicketTags.Add(new TicketTag { FkTicketId = ticketId, FkTagId = tagId, FkCreatedById = userId });
+            SetModifiedDate(ticketId);
+
+            db.SaveChanges();
+        }
+
+        /// <exception cref="NotSupportedException">User may not answer ticket.</exception>
+        public void SetArgument(int ticketId, int userId, string argument)
+        {
+            if (db.Tickets.Single(ticket => ticket.Id == ticketId).State != TicketState.Discussion)
+                throw new NotSupportedException("Argument cannot be set.  Ticket is not in the Discussion state.");
+
+            var ticketTagIds = db.TicketTags.Where(tag => tag.FkTicketId == ticketId).Select(tag => tag.FkTagId);
+            if(!GetExpertTags(userId).Select(tag => tag.Id).Intersect(ticketTagIds).Any())
+                throw new NotSupportedException("User is not an expert in any of the ticket tags and cannot answer the ticket.");
+
+            var argumentRow = db.Arguments.SingleOrDefault(arg => arg.FkTicketId == ticketId
+                && arg.FkUserId == userId);
+            if (argumentRow == null)
+            {
+                db.Arguments.Add(new Argument { FkTicketId = ticketId, FkUserId = userId, Body = argument });
+            }
+            else
+            {
+                argumentRow.Body = argument;
+            }
             SetModifiedDate(ticketId);
 
             db.SaveChanges();

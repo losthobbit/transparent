@@ -81,7 +81,7 @@ namespace Transparent.Data.Tests.Queries
         }
 
         [TestCase(TicketState.Verification)]
-        [TestCase(TicketState.Argument)]
+        [TestCase(TicketState.Discussion)]
         [TestCase(TicketState.Voting)]
         public void MyQueue_returns_tickets_in_public_state(TicketState ticketState)
         {
@@ -119,7 +119,7 @@ namespace Transparent.Data.Tests.Queries
         #region HighestRanked
 
         [TestCase(TicketState.Verification)]
-        [TestCase(TicketState.Argument)]
+        [TestCase(TicketState.Discussion)]
         [TestCase(TicketState.Voting)]
         public void HighestRanked_returns_tickets_in_public_state(TicketState ticketState)
         {
@@ -155,7 +155,7 @@ namespace Transparent.Data.Tests.Queries
         #region Newest
 
         [TestCase(TicketState.Verification)]
-        [TestCase(TicketState.Argument)]
+        [TestCase(TicketState.Discussion)]
         [TestCase(TicketState.Voting)]
         public void Newest_returns_tickets_in_public_state(TicketState ticketState)
         {
@@ -230,7 +230,7 @@ namespace Transparent.Data.Tests.Queries
         }
 
         [TestCase(TicketState.Verification)]
-        [TestCase(TicketState.Argument)]
+        [TestCase(TicketState.Discussion)]
         [TestCase(TicketState.Voting)]
         public void Search_returns_tests_in_public_state(TicketState ticketState)
         {
@@ -670,9 +670,17 @@ namespace Transparent.Data.Tests.Queries
 
         private Ticket getTicketTagInfoList_Ticket;
 
-        private void ArrangeGetTicketInfoTagList(Relative userPointsForTag = Relative.GreaterThan)
+        private void ArrangeGetTicketInfoTagList
+        (
+            Relative userPointsForTag = Relative.GreaterThan,
+            KnowledgeLevel knowledgeLevel = KnowledgeLevel.Competent
+        )
         {
-            testData.StephensCriticalThinkingTag.TotalPoints = testConfiguration.PointsRequiredToBeCompetent + (int)userPointsForTag;
+            testData.StephensCriticalThinkingTag.TotalPoints = 
+                (knowledgeLevel == KnowledgeLevel.Competent 
+                ? testConfiguration.PointsRequiredToBeCompetent
+                : testConfiguration.PointsRequiredToBeAnExpert)
+                + (int)userPointsForTag;
 
             getTicketTagInfoList_Ticket = new Suggestion
             {
@@ -781,6 +789,34 @@ namespace Transparent.Data.Tests.Queries
             Assert.IsFalse(actual.UserMayVerify);
         }
 
+        [Test]
+        public void GetTicketTagInfoList_user_has_less_than_expert_points_for_that_tag_returns_UserIsExpert_is_false()
+        {
+            //Arrange
+            ArrangeGetTicketInfoTagList(Relative.LessThan, KnowledgeLevel.Expert);
+
+            //Act
+            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, testData.Stephen.UserId).Single();
+
+            //Assert
+            Assert.IsFalse(actual.UserIsExpert);
+        }
+
+        [TestCase(Relative.GreaterThan)]
+        [TestCase(Relative.EqualTo)]
+        public void GetTicketTagInfoList_user_has_expert_points_for_that_tag_returns_UserIsExpert_is_true(
+            Relative userPointsForTag)
+        {
+            //Arrange
+            ArrangeGetTicketInfoTagList(userPointsForTag, KnowledgeLevel.Expert);
+
+            //Act
+            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, testData.Stephen.UserId).Single();
+
+            //Assert
+            Assert.IsTrue(actual.UserIsExpert);
+        }
+
         #endregion GetTicketTagInfoList
 
         #region StartTest
@@ -886,8 +922,7 @@ namespace Transparent.Data.Tests.Queries
             target.Create(ticket, testData.Stephen.UserId);
 
             //Assert
-            Assert.GreaterOrEqual(actualTicket.ModifiedDate, DateTime.UtcNow.AddSeconds(-3));
-            Assert.LessOrEqual(actualTicket.ModifiedDate, DateTime.UtcNow);
+            AssertModifiedDateSet(actualTicket.ModifiedDate);
         }
 
         #endregion Create
@@ -909,8 +944,7 @@ namespace Transparent.Data.Tests.Queries
             target.AddTicketTag(ticket.Id, testData.CriticalThinkingTag.Id, testData.Stephen.UserId);
 
             //Assert
-            Assert.GreaterOrEqual(actualTicket.ModifiedDate, DateTime.UtcNow.AddSeconds(-3));
-            Assert.LessOrEqual(actualTicket.ModifiedDate, DateTime.UtcNow);
+            AssertModifiedDateSet(actualTicket.ModifiedDate);
         }
 
         #endregion AddTicketTag
@@ -932,8 +966,7 @@ namespace Transparent.Data.Tests.Queries
             target.DeleteTicketTag(ticket.Id, testData.ScubaDivingTag.Id, testData.Admin.UserId);
 
             //Assert
-            Assert.GreaterOrEqual(actualTicket.ModifiedDate, DateTime.UtcNow.AddSeconds(-3));
-            Assert.LessOrEqual(actualTicket.ModifiedDate, DateTime.UtcNow);
+            AssertModifiedDateSet(actualTicket.ModifiedDate);
         }
 
         #endregion DeleteTicketTag
@@ -955,11 +988,94 @@ namespace Transparent.Data.Tests.Queries
             target.VerifyTicketTag(ticket.Id, testData.ScubaDivingTag.Id, testData.Admin.UserId);
 
             //Assert
-            Assert.GreaterOrEqual(actualTicket.ModifiedDate, DateTime.UtcNow.AddSeconds(-3));
-            Assert.LessOrEqual(actualTicket.ModifiedDate, DateTime.UtcNow);
+            AssertModifiedDateSet(actualTicket.ModifiedDate);
         }
 
         #endregion VerifyTicketTag
+
+        #region SetArgument
+
+        private Argument setArgument_ExistingArgument;
+        private Ticket setArgument_Ticket;
+
+        private void ArrangeSetArgument(bool existingArgument = false)
+        {
+            setArgument_Ticket = testData.JoesScubaDivingSuggestion;
+            setArgument_Ticket.State = TicketState.Discussion;
+
+            setArgument_ExistingArgument = new Argument
+            {
+                FkTicketId = testData.JoesScubaDivingSuggestion.Id,
+                FkUserId = testData.Admin.UserId
+            };
+            testData.UsersContext.Arguments.Add(setArgument_ExistingArgument);
+         }
+
+        [Test]
+        public void SetArgument_with_valid_user_and_no_argument_adds_argument()
+        {
+            //Arrange
+            ArrangeSetArgument();
+            Argument newArgument = null;
+            usersContext.SavedChanges += context =>
+            {
+                newArgument = context.Arguments.Last();
+            };           
+
+            //Act
+            target.SetArgument(setArgument_Ticket.Id, testData.Admin.UserId, "hello");
+
+            //Assert
+            Assert.AreEqual("hello", newArgument.Body);
+            Assert.AreEqual(testData.Admin.UserId, testData.Admin.UserId);
+            AssertModifiedDateSet(testData.JoesScubaDivingSuggestion.ModifiedDate);
+        }
+      
+        [Test]
+        public void SetArgument_with_valid_user_and_existing_argument_updates_argument()
+        {
+            //Arrange
+            ArrangeSetArgument(true);
+            string actualArgument = null;
+            usersContext.SavedChanges += context =>
+            {
+                actualArgument = setArgument_ExistingArgument.Body;
+            };
+
+            //Act
+            target.SetArgument(setArgument_Ticket.Id, testData.Admin.UserId, "hello");
+
+            //Assert
+            Assert.AreEqual("hello", actualArgument);
+            AssertModifiedDateSet(testData.JoesScubaDivingSuggestion.ModifiedDate);
+        }
+
+        [Test]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void SetArgument_with_user_who_is_not_an_expert_for_the_ticket_throws_NotSupportedException()
+        {
+            //Arrange
+            ArrangeSetArgument();
+            testData.AdminsScubaDivingTag.TotalPoints = testConfiguration.PointsRequiredToBeAnExpert - 1;
+
+            //Act
+            target.SetArgument(setArgument_Ticket.Id, testData.Admin.UserId, "hello");
+        }
+
+        [TestCase(TicketState.Verification)]
+        [TestCase(TicketState.Completed)]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void SetArgument_with_ticket_not_in_Discussion_state_throws_NotSupportedException(TicketState state)
+        {
+            //Arrange
+            ArrangeSetArgument();
+            setArgument_Ticket.State = state;
+
+            //Act
+            target.SetArgument(setArgument_Ticket.Id, testData.Admin.UserId, "hello");
+        }
+
+        #endregion SetArgument
 
         #region ProgressTicketsWithVerifiedTags
 
@@ -994,8 +1110,7 @@ namespace Transparent.Data.Tests.Queries
 
             //Assert
             Assert.AreNotEqual(TicketState.Verification, actualState.Value);
-            Assert.GreaterOrEqual(actualModifiedDate.Value, DateTime.UtcNow.AddSeconds(-3));
-            Assert.LessOrEqual(actualModifiedDate.Value, DateTime.UtcNow);
+            AssertModifiedDateSet(actualModifiedDate.Value);
         }
 
         [Test]
@@ -1060,5 +1175,11 @@ namespace Transparent.Data.Tests.Queries
         }
 
         #endregion ProgressTicketsWithVerifiedTags
+
+        private void AssertModifiedDateSet(DateTime modifiedDate)
+        {
+            Assert.GreaterOrEqual(modifiedDate, DateTime.UtcNow.AddSeconds(-3));
+            Assert.LessOrEqual(modifiedDate, DateTime.UtcNow);
+        }
     }
 }

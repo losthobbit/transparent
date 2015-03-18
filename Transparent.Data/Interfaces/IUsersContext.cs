@@ -23,6 +23,7 @@ namespace Transparent.Data.Interfaces
         IDbSet<Suggestion> Suggestions { get; }
         IDbSet<TestMarking> TestMarkings { get; }
         IDbSet<Subscription> Subscriptions { get; }
+        IDbSet<Argument> Arguments { get; set; }
 
         int SaveChanges();
         DbEntityEntry Entry(object entity);

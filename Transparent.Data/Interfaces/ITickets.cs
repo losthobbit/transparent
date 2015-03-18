@@ -59,11 +59,12 @@ namespace Transparent.Data.Interfaces
 
         void Create(Ticket ticket, int userId);
 
+        void SetArgument(int ticketId, int userId, string argument);
+
         #region Progress tickets
 
         void ProgressTicketsWithVerifiedTags();
 
         #endregion Progress tickets
-
     }
 }

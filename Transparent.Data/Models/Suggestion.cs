@@ -11,7 +11,7 @@ namespace Transparent.Data.Models
         private static TicketState[] states = new[]
         {
             TicketState.Verification,
-            TicketState.Argument,
+            TicketState.Discussion,
             TicketState.Voting,
             TicketState.Rejected,
             TicketState.Accepted,

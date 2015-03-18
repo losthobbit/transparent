@@ -36,7 +36,7 @@ namespace Transparent.Data.Models
         /// Once a configured number of arguments have been written, the ticket goes to the next state.
         /// Not applicable to tests.
         /// </remarks>
-        Argument = 20,
+        Discussion = 20,
 
         /// <remarks>
         /// Once a configured number of votes have been cast, and a configured amount of time has passed, the ticket goes to the next state.

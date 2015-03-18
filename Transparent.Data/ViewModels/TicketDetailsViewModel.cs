@@ -9,18 +9,17 @@ namespace Transparent.Data.ViewModels
 {
     public class TicketDetailsViewModel : BaseTicket
     {
-        private Ticket ticket { get; set; }
-        private bool multipleTags { get; set; }
-
-        public TicketRank UserRank { get; set; }
-
-        public IEnumerable<TicketTagViewModel> TagInfo { get; set; }
-
         public TicketDetailsViewModel()
         {
 
         }
 
+        /// <summary>
+        /// Create a populated TicketDetailsViewModel
+        /// </summary>
+        /// <param name="ticket">Ticket to base this on.</param>
+        /// <param name="userRank">How the viewing user ranked the ticket.</param>
+        /// <param name="tagInfo">Tags associated with the ticket.</param>
         public TicketDetailsViewModel(Ticket ticket, TicketRank userRank, IEnumerable<TicketTagViewModel> tagInfo)
         {
             this.ticket = ticket;
@@ -33,8 +32,15 @@ namespace Transparent.Data.ViewModels
             CreatedDate = ticket.CreatedDate;
             TicketType = ticket.TicketType;
             TicketTags = ticket.TicketTags;
+            State = ticket.State;
             TagInfo = tagInfo;
         }
+
+        public TicketRank UserRank { get; set; }
+        public IEnumerable<TicketTagViewModel> TagInfo { get; set; }
+
+        private Ticket ticket { get; set; }
+        private bool multipleTags { get; set; }
 
         public override string TextForCreated
         {

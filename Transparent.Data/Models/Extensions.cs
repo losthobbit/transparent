@@ -16,6 +16,9 @@ namespace Transparent.Data.Models
             return (T)property.GetCustomAttributes(attrType, false).First();
         }
 
+        /// <summary>
+        /// How the specified user ranked the ticket.
+        /// </summary>
         public static TicketRank GetTicketRank(this Ticket ticket, int userId)
         {
             var rankRecord = ticket.UserRanks.SingleOrDefault(rank => rank.FkUserId == userId);

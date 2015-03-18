@@ -11,7 +11,7 @@ namespace Transparent.Data.Models
         private static TicketState[] states = new[]
         {
             TicketState.Verification,
-            TicketState.Argument,
+            TicketState.Discussion,
             TicketState.Voting
         };
 
@@ -32,6 +32,14 @@ namespace Transparent.Data.Models
             get
             {
                 return "Asked";
+            }
+        }
+
+        public override string TextForArgument
+        {
+            get
+            {
+                return "answer";
             }
         }
 

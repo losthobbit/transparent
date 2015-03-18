@@ -113,7 +113,7 @@
             // PingTimer
             // 
             this.PingTimer.Enabled = true;
-            this.PingTimer.Interval = 120000;
+            this.PingTimer.Interval = 299000;
             this.PingTimer.Tick += new System.EventHandler(this.PingTimer_Tick);
             // 
             // Form1
