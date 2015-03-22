@@ -1,6 +1,7 @@
 ﻿@model Transparent.Data.Models.BaseTicket
 @using Castle.Windsor
 @using Transparent.Extensions;
+@using Transparent.Business.ViewModels;
 @{
     var container = ((IContainerAccessor)Context.ApplicationInstance).Container;
     var tags = container.Resolve<Transparent.Data.Interfaces.ITags>();
@@ -25,7 +26,8 @@
         </div>
         <div class="metadata">
             <div>
-                @Html.Action("_TicketTags", new Transparent.Business.ViewModels.TicketTagsViewModel(Model, ViewBag.EnableTagButton == null || ViewBag.EnableTagButton))
+                @Html.Action("_TicketTags", new TicketTagsViewModel(Model, 
+               ViewBag.EnableTagButton == null || ViewBag.EnableTagButton, (IEnumerable<TicketTagViewModel>)ViewData["TagInfo"]))
             </div>
             <div id="tagSelectors"></div>
             <script>

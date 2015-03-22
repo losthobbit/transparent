@@ -27,13 +27,13 @@ namespace Transparent.Business.ViewModels
 
         }
 
-        public TicketTagsViewModel(BaseTicket ticket, bool enableTagButton)
+        public TicketTagsViewModel(BaseTicket ticket, bool enableTagButton, IEnumerable<TicketTagViewModel> tagInfo = null)
         {
             EnableTagButton = enableTagButton;
             MultipleTags = ticket.MultipleTags;
             TicketId = ticket.Id;
 
-            TagInfo = TicketTagViewModel.CreateList(ticket);
+            TagInfo = TicketTagViewModel.CreateList(ticket, tagInfo);
         }
     }
 }

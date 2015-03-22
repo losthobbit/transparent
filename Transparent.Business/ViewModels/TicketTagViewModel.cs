@@ -20,9 +20,6 @@ namespace Transparent.Business.ViewModels
         {
             var tagInfoList = new List<TicketTagViewModel>(ticket.TicketTags.Select(ticketTag => new TicketTagViewModel { TagId = ticketTag.FkTagId, Name = ticketTag.Tag.Name }));
 
-            var ticketDetailsViewModel = ticket.Map();
-            if(source == null && ticketDetailsViewModel != null)
-                source = ticketDetailsViewModel.TagInfo;
             if (source != null)
             {
                 foreach (var ticketTagViewModel in tagInfoList)

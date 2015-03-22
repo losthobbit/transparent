@@ -9,7 +9,7 @@
 
 @Html.Partial("_MenuPartial")
 
-@Html.Partial("_DetailsPartial", Model.Map())
+@Html.Partial("_DetailsPartial", Model.Map(), new ViewDataDictionary {{ "TagInfo", Model.TagInfo }})
 
 @foreach (var argument in Model.Arguments)
 {
