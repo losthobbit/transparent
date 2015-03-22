@@ -1,4 +1,4 @@
-﻿@model Transparent.Business.ViewModels.DiscussViewModel
+﻿@model Transparent.Business.ViewModels.ArgumentViewModel
 
 <h3>@Model.Caption</h3>
 <div id="discussEditPartial" class="display-field">
@@ -8,11 +8,10 @@
     @Html.HiddenFor(m => m.Caption)
     @Html.HiddenFor(m => m.FkTicketId)
     @Html.ValidationSummary(true)
-    <fieldset class="long gap-above">
+    <fieldset class="long">
         <legend>@Model.Caption</legend>
         <div class="editor-field gap-above">
             @Html.EditorFor(model => model.Body)
-            <br />
             @Html.ValidationMessageFor(model => model.Body)
         </div>
         <p>

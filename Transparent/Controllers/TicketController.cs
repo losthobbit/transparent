@@ -35,16 +35,19 @@ namespace Transparent.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("_Discuss")]
-        public PartialViewResult Post_Discuss(DiscussViewModel discuss)
+        public PartialViewResult Post_Discuss(ArgumentViewModel discuss)
         {
-            tickets.SetArgument(discuss.FkTicketId, WebSecurity.CurrentUserId, discuss.Body);
+            if (ModelState.IsValid)
+            {
+                tickets.SetArgument(discuss.FkTicketId, WebSecurity.CurrentUserId, discuss.Body);
+            }
 
             return PartialView("_DiscussEditPartial", discuss);
         }
 
         [HttpGet]
         [ActionName("_Discuss")]
-        public PartialViewResult Get_Discuss(DiscussViewModel discuss)
+        public PartialViewResult Get_Discuss(ArgumentViewModel discuss)
         {
             return PartialView("_DiscussEditPartial", discuss);
         }

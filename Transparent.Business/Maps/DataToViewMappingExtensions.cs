@@ -25,7 +25,7 @@ namespace Transparent.Business.Maps
                 TicketTags = source.TicketTags,
                 State = source.State,
                 TextForArgument = source.TextForArgument,
-                Arguments = Map(source.Arguments)
+                Arguments = Map(source.Arguments).ToList()
             };
             viewModel.Arguments.ForEach(argument => 
             {
@@ -40,18 +40,19 @@ namespace Transparent.Business.Maps
             return Map((Data.Models.BaseTicket)source);
         }
 
-        public static IEnumerable<DiscussViewModel> Map(this IEnumerable<Data.Models.Argument> source)
+        public static IEnumerable<ArgumentViewModel> Map(this IEnumerable<Data.Models.Argument> source)
         {
             if (source == null)
                 return null;
             return source.Select(Map);
         }
 
-        public static DiscussViewModel Map(this Data.Models.Argument source)
+        public static ArgumentViewModel Map(this Data.Models.Argument source)
         {
-            return new DiscussViewModel
+            return new ArgumentViewModel
             {
-                Body = source.Body
+                Body = source.Body,
+                FkUserId = source.FkUserId
             };
         }
 

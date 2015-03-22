@@ -11,10 +11,11 @@ namespace Transparent.Business.ViewModels
     /// Part of a discussion on a suggestion or an answer to a question.
     /// </summary>
     [MetadataType(typeof(IArgument))]
-    public class DiscussViewModel: IArgument
+    public class ArgumentViewModel: IArgument
     {
         public string Caption { get; set; }
         public int FkTicketId { get; set; }
         public string Body { get; set; }
+        public int FkUserId { get; set; }
     }
 }

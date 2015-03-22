@@ -11,16 +11,20 @@
 
 @Html.Partial("_DetailsPartial", Model.Map(), new ViewDataDictionary {{ "TagInfo", Model.TagInfo }})
 
-@foreach (var argument in Model.Arguments)
-{
-    @Html.Partial("_DiscussViewPartial", argument)
+@{
+    var args = Model.Arguments;
+    var currentUsersArg = args.SingleOrDefault(arg => arg.FkUserId == WebSecurity.CurrentUserId);
+    foreach (var argument in args.Where(arg => arg != currentUsersArg))
+    {
+        @Html.Partial("_DiscussViewPartial", argument)
+    }
 }
 
 @if (Model.State == Transparent.Data.Models.TicketState.Discussion && Model.TagInfo.Any(info => info.UserIsExpert))
-{// TODO: Ensure that user has not already answered!
-    <input id="discussButton" type="button" value="Add @Model.TextForArgument.PrefixIndefiniteArticle()"/>
-    <div id="discussAnswer" style="display:none">
-        @Html.Action("_Discuss", new DiscussViewModel { FkTicketId = Model.Id, Caption = @Model.TextForArgument.CapitalizeFirstLetter() })
+{
+    <input id="discussButton" style="display:@(currentUsersArg == null?"inline":"none")" type="button" value="Add @Model.TextForArgument.PrefixIndefiniteArticle()"/>
+    <div id="discussAnswer" style="display:@(currentUsersArg == null?"none":"inline")">
+        @Html.Action("_Discuss", currentUsersArg ?? new ArgumentViewModel { FkTicketId = Model.Id, Caption = @Model.TextForArgument.CapitalizeFirstLetter() })
     </div>
     <script>
         $(function () {

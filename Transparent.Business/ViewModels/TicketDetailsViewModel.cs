@@ -23,7 +23,7 @@ namespace Transparent.Business.ViewModels
 
         public TicketRank UserRank { get; set; }
         public IEnumerable<TicketTagViewModel> TagInfo { get; set; }
-        public IEnumerable<DiscussViewModel> Arguments { get; set; }
+        public ICollection<ArgumentViewModel> Arguments { get; set; }
 
         public string TextForCreated { get; set; }
         public string TextForArgument { get; set; }
