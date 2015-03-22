@@ -66,6 +66,8 @@ namespace Transparent.Data.Models
         [Display(Name = "Tags")]
         public virtual ICollection<TicketTag> TicketTags { get; set; }
 
+        public virtual ICollection<Argument> Arguments { get; set; }
+
         [NotMapped]
         public virtual bool MultipleTags { get { return true; } }
 

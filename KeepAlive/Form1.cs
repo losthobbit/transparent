@@ -44,9 +44,9 @@ namespace KeepAlive
 
         private void PingTimer_Tick(object sender, EventArgs e)
         {
-            PingTimer.Enabled = false;
-            try
-            {
+            //PingTimer.Enabled = false;
+            //try
+            //{
                 using (var client = new WebClient())
                 {
                     WebException webException = null;
@@ -64,22 +64,22 @@ namespace KeepAlive
                     stopWatch.Stop();
                     Output(String.Format("Time: {0}  Ping interval: {1}   Download time: {2}   Response: {3}",
                         DateTime.Now.TimeOfDay, PingTimer.Interval, stopWatch.Elapsed, response));
-                    if (webException != null || stopWatch.ElapsedMilliseconds > RequiredResponseTime)
-                    {
-                        PingTimer.Interval = (int)((double)PingTimer.Interval * reducer);
-                    }
-                    else
-                    {
-                        PingTimer.Interval = (int)((double)PingTimer.Interval * increaser);
-                    }
+            //        if (webException != null || stopWatch.ElapsedMilliseconds > RequiredResponseTime)
+            //        {
+            //            PingTimer.Interval = (int)((double)PingTimer.Interval * reducer);
+            //        }
+            //        else
+            //        {
+            //            PingTimer.Interval = (int)((double)PingTimer.Interval * increaser);
+            //        }
                 }
-                Normalize(false, ref reducer);
-                Normalize(true, ref increaser);
-            }
-            finally
-            {
-                PingTimer.Enabled = true;
-            }
+            //    Normalize(false, ref reducer);
+            //    Normalize(true, ref increaser);
+            //}
+            //finally
+            //{
+            //    PingTimer.Enabled = true;
+            //}
         }
 
         /// <summary>

@@ -9,10 +9,10 @@ using System.Web.Security;
 using Transparent.Data;
 using Transparent.Data.Interfaces;
 using Transparent.Data.Models;
-using Transparent.Data.ViewModels;
-using Transparent.Data.Queries;
+using Transparent.Business.ViewModels;
+using Transparent.Business.Interfaces;
+using Transparent.Business.Maps;
 using WebMatrix.WebData;
-using Transparent.Models.Ticket;
 
 namespace Transparent.Controllers
 {
@@ -35,18 +35,18 @@ namespace Transparent.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("_Discuss")]
-        public PartialViewResult Post_Discuss(Discuss discuss)
+        public PartialViewResult Post_Discuss(DiscussViewModel discuss)
         {
             tickets.SetArgument(discuss.FkTicketId, WebSecurity.CurrentUserId, discuss.Body);
 
-            return PartialView("_DiscussPartial", discuss);
+            return PartialView("_DiscussEditPartial", discuss);
         }
 
         [HttpGet]
         [ActionName("_Discuss")]
-        public PartialViewResult Get_Discuss(Discuss discuss)
+        public PartialViewResult Get_Discuss(DiscussViewModel discuss)
         {
-            return PartialView("_DiscussPartial", discuss);
+            return PartialView("_DiscussEditPartial", discuss);
         }
 
         [HttpPost]
@@ -122,8 +122,9 @@ namespace Transparent.Controllers
             {
                 return HttpNotFound();
             }
-            return View(new TicketDetailsViewModel(ticket, ticket.GetTicketRank(WebSecurity.CurrentUserId), 
-                tickets.GetTicketTagInfoList(ticket, WebSecurity.CurrentUserId)));
+            var ticketDetailsViewModel = ticket.Map().Map(ticket.GetTicketRank(WebSecurity.CurrentUserId));
+            ticketDetailsViewModel.TagInfo = tickets.GetTicketTagInfoList(ticket, WebSecurity.CurrentUserId);
+            return View(ticketDetailsViewModel);
         }
 
         //

@@ -4,7 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Transparent.Data.Interfaces;
-using Transparent.Data.ViewModels;
+using Transparent.Business.ViewModels;
+using Transparent.Business.Interfaces;
 
 namespace Transparent.Controllers
 {

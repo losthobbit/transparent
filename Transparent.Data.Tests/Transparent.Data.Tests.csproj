@@ -64,14 +64,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Generic\FakeDbSet.cs" />
-    <Compile Include="Helpers\FakeTicketDbSet.cs" />
-    <Compile Include="Helpers\FakeUsersContext.cs" />
-    <Compile Include="Helpers\TestConfig.cs" />
-    <Compile Include="Helpers\TestData.cs" />
     <Compile Include="Models\StatefulTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Queries\TicketsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

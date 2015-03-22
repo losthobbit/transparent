@@ -55,6 +55,8 @@
     <Compile Include="Interfaces\Events\IEventRunner.cs" />
     <Compile Include="JavaScriptRoutines.cs" />
     <Compile Include="LinqExtensions.cs" />
+    <Compile Include="Mapping\IMapToExisting.cs" />
+    <Compile Include="Mapping\IMapToNew.cs" />
     <Compile Include="Services\Events\Event.cs" />
     <Compile Include="Services\Events\EventRunner.cs" />
     <Compile Include="StringRoutines.cs" />
@@ -64,7 +66,9 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Mapping\ReadMe.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

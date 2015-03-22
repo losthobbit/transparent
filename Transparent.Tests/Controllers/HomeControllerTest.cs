@@ -10,6 +10,7 @@ using Moq;
 using System.Web;
 using System.Web.Routing;
 using Transparent.Data.Interfaces;
+using Transparent.Business.Interfaces;
 
 namespace Transparent.Tests.Controllers
 {
