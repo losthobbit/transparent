@@ -948,6 +948,19 @@ namespace Transparent.Business.Tests.Services
             AssertModifiedDateSet(actualTicket.ModifiedDate);
         }
 
+        [TestCase(TicketState.Accepted)]
+        [TestCase(TicketState.Draft)]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void AddTicketTag_with_ticket_not_in_verification_state_throws_NotSupportedException(TicketState state)
+        {
+            //Arrange
+            var ticket = testData.JoesScubaDivingSuggestion;
+            ticket.State = state;
+
+            //Act
+            target.AddTicketTag(ticket.Id, testData.CriticalThinkingTag.Id, testData.Stephen.UserId);
+        }
+
         #endregion AddTicketTag
 
         #region DeleteTicketTag
@@ -970,6 +983,19 @@ namespace Transparent.Business.Tests.Services
             AssertModifiedDateSet(actualTicket.ModifiedDate);
         }
 
+        [TestCase(TicketState.Rejected)]
+        [TestCase(TicketState.InProgress)]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void DeleteTicketTag_with_ticket_not_in_verification_state_throws_NotSupportedException(TicketState state)
+        {
+            //Arrange
+            var ticket = testData.JoesScubaDivingSuggestion;
+            ticket.State = state;
+
+            //Act
+            target.DeleteTicketTag(ticket.Id, testData.ScubaDivingTag.Id, testData.Admin.UserId);
+        }
+
         #endregion DeleteTicketTag
 
         #region VerifyTicketTag
@@ -990,6 +1016,19 @@ namespace Transparent.Business.Tests.Services
 
             //Assert
             AssertModifiedDateSet(actualTicket.ModifiedDate);
+        }
+
+        [TestCase(TicketState.Completed)]
+        [TestCase(TicketState.Discussion)]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void VerifyTicketTag_with_ticket_not_in_verification_state_throws_NotSupportedException(TicketState state)
+        {
+            //Arrange
+            var ticket = testData.JoesScubaDivingSuggestion;
+            ticket.State = state;
+
+            //Act
+            target.VerifyTicketTag(ticket.Id, testData.ScubaDivingTag.Id, testData.Admin.UserId);
         }
 
         #endregion VerifyTicketTag

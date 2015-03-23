@@ -2,6 +2,7 @@
 @using Castle.Windsor
 @using Transparent.Extensions;
 @using Transparent.Business.ViewModels;
+@using Transparent.Data.Models;
 @{
     var container = ((IContainerAccessor)Context.ApplicationInstance).Container;
     var tags = container.Resolve<Transparent.Data.Interfaces.ITags>();
@@ -32,7 +33,7 @@
             <div id="tagSelectors"></div>
             <script>
                 var tags = @(tags.SerializeAndIndentTags(competentTagIds));
-                var enableAdd = @Json.Encode(Model.MultipleTags);
+                var enableAdd = @Json.Encode(Model.MultipleTags && Model.State <= TicketState.Verification);
 
                 $(function(){
                     if(tags.length > 0 && enableAdd)
