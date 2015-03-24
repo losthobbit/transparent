@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Models\StatefulTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\DataServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

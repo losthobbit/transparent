@@ -16,17 +16,17 @@ namespace Transparent.Business.Events
     /// </summary>
     public class CompleteTagValidationEvent: Event
     {
-        private readonly Func<ITickets> getTicketsService;
+        private readonly Func<IProgressTickets> getProgressTicketsService;
 
-        public CompleteTagValidationEvent(Common.Interfaces.IConfiguration configuration, Func<ITickets> getTicketsService)
+        public CompleteTagValidationEvent(Common.Interfaces.IConfiguration configuration, Func<IProgressTickets> getProgressTicketsService)
             : base(TimeSpan.Parse(configuration.GetValue("CompleteTagValidationEventInterval")))
         {
-            this.getTicketsService = getTicketsService;
+            this.getProgressTicketsService = getProgressTicketsService;
         }
 
         public override void Action()
         {
-            var tickets = getTicketsService();
+            var tickets = getProgressTicketsService();
             tickets.ProgressTicketsWithVerifiedTags();
         }
     }

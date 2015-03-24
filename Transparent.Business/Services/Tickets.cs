@@ -28,22 +28,14 @@ namespace Transparent.Business.Services
     /// </remarks>
     public class Tickets: ITickets
     {
-        /// <summary>
-        /// One requires this number of total points on a tag in order to view it in My Queue.
-        /// </summary>
-        /// <remarks>
-        /// Can be a configurable setting.
-        /// </remarks>
-        public const int MinimumUserTagPointsToWorkOnTicketWithSameTag = 1;
-
-        private IUsersContext db;
-
+        private readonly IUsersContext db;
+        private readonly IDataService dataService;
         private readonly IConfiguration configuration;
 
-        public Tickets(IUsersContext db, IConfiguration configuration)
+        public Tickets(IUsersContext db, IDataService dataService, IConfiguration configuration)
         {
             this.db = db;
-
+            this.dataService = dataService;
             this.configuration = configuration;
         }
 
@@ -81,7 +73,7 @@ namespace Transparent.Business.Services
                     from ticket in TicketSet(filter).GetPublic()
                     join ticketTag in db.TicketTags on ticket equals ticketTag.Ticket
                     join userTag in db.UserTags on ticketTag.Tag equals userTag.Tag
-                    where userTag.FkUserId == userId && userTag.TotalPoints >= MinimumUserTagPointsToWorkOnTicketWithSameTag
+                    where userTag.FkUserId == userId && userTag.TotalPoints >= configuration.PointsRequiredToBeCompetent
                     select ticket
                 ).OrderByDescending(ticket => ticket.Rank)                
             );
@@ -232,7 +224,7 @@ namespace Transparent.Business.Services
                 }
                 if(userTag.TotalPoints >= configuration.PointsRequiredBeforeDeductingPoints)
                 {
-                    AddPoints(userPoint, userTag, -configuration.PointsToDeductWhenStartingTest);
+                    dataService.AddPoints(userPoint, userTag, -configuration.PointsToDeductWhenStartingTest);
                 }
                 db.UserPoints.Add(userPoint);
                 db.SaveChanges();
@@ -452,41 +444,6 @@ namespace Transparent.Business.Services
             db.SaveChanges();
         }
 
-        // TODO: Consider putting these in a partial class?
-        #region Progress tickets
-
-        /// <summary>
-        /// Progresses tickets which are in the Verification state, and were last modified
-        /// the specified amount of time ago.
-        /// </summary>
-        public void ProgressTicketsWithVerifiedTags()
-        {
-            var lastModified = DateTime.UtcNow - configuration.DelayAfterValidatingTags;
-            var verifiedTickets = from ticket in db.Tickets
-                                  where ticket.State == TicketState.Verification &&
-                                  ticket.ModifiedDate <= lastModified && 
-                                  ticket.TicketTags.Any() &&
-                                  ticket.TicketTags.All(tag => tag.Verified)
-                                  select ticket;
-
-            foreach (var ticket in verifiedTickets)
-            {
-                SetNextState(ticket);
-            }
-            db.SaveChanges();
-        }
-
-        #endregion Progress tickets
-
-        private void SetNextState(Ticket ticket)
-        {
-            var state = ticket.NextState;
-            if (state == null)
-                throw new NotSupportedException("Ticket does not have a next state");
-            ticket.State = ticket.NextState.Value;
-            ticket.ModifiedDate = DateTime.UtcNow;
-        }
-
         private void SetModifiedDate(int ticketId)
         {
             db.Tickets.Single(ticket => ticket.Id == ticketId).ModifiedDate = DateTime.UtcNow;
@@ -533,7 +490,7 @@ namespace Transparent.Business.Services
                 pointsToAdd = -testAnswer.Quantity;
             }
             if (pointsToAdd != 0)
-                AddPoints
+                dataService.AddPoints
                 (
                     testAnswer,
                     testAnswer.User.Tags.Single(userTag => userTag.FkTagId == testAnswer.FkTagId),
@@ -548,64 +505,14 @@ namespace Transparent.Business.Services
         private void AdjustTestMarkersPoints(UserPoint testAnswer, bool? testPassed)
         {
             // Deduct markers' points in the case of a tie, or minority
-            AddPoints(testAnswer.TestMarkings
+            dataService.AddPoints(db, testAnswer.TestMarkings
                 .Where(testMarking => testPassed == null || testMarking.Passed != testPassed.Value)
                 .Select(marking => marking.FkUserId), testAnswer.FkTagId, testAnswer.FkTestId, -configuration.PointsMarkersLoseForDisagreeingATestResult, PointReason.MarkedTest);
 
             // Increase markers' points in the case of a majority
-            AddPoints(testAnswer.TestMarkings
+            dataService.AddPoints(db, testAnswer.TestMarkings
                 .Where(testMarking => testPassed.HasValue && testMarking.Passed == testPassed.Value)
                 .Select(marking => marking.FkUserId), testAnswer.FkTagId, testAnswer.FkTestId, configuration.PointsMarkersGainForAgreeingATestResult, PointReason.MarkedTest);
-        }
-
-        /// <summary>
-        /// Adds points to the UserPoint and UserTag.
-        /// </summary>
-        /// <remarks>
-        /// Does not call DbContext.SaveChanges.
-        /// </remarks>
-        private void AddPoints(UserPoint userPoint, UserTag userTag, int points)
-        {
-            userPoint.Quantity += points;
-            userTag.TotalPoints += points;
-        }
-
-        /// <summary>
-        /// Adds points to the UserPoint and UserTag.
-        /// </summary>
-        /// <remarks>
-        /// Does not call DbContext.SaveChanges.
-        /// </remarks>
-        private void AddPoints(int userId, int tagId, int testId, int points, PointReason reason)
-        {
-            var userPoint = db.UserPoints.SingleOrDefault(point => point.FkUserId == userId && point.FkTagId == tagId && point.FkTestId == testId);
-            if (userPoint == null)
-            {
-                userPoint = new UserPoint { FkUserId = userId, FkTagId = tagId, FkTestId = testId, Reason = reason };
-                db.UserPoints.Add(userPoint);
-            }
-
-            var userTag = db.UserTags.SingleOrDefault(tag => tag.FkUserId == userId && tag.FkTagId == tagId);
-            if (userTag == null)
-            {
-                userTag = new UserTag { FkTagId = tagId, FkUserId = userId };
-                db.UserTags.Add(userTag);
-            }
-            AddPoints(userPoint, userTag, points);
-        }
-
-        /// <summary>
-        /// Adds points to the UserPoints and UserTags.
-        /// </summary>
-        /// <remarks>
-        /// Does not call DbContext.SaveChanges.
-        /// </remarks>
-        private void AddPoints(IEnumerable<int> userId, int tagId, int testId, int points, PointReason reason)
-        {
-            foreach (var user in userId)
-            {
-                AddPoints(user, tagId, testId, points, reason);
-            }
         }
 
         /// <exception cref="NotSupportedException">User may not verify tag.</exception>

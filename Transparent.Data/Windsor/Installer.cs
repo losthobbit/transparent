@@ -19,7 +19,8 @@ namespace Transparent.Data.Windsor
             container.Register(
                 Component.For<IUsersContext>().ImplementedBy<UsersContext>().LifeStyle.Transient,
                 Component.For<ITags>().ImplementedBy<Tags>().LifeStyle.Singleton,
-                Component.For<IConfiguration>().ImplementedBy<Configuration>().LifeStyle.Singleton
+                Component.For<IConfiguration>().ImplementedBy<Configuration>().LifeStyle.Singleton,
+                Component.For<IDataService>().ImplementedBy<DataService>().LifeStyle.Singleton
             );
 
             Func<IUsersContext> usersContextFactory = () => container.Resolve<IUsersContext>();

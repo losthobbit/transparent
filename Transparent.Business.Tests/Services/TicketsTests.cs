@@ -17,32 +17,29 @@ using Transparent.Business.ViewModels;
 namespace Transparent.Business.Tests.Services
 {
     [TestFixture]
-    public class TicketsTests
+    public class TicketsTests : BaseTests
     {
-        private Fixture fixture;
-
         private Tickets target;
 
-        private TestData testData;
-        private IConfiguration testConfiguration;
-        private FakeUsersContext usersContext;
+        private IDataService dataService;
 
-        [SetUp()]
-        public void SetUp()
+        [SetUp]
+        public override void SetUp()
         {
-            fixture = new Fixture();
+            base.SetUp();
 
-            testData = TestData.Create();
-            usersContext = testData.UsersContext;
-            testConfiguration = new TestConfig();
-            target = new Tickets(usersContext, testConfiguration);
+            // TODO: I simply put this here to make existing tests pass.
+            // Feel free to refactor the data service into a mock.
+            dataService = new Transparent.Data.Services.DataService();
+
+            target = new Tickets(UsersContext, dataService, TestConfiguration);
         }
 
         #region MyQueue
 
         private void ArrangeMyQueue()
         {
-            testData.StephensCriticalThinkingTag.TotalPoints = Tickets.MinimumUserTagPointsToWorkOnTicketWithSameTag;
+            TestData.StephensCriticalThinkingTag.TotalPoints = TestConfiguration.PointsRequiredToBeCompetent;
         }
 
         [Test]
@@ -52,33 +49,33 @@ namespace Transparent.Business.Tests.Services
             ArrangeMyQueue();
 
             // Act
-            var ticketsContainer = target.MyQueue(new TicketsContainer(), testData.Stephen.UserId);
+            var ticketsContainer = target.MyQueue(new TicketsContainer(), TestData.Stephen.UserId);
 
             // Assert
-            ticketsContainer.PagedList.Single(ticket => ticket == testData.JoesCriticalThinkingSuggestion);
+            ticketsContainer.PagedList.Single(ticket => ticket == TestData.JoesCriticalThinkingSuggestion);
         }
 
         [Test]
         public void MyQueue_with_ticket_and_user_with_same_tag_and_less_than_minimum_points_does_not_return_ticket()
         {
             // Arrange
-            testData.StephensCriticalThinkingTag.TotalPoints = Tickets.MinimumUserTagPointsToWorkOnTicketWithSameTag - 1;
+            TestData.StephensCriticalThinkingTag.TotalPoints = TestConfiguration.PointsRequiredToBeCompetent - 1;
 
             // Act
-            var ticketsContainer = target.MyQueue(new TicketsContainer(), testData.Stephen.UserId);
+            var ticketsContainer = target.MyQueue(new TicketsContainer(), TestData.Stephen.UserId);
 
             // Assert
-            Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == testData.JoesCriticalThinkingSuggestion));
+            Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == TestData.JoesCriticalThinkingSuggestion));
         }
 
         [Test]
         public void MyQueue_with_ticket_and_user_without_same_tag_does_not_return_ticket()
         {
             // Act
-            var ticketsContainer = target.MyQueue(new TicketsContainer(), testData.Stephen.UserId);
+            var ticketsContainer = target.MyQueue(new TicketsContainer(), TestData.Stephen.UserId);
 
             // Assert
-            Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == testData.JoesScubaDivingSuggestion));
+            Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == TestData.JoesScubaDivingSuggestion));
         }
 
         [TestCase(TicketState.Verification)]
@@ -88,13 +85,13 @@ namespace Transparent.Business.Tests.Services
         {
             // Arrange
             ArrangeMyQueue();
-            testData.JoesCriticalThinkingSuggestion.State = ticketState;
+            TestData.JoesCriticalThinkingSuggestion.State = ticketState;
 
             // Act
-            var ticketsContainer = target.MyQueue(new TicketsContainer(), testData.Stephen.UserId);
+            var ticketsContainer = target.MyQueue(new TicketsContainer(), TestData.Stephen.UserId);
 
             // Assert
-            ticketsContainer.PagedList.Single(ticket => ticket == testData.JoesCriticalThinkingSuggestion);
+            ticketsContainer.PagedList.Single(ticket => ticket == TestData.JoesCriticalThinkingSuggestion);
         }
 
         [TestCase(TicketState.Draft)]
@@ -106,13 +103,13 @@ namespace Transparent.Business.Tests.Services
         {
             // Arrange
             ArrangeMyQueue();
-            testData.JoesCriticalThinkingSuggestion.State = ticketState;
+            TestData.JoesCriticalThinkingSuggestion.State = ticketState;
 
             // Act
-            var ticketsContainer = target.MyQueue(new TicketsContainer(), testData.Stephen.UserId);
+            var ticketsContainer = target.MyQueue(new TicketsContainer(), TestData.Stephen.UserId);
 
             // Assert
-            Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == testData.JoesCriticalThinkingSuggestion));
+            Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == TestData.JoesCriticalThinkingSuggestion));
         }
 
         #endregion MyQueue
@@ -125,13 +122,13 @@ namespace Transparent.Business.Tests.Services
         public void HighestRanked_returns_tickets_in_public_state(TicketState ticketState)
         {
             // Arrange
-            testData.JoesScubaDivingSuggestion.State = ticketState;
+            TestData.JoesScubaDivingSuggestion.State = ticketState;
 
             // Act
             var ticketsContainer = target.HighestRanked(new TicketsContainer());
 
             // Assert
-            ticketsContainer.PagedList.Single(ticket => ticket == testData.JoesScubaDivingSuggestion);
+            ticketsContainer.PagedList.Single(ticket => ticket == TestData.JoesScubaDivingSuggestion);
         }
 
         [TestCase(TicketState.Draft)]
@@ -142,13 +139,13 @@ namespace Transparent.Business.Tests.Services
         public void HighestRanked_does_not_return_tickets_in_non_public_state(TicketState ticketState)
         {
             // Arrange
-            testData.JoesScubaDivingSuggestion.State = ticketState;
+            TestData.JoesScubaDivingSuggestion.State = ticketState;
 
             // Act
             var ticketsContainer = target.HighestRanked(new TicketsContainer());
 
             // Assert
-            Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == testData.JoesScubaDivingSuggestion));
+            Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == TestData.JoesScubaDivingSuggestion));
         }
 
         #endregion HighestRanked
@@ -161,13 +158,13 @@ namespace Transparent.Business.Tests.Services
         public void Newest_returns_tickets_in_public_state(TicketState ticketState)
         {
             // Arrange
-            testData.JoesScubaDivingSuggestion.State = ticketState;
+            TestData.JoesScubaDivingSuggestion.State = ticketState;
 
             // Act
             var ticketsContainer = target.Newest(new TicketsContainer());
 
             // Assert
-            ticketsContainer.PagedList.Single(ticket => ticket == testData.JoesScubaDivingSuggestion);
+            ticketsContainer.PagedList.Single(ticket => ticket == TestData.JoesScubaDivingSuggestion);
         }
 
         [TestCase(TicketState.Draft)]
@@ -178,13 +175,13 @@ namespace Transparent.Business.Tests.Services
         public void Newest_does_not_return_tickets_in_non_public_state(TicketState ticketState)
         {
             // Arrange
-            testData.JoesScubaDivingSuggestion.State = ticketState;
+            TestData.JoesScubaDivingSuggestion.State = ticketState;
 
             // Act
             var ticketsContainer = target.Newest(new TicketsContainer());
 
             // Assert
-            Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == testData.JoesScubaDivingSuggestion));
+            Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == TestData.JoesScubaDivingSuggestion));
         }
 
         #endregion Newest
@@ -211,7 +208,7 @@ namespace Transparent.Business.Tests.Services
             var response = target.Search(searchFilter);
 
             //Assert
-            response.PagedList.Single(ticket => ticket == testData.CriticalThinkingTestThatJoeTookThatStephenMarked);
+            response.PagedList.Single(ticket => ticket == TestData.CriticalThinkingTestThatJoeTookThatStephenMarked);
         }
 
         [Test]
@@ -227,7 +224,7 @@ namespace Transparent.Business.Tests.Services
             var response = target.Search(filter);
 
             //Assert
-            Assert.IsFalse(response.PagedList.Any(ticket => ticket == testData.CriticalThinkingTestThatJoeTookThatStephenMarked));
+            Assert.IsFalse(response.PagedList.Any(ticket => ticket == TestData.CriticalThinkingTestThatJoeTookThatStephenMarked));
         }
 
         [TestCase(TicketState.Verification)]
@@ -237,13 +234,13 @@ namespace Transparent.Business.Tests.Services
         {
             // Arrange
             ArrangeSearch();
-            testData.CriticalThinkingTestThatJoeTookThatStephenMarked.State = ticketState;
+            TestData.CriticalThinkingTestThatJoeTookThatStephenMarked.State = ticketState;
 
             // Act
             var response = target.Search(searchFilter);
 
             // Assert
-            response.PagedList.Single(ticket => ticket == testData.CriticalThinkingTestThatJoeTookThatStephenMarked);
+            response.PagedList.Single(ticket => ticket == TestData.CriticalThinkingTestThatJoeTookThatStephenMarked);
         }
 
         [TestCase(TicketState.Completed)]
@@ -251,13 +248,13 @@ namespace Transparent.Business.Tests.Services
         {
             // Arrange
             ArrangeSearch();
-            testData.CriticalThinkingTestThatJoeTookThatStephenMarked.State = ticketState;
+            TestData.CriticalThinkingTestThatJoeTookThatStephenMarked.State = ticketState;
 
             // Act
             var response = target.Search(searchFilter);
 
             // Assert
-            Assert.IsFalse(response.PagedList.Any(ticket => ticket == testData.CriticalThinkingTestThatJoeTookThatStephenMarked));
+            Assert.IsFalse(response.PagedList.Any(ticket => ticket == TestData.CriticalThinkingTestThatJoeTookThatStephenMarked));
         }
 
         [TestCase(TicketState.Draft)]
@@ -265,13 +262,13 @@ namespace Transparent.Business.Tests.Services
         {
             // Arrange
             ArrangeSearch();
-            testData.CriticalThinkingTestThatJoeTookThatStephenMarked.State = ticketState;
+            TestData.CriticalThinkingTestThatJoeTookThatStephenMarked.State = ticketState;
 
             // Act
             var response = target.Search(searchFilter);
 
             // Assert
-            Assert.IsFalse(response.PagedList.Any(ticket => ticket == testData.CriticalThinkingTestThatJoeTookThatStephenMarked));
+            Assert.IsFalse(response.PagedList.Any(ticket => ticket == TestData.CriticalThinkingTestThatJoeTookThatStephenMarked));
         }
 
         #endregion Search
@@ -282,8 +279,8 @@ namespace Transparent.Business.Tests.Services
         public void GetUntakenTests_returns_only_tests_that_match_the_tag()
         {
             // Arrange
-            var tag = testData.CriticalThinkingTag;
-            var userId = testData.Stephen.UserId;
+            var tag = TestData.CriticalThinkingTag;
+            var userId = TestData.Stephen.UserId;
 
             // Act
             var actualTests = target.GetUntakenTests(tag.Id, userId);
@@ -297,9 +294,9 @@ namespace Transparent.Business.Tests.Services
         public void GetUntakenTests_returns_tests_that_have_not_been_taken_by_the_user()
         {
             // Arrange
-            var tag = testData.CriticalThinkingTag;
-            var userId = testData.Stephen.UserId;
-            var stephensPoints = testData.UsersContext.UserPoints.Where(userPoints => userPoints.User == testData.Stephen);
+            var tag = TestData.CriticalThinkingTag;
+            var userId = TestData.Stephen.UserId;
+            var stephensPoints = TestData.UsersContext.UserPoints.Where(userPoints => userPoints.User == TestData.Stephen);
             var testsStephenTook = stephensPoints.Select(point => point.TestTaken).Where(test => test != null).ToList();
             Assert.IsTrue(testsStephenTook.Any());
 
@@ -321,7 +318,7 @@ namespace Transparent.Business.Tests.Services
             //Arrange
 
             //Act
-            var actual = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserId);
+            var actual = target.GetTestsToBeMarked(new AnsweredTests(), TestData.Stephen.UserId);
 
             //Assert
             Assert.IsTrue(actual.PagedList.Any());
@@ -335,10 +332,10 @@ namespace Transparent.Business.Tests.Services
             //Arrange
 
             //Act
-            var actual = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserId);
+            var actual = target.GetTestsToBeMarked(new AnsweredTests(), TestData.Stephen.UserId);
 
             //Assert
-            Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.CriticalThinkingTestThatStephenTook));
+            Assert.IsTrue(actual.PagedList.All(item => item.Test != TestData.CriticalThinkingTestThatStephenTook));
         }
 
         [Test]
@@ -347,10 +344,10 @@ namespace Transparent.Business.Tests.Services
             //Arrange
 
             //Act
-            var actual = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserId);
+            var actual = target.GetTestsToBeMarked(new AnsweredTests(), TestData.Stephen.UserId);
 
             //Assert
-            Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.CriticalThinkingTestThatJoeTookThatStephenMarked));
+            Assert.IsTrue(actual.PagedList.All(item => item.Test != TestData.CriticalThinkingTestThatJoeTookThatStephenMarked));
         }
 
         [Test]
@@ -359,10 +356,10 @@ namespace Transparent.Business.Tests.Services
             //Arrange
 
             //Act
-            var actual = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserId);
+            var actual = target.GetTestsToBeMarked(new AnsweredTests(), TestData.Stephen.UserId);
 
             //Assert
-            Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.CriticalThinkingTestThatJoeTookThatHasBeenMarkedCompletely));
+            Assert.IsTrue(actual.PagedList.All(item => item.Test != TestData.CriticalThinkingTestThatJoeTookThatHasBeenMarkedCompletely));
         }
 
         [Test]
@@ -371,10 +368,10 @@ namespace Transparent.Business.Tests.Services
             //Arrange
 
             //Act
-            var actual = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserId);
+            var actual = target.GetTestsToBeMarked(new AnsweredTests(), TestData.Stephen.UserId);
 
             //Assert
-            Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.CriticalThinkingTestThatJoeStarted));
+            Assert.IsTrue(actual.PagedList.All(item => item.Test != TestData.CriticalThinkingTestThatJoeStarted));
         }
 
         [Test]
@@ -383,10 +380,10 @@ namespace Transparent.Business.Tests.Services
             //Arrange
 
             //Act
-            var actual = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserId);
+            var actual = target.GetTestsToBeMarked(new AnsweredTests(), TestData.Stephen.UserId);
 
             //Assert
-            Assert.IsTrue(actual.PagedList.All(item => item.Test != testData.BungeeJumpingTestThatJoeTook));
+            Assert.IsTrue(actual.PagedList.All(item => item.Test != TestData.BungeeJumpingTestThatJoeTook));
         }
 
         #endregion
@@ -397,12 +394,12 @@ namespace Transparent.Business.Tests.Services
         public void TestToBeMarked_returns_tests_which_are_returned_by_TestsToBeMarked()
         {
             //Arrange
-            var testList = target.GetTestsToBeMarked(new AnsweredTests(), testData.Stephen.UserId);
+            var testList = target.GetTestsToBeMarked(new AnsweredTests(), TestData.Stephen.UserId);
 
             foreach (var test in testList.PagedList)
             {
                 //Act
-                var actual = target.GetTestToBeMarked(test.Id, testData.Stephen.UserId);
+                var actual = target.GetTestToBeMarked(test.Id, TestData.Stephen.UserId);
 
                 //Assert
                 Assert.AreEqual(test.Id, actual.Id);
@@ -417,11 +414,11 @@ namespace Transparent.Business.Tests.Services
             //Arrange
             var invalidTests = new[]
             {
-                testData.CriticalThinkingTestThatStephenTook,
-                testData.CriticalThinkingTestThatJoeTookThatStephenMarked,
-                testData.CriticalThinkingTestThatJoeTookThatHasBeenMarkedCompletely,
-                testData.CriticalThinkingTestThatJoeStarted,
-                testData.BungeeJumpingTestThatJoeTook
+                TestData.CriticalThinkingTestThatStephenTook,
+                TestData.CriticalThinkingTestThatJoeTookThatStephenMarked,
+                TestData.CriticalThinkingTestThatJoeTookThatHasBeenMarkedCompletely,
+                TestData.CriticalThinkingTestThatJoeStarted,
+                TestData.BungeeJumpingTestThatJoeTook
             };
 
             foreach (var test in invalidTests)
@@ -429,7 +426,7 @@ namespace Transparent.Business.Tests.Services
                 try
                 {
                     //Act
-                    target.GetTestToBeMarked(test.Id, testData.Stephen.UserId);
+                    target.GetTestToBeMarked(test.Id, TestData.Stephen.UserId);
 
                     //Assert
                     Assert.Fail("SecurityException expected.");
@@ -458,18 +455,18 @@ namespace Transparent.Business.Tests.Services
             markTest_FailMarkers_UserTags = new List<UserTag>();
             markTest_PassMarkers_UserTags = new List<UserTag>();
 
-            testConfiguration.MarkersRequiredPerTest = markersRequiredPerTest;
+            TestConfiguration.MarkersRequiredPerTest = markersRequiredPerTest;
 
-            markTest_UserPoint = testData.PointForCriticalThinkingTestThatJoeTookThatStephenMarked;
-            var adminUserTag = testData.AddUserTag(testData.Admin, testData.CriticalThinkingTag, testConfiguration.PointsRequiredToBeCompetent);
+            markTest_UserPoint = TestData.PointForCriticalThinkingTestThatJoeTookThatStephenMarked;
+            var adminUserTag = TestData.AddUserTag(TestData.Admin, TestData.CriticalThinkingTag, TestConfiguration.PointsRequiredToBeCompetent);
             markTest_Markers_UserTags.Add(adminUserTag);
             markTest_PassMarkers_UserTags.Add(adminUserTag);
             var testsMarked = 0;
             while (markTest_UserPoint.TestMarkings.Count() < timesTestMarked)
             {
-                bool pass = fails == null ? fixture.Create<bool>() : testsMarked >= fails.Value;
-                var user = testData.CreateUser();
-                var userTag = testData.AddUserTag(user, testData.CriticalThinkingTag, testConfiguration.PointsRequiredToBeCompetent);
+                bool pass = fails == null ? Fixture.Create<bool>() : testsMarked >= fails.Value;
+                var user = TestData.CreateUser();
+                var userTag = TestData.AddUserTag(user, TestData.CriticalThinkingTag, TestConfiguration.PointsRequiredToBeCompetent);
                 markTest_Markers_UserTags.Add(userTag);
                 if (pass)
                     markTest_PassMarkers_UserTags.Add(userTag);
@@ -489,7 +486,7 @@ namespace Transparent.Business.Tests.Services
             ArrangeMarkTest(markersRequiredPerTest, markersRequiredPerTest - 2);
 
             //Act
-            target.MarkTest(markTest_UserPoint.Id, fixture.Create<bool>(), testData.Admin.UserId);
+            target.MarkTest(markTest_UserPoint.Id, Fixture.Create<bool>(), TestData.Admin.UserId);
 
             //Assert
             Assert.IsFalse(markTest_UserPoint.MarkingComplete);
@@ -502,13 +499,13 @@ namespace Transparent.Business.Tests.Services
             //Arrange
             ArrangeMarkTest(markersRequiredPerTest, markersRequiredPerTest - 1);
             var actualMarkingComplete = markTest_UserPoint.MarkingComplete;
-            usersContext.SavedChanges += context =>
+            UsersContext.SavedChanges += context =>
             {
                 actualMarkingComplete = markTest_UserPoint.MarkingComplete;
             };
 
             //Act
-            target.MarkTest(markTest_UserPoint.Id, fixture.Create<bool>(), testData.Admin.UserId);
+            target.MarkTest(markTest_UserPoint.Id, Fixture.Create<bool>(), TestData.Admin.UserId);
 
             //Assert
             Assert.IsTrue(actualMarkingComplete);
@@ -522,13 +519,13 @@ namespace Transparent.Business.Tests.Services
             var markersTagExpectedPoints = markTest_Markers_UserTags.Select(tag => tag.TotalPoints).ToList();
 
             List<int> actualPoints = null;
-            usersContext.SavedChanges += context =>
+            UsersContext.SavedChanges += context =>
             {
                 actualPoints = markTest_Markers_UserTags.Select(tag => tag.TotalPoints).ToList();
             };
 
             //Act
-            target.MarkTest(markTest_UserPoint.Id, true, testData.Admin.UserId);
+            target.MarkTest(markTest_UserPoint.Id, true, TestData.Admin.UserId);
 
             //Assert
             CollectionAssert.AreEqual(markersTagExpectedPoints, actualPoints);
@@ -538,18 +535,18 @@ namespace Transparent.Business.Tests.Services
         public void MarkTest_with_all_markers_and_50_50_split_reduces_all_markers_points(int markersRequiredPerTest, int pointsToLose)
         {
             //Arrange
-            testConfiguration.PointsMarkersLoseForDisagreeingATestResult = pointsToLose;
+            TestConfiguration.PointsMarkersLoseForDisagreeingATestResult = pointsToLose;
             ArrangeMarkTest(markersRequiredPerTest, markersRequiredPerTest - 1, markersRequiredPerTest / 2);
             var markersTagExpectedPoints = markTest_Markers_UserTags.Select(tag => tag.TotalPoints - pointsToLose).ToList();
 
             List<int> actualPoints = null;
-            usersContext.SavedChanges += context =>
+            UsersContext.SavedChanges += context =>
             {
                 actualPoints = markTest_Markers_UserTags.Select(tag => tag.TotalPoints).ToList();
             };
 
             //Act
-            target.MarkTest(markTest_UserPoint.Id, true, testData.Admin.UserId);
+            target.MarkTest(markTest_UserPoint.Id, true, TestData.Admin.UserId);
 
             //Assert
             CollectionAssert.AreEqual(markersTagExpectedPoints, actualPoints);
@@ -559,18 +556,18 @@ namespace Transparent.Business.Tests.Services
         public void MarkTest_with_all_markers_and_non_50_50_split_reduces_minority_markers_points(int markersRequiredPerTest, int pointsToLose, int numberOfFails)
         {
             //Arrange
-            testConfiguration.PointsMarkersLoseForDisagreeingATestResult = pointsToLose;
+            TestConfiguration.PointsMarkersLoseForDisagreeingATestResult = pointsToLose;
             ArrangeMarkTest(markersRequiredPerTest, markersRequiredPerTest - 1, numberOfFails);
             var minorityExpectedPoints = markTest_PassMarkers_UserTags.Select(tag => tag.TotalPoints - pointsToLose).ToList();
 
             List<int> actualPoints = null;
-            usersContext.SavedChanges += context =>
+            UsersContext.SavedChanges += context =>
             {
                 actualPoints = markTest_PassMarkers_UserTags.Select(tag => tag.TotalPoints).ToList();
             };
 
             //Act
-            target.MarkTest(markTest_UserPoint.Id, true, testData.Admin.UserId);
+            target.MarkTest(markTest_UserPoint.Id, true, TestData.Admin.UserId);
 
             //Assert
             CollectionAssert.AreEqual(minorityExpectedPoints, actualPoints);
@@ -580,18 +577,18 @@ namespace Transparent.Business.Tests.Services
         public void MarkTest_with_all_markers_and_non_50_50_split_increases_majority_markers_points(int markersRequiredPerTest, int pointsToGain, int numberOfFails)
         {
             //Arrange
-            testConfiguration.PointsMarkersGainForAgreeingATestResult = pointsToGain;
+            TestConfiguration.PointsMarkersGainForAgreeingATestResult = pointsToGain;
             ArrangeMarkTest(markersRequiredPerTest, markersRequiredPerTest - 1, numberOfFails);
             var majorityExpectedPoints = markTest_FailMarkers_UserTags.Select(tag => tag.TotalPoints + pointsToGain).ToList();
 
             List<int> actualPoints = null;
-            usersContext.SavedChanges += context =>
+            UsersContext.SavedChanges += context =>
             {
                 actualPoints = markTest_FailMarkers_UserTags.Select(tag => tag.TotalPoints).ToList();
             };
 
             //Act
-            target.MarkTest(markTest_UserPoint.Id, true, testData.Admin.UserId);
+            target.MarkTest(markTest_UserPoint.Id, true, TestData.Admin.UserId);
 
             //Assert
             CollectionAssert.AreEqual(majorityExpectedPoints, actualPoints);
@@ -601,22 +598,22 @@ namespace Transparent.Business.Tests.Services
         public void MarkTest_with_all_markers_and_majority_of_markers_passed_increases_markers_points(int markersRequiredPerTest, int pointsToGain, int numberOfFails)
         {
             //Arrange
-            testConfiguration.PointsForPassingATest = pointsToGain;
+            TestConfiguration.PointsForPassingATest = pointsToGain;
             ArrangeMarkTest(markersRequiredPerTest, markersRequiredPerTest - 1, numberOfFails);
 
             var actualPoints = markTest_UserPoint.Quantity;
-            var totalPoints = testData.JoesCriticalThinkingTag.TotalPoints;
-            usersContext.SavedChanges += context =>
+            var totalPoints = TestData.JoesCriticalThinkingTag.TotalPoints;
+            UsersContext.SavedChanges += context =>
             {
                 actualPoints = markTest_UserPoint.Quantity;
-                totalPoints = testData.JoesCriticalThinkingTag.TotalPoints;
+                totalPoints = TestData.JoesCriticalThinkingTag.TotalPoints;
             };
             var expectedPoints = pointsToGain;
             // e.g. if total = 10, actualPoints = -2, and pointsToGain = 7, then expected total = 19
             var expectedTotalPoints = totalPoints + pointsToGain - actualPoints;
 
             //Act
-            target.MarkTest(markTest_UserPoint.Id, true, testData.Admin.UserId);
+            target.MarkTest(markTest_UserPoint.Id, true, TestData.Admin.UserId);
 
             //Assert
             Assert.AreEqual(expectedPoints, actualPoints);
@@ -630,14 +627,14 @@ namespace Transparent.Business.Tests.Services
             ArrangeMarkTest(markersRequiredPerTest, markersRequiredPerTest - 1, numberOfFails);
 
             var expectedPoints = markTest_UserPoint.Quantity;
-            var expectedTotalPoints = testData.JoesCriticalThinkingTag.TotalPoints;
+            var expectedTotalPoints = TestData.JoesCriticalThinkingTag.TotalPoints;
 
             //Act
-            target.MarkTest(markTest_UserPoint.Id, true, testData.Admin.UserId);
+            target.MarkTest(markTest_UserPoint.Id, true, TestData.Admin.UserId);
 
             //Assert
             Assert.AreEqual(expectedPoints, markTest_UserPoint.Quantity);
-            Assert.AreEqual(expectedTotalPoints, testData.JoesCriticalThinkingTag.TotalPoints);
+            Assert.AreEqual(expectedTotalPoints, TestData.JoesCriticalThinkingTag.TotalPoints);
         }
 
         [TestCase(6, 3)]
@@ -647,18 +644,18 @@ namespace Transparent.Business.Tests.Services
             ArrangeMarkTest(markersRequiredPerTest, markersRequiredPerTest - 1, numberOfFails);
 
             var actualPoints = markTest_UserPoint.Quantity;
-            var totalPoints = testData.JoesCriticalThinkingTag.TotalPoints;
-            usersContext.SavedChanges += context =>
+            var totalPoints = TestData.JoesCriticalThinkingTag.TotalPoints;
+            UsersContext.SavedChanges += context =>
             {
                 actualPoints = markTest_UserPoint.Quantity;
-                totalPoints = testData.JoesCriticalThinkingTag.TotalPoints;
+                totalPoints = TestData.JoesCriticalThinkingTag.TotalPoints;
             };
             var expectedPoints = 0;
             // e.g. if total = 10, and actualPoints = -2, then expected total = 12
             var expectedTotalPoints = totalPoints - actualPoints;
 
             //Act
-            target.MarkTest(markTest_UserPoint.Id, true, testData.Admin.UserId);
+            target.MarkTest(markTest_UserPoint.Id, true, TestData.Admin.UserId);
 
             //Assert
             Assert.AreEqual(expectedPoints, actualPoints);
@@ -677,25 +674,25 @@ namespace Transparent.Business.Tests.Services
             KnowledgeLevel knowledgeLevel = KnowledgeLevel.Competent
         )
         {
-            testData.StephensCriticalThinkingTag.TotalPoints = 
+            TestData.StephensCriticalThinkingTag.TotalPoints = 
                 (knowledgeLevel == KnowledgeLevel.Competent 
-                ? testConfiguration.PointsRequiredToBeCompetent
-                : testConfiguration.PointsRequiredToBeAnExpert)
+                ? TestConfiguration.PointsRequiredToBeCompetent
+                : TestConfiguration.PointsRequiredToBeAnExpert)
                 + (int)userPointsForTag;
 
             getTicketTagInfoList_Ticket = new Suggestion
             {
-                User = testData.Joe,
-                FkUserId = testData.Joe.UserId,
+                User = TestData.Joe,
+                FkUserId = TestData.Joe.UserId,
                 TicketTags = new List<TicketTag>
                 {
                     new TicketTag
                     {
                         Verified = false,
-                        CreatedBy = testData.Joe,
-                        FkCreatedById = testData.Joe.UserId,
-                        Tag = testData.CriticalThinkingTag,
-                        FkTagId = testData.CriticalThinkingTag.Id
+                        CreatedBy = TestData.Joe,
+                        FkCreatedById = TestData.Joe.UserId,
+                        Tag = TestData.CriticalThinkingTag,
+                        FkTagId = TestData.CriticalThinkingTag.Id
                     }
                 }
             };
@@ -709,7 +706,7 @@ namespace Transparent.Business.Tests.Services
             ArrangeGetTicketInfoTagList(userPointsForTag);
 
             //Act
-            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, testData.Stephen.UserId).Single();
+            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, TestData.Stephen.UserId).Single();
 
             //Assert
             Assert.AreEqual(getTicketTagInfoList_Ticket.TicketTags.Single().FkTagId, actual.TagId);
@@ -725,7 +722,7 @@ namespace Transparent.Business.Tests.Services
             getTicketTagInfoList_Ticket.TicketTags.Single().FkCreatedById = null;
 
             //Act
-            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, testData.Stephen.UserId).Single();
+            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, TestData.Stephen.UserId).Single();
 
             //Assert
             Assert.IsTrue(actual.UserMayVerify);
@@ -739,7 +736,7 @@ namespace Transparent.Business.Tests.Services
             getTicketTagInfoList_Ticket.TicketTags.Single().Verified = true;
 
             //Act
-            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, testData.Stephen.UserId).Single();
+            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, TestData.Stephen.UserId).Single();
 
             //Assert
             Assert.IsFalse(actual.UserMayVerify);
@@ -750,11 +747,11 @@ namespace Transparent.Business.Tests.Services
         {
             //Arrange
             ArrangeGetTicketInfoTagList();
-            getTicketTagInfoList_Ticket.TicketTags.Single().CreatedBy = testData.Stephen;
-            getTicketTagInfoList_Ticket.TicketTags.Single().FkCreatedById = testData.Stephen.UserId;
+            getTicketTagInfoList_Ticket.TicketTags.Single().CreatedBy = TestData.Stephen;
+            getTicketTagInfoList_Ticket.TicketTags.Single().FkCreatedById = TestData.Stephen.UserId;
 
             //Act
-            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, testData.Stephen.UserId).Single();
+            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, TestData.Stephen.UserId).Single();
 
             //Assert
             Assert.IsFalse(actual.UserMayVerify);
@@ -767,11 +764,11 @@ namespace Transparent.Business.Tests.Services
             ArrangeGetTicketInfoTagList();
             getTicketTagInfoList_Ticket.TicketTags.Single().CreatedBy = null;
             getTicketTagInfoList_Ticket.TicketTags.Single().FkCreatedById = null;
-            getTicketTagInfoList_Ticket.User = testData.Stephen;
-            getTicketTagInfoList_Ticket.FkUserId = testData.Stephen.UserId;
+            getTicketTagInfoList_Ticket.User = TestData.Stephen;
+            getTicketTagInfoList_Ticket.FkUserId = TestData.Stephen.UserId;
 
             //Act
-            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, testData.Stephen.UserId).Single();
+            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, TestData.Stephen.UserId).Single();
 
             //Assert
             Assert.IsFalse(actual.UserMayVerify);
@@ -784,7 +781,7 @@ namespace Transparent.Business.Tests.Services
             ArrangeGetTicketInfoTagList(Relative.LessThan);
 
             //Act
-            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, testData.Stephen.UserId).Single();
+            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, TestData.Stephen.UserId).Single();
 
             //Assert
             Assert.IsFalse(actual.UserMayVerify);
@@ -797,7 +794,7 @@ namespace Transparent.Business.Tests.Services
             ArrangeGetTicketInfoTagList(Relative.LessThan, KnowledgeLevel.Expert);
 
             //Act
-            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, testData.Stephen.UserId).Single();
+            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, TestData.Stephen.UserId).Single();
 
             //Assert
             Assert.IsFalse(actual.UserIsExpert);
@@ -812,7 +809,7 @@ namespace Transparent.Business.Tests.Services
             ArrangeGetTicketInfoTagList(userPointsForTag, KnowledgeLevel.Expert);
 
             //Act
-            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, testData.Stephen.UserId).Single();
+            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, TestData.Stephen.UserId).Single();
 
             //Assert
             Assert.IsTrue(actual.UserIsExpert);
@@ -827,15 +824,15 @@ namespace Transparent.Business.Tests.Services
         {
             //Arrange
             UserTag stephensScubaDivingTag = null;
-            usersContext.SavedChanges += context =>
+            UsersContext.SavedChanges += context =>
             {
                 stephensScubaDivingTag = context.UserTags.SingleOrDefault(tag => 
-                    tag.FkTagId == testData.ScubaDivingTag.Id &&
-                    tag.FkUserId == testData.Stephen.UserId);
+                    tag.FkTagId == TestData.ScubaDivingTag.Id &&
+                    tag.FkUserId == TestData.Stephen.UserId);
             };
 
             //Act
-            target.StartTest(testData.ScubaDivingTestThatJoeTook, testData.Stephen.UserId);
+            target.StartTest(TestData.ScubaDivingTestThatJoeTook, TestData.Stephen.UserId);
 
             //Assert
             Assert.IsNotNull(stephensScubaDivingTag);
@@ -846,22 +843,22 @@ namespace Transparent.Business.Tests.Services
         public void StartTest_with_points_higher_than_or_equal_to_required_points_deducts_points(int pointsAboveRequired)
         {
             //Arrange
-            testData.StephensCriticalThinkingTag.TotalPoints = testConfiguration.PointsRequiredBeforeDeductingPoints + pointsAboveRequired;
+            TestData.StephensCriticalThinkingTag.TotalPoints = TestConfiguration.PointsRequiredBeforeDeductingPoints + pointsAboveRequired;
             int? actual = null;
-            usersContext.SavedChanges += context =>
+            UsersContext.SavedChanges += context =>
             {
                 var newPoint = context.UserPoints.Single(point =>
-                    point.FkTagId == testData.CriticalThinkingTag.Id &&
-                    point.FkTestId == testData.CriticalThinkingTestThatJoeTook.Id &&
-                    point.User == testData.Stephen);
+                    point.FkTagId == TestData.CriticalThinkingTag.Id &&
+                    point.FkTestId == TestData.CriticalThinkingTestThatJoeTook.Id &&
+                    point.User == TestData.Stephen);
                 actual = newPoint.Quantity;
             };
 
             //Act
-            target.StartTest(testData.CriticalThinkingTestThatJoeTook, testData.Stephen.UserId);
+            target.StartTest(TestData.CriticalThinkingTestThatJoeTook, TestData.Stephen.UserId);
 
             //Assert
-            Assert.AreEqual(-testConfiguration.PointsToDeductWhenStartingTest, actual.Value);
+            Assert.AreEqual(-TestConfiguration.PointsToDeductWhenStartingTest, actual.Value);
         }
 
         [TestCase(1)]
@@ -869,19 +866,19 @@ namespace Transparent.Business.Tests.Services
         public void StartTest_with_points_higher_than_or_equal_to_required_points_deducts_points_from_user_tag_total(int pointsAboveRequired)
         {
             //Arrange
-            testData.StephensCriticalThinkingTag.TotalPoints = testConfiguration.PointsRequiredBeforeDeductingPoints + pointsAboveRequired;
-            var prevPoints = testData.StephensCriticalThinkingTag.TotalPoints;
+            TestData.StephensCriticalThinkingTag.TotalPoints = TestConfiguration.PointsRequiredBeforeDeductingPoints + pointsAboveRequired;
+            var prevPoints = TestData.StephensCriticalThinkingTag.TotalPoints;
             var actualTotalPoints = prevPoints;
-            usersContext.SavedChanges += context =>
+            UsersContext.SavedChanges += context =>
             {
-                actualTotalPoints = testData.StephensCriticalThinkingTag.TotalPoints;
+                actualTotalPoints = TestData.StephensCriticalThinkingTag.TotalPoints;
             };
 
             //Act
-            target.StartTest(testData.CriticalThinkingTestThatJoeTook, testData.Stephen.UserId);
+            target.StartTest(TestData.CriticalThinkingTestThatJoeTook, TestData.Stephen.UserId);
 
             //Assert
-            Assert.AreEqual(prevPoints - testConfiguration.PointsToDeductWhenStartingTest, actualTotalPoints);
+            Assert.AreEqual(prevPoints - TestConfiguration.PointsToDeductWhenStartingTest, actualTotalPoints);
         }
 
         [TestCase(1)]
@@ -889,16 +886,16 @@ namespace Transparent.Business.Tests.Services
         public void StartTest_with_points_less_than_or_equal_to_required_points_does_not_deduct_points(int pointsBelowRequired)
         {
             //Arrange
-            testData.StephensCriticalThinkingTag.TotalPoints = testConfiguration.PointsRequiredBeforeDeductingPoints - pointsBelowRequired;
+            TestData.StephensCriticalThinkingTag.TotalPoints = TestConfiguration.PointsRequiredBeforeDeductingPoints - pointsBelowRequired;
 
             //Act
-            target.StartTest(testData.CriticalThinkingTestThatJoeTook, testData.Stephen.UserId);
+            target.StartTest(TestData.CriticalThinkingTestThatJoeTook, TestData.Stephen.UserId);
 
             //Assert
-            var newPoint = testData.UsersContext.UserPoints.Single(point =>
-                point.FkTagId == testData.CriticalThinkingTag.Id &&
-                point.FkTestId == testData.CriticalThinkingTestThatJoeTook.Id &&
-                point.User == testData.Stephen);
+            var newPoint = TestData.UsersContext.UserPoints.Single(point =>
+                point.FkTagId == TestData.CriticalThinkingTag.Id &&
+                point.FkTestId == TestData.CriticalThinkingTestThatJoeTook.Id &&
+                point.User == TestData.Stephen);
             Assert.AreEqual(0, newPoint.Quantity);
         }
 
@@ -914,13 +911,13 @@ namespace Transparent.Business.Tests.Services
             {
             };
             Ticket actualTicket = null;
-            usersContext.SavedChanges += context =>
+            UsersContext.SavedChanges += context =>
             {
                 actualTicket = context.Tickets.Last();
             };            
 
             //Act
-            target.Create(ticket, testData.Stephen.UserId);
+            target.Create(ticket, TestData.Stephen.UserId);
 
             //Assert
             AssertModifiedDateSet(actualTicket.ModifiedDate);
@@ -934,15 +931,15 @@ namespace Transparent.Business.Tests.Services
         public void AddTicketTag_with_valid_parameters_sets_ModifiedDate_on_ticket()
         {
             //Arrange
-            var ticket = testData.JoesScubaDivingSuggestion;
+            var ticket = TestData.JoesScubaDivingSuggestion;
             Ticket actualTicket = null;
-            usersContext.SavedChanges += context =>
+            UsersContext.SavedChanges += context =>
             {
                 actualTicket = ticket;
             };
 
             //Act
-            target.AddTicketTag(ticket.Id, testData.CriticalThinkingTag.Id, testData.Stephen.UserId);
+            target.AddTicketTag(ticket.Id, TestData.CriticalThinkingTag.Id, TestData.Stephen.UserId);
 
             //Assert
             AssertModifiedDateSet(actualTicket.ModifiedDate);
@@ -954,11 +951,11 @@ namespace Transparent.Business.Tests.Services
         public void AddTicketTag_with_ticket_not_in_verification_state_throws_NotSupportedException(TicketState state)
         {
             //Arrange
-            var ticket = testData.JoesScubaDivingSuggestion;
+            var ticket = TestData.JoesScubaDivingSuggestion;
             ticket.State = state;
 
             //Act
-            target.AddTicketTag(ticket.Id, testData.CriticalThinkingTag.Id, testData.Stephen.UserId);
+            target.AddTicketTag(ticket.Id, TestData.CriticalThinkingTag.Id, TestData.Stephen.UserId);
         }
 
         #endregion AddTicketTag
@@ -969,15 +966,15 @@ namespace Transparent.Business.Tests.Services
         public void DeleteTicketTag_with_valid_parameters_sets_ModifiedDate_on_ticket()
         {
             //Arrange
-            var ticket = testData.JoesScubaDivingSuggestion;
+            var ticket = TestData.JoesScubaDivingSuggestion;
             Ticket actualTicket = null;
-            usersContext.SavedChanges += context =>
+            UsersContext.SavedChanges += context =>
             {
                 actualTicket = ticket;
             };
 
             //Act
-            target.DeleteTicketTag(ticket.Id, testData.ScubaDivingTag.Id, testData.Admin.UserId);
+            target.DeleteTicketTag(ticket.Id, TestData.ScubaDivingTag.Id, TestData.Admin.UserId);
 
             //Assert
             AssertModifiedDateSet(actualTicket.ModifiedDate);
@@ -989,11 +986,11 @@ namespace Transparent.Business.Tests.Services
         public void DeleteTicketTag_with_ticket_not_in_verification_state_throws_NotSupportedException(TicketState state)
         {
             //Arrange
-            var ticket = testData.JoesScubaDivingSuggestion;
+            var ticket = TestData.JoesScubaDivingSuggestion;
             ticket.State = state;
 
             //Act
-            target.DeleteTicketTag(ticket.Id, testData.ScubaDivingTag.Id, testData.Admin.UserId);
+            target.DeleteTicketTag(ticket.Id, TestData.ScubaDivingTag.Id, TestData.Admin.UserId);
         }
 
         #endregion DeleteTicketTag
@@ -1004,15 +1001,15 @@ namespace Transparent.Business.Tests.Services
         public void VerifyTicketTag_with_valid_parameters_sets_ModifiedDate_on_ticket()
         {
             //Arrange
-            var ticket = testData.JoesScubaDivingSuggestion;
+            var ticket = TestData.JoesScubaDivingSuggestion;
             Ticket actualTicket = null;
-            usersContext.SavedChanges += context =>
+            UsersContext.SavedChanges += context =>
             {
                 actualTicket = ticket;
             };
 
             //Act
-            target.VerifyTicketTag(ticket.Id, testData.ScubaDivingTag.Id, testData.Admin.UserId);
+            target.VerifyTicketTag(ticket.Id, TestData.ScubaDivingTag.Id, TestData.Admin.UserId);
 
             //Assert
             AssertModifiedDateSet(actualTicket.ModifiedDate);
@@ -1024,11 +1021,11 @@ namespace Transparent.Business.Tests.Services
         public void VerifyTicketTag_with_ticket_not_in_verification_state_throws_NotSupportedException(TicketState state)
         {
             //Arrange
-            var ticket = testData.JoesScubaDivingSuggestion;
+            var ticket = TestData.JoesScubaDivingSuggestion;
             ticket.State = state;
 
             //Act
-            target.VerifyTicketTag(ticket.Id, testData.ScubaDivingTag.Id, testData.Admin.UserId);
+            target.VerifyTicketTag(ticket.Id, TestData.ScubaDivingTag.Id, TestData.Admin.UserId);
         }
 
         #endregion VerifyTicketTag
@@ -1040,15 +1037,15 @@ namespace Transparent.Business.Tests.Services
 
         private void ArrangeSetArgument(bool existingArgument = false)
         {
-            setArgument_Ticket = testData.JoesScubaDivingSuggestion;
+            setArgument_Ticket = TestData.JoesScubaDivingSuggestion;
             setArgument_Ticket.State = TicketState.Discussion;
 
             setArgument_ExistingArgument = new Argument
             {
-                FkTicketId = testData.JoesScubaDivingSuggestion.Id,
-                FkUserId = testData.Admin.UserId
+                FkTicketId = TestData.JoesScubaDivingSuggestion.Id,
+                FkUserId = TestData.Admin.UserId
             };
-            testData.UsersContext.Arguments.Add(setArgument_ExistingArgument);
+            TestData.UsersContext.Arguments.Add(setArgument_ExistingArgument);
          }
 
         [Test]
@@ -1057,18 +1054,18 @@ namespace Transparent.Business.Tests.Services
             //Arrange
             ArrangeSetArgument();
             Argument newArgument = null;
-            usersContext.SavedChanges += context =>
+            UsersContext.SavedChanges += context =>
             {
                 newArgument = context.Arguments.Last();
             };           
 
             //Act
-            target.SetArgument(setArgument_Ticket.Id, testData.Admin.UserId, "hello");
+            target.SetArgument(setArgument_Ticket.Id, TestData.Admin.UserId, "hello");
 
             //Assert
             Assert.AreEqual("hello", newArgument.Body);
-            Assert.AreEqual(testData.Admin.UserId, testData.Admin.UserId);
-            AssertModifiedDateSet(testData.JoesScubaDivingSuggestion.ModifiedDate);
+            Assert.AreEqual(TestData.Admin.UserId, TestData.Admin.UserId);
+            AssertModifiedDateSet(TestData.JoesScubaDivingSuggestion.ModifiedDate);
         }
       
         [Test]
@@ -1077,17 +1074,17 @@ namespace Transparent.Business.Tests.Services
             //Arrange
             ArrangeSetArgument(true);
             string actualArgument = null;
-            usersContext.SavedChanges += context =>
+            UsersContext.SavedChanges += context =>
             {
                 actualArgument = setArgument_ExistingArgument.Body;
             };
 
             //Act
-            target.SetArgument(setArgument_Ticket.Id, testData.Admin.UserId, "hello");
+            target.SetArgument(setArgument_Ticket.Id, TestData.Admin.UserId, "hello");
 
             //Assert
             Assert.AreEqual("hello", actualArgument);
-            AssertModifiedDateSet(testData.JoesScubaDivingSuggestion.ModifiedDate);
+            AssertModifiedDateSet(TestData.JoesScubaDivingSuggestion.ModifiedDate);
         }
 
         [Test]
@@ -1096,10 +1093,10 @@ namespace Transparent.Business.Tests.Services
         {
             //Arrange
             ArrangeSetArgument();
-            testData.AdminsScubaDivingTag.TotalPoints = testConfiguration.PointsRequiredToBeAnExpert - 1;
+            TestData.AdminsScubaDivingTag.TotalPoints = TestConfiguration.PointsRequiredToBeAnExpert - 1;
 
             //Act
-            target.SetArgument(setArgument_Ticket.Id, testData.Admin.UserId, "hello");
+            target.SetArgument(setArgument_Ticket.Id, TestData.Admin.UserId, "hello");
         }
 
         [TestCase(TicketState.Verification)]
@@ -1112,114 +1109,9 @@ namespace Transparent.Business.Tests.Services
             setArgument_Ticket.State = state;
 
             //Act
-            target.SetArgument(setArgument_Ticket.Id, testData.Admin.UserId, "hello");
+            target.SetArgument(setArgument_Ticket.Id, TestData.Admin.UserId, "hello");
         }
 
         #endregion SetArgument
-
-        #region ProgressTicketsWithVerifiedTags
-
-        Ticket progressTicketsWithVerifiedTagsTicket;
-
-        private void ArrangeProgressTicketsWithVerifiedTags()
-        {
-            progressTicketsWithVerifiedTagsTicket = testData.JoesCriticalThinkingSuggestion;
-            progressTicketsWithVerifiedTagsTicket.State = TicketState.Verification;
-            progressTicketsWithVerifiedTagsTicket.TicketTags.ForEach(tag => tag.Verified = true);
-            testConfiguration.DelayAfterValidatingTags = TimeSpan.FromSeconds(10);
-            progressTicketsWithVerifiedTagsTicket.ModifiedDate = DateTime.UtcNow.AddSeconds(-11);
-        }
-
-        [Test]
-        public void ProgressTicketsWithVerifiedTags_with_verified_ticket_changes_ticket_state()
-        {
-            //Arrange
-            ArrangeProgressTicketsWithVerifiedTags();
-            TicketState? actualState = null;
-            DateTime? actualModifiedDate = null;
-            Action updateTicket = () =>
-            {
-                actualState = progressTicketsWithVerifiedTagsTicket.State;
-                actualModifiedDate = progressTicketsWithVerifiedTagsTicket.ModifiedDate;
-            };
-            updateTicket();
-            usersContext.SavedChanges += context => updateTicket();
-
-            //Act
-            target.ProgressTicketsWithVerifiedTags();
-
-            //Assert
-            Assert.AreNotEqual(TicketState.Verification, actualState.Value);
-            AssertModifiedDateSet(actualModifiedDate.Value);
-        }
-
-        [Test]
-        public void ProgressTicketsWithVerifiedTags_with_unverified_ticket_does_not_change_ticket_state()
-        {
-            //Arrange
-            ArrangeProgressTicketsWithVerifiedTags();
-            progressTicketsWithVerifiedTagsTicket.State = TicketState.Draft;
-
-            //Act
-            target.ProgressTicketsWithVerifiedTags();
-
-            //Assert
-            Assert.AreEqual(TicketState.Draft, progressTicketsWithVerifiedTagsTicket.State);
-        }
-
-        [Test]
-        public void ProgressTicketsWithVerifiedTags_with_recently_modified_ticket_does_not_change_ticket_state()
-        {
-            //Arrange
-            ArrangeProgressTicketsWithVerifiedTags();
-            progressTicketsWithVerifiedTagsTicket.ModifiedDate = DateTime.UtcNow.AddSeconds(-8);
-
-            //Act
-            target.ProgressTicketsWithVerifiedTags();
-
-            //Assert
-            Assert.AreEqual(TicketState.Verification, progressTicketsWithVerifiedTagsTicket.State);
-        }
-
-        [Test]
-        public void ProgressTicketsWithVerifiedTags_with_ticket_without_tags_does_not_change_ticket_state()
-        {
-            //Arrange
-            ArrangeProgressTicketsWithVerifiedTags();
-            var tags = progressTicketsWithVerifiedTagsTicket.TicketTags.ToList();
-            progressTicketsWithVerifiedTagsTicket.TicketTags.Clear();
-            foreach(var tag in tags)
-            {
-                testData.UsersContext.TicketTags.Remove(tag);
-            }
-
-            //Act
-            target.ProgressTicketsWithVerifiedTags();
-
-            //Assert
-            Assert.AreEqual(TicketState.Verification, progressTicketsWithVerifiedTagsTicket.State);
-        }
-
-        [Test]
-        public void ProgressTicketsWithVerifiedTags_with_ticket_with_unverified_tag_does_not_change_ticket_state()
-        {
-            //Arrange
-            ArrangeProgressTicketsWithVerifiedTags();
-            progressTicketsWithVerifiedTagsTicket.TicketTags.Last().Verified = false;
-
-            //Act
-            target.ProgressTicketsWithVerifiedTags();
-
-            //Assert
-            Assert.AreEqual(TicketState.Verification, progressTicketsWithVerifiedTagsTicket.State);
-        }
-
-        #endregion ProgressTicketsWithVerifiedTags
-
-        private void AssertModifiedDateSet(DateTime modifiedDate)
-        {
-            Assert.GreaterOrEqual(modifiedDate, DateTime.UtcNow.AddSeconds(-3));
-            Assert.LessOrEqual(modifiedDate, DateTime.UtcNow);
-        }
     }
 }
