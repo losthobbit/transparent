@@ -23,7 +23,10 @@ namespace Transparent.Business.Tests.Helpers
             PointsRequiredToBeCompetent = 5;
             PointsRequiredToBeAnExpert = 10;
 
+            MaxPositionToAdvanceState = 2;
             DelayAfterValidatingTags = TimeSpan.FromSeconds(2);
+            MinimumNumberOfArgumentsToAdvanceState = 2;
+            DelayAfterDiscussion = TimeSpan.FromSeconds(2);
         }
 
         public string CurrentSubGoal { get; set; }
@@ -38,6 +41,9 @@ namespace Transparent.Business.Tests.Helpers
         public int PointsRequiredToBeCompetent { get; set; }
         public int PointsRequiredToBeAnExpert { get; set; }
 
+        public int MaxPositionToAdvanceState { get; set; }
         public TimeSpan DelayAfterValidatingTags { get; set; }
+        public int MinimumNumberOfArgumentsToAdvanceState { get; set; }
+        public TimeSpan DelayAfterDiscussion { get; set; }
     }
 }

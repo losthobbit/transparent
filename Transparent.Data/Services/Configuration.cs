@@ -36,12 +36,31 @@ namespace Transparent.Data.Services
         #region Progressing tickets
 
         /// <summary>
+        /// The maximum position (based on highest ranked within a state) that a ticket can
+        /// be in before being allowed to advance to the next state via a timed event.
+        /// </summary>
+        /// <remarks>
+        /// This prevents low ranked tickets from progressing faster than high ranked tickets.
+        /// </remarks>
+        public int MaxPositionToAdvanceState { get; set; }
+
+        /// <summary>
         /// Delay after tags have been validated before moving a ticket to the next state.
         /// </summary>
         /// <remarks>
         /// This allows time for tags to be added.
         /// </remarks>
         public TimeSpan DelayAfterValidatingTags { get; set; }
+
+        public int MinimumNumberOfArgumentsToAdvanceState { get; set; }
+
+        /// <summary>
+        /// Delay after the required number of arguments have been presented before moving a ticket to the next state.
+        /// </summary>
+        /// <remarks>
+        /// This allows time for additional arguments to be added.
+        /// </remarks>
+        public TimeSpan DelayAfterDiscussion { get; set; }
 
         #endregion Progressing tickets
 
@@ -59,7 +78,10 @@ namespace Transparent.Data.Services
             PointsRequiredToBeCompetent = int.Parse(configuration.GetValue("PointsRequiredToBeCompetent"));
             PointsRequiredToBeAnExpert = int.Parse(configuration.GetValue("PointsRequiredToBeAnExpert"));
 
+            MaxPositionToAdvanceState = int.Parse(configuration.GetValue("MaxPositionToAdvanceState"));
             DelayAfterValidatingTags = TimeSpan.Parse(configuration.GetValue("DelayAfterValidatingTags"));
+            MinimumNumberOfArgumentsToAdvanceState = int.Parse(configuration.GetValue("MinimumNumberOfArgumentsToAdvanceState"));
+            DelayAfterDiscussion = TimeSpan.Parse(configuration.GetValue("DelayAfterDiscussion"));
         }
     }
 }

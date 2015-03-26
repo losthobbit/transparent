@@ -37,14 +37,48 @@ namespace Transparent.Business.Services
             using (var db = getUsersContext())
             {
                 var lastModified = DateTime.UtcNow - configuration.DelayAfterValidatingTags;
-                var verifiedTickets = from ticket in db.Tickets
-                                      where ticket.State == TicketState.Verification &&
-                                      ticket.ModifiedDate <= lastModified &&
+
+                var highestRankedVerificationTickets = (from ticket in db.Tickets
+                                                        where ticket.State == TicketState.Verification
+                                                        orderby ticket.Rank descending
+                                                        select ticket).Take(configuration.MaxPositionToAdvanceState);
+
+                var verifiedTickets = from ticket in highestRankedVerificationTickets
+                                      where ticket.ModifiedDate <= lastModified &&
                                       ticket.TicketTags.Any() &&
                                       ticket.TicketTags.All(tag => tag.Verified)
                                       select ticket;
 
                 foreach (var ticket in verifiedTickets)
+                {
+                    dataService.SetNextState(ticket);
+                }
+                db.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// Progresses tickets which are in the Discussion state, and were last modified
+        /// the specified amount of time ago.
+        /// </summary>
+        public void ProgressTicketsWithArguments()
+        {
+            using (var db = getUsersContext())
+            {
+                var lastModified = DateTime.UtcNow - configuration.DelayAfterDiscussion;
+                var minNumberOfArguments = configuration.MinimumNumberOfArgumentsToAdvanceState;
+
+                var highestRankedDiscussionTickets = (from ticket in db.Tickets
+                                                      where ticket.State == TicketState.Discussion
+                                                      orderby ticket.Rank descending
+                                                      select ticket).Take(configuration.MaxPositionToAdvanceState);
+
+                var discussedTickets = from ticket in highestRankedDiscussionTickets
+                                       where ticket.ModifiedDate <= lastModified &&
+                                       ticket.Arguments.Count >= minNumberOfArguments
+                                       select ticket;
+
+                foreach (var ticket in discussedTickets)
                 {
                     dataService.SetNextState(ticket);
                 }

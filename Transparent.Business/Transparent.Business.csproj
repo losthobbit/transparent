@@ -82,6 +82,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\CompleteDiscussionEvent.cs" />
     <Compile Include="Events\CompleteTagValidationEvent.cs" />
     <Compile Include="Interfaces\IGeneral.cs" />
     <Compile Include="Interfaces\IProgressTickets.cs" />

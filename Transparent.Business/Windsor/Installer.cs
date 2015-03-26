@@ -19,14 +19,12 @@ namespace Transparent.Business.Windsor
         {
             container.Register(
                 Component.For<IEvent>().ImplementedBy<CompleteTagValidationEvent>().LifeStyle.Singleton,
+                Component.For<IEvent>().ImplementedBy<CompleteDiscussionEvent>().LifeStyle.Singleton,
                 Component.For<ITickets>().ImplementedBy<Tickets>().LifeStyle.Transient,
                 Component.For<IUser>().ImplementedBy<User>().LifeStyle.Transient,
                 Component.For<IGeneral>().ImplementedBy<General>().LifeStyle.Singleton,
                 Component.For<IProgressTickets>().ImplementedBy<ProgressTickets>().LifeStyle.Singleton
             );
-
-            Func<IProgressTickets> progressTicketsFactory = () => container.Resolve<IProgressTickets>();
-            container.Register(Component.For<Func<IProgressTickets>>().Instance(progressTicketsFactory));
         }
     }
 }
