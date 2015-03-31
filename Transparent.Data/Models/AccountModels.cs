@@ -66,7 +66,7 @@ namespace Transparent.Data.Models
 
     public class LoginModel : IValidatableObject
     {
-        [Display(Name = "Name")]
+        [Display(Name = "Username")]
         [StringLength(100)]
         public string UserName { get; set; }
 

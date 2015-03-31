@@ -16,6 +16,15 @@ namespace Transparent.Data.Models
             return (T)property.GetCustomAttributes(attrType, false).First();
         }
 
+        public static KnowledgeLevel ToKnowledgeLevel(this int points, int competentPoints, int expertPoints)
+        {
+            return points < competentPoints
+                ? KnowledgeLevel.Beginner
+                : points < expertPoints
+                    ? KnowledgeLevel.Competent
+                    : KnowledgeLevel.Expert;
+        }
+
         /// <summary>
         /// How the specified user ranked the ticket.
         /// </summary>

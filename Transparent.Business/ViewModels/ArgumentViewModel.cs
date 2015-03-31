@@ -17,5 +17,6 @@ namespace Transparent.Business.ViewModels
         public int FkTicketId { get; set; }
         public string Body { get; set; }
         public int FkUserId { get; set; }
+        public UserSummaryViewModel User { get; set; }
     }
 }

@@ -6,4 +6,4 @@ It reminded me of the days when I was first introduced to automapper and I could
 using a tool where I could simply say obj1.Prop = obj2.Prop and get design time compiler checking to see
 if I was doing anything silly.  
 
-To make things simple, I might not use and automatic mapper.
+To make things simple, I might not use an automatic mapper.

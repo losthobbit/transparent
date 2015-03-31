@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Transparent.Data.Caches;
 using Transparent.Data.Interfaces;
 using Transparent.Data.Services;
+using Common.Windsor;
 
 namespace Transparent.Data.Windsor
 {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 
-namespace Transparent.Windsor
+namespace Common.Windsor
 {
     public static class WindsorExtensions
     {   

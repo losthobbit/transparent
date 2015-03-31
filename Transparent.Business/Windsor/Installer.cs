@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using Transparent.Business.Events;
 using Transparent.Business.Interfaces;
 using Transparent.Business.Services;
+using Common.Windsor;
+using Transparent.Business.Maps;
 
 namespace Transparent.Business.Windsor
 {
@@ -23,8 +25,10 @@ namespace Transparent.Business.Windsor
                 Component.For<ITickets>().ImplementedBy<Tickets>().LifeStyle.Transient,
                 Component.For<IUser>().ImplementedBy<User>().LifeStyle.Transient,
                 Component.For<IGeneral>().ImplementedBy<General>().LifeStyle.Singleton,
-                Component.For<IProgressTickets>().ImplementedBy<ProgressTickets>().LifeStyle.Singleton
+                Component.For<IProgressTickets>().ImplementedBy<ProgressTickets>().LifeStyle.Singleton,
+                Component.For<Dependencies>().LifeStyle.Singleton
             );
+            DataToViewMappingExtensions.Dependencies = container.Resolve<Dependencies>();
         }
     }
 }

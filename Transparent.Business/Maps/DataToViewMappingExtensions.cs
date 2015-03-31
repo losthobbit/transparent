@@ -6,11 +6,22 @@ using System.Text;
 using System.Threading.Tasks;
 using Transparent.Business.ViewModels;
 using Common;
+using Transparent.Data.Interfaces;
 
 namespace Transparent.Business.Maps
 {
+    using Data.Models;
+
     public static class DataToViewMappingExtensions
     {
+        /// <summary>
+        /// Must be injected.
+        /// </summary>
+        /// <remarks>
+        /// I know this is not good... but I don't care enough to care :)
+        /// </remarks>
+        public static Dependencies Dependencies { get; set; }
+
         public static TicketDetailsViewModel Map(this Data.Models.BaseTicket source)
         {
             var viewModel = new TicketDetailsViewModel
@@ -52,7 +63,39 @@ namespace Transparent.Business.Maps
             return new ArgumentViewModel
             {
                 Body = source.Body,
-                FkUserId = source.FkUserId
+                FkUserId = source.FkUserId,
+                User = source.User.Map()
+            };
+        }
+
+        public static UserSummaryViewModel Map(this Data.Models.UserProfile source)
+        {
+            return new UserSummaryViewModel
+            {
+                Username = source.UserName,
+                Tags = source.Tags.Map()
+                    .Where(t => t.KnowledgeLevel > KnowledgeLevel.Beginner)
+                    .OrderByDescending(t => t.TotalPoints)
+                    .ToList()
+            };
+        }
+
+        public static IEnumerable<UserTagViewModel> Map(this IEnumerable<Data.Models.UserTag> source)
+        {
+            if (source == null)
+                return null;
+            return source.Select(Map);
+        }
+
+        public static UserTagViewModel Map(this Data.Models.UserTag source)
+        {
+            return new UserTagViewModel
+            {
+                Id = source.Tag.Id,
+                Name = source.Tag.Name,
+                TotalPoints = source.TotalPoints,
+                KnowledgeLevel = source.TotalPoints.ToKnowledgeLevel(Dependencies.Configuration.PointsRequiredToBeCompetent,
+                    Dependencies.Configuration.PointsRequiredToBeAnExpert)
             };
         }
 

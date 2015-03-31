@@ -1,11 +1,13 @@
 ﻿@model Transparent.Business.ViewModels.ArgumentViewModel
-
 <h3>@Model.Caption</h3>
-<div id="discussEditPartial" class="display-field">
+<div id="discussViewPartial" class="display-field">
     <fieldset class="long">
         <legend>@Model.Caption</legend>
         <div class="editor-field gap-above">
             @Html.DisplayFor(model => model.Body)
         </div>
     </fieldset>
+    <div class="metadata float-right">
+    @Html.DisplayFor(model => model.User)
+    </div>
 </div>

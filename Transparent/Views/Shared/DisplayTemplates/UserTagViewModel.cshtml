@@ -1,0 +1,9 @@
+﻿@model Transparent.Business.ViewModels.UserTagViewModel
+<tr>
+    <td class="display-label">
+        @Html.ActionLink(Model.Name, "Details", "Tag", new { id = Model.Id }, new { })
+    </td>
+    <td class="display-field @Model.KnowledgeLevel.ToString()">
+        @Html.DisplayFor(model => model.TotalPoints)
+    </td>
+</tr>

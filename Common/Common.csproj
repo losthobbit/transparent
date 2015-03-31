@@ -62,6 +62,7 @@
     <Compile Include="StringRoutines.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Windsor\Installer.cs" />
+    <Compile Include="Windsor\WindsorExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

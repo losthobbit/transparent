@@ -25,6 +25,14 @@ a { text-decoration:none }
     font-size: .8em;
 }
 
+.Expert {
+    color: gold;
+}
+
+.Competent {
+    color: silver;
+}
+
 .question {
     
 }

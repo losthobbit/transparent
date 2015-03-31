@@ -192,7 +192,6 @@
     <Compile Include="Windsor\Installer.cs" />
     <Compile Include="Windsor\WindsorActionInvoker.cs" />
     <Compile Include="Windsor\WindsorControllerFactory.cs" />
-    <Compile Include="Windsor\WindsorExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -370,6 +369,8 @@
     <Content Include="Views\Shared\DisplayTemplates\TextToHtml.cshtml" />
     <Content Include="Views\Ticket\_DiscussEditPartial.cshtml" />
     <Content Include="Views\Ticket\_DiscussViewPartial.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\UserSummaryViewModel.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\UserTagViewModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
