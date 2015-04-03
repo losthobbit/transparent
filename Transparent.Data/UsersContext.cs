@@ -30,6 +30,7 @@ namespace Transparent.Data
         public IDbSet<TestMarking> TestMarkings { get; set; }
         public IDbSet<Subscription> Subscriptions { get; set; }
         public IDbSet<Argument> Arguments { get; set; }
+        public IDbSet<TicketUserVote> TicketUserVotes { get; set; }
 
         /// <summary>
         /// UserProfiles with eagerly loaded information.

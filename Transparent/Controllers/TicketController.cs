@@ -57,14 +57,27 @@ namespace Transparent.Controllers
         public PartialViewResult _SetRank(TicketDetailsViewModel ticket)
         {
             var newRank = tickets.SetRank(ticket.Id, ticket.NewRank, WebSecurity.CurrentUserId);
-            ticket.Rank = newRank.Item1;
-            ticket.UserRank = newRank.Item2;
+            ticket.Rank = newRank;
+            ticket.UserRank = ticket.NewRank;
             return PartialView("_RankPartial", ticket);
         }
 
         public PartialViewResult _Rank(TicketDetailsViewModel ticket)
         {
             return PartialView("_RankPartial", ticket);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public PartialViewResult _SetVote(VoteViewModel vote)
+        {
+            var newVote = tickets.SetVote(vote.TicketId, vote.NewVote, WebSecurity.CurrentUserId);
+            return PartialView("_VotePartial", newVote);
+        }
+
+        public PartialViewResult _Vote(VoteViewModel vote)
+        {
+            return PartialView("_VotePartial", vote);
         }
 
         public PartialViewResult _TicketTags(TicketTagsViewModel ticket)
@@ -125,7 +138,7 @@ namespace Transparent.Controllers
             {
                 return HttpNotFound();
             }
-            var ticketDetailsViewModel = ticket.Map().Map(ticket.GetTicketRank(WebSecurity.CurrentUserId));
+            var ticketDetailsViewModel = ticket.Map(WebSecurity.CurrentUserId).Map(ticket.GetUserRank(WebSecurity.CurrentUserId));
             ticketDetailsViewModel.TagInfo = tickets.GetTicketTagInfoList(ticket, WebSecurity.CurrentUserId);
             return View(ticketDetailsViewModel);
         }

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Transparent.Business.Tests.Generic
+namespace Tests.Common
 {
     /// <summary>
     /// In memory implementation of IDbSet for unit testing.

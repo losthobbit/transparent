@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Transparent.Business.Services;
-using Transparent.Business.Tests.Helpers;
+using Transparent.Data.Tests.Helpers;
 using Transparent.Data.Interfaces;
 using Transparent.Data.Models;
 using Common;

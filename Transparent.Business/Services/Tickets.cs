@@ -134,43 +134,41 @@ namespace Transparent.Business.Services
             );
         }
 
-        public Tuple<int, TicketRank> SetRank(int ticketId, TicketRank ticketRank, int userId)
+        /// <summary>
+        /// Adjusts the rank of the ticket based on the user's stance.
+        /// </summary>
+        /// <returns>
+        /// The new rank
+        /// </returns>
+        public int SetRank(int ticketId, Stance ticketRank, int userId)
+        {
+            var rank = dataService.SetRank(db, ticketId, ticketRank, userId);
+            db.SaveChanges();
+            return rank;
+        }
+
+        /// <summary>
+        /// Adjusts the votes of the ticket based on the user's stance.
+        /// </summary>
+        public VoteViewModel SetVote(int ticketId, Stance vote, int userId)
         {
             var ticket = db.Tickets.Single(t => t.Id == ticketId);
-            var rankRecord = ticket.UserRanks.SingleOrDefault(rank => rank.FkUserId == userId);
-            if(rankRecord == null)
-            {
-                if(ticketRank != TicketRank.NotRanked)
-                {
-                    ticket.UserRanks.Add
-                    (
-                        new TicketUserRank
-                        { 
-                            Up = ticketRank == TicketRank.Up,
-                            FkUserId = userId
-                        }
-                    );
-                    ticket.Rank += (int)ticketRank;
-                }
-            }
-            else
-            {
-                if(ticketRank == TicketRank.NotRanked)
-                {
-                    ticket.UserRanks.Remove(rankRecord);
-                    ticket.Rank += rankRecord.Up ? -1 : 1;
-                }
-                else
-                {
-                    if(rankRecord.Up && ticketRank == TicketRank.Down || !rankRecord.Up && ticketRank == TicketRank.Up)
-                    {
-                        rankRecord.Up = !rankRecord.Up;
-                        ticket.Rank += (int)ticketRank * 2;
-                    }
-                }
-            }
+
+            if (ticket.State != TicketState.Voting)
+                throw new NotSupportedException("Only tickets in the Voting state can be voted on.");
+
+            if (!UserHasCompetence(ticket.Id, userId))
+                throw new NotSupportedException("User is not competent in any of the ticket tags and cannot vote on the ticket.");
+
+            dataService.SetVote(ticket, vote, userId);
             db.SaveChanges();
-            return new Tuple<int, TicketRank>(ticket.Rank, ticketRank);
+            return new VoteViewModel
+            {
+                 TicketId = ticketId,
+                 UserVote = vote,
+                 VotesFor = ticket.VotesFor,
+                 VotesAgainst = ticket.VotesAgainst
+            };
         }
 
         public IEnumerable<Test> GetUntakenTests(int tagId, int userId)
@@ -250,6 +248,24 @@ namespace Transparent.Business.Services
                 throw new NotSupportedException("The test has already been answered.  It cannot be answered again.");
             userPoint.Answer = answer;
             db.SaveChanges();
+        }
+
+        /// <summary>
+        /// Check if user is competent in at least one of the tags on the ticket
+        /// </summary>
+        public bool UserHasCompetence(int ticketId, int userId)
+        {
+            var ticketTagIds = db.TicketTags.Where(tag => tag.FkTicketId == ticketId).Select(tag => tag.FkTagId);
+            return GetCompetentTags(userId).Select(tag => tag.Id).Intersect(ticketTagIds).Any();
+        }
+
+        /// <summary>
+        /// Check if user is an expert in at least one of the tags on the ticket
+        /// </summary>
+        public bool UserHasExpertise(int ticketId, int userId)
+        {
+            var ticketTagIds = db.TicketTags.Where(tag => tag.FkTicketId == ticketId).Select(tag => tag.FkTagId);
+            return GetExpertTags(userId).Select(tag => tag.Id).Intersect(ticketTagIds).Any();
         }
 
         /// <summary>
@@ -425,8 +441,7 @@ namespace Transparent.Business.Services
             if (db.Tickets.Single(ticket => ticket.Id == ticketId).State != TicketState.Discussion)
                 throw new NotSupportedException("Argument cannot be set.  Ticket is not in the Discussion state.");
 
-            var ticketTagIds = db.TicketTags.Where(tag => tag.FkTicketId == ticketId).Select(tag => tag.FkTagId);
-            if(!GetExpertTags(userId).Select(tag => tag.Id).Intersect(ticketTagIds).Any())
+            if (!UserHasExpertise(ticketId, userId))
                 throw new NotSupportedException("User is not an expert in any of the ticket tags and cannot answer the ticket.");
 
             var argumentRow = db.Arguments.SingleOrDefault(arg => arg.FkTicketId == ticketId

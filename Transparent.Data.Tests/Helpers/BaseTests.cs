@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Transparent.Data.Interfaces;
 
-namespace Transparent.Business.Tests.Helpers
+namespace Transparent.Data.Tests.Helpers
 {
     public abstract class BaseTests
     {

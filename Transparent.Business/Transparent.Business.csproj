@@ -108,6 +108,7 @@
     <Compile Include="ViewModels\UserSummaryViewModel.cs" />
     <Compile Include="ViewModels\UserTagViewModel.cs" />
     <Compile Include="ViewModels\VolunteerViewModel.cs" />
+    <Compile Include="ViewModels\VoteViewModel.cs" />
     <Compile Include="Windsor\Installer.cs" />
   </ItemGroup>
   <ItemGroup>

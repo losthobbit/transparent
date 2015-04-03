@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 namespace Transparent.Data.Models
 {
     /// <summary>
-    /// Shows whether a specific ticket has been ranked up or down by a specific user.
+    /// Shows whether a specific ticket has been voted for or against by a specific user.
     /// </summary>
-    public class TicketUserRank
+    public class TicketUserVote
     {
         [Key, Column(Order = 0)]
         [ForeignKey("Ticket")]
@@ -26,9 +26,9 @@ namespace Transparent.Data.Models
         public virtual UserProfile User { get; set; }
 
         /// <summary>
-        /// True is up, False is down.
+        /// True is for, False is against.
         /// </summary>
         [Required]
-        public bool Up { get; set; }
+        public bool For { get; set; }
     }
 }

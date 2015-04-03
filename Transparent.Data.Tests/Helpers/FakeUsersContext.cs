@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Transparent.Data.Interfaces;
 using Transparent.Data.Models;
-using Transparent.Business.Tests.Generic;
+using Tests.Common;
 
-namespace Transparent.Business.Tests.Helpers
+namespace Transparent.Data.Tests.Helpers
 {
     public class FakeUsersContext : IUsersContext
     {
@@ -30,6 +30,7 @@ namespace Transparent.Business.Tests.Helpers
             TestMarkings = new FakeDbSet<TestMarking>();
             Subscriptions = new FakeDbSet<Subscription>();
             Arguments = new FakeDbSet<Argument>();
+            TicketUserVotes = new FakeDbSet<TicketUserVote>();
         }
 
         public IDbSet<UserProfile> UserProfiles { get; private set; }
@@ -45,6 +46,7 @@ namespace Transparent.Business.Tests.Helpers
         public IDbSet<TestMarking> TestMarkings { get; set; }
         public IDbSet<Subscription> Subscriptions { get; set; }
         public IDbSet<Argument> Arguments { get; set; }
+        public IDbSet<TicketUserVote> TicketUserVotes { get; private set; }
 
         public IQueryable<UserProfile> FullUserProfiles
         {

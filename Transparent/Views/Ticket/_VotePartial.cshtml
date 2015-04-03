@@ -1,0 +1,31 @@
+﻿@model Transparent.Business.ViewModels.VoteViewModel
+@using Transparent.Data.Models
+@using (Ajax.BeginForm("_SetVote", new AjaxOptions { UpdateTargetId = "votePartial" }))
+{
+    @Html.AntiForgeryToken();
+    @Html.HiddenFor(m => m.TicketId);
+    var buttonClass = (Model.UserVote == Stance.For ? "inset" : "outset") + " for";
+    var buttonClass2 = (Model.UserVote == Stance.Against ? "inset" : "outset") + " against";
+    <table>
+        <tr>
+            <td>
+                Vote&nbsp;
+            </td>
+            <td class="@buttonClass">
+                <button name="newVote" class="@buttonClass" title="For" value="@(Model.UserVote == Stance.For ? Stance.Neutral : Stance.For)">For</button>
+            </td>
+            <td class="@buttonClass2">
+                <button name="newVote" class="@buttonClass2" title="Against" value="@(Model.UserVote == Stance.Against ? Stance.Neutral : Stance.Against)">Against</button>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td style="text-align:center">
+                @Html.DisplayFor(model => model.VotesFor)
+            </td>
+            <td style="text-align: center">
+                @Html.DisplayFor(model => model.VotesAgainst)
+            </td>
+        </tr>
+    </table>
+}

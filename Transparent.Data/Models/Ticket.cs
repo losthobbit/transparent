@@ -47,6 +47,14 @@ namespace Transparent.Data.Models
             throw new NotSupportedException("Unknown ticket type");
         }
 
+        public virtual ICollection<TicketUserVote> UserVotes { get; set; }
+
+        [Required]
+        public int VotesFor { get; set; }
+
+        [Required]
+        public int VotesAgainst { get; set; }
+
         /// <summary>
         /// There can potentially be more than one state, e.g. after Voting.
         /// This property should only be used when a state can only have one

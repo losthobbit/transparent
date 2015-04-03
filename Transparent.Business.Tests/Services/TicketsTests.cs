@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 using Transparent.Data.Interfaces;
 using Transparent.Data.Models;
 using Transparent.Business.Services;
-using Transparent.Business.Tests.Helpers;
+using Transparent.Data.Tests.Helpers;
 using Common;
 using NUnit.Framework;
 using System.Security;
 using Tests.Common;
 using Ploeh.AutoFixture;
 using Transparent.Business.ViewModels;
+using Moq;
+using Transparent.Data.Services;
 
 namespace Transparent.Business.Tests.Services
 {
@@ -21,18 +23,32 @@ namespace Transparent.Business.Tests.Services
     {
         private Tickets target;
 
-        private IDataService dataService;
+        private Mock<IDataService> mockDataService;
 
         [SetUp]
         public override void SetUp()
         {
             base.SetUp();
 
-            // TODO: I simply put this here to make existing tests pass.
-            // Feel free to refactor the data service into a mock.
-            dataService = new Transparent.Data.Services.DataService();
+            mockDataService = new Mock<IDataService>();
 
-            target = new Tickets(UsersContext, dataService, TestConfiguration);
+            target = new Tickets(UsersContext, mockDataService.Object, TestConfiguration);
+        }
+        
+        /// <summary>
+        /// This is simply to avoid having to fix tests after moving code into the data service.
+        /// </summary>
+        /// <remarks>
+        /// Feel free to remove this and do tests in the dataservice.
+        /// </remarks>
+        private void UseRealDataService()
+        {
+            var dataService = new DataService();
+            mockDataService.Setup(x => x.AddPoints(It.IsAny<UserPoint>(), It.IsAny<UserTag>(), It.IsAny<int>()))
+                .Callback<UserPoint, UserTag, int>(dataService.AddPoints);
+            mockDataService.Setup(x => x.AddPoints(It.IsAny<IUsersContext>(), It.IsAny<IEnumerable<int>>(), It.IsAny<int>(), It.IsAny<int>(),
+                It.IsAny<int>(), It.IsAny<PointReason>()))
+                .Callback<IUsersContext, IEnumerable<int>, int, int, int, PointReason>(dataService.AddPoints);
         }
 
         #region MyQueue
@@ -450,6 +466,8 @@ namespace Transparent.Business.Tests.Services
 
         private void ArrangeMarkTest(int markersRequiredPerTest = 2, int timesTestMarked = 1, int? fails = null)
         {
+            UseRealDataService();
+
             markTest_Markers = new List<UserProfile>();
             markTest_Markers_UserTags = new List<UserTag>();
             markTest_FailMarkers_UserTags = new List<UserTag>();
@@ -818,11 +836,17 @@ namespace Transparent.Business.Tests.Services
         #endregion GetTicketTagInfoList
 
         #region StartTest
+
+        private void ArrangeStartTest()
+        {
+            UseRealDataService();
+        }
         
         [Test]
         public void StartTest_with_user_without_associated_tag_adds_tag_to_user()
         {
             //Arrange
+            ArrangeStartTest();
             UserTag stephensScubaDivingTag = null;
             UsersContext.SavedChanges += context =>
             {
@@ -843,6 +867,7 @@ namespace Transparent.Business.Tests.Services
         public void StartTest_with_points_higher_than_or_equal_to_required_points_deducts_points(int pointsAboveRequired)
         {
             //Arrange
+            ArrangeStartTest();
             TestData.StephensCriticalThinkingTag.TotalPoints = TestConfiguration.PointsRequiredBeforeDeductingPoints + pointsAboveRequired;
             int? actual = null;
             UsersContext.SavedChanges += context =>
@@ -866,6 +891,7 @@ namespace Transparent.Business.Tests.Services
         public void StartTest_with_points_higher_than_or_equal_to_required_points_deducts_points_from_user_tag_total(int pointsAboveRequired)
         {
             //Arrange
+            ArrangeStartTest();
             TestData.StephensCriticalThinkingTag.TotalPoints = TestConfiguration.PointsRequiredBeforeDeductingPoints + pointsAboveRequired;
             var prevPoints = TestData.StephensCriticalThinkingTag.TotalPoints;
             var actualTotalPoints = prevPoints;
@@ -886,6 +912,7 @@ namespace Transparent.Business.Tests.Services
         public void StartTest_with_points_less_than_or_equal_to_required_points_does_not_deduct_points(int pointsBelowRequired)
         {
             //Arrange
+            ArrangeStartTest();
             TestData.StephensCriticalThinkingTag.TotalPoints = TestConfiguration.PointsRequiredBeforeDeductingPoints - pointsBelowRequired;
 
             //Act
@@ -1113,5 +1140,61 @@ namespace Transparent.Business.Tests.Services
         }
 
         #endregion SetArgument
+
+        #region SetVote
+
+        private Ticket setVote_Ticket;
+        private bool setVoteCalled = false;
+        private bool setVoteCalledAndSaved = false;
+
+        private void ArrangeSetVote()
+        {
+            setVote_Ticket = TestData.JoesScubaDivingSuggestion;
+            setVote_Ticket.State = TicketState.Voting;
+            TestData.AdminsScubaDivingTag.TotalPoints = TestConfiguration.PointsRequiredToBeCompetent + new Random().Next(3);
+            mockDataService.Setup(x => x.SetVote(setVote_Ticket, It.IsAny<Stance>(), TestData.Admin.UserId))
+                .Callback(() => setVoteCalled = true);
+            UsersContext.SavedChanges += context => setVoteCalledAndSaved = setVoteCalled;
+        }
+        
+        [Test]
+        public void SetVote_with_valid_parameters_calls_SetVote_on_data_service()
+        {
+            //Arrange
+            ArrangeSetVote();
+
+            //Act
+            target.SetVote(setVote_Ticket.Id, Fixture.Create<Stance>(), TestData.Admin.UserId);
+
+            //Assert
+            Assert.IsTrue(setVoteCalledAndSaved);
+        }
+       
+        [TestCase(TicketState.Verification)]
+        [TestCase(TicketState.Discussion)]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void SetVote_with_ticket_not_in_Voting_state_throws_NotSupportedException(TicketState state)
+        {
+            //Arrange
+            ArrangeSetVote();
+            setVote_Ticket.State = state;
+
+            //Act
+            target.SetVote(setVote_Ticket.Id, Fixture.Create<Stance>(), TestData.Admin.UserId);
+        }
+
+        [Test]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void SetVote_with_user_who_is_not_a_competent_for_the_ticket_throws_NotSupportedException()
+        {
+            //Arrange
+            ArrangeSetVote();
+            TestData.AdminsScubaDivingTag.TotalPoints = TestConfiguration.PointsRequiredToBeCompetent - 1;
+
+            //Act
+            target.SetVote(setVote_Ticket.Id, Fixture.Create<Stance>(), TestData.Admin.UserId);
+        }
+
+        #endregion SetVote
     }
 }

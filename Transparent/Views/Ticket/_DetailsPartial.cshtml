@@ -18,7 +18,7 @@
     <div>
         @if (ViewBag.ShowRank == null || ViewBag.ShowRank)
         {
-        <div class="float-left" style="text-align:center">         
+        <div id="rankPartial" class="float-left display-field" style="text-align:center">    
             @Html.Action("_Rank", Model)
         </div>
         }

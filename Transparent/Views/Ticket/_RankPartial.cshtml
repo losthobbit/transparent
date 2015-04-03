@@ -1,18 +1,16 @@
 ﻿@model Transparent.Business.ViewModels.TicketDetailsViewModel
-
-<div id="rankPartial" class="display-field">
-    @using (Ajax.BeginForm("_SetRank", new AjaxOptions { UpdateTargetId = "rankPartial" }))
-    {
-        @Html.AntiForgeryToken()
-        @Html.HiddenFor(m => m.Id)
-        var buttonClass = (Model.UserRank == Transparent.Data.Models.TicketRank.Up ? "ui-state-highlight " : "") + "ui-icon";
-        <div class="@buttonClass">
-            <button name="newRank" class="ui-icon-triangle-1-n @buttonClass" title="Increase rank" value="@(Model.UserRank == Transparent.Data.Models.TicketRank.Up ? "NotRanked" : "Up")">IncreaseRank</button>
-        </div>
-        <h1 id="rank">@Html.DisplayFor(model => model.Rank)</h1>
-        buttonClass = (Model.UserRank == Transparent.Data.Models.TicketRank.Down ? "ui-state-highlight " : "") + "ui-icon";
-        <div class="@buttonClass">
-            <button name="newRank" class="ui-icon-triangle-1-s @buttonClass" title="Decrease rank" value="@(Model.UserRank == Transparent.Data.Models.TicketRank.Down ? "NotRanked" : "Down")">DecreaseRank</button>
-        </div>
-    }
-</div>
+@using Transparent.Data.Models
+@using (Ajax.BeginForm("_SetRank", new AjaxOptions { UpdateTargetId = "rankPartial" }))
+{
+    @Html.AntiForgeryToken();
+    @Html.HiddenFor(m => m.Id);
+    var buttonClass = (Model.UserRank == Stance.For ? "ui-state-highlight " : "") + "ui-icon";
+    <div class="@buttonClass">
+        <button name="newRank" class="ui-icon-triangle-1-n @buttonClass" title="Increase rank" value="@(Model.UserRank == Stance.For ? Stance.Neutral : Stance.For)">IncreaseRank</button>
+    </div>
+    <h1 id="rank">@Html.DisplayFor(model => model.Rank)</h1>
+    buttonClass = (Model.UserRank == Stance.Against ? "ui-state-highlight " : "") + "ui-icon";
+    <div class="@buttonClass">
+        <button name="newRank" class="ui-icon-triangle-1-s @buttonClass" title="Decrease rank" value="@(Model.UserRank == Stance.Against ? Stance.Neutral : Stance.Against)">DecreaseRank</button>
+    </div>
+}

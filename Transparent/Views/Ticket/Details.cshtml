@@ -1,6 +1,7 @@
 ﻿@model Transparent.Business.ViewModels.TicketDetailsViewModel
 @using Transparent.Business.ViewModels;
 @using Transparent.Business.Maps;
+@using Transparent.Data.Models;
 @using Common;
 
 @{
@@ -11,6 +12,13 @@
 
 @Html.Partial("_DetailsPartial", Model.Map(), new ViewDataDictionary {{ "TagInfo", Model.TagInfo }})
 
+@if (Model.State == TicketState.Voting)
+{
+    <div id="votePartial" class="lighter">   
+    @Html.Action("_Vote", Model.Vote)
+    </div>
+}
+
 @{
     var args = Model.Arguments;
     var currentUsersArg = args.SingleOrDefault(arg => arg.FkUserId == WebSecurity.CurrentUserId);
@@ -20,7 +28,7 @@
     }
 }
 
-@if (Model.State == Transparent.Data.Models.TicketState.Discussion && Model.TagInfo.Any(info => info.UserIsExpert))
+@if (Model.State == TicketState.Discussion && Model.TagInfo.Any(info => info.UserIsExpert))
 {
     <input id="discussButton" style="display:@(currentUsersArg == null?"inline":"none")" type="button" value="Add @Model.TextForArgument.PrefixIndefiniteArticle()"/>
     <div id="discussAnswer" style="display:@(currentUsersArg == null?"none":"inline")">

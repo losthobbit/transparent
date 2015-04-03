@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Transparent.Data.Interfaces;
 using Transparent.Data.Models;
-using Transparent.Business.Tests.Generic;
+using Tests.Common;
 
-namespace Transparent.Business.Tests.Helpers
+namespace Transparent.Data.Tests.Helpers
 {
     public class TestData
     {

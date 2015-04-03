@@ -5,10 +5,10 @@ using System.Web;
 
 namespace Transparent.Data.Models
 {
-    public enum TicketRank
+    public enum Stance
     {
-        Up = 1,
-        Down = -1,
-        NotRanked = 0
+        For = 1,
+        Against = -1,
+        Neutral = 0
     }
 }

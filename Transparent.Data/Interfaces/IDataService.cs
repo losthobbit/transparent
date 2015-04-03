@@ -32,5 +32,23 @@ namespace Transparent.Data.Interfaces
         /// Does not call DbContext.SaveChanges.
         /// </remarks>
         void AddPoints(IUsersContext db, IEnumerable<int> userId, int tagId, int testId, int points, PointReason reason);
+
+        /// <summary>
+        /// Adjusts the rank of the ticket based on the user's stance.
+        /// </summary>
+        /// <remarks>
+        /// Ensures ticket rank and ticket user rank are adjusted together.
+        /// Does not call DbContext.SaveChanges.
+        /// </remarks>
+        int SetRank(IUsersContext db, int ticketId, Stance ticketRank, int userId);
+
+        /// <summary>
+        /// Adjusts the votes of the ticket based on the user's stance.
+        /// </summary>
+        /// <remarks>
+        /// Ensures that ticket votes (for and against) and ticket user vote are adjusted together.
+        /// Does not call DbContext.SaveChanges.
+        /// </remarks>
+        void SetVote(Ticket ticket, Stance vote, int userId);
     }
 }

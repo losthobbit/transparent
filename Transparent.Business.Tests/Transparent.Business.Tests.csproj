@@ -55,12 +55,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Generic\FakeDbSet.cs" />
-    <Compile Include="Helpers\BaseTests.cs" />
-    <Compile Include="Helpers\FakeTicketDbSet.cs" />
-    <Compile Include="Helpers\FakeUsersContext.cs" />
-    <Compile Include="Helpers\TestConfig.cs" />
-    <Compile Include="Helpers\TestData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ProgressTicketsTests.cs" />
     <Compile Include="Services\TicketsTests.cs" />
@@ -81,6 +75,10 @@
     <ProjectReference Include="..\Transparent.Business\Transparent.Business.csproj">
       <Project>{e7778766-a3b2-4a80-96be-c1d498bdf280}</Project>
       <Name>Transparent.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Transparent.Data.Tests\Transparent.Data.Tests.csproj">
+      <Project>{00e4a459-e3da-4dab-8f23-0f0e16a8f0c1}</Project>
+      <Name>Transparent.Data.Tests</Name>
     </ProjectReference>
     <ProjectReference Include="..\Transparent.Data\Transparent.Data.csproj">
       <Project>{2d93c988-7c3e-46ed-a7b6-fb47ad7ebf4c}</Project>

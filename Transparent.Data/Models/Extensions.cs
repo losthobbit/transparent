@@ -28,12 +28,23 @@ namespace Transparent.Data.Models
         /// <summary>
         /// How the specified user ranked the ticket.
         /// </summary>
-        public static TicketRank GetTicketRank(this Ticket ticket, int userId)
+        public static Stance GetUserRank(this Ticket ticket, int userId)
         {
             var rankRecord = ticket.UserRanks.SingleOrDefault(rank => rank.FkUserId == userId);
             if (rankRecord == null)
-                return TicketRank.NotRanked;
-            return rankRecord.Up ? TicketRank.Up : TicketRank.Down;
+                return Stance.Neutral;
+            return rankRecord.Up ? Stance.For : Stance.Against;
+        }
+
+        /// <summary>
+        /// How the specified user voted for the ticket.
+        /// </summary>
+        public static Stance GetUserVote(this Ticket ticket, int userId)
+        {
+            var voteRecord = ticket.UserVotes.SingleOrDefault(vote => vote.FkUserId == userId);
+            if (voteRecord == null)
+                return Stance.Neutral;
+            return voteRecord.For ? Stance.For : Stance.Against;
         }
 
         public static bool Any(this IEnumerable enumerable)

@@ -6,19 +6,24 @@ using System.Text;
 using System.Threading.Tasks;
 using Transparent.Data.Models;
 using Transparent.Data.Services;
+using Transparent.Data.Tests.Helpers;
 
 namespace Transparent.Data.Tests.Services
 {
     [TestFixture]
-    public class DataServiceTests
+    public class DataServiceTests : BaseTests
     {
         private DataService target;
 
         [SetUp]
-        public void SetUp()
+        public override void SetUp()
         {
+            base.SetUp();
+
             target = new DataService();
         }
+
+        #region SetNextState
 
         [TestCase(TicketState.InProgress)]
         [TestCase(TicketState.Verification)]
@@ -35,10 +40,109 @@ namespace Transparent.Data.Tests.Services
             AssertModifiedDateSet(ticket.ModifiedDate);
         }
 
-        private void AssertModifiedDateSet(DateTime modifiedDate)
+        #endregion SetNextState
+
+        #region SetVote
+
+        private Ticket GetSetVoteTicket(int ticketVotesFor, int ticketVotesAgainst, Stance ticketUserVote)
         {
-            Assert.GreaterOrEqual(modifiedDate, DateTime.UtcNow.AddSeconds(-3));
-            Assert.LessOrEqual(modifiedDate, DateTime.UtcNow);
+            var ticket = TestData.JoesScubaDivingSuggestion;
+            ticket.VotesFor = ticketVotesFor;
+            ticket.VotesAgainst = ticketVotesAgainst;
+            ticket.UserVotes = new List<TicketUserVote>
+            {
+            };
+            if (ticketUserVote != Stance.Neutral)
+            {
+                ticket.UserVotes.Add
+                (
+                    new TicketUserVote
+                    {
+                        FkTicketId = ticket.Id,
+                        For = ticketUserVote == Stance.For,
+                        FkUserId = TestData.Stephen.UserId,
+                        Ticket = ticket,
+                        User = TestData.Stephen
+                    }
+                );
+            }
+            return ticket;
         }
+
+        [TestCase(5, 7, Stance.Neutral, Stance.For, 6, 7)]
+        [TestCase(5, 7, Stance.Neutral, Stance.Against, 5, 8)]
+        [TestCase(5, 7, Stance.Neutral, Stance.Neutral, 5, 7)]
+        [TestCase(5, 7, Stance.For, Stance.For, 5, 7)]
+        [TestCase(5, 7, Stance.For, Stance.Against, 4, 8)]
+        [TestCase(5, 7, Stance.For, Stance.Neutral, 4, 7)]
+        [TestCase(5, 7, Stance.Against, Stance.For, 6, 6)]
+        [TestCase(5, 7, Stance.Against, Stance.Against, 5, 7)]
+        [TestCase(5, 7, Stance.Against, Stance.Neutral, 5, 6)]
+        public void SetVote_with_valid_parameters_sets_VotesFor_and_VotesAgainst(
+            int ticketVotesFor, int ticketVotesAgainst, Stance ticketUserVote,
+            Stance newVote, int expectedVotesFor, int expectedVotesAgainst)
+        {
+            //Arrange
+            var ticket = GetSetVoteTicket(ticketVotesFor, ticketVotesAgainst, ticketUserVote);
+
+            //Act
+            target.SetVote(ticket, newVote, TestData.Stephen.UserId);
+
+            //Assert
+            Assert.AreEqual(expectedVotesFor, ticket.VotesFor);
+            Assert.AreEqual(expectedVotesAgainst, ticket.VotesAgainst);
+        }
+
+        public enum Crud { Create, Update, Delete, Nothing };
+
+        [TestCase(5, 7, Stance.Neutral, Stance.For, Crud.Create)]
+        [TestCase(5, 7, Stance.Neutral, Stance.Against, Crud.Create)]
+        [TestCase(5, 7, Stance.Neutral, Stance.Neutral, Crud.Nothing)]
+        [TestCase(5, 7, Stance.For, Stance.For, Crud.Nothing)]
+        [TestCase(5, 7, Stance.For, Stance.Against, Crud.Update)]
+        [TestCase(5, 7, Stance.For, Stance.Neutral, Crud.Delete)]
+        [TestCase(5, 7, Stance.Against, Stance.For, Crud.Update)]
+        [TestCase(5, 7, Stance.Against, Stance.Against, Crud.Nothing)]
+        [TestCase(5, 7, Stance.Against, Stance.Neutral, Crud.Delete)]
+        public void SetVote_with_valid_parameters_sets_user_vote(
+            int ticketVotesFor, int ticketVotesAgainst, Stance ticketUserVote, Stance newVote, Crud expectedAction)
+        {
+            //Arrange
+            var ticket = GetSetVoteTicket(ticketVotesFor, ticketVotesAgainst, ticketUserVote);
+            var existingVotes = ticket.UserVotes.Where(vote => vote.User == TestData.Stephen).Select(vote => vote.For).ToList();
+
+            //Act
+            target.SetVote(ticket, newVote, TestData.Stephen.UserId);
+
+            //Assert
+            var actualVotes = ticket.UserVotes.Where(vote => vote.FkUserId == TestData.Stephen.UserId).Select(vote => vote.For);
+            switch (expectedAction)
+            {
+                case Crud.Create:
+                {
+                    Assert.AreEqual(existingVotes.Count() + 1, actualVotes.Count());
+                    Assert.AreEqual(newVote == Stance.For, ticket.UserVotes.Last().For);
+                    break;
+                }
+                case Crud.Update:
+                {
+                    Assert.AreEqual(existingVotes.Count(), actualVotes.Count());
+                    Assert.AreEqual(newVote == Stance.For, ticket.UserVotes.Last().For);
+                    break;
+                }
+                case Crud.Delete:
+                {
+                    Assert.AreEqual(existingVotes.Count() - 1, actualVotes.Count());
+                    break;
+                }
+                case Crud.Nothing:
+                {
+                    CollectionAssert.AreEquivalent(existingVotes, actualVotes);
+                    break;
+                }
+            }
+        }
+
+        #endregion SetVote
     }
 }

@@ -46,9 +46,23 @@ namespace Transparent.Business.Maps
             return viewModel;
         }
 
-        public static TicketDetailsViewModel Map(this Data.Models.Ticket source)
+        public static TicketDetailsViewModel Map(this Data.Models.Ticket source, int userId)
         {
-            return Map((Data.Models.BaseTicket)source);
+            var viewModel = Map((Data.Models.BaseTicket)source);
+            viewModel.Vote = source.Map<VoteViewModel>(userId);
+            return viewModel;
+        }
+
+        public static VoteViewModel Map<T>(this Data.Models.Ticket source, int userId)
+            where T: VoteViewModel
+        {
+            return new VoteViewModel
+            {
+                TicketId = source.Id,
+                UserVote = source.GetUserVote(userId),
+                VotesFor = source.VotesFor,
+                VotesAgainst = source.VotesAgainst
+            };
         }
 
         public static IEnumerable<ArgumentViewModel> Map(this IEnumerable<Data.Models.Argument> source)
@@ -99,7 +113,7 @@ namespace Transparent.Business.Maps
             };
         }
 
-        public static TicketDetailsViewModel Map(this TicketDetailsViewModel destination, Data.Models.TicketRank source)
+        public static TicketDetailsViewModel Map(this TicketDetailsViewModel destination, Data.Models.Stance source)
         {
             destination.UserRank = source;
             return destination;

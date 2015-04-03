@@ -19,7 +19,15 @@ namespace Transparent.Business.Interfaces
         TicketsContainer Newest(TicketsContainer filter);
         TicketsContainer HighestRanked(TicketsContainer filter);
         Search Search(Search filter);
-        Tuple<int, TicketRank> SetRank(int ticketId, TicketRank ticketRank, int userId);
+
+        /// <summary>
+        /// Adjusts the rank of the ticket based on the user's stance.
+        /// </summary>
+        /// <returns>
+        /// The new rank
+        /// </returns>
+        int SetRank(int ticketId, Stance ticketRank, int userId);
+
         IEnumerable<Test> GetUntakenTests(int tagId, int userId);
         Test GetRandomUntakenTest(int tagId, int userId);
         int CountUntakenTestsRemaining(int tagId, int userId);
@@ -60,5 +68,10 @@ namespace Transparent.Business.Interfaces
         void Create(Ticket ticket, int userId);
 
         void SetArgument(int ticketId, int userId, string argument);
+
+        /// <summary>
+        /// Adjusts the votes of the ticket based on the user's stance.
+        /// </summary>
+        VoteViewModel SetVote(int ticketId, Stance stance, int userId);
     }
 }

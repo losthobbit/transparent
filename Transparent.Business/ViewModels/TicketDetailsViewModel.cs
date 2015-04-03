@@ -21,7 +21,6 @@ namespace Transparent.Business.ViewModels
 
         }
 
-        public TicketRank UserRank { get; set; }
         public IEnumerable<TicketTagViewModel> TagInfo { get; set; }
         public ICollection<ArgumentViewModel> Arguments { get; set; }
 
@@ -29,9 +28,14 @@ namespace Transparent.Business.ViewModels
         public string TextForArgument { get; set; }
 
         public bool MultipleTags { get; set; }
-        public TicketRank NewRank { get; set; }
-        public int Id { get; set; }
+
         public int Rank { get; set; }
+        public Stance UserRank { get; set; }
+        public Stance NewRank { get; set; }
+
+        public VoteViewModel Vote { get; set; }
+
+        public int Id { get; set; }
         public string Heading { get; set; }
         public string Body { get; set; }
         public DateTime CreatedDate { get; set; }
