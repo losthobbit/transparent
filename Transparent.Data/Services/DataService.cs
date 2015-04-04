@@ -22,12 +22,12 @@ namespace Transparent.Data.Services
         /// <remarks>
         /// Does not call DbContext.SaveChanges.
         /// </remarks>
-        public void SetNextState(Ticket ticket)
+        public void SetNextState(Ticket ticket, TicketState? specificState = null)
         {
-            var state = ticket.NextState;
+            var state = specificState ?? ticket.NextState;
             if (state == null)
                 throw new NotSupportedException("Ticket does not have a next state");
-            ticket.State = ticket.NextState.Value;
+            ticket.TrySetState(state.Value);
             ticket.ModifiedDate = DateTime.UtcNow;
         }
 

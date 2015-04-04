@@ -46,5 +46,18 @@ namespace Transparent.Data.Interfaces
         /// This allows time for additional arguments to be added.
         /// </remarks>
         TimeSpan DelayAfterDiscussion { get; set; }
+
+        /// <summary>
+        /// Time waiting for votes before moving a ticket to the next state
+        /// </summary>
+        /// <remarks>
+        /// This allows time for users to vote.
+        /// </remarks>
+        TimeSpan DelayForVoting { get; set; }
+
+        /// <summary>
+        /// The percentage of votes required in order to accept the ticket
+        /// </summary>
+        int PercentOfVotesRequiredToAccept { get; set; }
     }
 }

@@ -59,5 +59,13 @@ namespace Transparent.Data.Models
         {
             get { return states; }
         }
+
+        public override void TrySetState(TicketState state)
+        {
+            if (state == TicketState.Accepted)
+                State = TicketState.Completed;
+            else
+                base.TrySetState(state);
+        }
     }
 }

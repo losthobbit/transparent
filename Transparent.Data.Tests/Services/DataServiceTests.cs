@@ -40,6 +40,31 @@ namespace Transparent.Data.Tests.Services
             AssertModifiedDateSet(ticket.ModifiedDate);
         }
 
+        [TestCase(TicketType.Suggestion, TicketState.Accepted, TicketState.Accepted)]
+        [TestCase(TicketType.Suggestion, TicketState.Rejected, TicketState.Rejected)]
+        [TestCase(TicketType.Test, TicketState.Accepted, TicketState.Completed)]
+        [TestCase(TicketType.Test, TicketState.Rejected, TicketState.Rejected)]
+        public void SetNextState_with_specifiedState_sets_state_according_to_ticket_type(
+            TicketType ticketType, TicketState specifiedState, TicketState expectedState)
+        {
+            //Arrange
+            Ticket ticket = null;
+            switch (ticketType)
+            {
+                case TicketType.Suggestion: ticket = new Suggestion(); break;
+                case TicketType.Test: ticket = new Test(); break;
+            }
+            ticket.State = TicketState.Voting;
+            ticket.ModifiedDate = DateTime.UtcNow.AddDays(-1);
+
+            //Act
+            target.SetNextState(ticket, specifiedState);
+
+            //Assert
+            Assert.AreEqual(expectedState, ticket.State);
+            AssertModifiedDateSet(ticket.ModifiedDate);
+        }
+
         #endregion SetNextState
 
         #region SetVote

@@ -83,5 +83,13 @@ namespace Transparent.Data.Models
 
         [NotMapped]
         protected TicketState StartingState { get { return States.First(); } }
+
+        /// <summary>
+        /// Attempt to set state.  If the state is not valid for this type, it could be redirected.
+        /// </summary>
+        public virtual void TrySetState(TicketState state)
+        {
+            State = state;
+        }
     }
 }

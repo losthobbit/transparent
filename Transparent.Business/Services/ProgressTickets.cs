@@ -85,5 +85,34 @@ namespace Transparent.Business.Services
                 db.SaveChanges();
             }
         }
+
+        /// <summary>
+        /// Progresses tickets which are in the Voting state, and (were last modified
+        /// the specified amount of time ago or have a large enough gap between for and against votes).
+        /// </summary>
+        public void ProgressTicketsWithVotes()
+        {
+            using (var db = getUsersContext())
+            {
+                var lastModified = DateTime.UtcNow - configuration.DelayForVoting;
+
+                var highestRankedVotingTickets = (from ticket in db.Tickets
+                                                      where ticket.State == TicketState.Voting
+                                                      orderby ticket.Rank descending
+                                                      select ticket).Take(configuration.MaxPositionToAdvanceState);
+
+                var votingTickets = from ticket in highestRankedVotingTickets
+                                    where ticket.ModifiedDate <= lastModified
+                                    select ticket;
+
+                foreach (var ticket in votingTickets)
+                {
+                    var totalVotes = ticket.VotesFor + ticket.VotesAgainst;
+                    var accepted = totalVotes > 0 && ((double)ticket.VotesFor / (double)totalVotes >= (double)configuration.PercentOfVotesRequiredToAccept / 100d);
+                    dataService.SetNextState(ticket, accepted ? TicketState.Accepted : TicketState.Rejected);
+                }
+                db.SaveChanges();
+            }
+        }
     }
 }

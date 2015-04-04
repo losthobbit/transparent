@@ -62,6 +62,19 @@ namespace Transparent.Data.Services
         /// </remarks>
         public TimeSpan DelayAfterDiscussion { get; set; }
 
+        /// <summary>
+        /// Time waiting for votes before moving a ticket to the next state
+        /// </summary>
+        /// <remarks>
+        /// This allows time for users to vote.
+        /// </remarks>
+        public TimeSpan DelayForVoting { get; set; }
+
+        /// <summary>
+        /// The percentage of votes required in order to accept the ticket
+        /// </summary>
+        public int PercentOfVotesRequiredToAccept { get; set; }
+
         #endregion Progressing tickets
 
         public Configuration(Common.Interfaces.IConfiguration configuration)
@@ -82,6 +95,8 @@ namespace Transparent.Data.Services
             DelayAfterValidatingTags = TimeSpan.Parse(configuration.GetValue("DelayAfterValidatingTags"));
             MinimumNumberOfArgumentsToAdvanceState = int.Parse(configuration.GetValue("MinimumNumberOfArgumentsToAdvanceState"));
             DelayAfterDiscussion = TimeSpan.Parse(configuration.GetValue("DelayAfterDiscussion"));
+            DelayForVoting = TimeSpan.Parse(configuration.GetValue("DelayForVoting"));
+            PercentOfVotesRequiredToAccept = int.Parse(configuration.GetValue("PercentOfVotesRequiredToAccept"));
         }
     }
 }

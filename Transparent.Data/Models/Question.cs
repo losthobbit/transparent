@@ -12,7 +12,7 @@ namespace Transparent.Data.Models
         {
             TicketState.Verification,
             TicketState.Discussion,
-            TicketState.Voting
+            TicketState.Completed
         };
 
         public override TicketType TicketType

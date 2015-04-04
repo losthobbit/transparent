@@ -27,6 +27,8 @@ namespace Transparent.Data.Tests.Helpers
             DelayAfterValidatingTags = TimeSpan.FromSeconds(2);
             MinimumNumberOfArgumentsToAdvanceState = 2;
             DelayAfterDiscussion = TimeSpan.FromSeconds(2);
+            DelayForVoting = TimeSpan.FromSeconds(2);
+            PercentOfVotesRequiredToAccept = 60;
         }
 
         public string CurrentSubGoal { get; set; }
@@ -45,5 +47,7 @@ namespace Transparent.Data.Tests.Helpers
         public TimeSpan DelayAfterValidatingTags { get; set; }
         public int MinimumNumberOfArgumentsToAdvanceState { get; set; }
         public TimeSpan DelayAfterDiscussion { get; set; }
+        public TimeSpan DelayForVoting { get; set; }
+        public int PercentOfVotesRequiredToAccept { get; set; }
     }
 }

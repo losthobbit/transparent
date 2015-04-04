@@ -10,12 +10,12 @@ namespace Transparent.Data.Interfaces
     public interface IDataService
     {
         /// <summary>
-        /// Adds points to the UserPoint and UserTag.
+        /// Sets the state of the ticket to the next or specified state and sets the modified date.
         /// </summary>
         /// <remarks>
         /// Does not call DbContext.SaveChanges.
         /// </remarks>
-        void SetNextState(Ticket ticket);
+        void SetNextState(Ticket ticket, TicketState? specificState = null);
 
         /// <summary>
         /// Adds points to the UserPoint and UserTag.

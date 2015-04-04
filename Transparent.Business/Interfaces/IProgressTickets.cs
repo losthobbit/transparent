@@ -19,5 +19,11 @@ namespace Transparent.Business.Interfaces
         /// the specified amount of time ago.
         /// </summary>
         void ProgressTicketsWithArguments();
+
+        /// <summary>
+        /// Progresses tickets which are in the Voting state, and were last modified
+        /// the specified amount of time ago.
+        /// </summary>
+        void ProgressTicketsWithVotes();
     }
 }

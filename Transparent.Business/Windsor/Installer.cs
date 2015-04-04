@@ -22,6 +22,7 @@ namespace Transparent.Business.Windsor
             container.Register(
                 Component.For<IEvent>().ImplementedBy<CompleteTagValidationEvent>().LifeStyle.Singleton,
                 Component.For<IEvent>().ImplementedBy<CompleteDiscussionEvent>().LifeStyle.Singleton,
+                Component.For<IEvent>().ImplementedBy<CompleteVotingEvent>().LifeStyle.Singleton,
                 Component.For<ITickets>().ImplementedBy<Tickets>().LifeStyle.Transient,
                 Component.For<IUser>().ImplementedBy<User>().LifeStyle.Transient,
                 Component.For<IGeneral>().ImplementedBy<General>().LifeStyle.Singleton,
