@@ -50,6 +50,7 @@ namespace Transparent.Data.Tests.Helpers
             public Test CriticalThinkingTestThatJoeTookThatStephenMarked;
             public Test CriticalThinkingTestThatJoeStarted;
             public Test BungeeJumpingTestThatJoeTook;
+            public Test CriticalThinkingTestThatIsInTheVotingStage;
 
             #endregion Tests
 
@@ -85,17 +86,33 @@ namespace Transparent.Data.Tests.Helpers
             JoesCriticalThinkingSuggestion = new Suggestion { Id = 1, FkUserId = Joe.UserId, User = Joe, Heading = "Hello", Body = "My name is Joe" };
             JoesScubaDivingSuggestion = new Suggestion { Id = 2, FkUserId = Joe.UserId, User = Joe, Heading = "Scuba", Body = "I like to dive" };
 
-            CriticalThinkingTestThatJoeTook = new Test { Id = 200, FkUserId = Admin.UserId, User = Admin, Heading = "Logical Fallacy", 
-                Body = "Name the logical fallacy"};
-            ScubaDivingTestThatJoeTook = new Test { Id = 201, FkUserId = Admin.UserId, User = Admin, Heading = "Breathing", 
-                Body = "What do you breathe?"};
+            CriticalThinkingTestThatJoeTook = new Test 
+            { 
+                Id = 200, 
+                FkUserId = Admin.UserId, 
+                User = Admin, 
+                Heading = "Logical Fallacy", 
+                Body = "Name the logical fallacy",
+                State = TicketState.Completed
+            };
+            ScubaDivingTestThatJoeTook = new Test 
+            { 
+                Id = 201, 
+                FkUserId = 
+                Admin.UserId, 
+                User = Admin, 
+                Heading = "Breathing", 
+                Body = "What do you breathe?",
+                State = TicketState.Completed
+            };
             CriticalThinkingTestThatStephenTook = new Test
             {
                 Id = 203,
                 FkUserId = Admin.UserId,
                 User = Admin,
                 Heading = "Another LF",
-                Body = "Are you a logical fallacy?"
+                Body = "Are you a logical fallacy?",
+                State = TicketState.Completed
             };
             CriticalThinkingTestThatJoeTookThatHasBeenMarkedCompletely = new Test
             {
@@ -103,7 +120,8 @@ namespace Transparent.Data.Tests.Helpers
                 FkUserId = Admin.UserId,
                 User = Admin,
                 Heading = "Cognitive",
-                Body = "What is cognitive dissonance?"
+                Body = "What is cognitive dissonance?",
+                State = TicketState.Completed
             };
             CriticalThinkingTestThatJoeTookThatStephenMarked = new Test
             {
@@ -111,7 +129,8 @@ namespace Transparent.Data.Tests.Helpers
                 FkUserId = Admin.UserId,
                 User = Admin,
                 Heading = "Age",
-                Body = "What is your age?"
+                Body = "What is your age?",
+                State = TicketState.Completed
             };
             CriticalThinkingTestThatJoeStarted = new Test
             {
@@ -119,7 +138,8 @@ namespace Transparent.Data.Tests.Helpers
                 FkUserId = Admin.UserId,
                 User = Admin,
                 Heading = "Height",
-                Body = "How tall are you?"
+                Body = "How tall are you?",
+                State = TicketState.Completed
             };
             BungeeJumpingTestThatJoeTook = new Test
             {
@@ -127,7 +147,17 @@ namespace Transparent.Data.Tests.Helpers
                 FkUserId = Admin.UserId,
                 User = Admin,
                 Heading = "Jumping",
-                Body = "How high do you jump from?"
+                Body = "How high do you jump from?",
+                State = TicketState.Completed
+            };
+            CriticalThinkingTestThatIsInTheVotingStage = new Test
+            {
+                Id = 208,
+                FkUserId = Stephen.UserId,
+                User = Stephen,
+                Heading = "IQ",
+                Body = "What is your IQ?",
+                State = TicketState.Voting
             };
 
             StephensCriticalThinkingTag = new UserTag
@@ -203,7 +233,8 @@ namespace Transparent.Data.Tests.Helpers
                     testData.ScubaDivingTestThatJoeTook,
                     testData.CriticalThinkingTestThatJoeTookThatHasBeenMarkedCompletely,
                     testData.CriticalThinkingTestThatJoeTookThatStephenMarked,
-                    testData.BungeeJumpingTestThatJoeTook
+                    testData.BungeeJumpingTestThatJoeTook,
+                    testData.CriticalThinkingTestThatIsInTheVotingStage
                 },
                 TicketTags =
                 {
@@ -250,6 +281,11 @@ namespace Transparent.Data.Tests.Helpers
                     new TicketTag
                     {
                         Ticket = testData.CriticalThinkingTestThatJoeStarted, FkTicketId = testData.CriticalThinkingTestThatJoeStarted.Id,
+                        Tag = testData.CriticalThinkingTag, FkTagId = testData.CriticalThinkingTag.Id
+                    },
+                    new TicketTag
+                    {
+                        Ticket = testData.CriticalThinkingTestThatIsInTheVotingStage, FkTicketId = testData.CriticalThinkingTestThatIsInTheVotingStage.Id,
                         Tag = testData.CriticalThinkingTag, FkTagId = testData.CriticalThinkingTag.Id
                     }
                 },

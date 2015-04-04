@@ -174,7 +174,7 @@ namespace Transparent.Business.Services
         public IEnumerable<Test> GetUntakenTests(int tagId, int userId)
         {
             var untakenTests = from test in db.Tests
-                               where test.TicketTags.Any(tag => tag.FkTagId == tagId)
+                               where test.State == TicketState.Completed && test.TicketTags.Any(tag => tag.FkTagId == tagId)
                                from userPoint in db.UserPoints
                                     .Where(point => point.TestTaken == test && point.FkUserId == userId)
                                     .DefaultIfEmpty()

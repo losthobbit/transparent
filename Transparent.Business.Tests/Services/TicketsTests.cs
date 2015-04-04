@@ -224,7 +224,7 @@ namespace Transparent.Business.Tests.Services
             var response = target.Search(searchFilter);
 
             //Assert
-            response.PagedList.Single(ticket => ticket == TestData.CriticalThinkingTestThatJoeTookThatStephenMarked);
+            response.PagedList.Single(ticket => ticket == TestData.CriticalThinkingTestThatIsInTheVotingStage);
         }
 
         [Test]
@@ -304,6 +304,20 @@ namespace Transparent.Business.Tests.Services
             // Assert
             Assert.IsTrue(actualTests.Any());
             Assert.IsTrue(actualTests.All(test => test.TicketTags.Single().Tag == tag));
+        }
+
+        [Test]
+        public void GetUntakenTests_returns_only_tests_that_are_in_the_completed_state()
+        {
+            // Arrange
+            var tag = TestData.CriticalThinkingTag;
+            var userId = TestData.Stephen.UserId;
+
+            // Act
+            var actualTests = target.GetUntakenTests(tag.Id, userId);
+
+            // Assert
+            Assert.IsTrue(actualTests.All(test => test.State == TicketState.Completed));
         }
 
         [Test]

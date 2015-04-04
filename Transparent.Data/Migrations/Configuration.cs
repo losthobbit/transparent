@@ -64,7 +64,8 @@ namespace Transparent.Data.Migrations
                     CreatedDate = DateTime.Now,
                     Heading = "Name the logical fallacy",
                     Body = body,
-                    TicketTags = new Collection<TicketTag> { new TicketTag { Tag = criticalThinkingTag } }
+                    TicketTags = new Collection<TicketTag> { new TicketTag { Tag = criticalThinkingTag } },
+                    State = TicketState.Completed
                 });
             body = "Name or explain a logical fallacy in the following:\n\n" +
                     "Either chemotherapy or a miracle cured his cancer.  He didn't have chemotherapy.  Therefore it was a miracle.";
@@ -75,7 +76,8 @@ namespace Transparent.Data.Migrations
                     CreatedDate = DateTime.Now,
                     Heading = "Name or explain the logical fallacy",
                     Body = body,
-                    TicketTags = new Collection<TicketTag> { new TicketTag { Tag = criticalThinkingTag } }
+                    TicketTags = new Collection<TicketTag> { new TicketTag { Tag = criticalThinkingTag } },
+                    State = TicketState.Completed
                 });
         }
 
