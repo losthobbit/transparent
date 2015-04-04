@@ -1,0 +1,23 @@
+﻿@if (Request.IsAuthenticated) {
+<ul id="menu">
+    @{var links = new []
+        {
+            new []{ "Learn", "Details", "Tag" },
+            new []{ "Volunteer", "Volunteer" }
+        };
+    }
+    @foreach(var link in links)
+    {
+        <li>
+        @if (ViewBag.Title == link[0])
+        {
+            <b>@MvcHtmlString.Create(link[0])</b>
+        }
+        else
+        {
+            @Html.ActionLink(link[0], link[1], link.Length > 2 ? link[2] : "Ticket");
+        }
+        </li>
+    }
+</ul>
+}
