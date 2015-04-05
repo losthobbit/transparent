@@ -1,14 +1,12 @@
 ﻿var tagSelectors;
 
 // TagSelector class
-
 function TagSelector(element) {
     this.element = element;
     this.prevValue = element.value;
 }
 
 // TagSelectors class
-
 function TagSelectors(container, enableAdd, ajax, tags, ticketId) {
     this.container = container;
     this.enableAdd = enableAdd;

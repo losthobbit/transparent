@@ -38,7 +38,6 @@ namespace Transparent.Controllers
                     tickets.AddTicketTag(request.TicketId, request.NewTagId, WebSecurity.CurrentUserId);
                 return Json(true);
             }
-            // SO: I'm not sure whether to let the exception be raised or return false.
             catch (NotSupportedException)
             {
                 return Json(false);

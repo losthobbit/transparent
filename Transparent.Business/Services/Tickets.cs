@@ -15,6 +15,7 @@ namespace Transparent.Business.Services
 {
     using Data.Extensions;
     using Transparent.Business.Interfaces;
+    using System.Data.Entity.Infrastructure;
 
     /// <summary>
     /// Contains methods for getting tickets.
@@ -432,7 +433,14 @@ namespace Transparent.Business.Services
             db.TicketTags.Add(new TicketTag { FkTicketId = ticketId, FkTagId = tagId, FkCreatedById = userId });
             SetModifiedDate(ticketId);
 
-            db.SaveChanges();
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                throw new NotSupportedException("Only one of a particular tag can be added.", e);
+            }
         }
 
         /// <exception cref="NotSupportedException">User may not answer ticket.</exception>
