@@ -373,6 +373,9 @@
     <Content Include="Views\Shared\DisplayTemplates\UserTagViewModel.cshtml" />
     <Content Include="Views\Ticket\_VotePartial.cshtml" />
     <Content Include="Views\Shared\_NonTicketMenuPartial.cshtml" />
+    <Content Include="Views\Ticket\Answered.cshtml" />
+    <Content Include="Views\Ticket\Archive.cshtml" />
+    <Content Include="Views\Ticket\Accepted.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

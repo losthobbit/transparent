@@ -48,7 +48,12 @@ namespace Transparent.Filters
 
             if (doEvent)
             {
-                EventRunner.RunEventsAsync();
+                if(TechnicalConfiguration.RunEventsAsync)
+                    // Better for high traffic to make the page load faster
+                    EventRunner.RunEventsAsync();
+                else
+                    // Better for low traffic so that updates occur before page loads
+                    EventRunner.RunEvents();
             }
 
             base.OnActionExecuting(filterContext);

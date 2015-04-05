@@ -105,7 +105,7 @@ namespace Transparent.Controllers
 
         public ActionResult Newest(TicketsContainer ticketsContainer)
         {
-            return View(tickets.Newest(ticketsContainer));
+            return View(tickets.NewestPublic(ticketsContainer));
         }
 
         public ActionResult RaisedByMe(TicketsContainer ticketsContainer)
@@ -126,6 +126,35 @@ namespace Transparent.Controllers
         public ActionResult Search(Search search)
         {
             return View(tickets.Search(search));
+        }
+
+        public ActionResult Answered(TicketsContainer ticketsContainer)
+        {
+            return View(tickets.Answered(ticketsContainer));
+        }
+
+        /// <summary>
+        /// Returns suggestions which are accepted or in progress.
+        /// </summary>
+        /// <returns>Suggestions which are accepted or in progress</returns>
+        public ActionResult Accepted(TicketsContainer ticketsContainer)
+        {
+            ticketsContainer.TicketType = TicketType.Suggestion;
+            if (ticketsContainer.TicketState == null)
+                ticketsContainer.TicketState = TicketState.Accepted;
+            return View(tickets.Newest(ticketsContainer));
+        }
+
+        /// <summary>
+        /// Returns suggestions which are completed or in rejected.
+        /// </summary>
+        /// <returns>Suggestions which are completed or in rejected</returns>
+        public ActionResult Archive(TicketsContainer ticketsContainer)
+        {
+            ticketsContainer.TicketType = TicketType.Suggestion;
+            if (ticketsContainer.TicketState == null)
+                ticketsContainer.TicketState = TicketState.Completed;
+            return View(tickets.Newest(ticketsContainer));
         }
 
         //

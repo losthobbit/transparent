@@ -1,0 +1,12 @@
+﻿@model Transparent.Data.Models.TicketsContainer
+@using Transparent.Data.Models;
+@{
+    ViewBag.Title = "Accepted";
+}
+
+@Html.Partial("_MenuPartial")
+@Html.Partial("_TicketListPartial", Model, new ViewDataDictionary
+{
+    { "ShowTicketTypeMenu", false },
+    { "States", new []{TicketState.Accepted, TicketState.InProgress} }
+})

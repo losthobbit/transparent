@@ -16,8 +16,21 @@ namespace Transparent.Business.Interfaces
         TicketsContainer MyQueue(TicketsContainer filter, int userId);
 
         TicketsContainer RaisedBy(TicketsContainer filter, int userId);
-        TicketsContainer Newest(TicketsContainer filter);
+        TicketsContainer NewestPublic(TicketsContainer filter);
         TicketsContainer HighestRanked(TicketsContainer filter);
+
+        /// <summary>
+        /// Returns questions in the completed state.
+        /// </summary>
+        /// <returns>Questions in the completed state</returns>
+        TicketsContainer Answered(TicketsContainer filter);
+
+        /// <summary>
+        /// Returns suggestions in the filter's state.
+        /// </summary>
+        /// <returns>Suggestions in the filter's state</returns>
+        TicketsContainer Newest(TicketsContainer filter);
+
         Search Search(Search filter);
 
         /// <summary>

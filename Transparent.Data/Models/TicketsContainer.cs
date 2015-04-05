@@ -9,6 +9,7 @@ namespace Transparent.Data.Models
     public class TicketsContainer : StatefulPagedList<Ticket, TicketsContainer>
     {
         private const string TicketTypeKey = "T";
+        private const string TicketStateKey = "Z";
 
         public TicketsContainer()
         {
@@ -30,6 +31,18 @@ namespace Transparent.Data.Models
             }
         }
 
+        public TicketState? TicketState
+        {
+            get
+            {
+                return (TicketState?)GetNullableInt(TicketStateKey);
+            }
+            set
+            {
+                SetValue(TicketStateKey, (int?)value);
+            }
+        }
+
         /// <summary>
         /// Creates a generic TicketsContainer with a clone of the state and sets the TicketType of the cloned state.
         /// </summary>
@@ -39,6 +52,18 @@ namespace Transparent.Data.Models
         {
             var stateful = GetState();
             stateful.SetValue(TicketTypeKey, (int?)ticketType);
+            return stateful;
+        }
+
+        /// <summary>
+        /// Creates a generic TicketsContainer with a clone of the state and sets the TicketState of the cloned state.
+        /// </summary>
+        /// <param name="ticketState">The ticket state for the cloned state.</param>
+        /// <returns>A generic TicketsContainer with a clone of the state.</returns>
+        public Stateful GetState(TicketState? ticketState)
+        {
+            var stateful = GetState();
+            stateful.SetValue(TicketStateKey, (int?)ticketState);
             return stateful;
         }
     }

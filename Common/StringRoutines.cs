@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Common
@@ -29,6 +30,22 @@ namespace Common
         public static string CapitalizeFirstLetter(this string text)
         {
             return Char.ToUpper(text[0]) + text.Substring(1);
+        }
+
+        /// <summary>
+        /// Converts camel case into end user readable text.
+        /// </summary>
+        public static string CamelCaseToSpacedWords(this string camelCase)
+        {
+            return Regex.Replace(
+                Regex.Replace(
+                    camelCase,
+                    @"(\P{Ll})(\P{Ll}\p{Ll})",
+                    "$1 $2"
+                ),
+                @"(\p{Ll})(\P{Ll})",
+                "$1 $2"
+            );
         }
     }
 }

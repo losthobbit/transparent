@@ -17,9 +17,18 @@ namespace Transparent.Services
         /// </remarks>
         public TimeSpan MinEventInterval { get; set; }
 
+        /// <summary>
+        /// For high traffic this could improve page loading time.
+        /// </summary>
+        /// <remarks>
+        /// For low traffic it may be better to set this to false in order to do the updates before loading the page.
+        /// </remarks>
+        public bool RunEventsAsync { get; set; }
+
         public TechnicalConfiguration(Common.Interfaces.IConfiguration configuration)
         {
             MinEventInterval = TimeSpan.Parse(configuration.GetValue("MinEventInterval"));
+            RunEventsAsync = Boolean.Parse(configuration.GetValue("RunEventsAsync"));
         }
     }
 }

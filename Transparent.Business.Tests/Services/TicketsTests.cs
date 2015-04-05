@@ -166,18 +166,18 @@ namespace Transparent.Business.Tests.Services
 
         #endregion HighestRanked
 
-        #region Newest
+        #region NewestPublic
 
         [TestCase(TicketState.Verification)]
         [TestCase(TicketState.Discussion)]
         [TestCase(TicketState.Voting)]
-        public void Newest_returns_tickets_in_public_state(TicketState ticketState)
+        public void NewestPublic_returns_tickets_in_public_state(TicketState ticketState)
         {
             // Arrange
             TestData.JoesScubaDivingSuggestion.State = ticketState;
 
             // Act
-            var ticketsContainer = target.Newest(new TicketsContainer());
+            var ticketsContainer = target.NewestPublic(new TicketsContainer());
 
             // Assert
             ticketsContainer.PagedList.Single(ticket => ticket == TestData.JoesScubaDivingSuggestion);
@@ -188,16 +188,65 @@ namespace Transparent.Business.Tests.Services
         [TestCase(TicketState.Accepted)]
         [TestCase(TicketState.InProgress)]
         [TestCase(TicketState.Completed)]
-        public void Newest_does_not_return_tickets_in_non_public_state(TicketState ticketState)
+        public void NewestPublic_does_not_return_tickets_in_non_public_state(TicketState ticketState)
         {
             // Arrange
             TestData.JoesScubaDivingSuggestion.State = ticketState;
 
             // Act
-            var ticketsContainer = target.Newest(new TicketsContainer());
+            var ticketsContainer = target.NewestPublic(new TicketsContainer());
 
             // Assert
             Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == TestData.JoesScubaDivingSuggestion));
+        }
+
+        #endregion NewestPublic
+
+        #region Answered
+
+        [Test]
+        public void Answered_only_returns_questions()
+        {
+            // Arrange
+            TestData.StephensCriticalThinkingQuestion.State = TicketState.Completed;
+
+            // Act
+            var ticketsContainer = target.Answered(new TicketsContainer());
+
+            // Assert
+            Assert.IsTrue(ticketsContainer.PagedList.All(ticket => ticket is Question));
+        }
+
+        [TestCase(TicketState.Verification)]
+        [TestCase(TicketState.Discussion)]
+        public void Answered_does_not_return_questions_in_non_completed_state(TicketState ticketState)
+        {
+            // Arrange
+            TestData.StephensCriticalThinkingQuestion.State = ticketState;
+
+            // Act
+            var ticketsContainer = target.Answered(new TicketsContainer());
+
+            // Assert
+            Assert.IsTrue(ticketsContainer.PagedList.All(ticket => ticket.State == TicketState.Completed));
+        }
+
+        #endregion Answered
+
+        #region Newest
+
+        [TestCase(TicketType.Suggestion, TicketState.Verification)]
+        [TestCase(TicketType.Suggestion, TicketState.Discussion)]
+        [TestCase(TicketType.Question, TicketState.Discussion)]
+        public void Newest_only_returns_tickets_with_the_specified_type_and_state(TicketType type, TicketState state)
+        {
+            // Arrange
+
+            // Act
+            var ticketsContainer = target.Newest(new TicketsContainer { TicketType = type, TicketState = state });
+
+            // Assert
+            Assert.IsTrue(ticketsContainer.PagedList.All(ticket => ticket.TicketType == type && ticket.State == state));
         }
 
         #endregion Newest

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Common;
 
 namespace Transparent.Extensions
 {
@@ -20,7 +21,7 @@ namespace Transparent.Extensions
         {
             if (obj == null)
                 return "None";
-            return obj.ToString();
+            return obj.ToString().CamelCaseToSpacedWords();
         }
 
         /// <summary>
@@ -36,7 +37,7 @@ namespace Transparent.Extensions
         {
             if (obj == null)
                 return "All";
-            return obj.ToString() + 's';
+            return obj.ToString().CamelCaseToSpacedWords() + 's';
         }
     }
 }

@@ -56,6 +56,8 @@ namespace Transparent.Data.Tests.Helpers
 
             #region Questions
 
+            public Question StephensCriticalThinkingQuestion;
+
             #endregion Questions
 
         #endregion Tickets
@@ -160,6 +162,16 @@ namespace Transparent.Data.Tests.Helpers
                 State = TicketState.Voting
             };
 
+            StephensCriticalThinkingQuestion = new Question
+            {
+                Id = 209,
+                FkUserId = Stephen.UserId,
+                User = Stephen,
+                Heading = "Meaning of life",
+                Body = "What is the meaning of life?",
+                State = TicketState.Discussion
+            };
+
             StephensCriticalThinkingTag = new UserTag
             {
                 User = Stephen,
@@ -209,7 +221,7 @@ namespace Transparent.Data.Tests.Helpers
         {
             var testData = new TestData();
             var fakeContext = new FakeUsersContext
-            {               
+            {
                 Tags =
                 {
                     testData.CriticalThinkingTag,
@@ -227,6 +239,7 @@ namespace Transparent.Data.Tests.Helpers
                     testData.JoesCriticalThinkingSuggestion,
                     testData.JoesScubaDivingSuggestion,
                     // Questions
+                    testData.StephensCriticalThinkingQuestion,
                     // Tests
                     testData.CriticalThinkingTestThatJoeTook,
                     testData.CriticalThinkingTestThatStephenTook,
@@ -286,6 +299,11 @@ namespace Transparent.Data.Tests.Helpers
                     new TicketTag
                     {
                         Ticket = testData.CriticalThinkingTestThatIsInTheVotingStage, FkTicketId = testData.CriticalThinkingTestThatIsInTheVotingStage.Id,
+                        Tag = testData.CriticalThinkingTag, FkTagId = testData.CriticalThinkingTag.Id
+                    },
+                    new TicketTag
+                    {
+                        Ticket = testData.StephensCriticalThinkingQuestion, FkTicketId = testData.StephensCriticalThinkingQuestion.Id,
                         Tag = testData.CriticalThinkingTag, FkTagId = testData.CriticalThinkingTag.Id
                     }
                 },
@@ -358,6 +376,17 @@ namespace Transparent.Data.Tests.Helpers
                         TestPoint = testData.PointForCriticalThinkingTestThatJoeTookThatStephenMarked,
                         Passed = true
                     }
+                },
+                Arguments =
+                {
+                    new Argument
+                    {
+                        Body = "42",
+                        FkTicketId = testData.StephensCriticalThinkingQuestion.Id,
+                        Ticket = testData.StephensCriticalThinkingQuestion,
+                        FkUserId = testData.Joe.UserId,
+                        User = testData.Joe
+                    }
                 }
             };
             fakeContext.SavedChanges += obj => testData.ResolveRelationships();
@@ -417,6 +446,7 @@ namespace Transparent.Data.Tests.Helpers
             foreach (var ticket in UsersContext.Tickets)
             {
                 ticket.TicketTags = UsersContext.TicketTags.Where(ticketTag => ticketTag.Ticket == ticket).ToList();
+                ticket.Arguments = UsersContext.Arguments.Where(argument => argument.Ticket == ticket).ToList();
             }
 
             foreach (var userPoint in UsersContext.UserPoints)

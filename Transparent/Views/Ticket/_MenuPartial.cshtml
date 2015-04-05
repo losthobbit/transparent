@@ -2,13 +2,16 @@
     <ul id="menu" class="left main">
         @{var links = new []
             {
+                new []{ "Create", "Create" },
                 new []{ "My Queue", "MyQueue" },
                 new []{ "Highest Ranked", "HighestRanked" },
-                new []{ "Newest", "Newest" },
+                new []{ "New", "Newest" },
                 new []{ "Raised by Me", "RaisedByMe" },
+                new []{ "Accepted", "Accepted" },
+                new []{ "Answered", "Answered" },
                 new []{ "Search", "Search" },
-                new []{ "Create", "Create" },
                 new []{ "Mark Tests", "MarkTests" },
+                new []{ "Archive", "Archive" }
             };
         }
         @foreach(var link in links)

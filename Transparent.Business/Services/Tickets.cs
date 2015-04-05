@@ -40,17 +40,33 @@ namespace Transparent.Business.Services
             this.configuration = configuration;
         }
 
-        private IQueryable<Ticket> TicketSet(TicketsContainer filter)
+        private IQueryable<Ticket> TicketsByType(TicketType? ticketType)
         {
-            if (filter.TicketType == null)
+            if (ticketType == null)
                 return db.Tickets;
-            switch (filter.TicketType.Value)
+            switch (ticketType.Value)
             {
                 case TicketType.Question: return db.Questions;
                 case TicketType.Suggestion: return db.Suggestions;
                 case TicketType.Test: return db.Tests;
             }
             throw new NotSupportedException("Unknown ticket type");
+        }
+
+        /// <summary>
+        /// Returns a filtered query for tickets based on TicketType and TicketState.
+        /// </summary>
+        /// <returns>Filtered query for tickets</returns>
+        private IQueryable<Ticket> TicketSet(TicketsContainer filter)
+        {
+            var query = TicketsByType(filter.TicketType);
+
+            if (filter.TicketState.HasValue)
+            {
+                return query.Where(ticket => ticket.State == filter.TicketState.Value);
+            }
+
+            return query;
         }
 
         public void Create(Ticket ticket, int userId)
@@ -93,7 +109,7 @@ namespace Transparent.Business.Services
             );
         }
 
-        public TicketsContainer Newest(TicketsContainer filter)
+        public TicketsContainer NewestPublic(TicketsContainer filter)
         {
             return filter.Initialize
             (
@@ -116,6 +132,41 @@ namespace Transparent.Business.Services
                     .GetPublic()
                 )
                 .OrderByDescending(ticket => ticket.Rank)
+            );
+        }
+
+        /// <summary>
+        /// Returns questions in the completed state.
+        /// </summary>
+        /// <returns>Questions in the completed state.</returns>
+        public TicketsContainer Answered(TicketsContainer filter)
+        {
+            filter.TicketType = TicketType.Question;
+            return filter.Initialize
+            (
+                filter.ApplyFilter
+                (
+                    from ticket in TicketSet(filter)
+                    where ticket.State == TicketState.Completed
+                    select ticket
+                )
+                .OrderByDescending(ticket => ticket.CreatedDate)
+            );
+        }
+
+        /// <summary>
+        /// Returns tickets based on the filter's TicketType and TicketState, sorted by created date in descending order.
+        /// </summary>
+        /// <returns>Tickets based on the filter's TicketType and TicketState, sorted by created date in descending order</returns>
+        public TicketsContainer Newest(TicketsContainer filter)
+        {
+            return filter.Initialize
+            (
+                filter.ApplyFilter
+                (
+                    TicketSet(filter)
+                )
+                .OrderByDescending(ticket => ticket.CreatedDate)
             );
         }
 

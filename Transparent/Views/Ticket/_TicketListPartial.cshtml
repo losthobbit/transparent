@@ -7,6 +7,8 @@
     {      
         <section>
             <header>
+            @if(!ViewData.ContainsKey("ShowTicketTypeMenu") || (bool)ViewData["ShowTicketTypeMenu"])
+            {
                 <ul id="menu" class="left subMenu">
                 @foreach(var ticketType in ModelViewExtensions.TicketTypeInfo)
                 {
@@ -24,6 +26,28 @@
                     </li>
                 }
                 </ul>
+            }
+            @if (ViewData.ContainsKey("States"))
+            {
+                var states = (TicketState[])ViewData["States"];
+                <ul id="menu" class="left subMenu">
+                @foreach (var state in states)
+                {
+                    <li>
+                        @{
+                            if(Model.TicketState == state)
+                            {
+                                <b>@state.DisplayName()</b>
+                            }
+                            else
+                            {
+                                @Html.ActionLink(state.DisplayName(), ViewContext.RouteData.Values["action"].ToString(), Model.GetState(state));
+                            }
+                        }
+                    </li>
+                }
+                </ul>                
+            }
             </header>
             <table>
             @foreach (var item in Model.PagedList)

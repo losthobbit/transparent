@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace Common.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class StringRoutinesTests
     {
-        [TestMethod]
+        #region Spaces
+
+        [Test]
         public void Spaces_with_5_spaces_returns_5_spaces()
         {
             // Act
@@ -19,5 +21,21 @@ namespace Common.Tests
             // Act
             Assert.AreEqual("     ", actual);
         }
+
+        #endregion Spaces
+
+        #region CamelCaseToSpacedWords
+
+        [TestCase("IDontWorkAtIBM", "I Dont Work At IBM")]
+        public void CamelCaseToSpacedWords_with_camel_case_returns_user_readable_text(string camelCase, string expected)
+        {
+            //Act
+            var actual = StringRoutines.CamelCaseToSpacedWords(camelCase);
+
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        #endregion CamelCaseToSpacedWords
     }
 }
