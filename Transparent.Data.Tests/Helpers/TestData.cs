@@ -225,7 +225,8 @@ namespace Transparent.Data.Tests.Helpers
                 Tags =
                 {
                     testData.CriticalThinkingTag,
-                    testData.ScubaDivingTag
+                    testData.ScubaDivingTag,
+                    testData.BungeeJumpingTag
                 },
                 UserProfiles =
                 {
@@ -395,6 +396,10 @@ namespace Transparent.Data.Tests.Helpers
             fakeContext.Suggestions = new FakeDbSet<Suggestion>(testData.UsersContext.Tickets.OfType<Suggestion>());
             fakeContext.Questions = new FakeDbSet<Question>(testData.UsersContext.Tickets.OfType<Question>());
             fakeContext.Tests = new FakeDbSet<Test>(testData.UsersContext.Tickets.OfType<Test>());
+
+            testData.CriticalThinkingTag.Children = new List<Tag> { testData.ScubaDivingTag, testData.BungeeJumpingTag };
+            testData.ScubaDivingTag.Parents = new List<Tag> { testData.CriticalThinkingTag };
+            testData.BungeeJumpingTag.Parents = new List<Tag> { testData.BungeeJumpingTag };
 
             testData.ResolveRelationships();
 

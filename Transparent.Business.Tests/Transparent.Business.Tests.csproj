@@ -58,6 +58,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ProgressTicketsTests.cs" />
     <Compile Include="Services\TicketsTests.cs" />
+    <Compile Include="Services\UserTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

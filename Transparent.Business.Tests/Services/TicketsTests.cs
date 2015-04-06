@@ -15,6 +15,7 @@ using Ploeh.AutoFixture;
 using Transparent.Business.ViewModels;
 using Moq;
 using Transparent.Data.Services;
+using Transparent.Business.Interfaces;
 
 namespace Transparent.Business.Tests.Services
 {
@@ -24,6 +25,7 @@ namespace Transparent.Business.Tests.Services
         private Tickets target;
 
         private Mock<IDataService> mockDataService;
+        private Mock<IUser> mockUserService;
 
         [SetUp]
         public override void SetUp()
@@ -31,8 +33,9 @@ namespace Transparent.Business.Tests.Services
             base.SetUp();
 
             mockDataService = new Mock<IDataService>();
+            mockUserService = new Mock<IUser>();
 
-            target = new Tickets(UsersContext, mockDataService.Object, TestConfiguration);
+            target = new Tickets(UsersContext, mockDataService.Object, TestConfiguration, mockUserService.Object);
         }
         
         /// <summary>
@@ -340,10 +343,17 @@ namespace Transparent.Business.Tests.Services
 
         #region GetUntakenTests
 
+        private void ArrangeGetUntakenTests(bool competentInParents = true)
+        {
+            mockUserService.Setup(x => x.GetIncompetentParentsTags(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(competentInParents ? new List<Tag>() : new List<Tag> { TestData.CriticalThinkingTag });
+        }
+
         [Test]
         public void GetUntakenTests_returns_only_tests_that_match_the_tag()
         {
             // Arrange
+            ArrangeGetUntakenTests();
             var tag = TestData.CriticalThinkingTag;
             var userId = TestData.Stephen.UserId;
 
@@ -359,6 +369,7 @@ namespace Transparent.Business.Tests.Services
         public void GetUntakenTests_returns_only_tests_that_are_in_the_completed_state()
         {
             // Arrange
+            ArrangeGetUntakenTests();
             var tag = TestData.CriticalThinkingTag;
             var userId = TestData.Stephen.UserId;
 
@@ -373,6 +384,7 @@ namespace Transparent.Business.Tests.Services
         public void GetUntakenTests_returns_tests_that_have_not_been_taken_by_the_user()
         {
             // Arrange
+            ArrangeGetUntakenTests();
             var tag = TestData.CriticalThinkingTag;
             var userId = TestData.Stephen.UserId;
             var stephensPoints = TestData.UsersContext.UserPoints.Where(userPoints => userPoints.User == TestData.Stephen);
@@ -387,7 +399,45 @@ namespace Transparent.Business.Tests.Services
             Assert.IsTrue(actualTests.All(test => !testsStephenTook.Contains(test)));
         }
 
+        [Test]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void GetUntakenTests_where_the_user_is_incompetent_in_the_parent_tag_throws_NotSupportedException()
+        {
+            // Arrange
+            ArrangeGetUntakenTests(false);
+            var tag = TestData.BungeeJumpingTag;
+            var userId = TestData.Stephen.UserId;
+
+            // Act
+            var actualTests = target.GetUntakenTests(tag.Id, userId);
+        }
+
         #endregion GetUntakenTest
+
+        #region AnswerTest
+
+        private void ArrangeAnswerTest()
+        {
+        }
+
+        [Test]
+        public void AnswerTest_with_valid_parameters_sets_answer()
+        {
+            //Arrange
+            ArrangeAnswerTest();
+            var testId = TestData.CriticalThinkingTestThatJoeStarted.Id;
+            var userId = TestData.Joe.UserId;
+            var userPoint = TestData.UsersContext.UserPoints.SingleOrDefault(point => point.FkTestId == testId && point.FkUserId == userId);
+            var answer = Fixture.Create<string>();
+
+            //Act
+            target.AnswerTest(testId, answer, userId);
+
+            //Assert
+            Assert.AreEqual(answer, userPoint.Answer);
+        }
+
+        #endregion AnswerTest
 
         #region TestsToBeMarked
 
@@ -900,9 +950,12 @@ namespace Transparent.Business.Tests.Services
 
         #region StartTest
 
-        private void ArrangeStartTest()
+        private void ArrangeStartTest(bool competentInParents = true)
         {
             UseRealDataService();
+            
+            mockUserService.Setup(x => x.GetIncompetentParentsTags(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(competentInParents ? new List<Tag>() : new List<Tag> { TestData.CriticalThinkingTag });
         }
         
         [Test]
@@ -987,6 +1040,17 @@ namespace Transparent.Business.Tests.Services
                 point.FkTestId == TestData.CriticalThinkingTestThatJoeTook.Id &&
                 point.User == TestData.Stephen);
             Assert.AreEqual(0, newPoint.Quantity);
+        }
+
+        [Test]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void StartTest_with_an_incompetent_parent_tag_throws_NotSupportedException()
+        {
+            //Arrange
+            ArrangeStartTest(false);
+
+            //Act
+            target.StartTest(TestData.ScubaDivingTestThatJoeTook, TestData.Stephen.UserId);
         }
 
         #endregion StartTest

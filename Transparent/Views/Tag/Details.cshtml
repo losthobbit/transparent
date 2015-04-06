@@ -2,6 +2,7 @@
 @using Castle.Windsor
 @using Transparent.Data.Interfaces
 @using Transparent.Business.Interfaces
+@using Transparent.Data.Models
 
 @{
     ViewBag.Title = "Learn";
@@ -10,8 +11,8 @@
     var tickets = container.Resolve<ITickets>();
     var user = container.Resolve<IUser>();
     var configuration = container.Resolve<IConfiguration>();
-    var numberOfTests = tickets.CountUntakenTestsRemaining(Model.Id, WebSecurity.CurrentUserId);
     var pointsForTag = user.GetPointsForTag(WebSecurity.CurrentUserId, Model.Id);
+    var inCompetentParentsTags = user.GetIncompetentParentsTags(WebSecurity.CurrentUserId, Model.Id);
 }
 
 <canvas id="tagDiagram" width="660" height="300" style="border:1px solid #FFFFFF;">
@@ -47,13 +48,23 @@
     <div class="display-field">
         <h2>@Html.DisplayFor(model => model.Name)</h2>
         <p>You have @pointsForTag points for @Model.Name</p>
-        @if(numberOfTests > 0)
+        @{
+        if(inCompetentParentsTags.Any())
         {
-            <a id="takeTestButton" class="button">Take a test</a><text>(</text>@Html.Raw(numberOfTests)<text> remaining)</text>
+            <i>Take more tests to show your competence in @String.Join(", ", inCompetentParentsTags.Select(tag => tag.Name)) before taking tests in @Model.Name</i>
         }
         else
         {
-            <i>All tests have been taken.</i>
+            var numberOfTests = tickets.CountUntakenTestsRemaining(Model.Id, WebSecurity.CurrentUserId);
+            if (numberOfTests > 0)
+            {
+                <a id="takeTestButton" class="button">Take a test</a><text>(</text>@Html.Raw(numberOfTests)<text> remaining)</text>
+            }
+            else
+            {
+                <i>All tests have been taken.</i>
+            }
+        }
         }
     </div>
     <div class="display-field">

@@ -32,12 +32,14 @@ namespace Transparent.Business.Services
         private readonly IUsersContext db;
         private readonly IDataService dataService;
         private readonly IConfiguration configuration;
+        private readonly IUser userService;
 
-        public Tickets(IUsersContext db, IDataService dataService, IConfiguration configuration)
+        public Tickets(IUsersContext db, IDataService dataService, IConfiguration configuration, IUser userService)
         {
             this.db = db;
             this.dataService = dataService;
             this.configuration = configuration;
+            this.userService = userService;
         }
 
         private IQueryable<Ticket> TicketsByType(TicketType? ticketType)
@@ -202,6 +204,7 @@ namespace Transparent.Business.Services
         /// <summary>
         /// Adjusts the votes of the ticket based on the user's stance.
         /// </summary>
+        /// <exception cref="NotSupportedException">Ticket not in the voting state or user is not competent.</exception>
         public VoteViewModel SetVote(int ticketId, Stance vote, int userId)
         {
             var ticket = db.Tickets.Single(t => t.Id == ticketId);
@@ -223,8 +226,12 @@ namespace Transparent.Business.Services
             };
         }
 
+        /// <exception cref="NotSupportedException">User is not competent in parent tag.</exception>
         public IEnumerable<Test> GetUntakenTests(int tagId, int userId)
         {
+            if (userService.GetIncompetentParentsTags(userId, tagId).Any())
+                throw new NotSupportedException("User is not competent in parent tag.");
+
             var untakenTests = from test in db.Tests
                                where test.State == TicketState.Completed && test.TicketTags.Any(tag => tag.FkTagId == tagId)
                                from userPoint in db.UserPoints
@@ -249,12 +256,16 @@ namespace Transparent.Business.Services
         /// Record that the user started the test and deduct points
         /// </summary>
         /// <param name="test">The test to start.</param>
-        /// <exception cref="NotSupportedException">Test already completed.</exception>
+        /// <exception cref="NotSupportedException">Test already completed or user is not competent in parent tag.</exception>
         /// <exception cref="ArgumentNullException">Required argument is null.</exception>
         public void StartTest(Test test, int userId)
         {
             if (test == null)
                 throw new ArgumentNullException("test");
+
+            if (userService.GetIncompetentParentsTags(userId, test.TagId).Any())
+                throw new NotSupportedException("User is not competent in parent tag.");
+
             var userPoint = db.UserPoints.SingleOrDefault(point => point.FkTestId == test.Id && point.FkUserId == userId);
             if (userPoint == null)
             {

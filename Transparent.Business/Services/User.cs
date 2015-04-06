@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Transparent.Business.Interfaces;
 using Transparent.Data.Interfaces;
+using Transparent.Data.Models;
 
 namespace Transparent.Business.Services
 {
@@ -19,20 +20,28 @@ namespace Transparent.Business.Services
     public class User: IUser
     {
         private IUsersContext db;
-
         private readonly IConfiguration configuration;
+        private readonly ITags tags;
 
-        public User(IUsersContext db, IConfiguration configuration)
+        public User(IUsersContext db, IConfiguration configuration, ITags tags)
         {
             this.db = db;
-
             this.configuration = configuration;
+            this.tags = tags;
         }
 
         public int GetPointsForTag(int userId, int tagId)
         {
             var userTag = db.UserTags.SingleOrDefault(tag => tag.FkUserId == userId && tag.FkTagId == tagId);
             return userTag == null ? 0 : userTag.TotalPoints;
+        }
+
+        public List<Tag> GetIncompetentParentsTags(int userId, int tagId)
+        {
+            var parents = tags.Find(tagId).Parents;
+            return parents == null
+                ? new List<Tag>()
+                : parents.Where(p => GetPointsForTag(userId, p.Id) < configuration.PointsRequiredToBeCompetent).ToList();
         }
     }
 }
