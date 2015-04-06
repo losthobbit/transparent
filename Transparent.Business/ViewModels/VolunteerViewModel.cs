@@ -13,5 +13,6 @@ namespace Transparent.Business.ViewModels
     {
         public bool Volunteer { get; set; }
         public string Services { get; set; }
+        public UserSummaryViewModel UserSummary { get; set; }
     }
 }

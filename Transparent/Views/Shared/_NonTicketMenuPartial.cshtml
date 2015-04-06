@@ -3,7 +3,8 @@
     @{var links = new []
         {
             new []{ "Learn", "Details", "Tag" },
-            new []{ "Volunteer", "Volunteer" }
+            new []{ "Volunteer", "Volunteer", "Volunteer" },
+            new []{ "Volunteers", "Volunteers", "Volunteer" }
         };
     }
     @foreach(var link in links)
@@ -15,7 +16,7 @@
         }
         else
         {
-            @Html.ActionLink(link[0], link[1], link.Length > 2 ? link[2] : "Ticket");
+            @Html.ActionLink(link[0], link[1], link[2]);
         }
         </li>
     }

@@ -172,6 +172,7 @@
     <Compile Include="Models\PagedList.cs" />
     <Compile Include="Models\PointReason.cs" />
     <Compile Include="Models\Question.cs" />
+    <Compile Include="Models\Role.cs" />
     <Compile Include="Models\StatefulPagedList.cs" />
     <Compile Include="Models\Subscription.cs" />
     <Compile Include="Models\Suggestion.cs" />
@@ -189,6 +190,8 @@
     <Compile Include="Models\Stance.cs" />
     <Compile Include="Models\TicketTag.cs" />
     <Compile Include="Models\TicketUserRank.cs" />
+    <Compile Include="Models\UsersContainer.cs" />
+    <Compile Include="Models\UserInRole.cs" />
     <Compile Include="Models\UserTag.cs" />
     <Compile Include="Models\TicketsContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

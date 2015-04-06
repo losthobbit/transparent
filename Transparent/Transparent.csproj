@@ -176,6 +176,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\TicketController.cs" />
+    <Compile Include="Controllers\VolunteerController.cs" />
     <Compile Include="Extensions\DataAnnotationsExtensions.cs" />
     <Compile Include="Extensions\ModelViewExtensions.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
@@ -359,9 +360,9 @@
     <Content Include="Views\Ticket\TakeTest.cshtml" />
     <Content Include="Views\Ticket\_DetailsPartial.cshtml" />
     <Content Include="Views\Ticket\MarkTests.cshtml" />
-    <Content Include="Views\Ticket\_PagesPartial.cshtml" />
+    <Content Include="Views\Shared\_PagesPartial.cshtml" />
     <Content Include="Views\Ticket\MarkTest.cshtml" />
-    <Content Include="Views\Ticket\Volunteer.cshtml" />
+    <Content Include="Views\Volunteer\Volunteer.cshtml" />
     <Content Include="Views\Ticket\_TicketTagsPartial.cshtml" />
     <Content Include="Views\Home\_StatsPartial.cshtml" />
     <Content Include="Views\Home\PageNotFound.cshtml" />
@@ -376,6 +377,8 @@
     <Content Include="Views\Ticket\Answered.cshtml" />
     <Content Include="Views\Ticket\Archive.cshtml" />
     <Content Include="Views\Ticket\Accepted.cshtml" />
+    <Content Include="Views\Volunteer\Volunteers.cshtml" />
+    <Content Include="Views\Volunteer\_VolunteerDetailsPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

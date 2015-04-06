@@ -1,0 +1,19 @@
+﻿@model Transparent.Data.Models.UsersContainer
+@using Transparent.Business.Maps
+@using Transparent.Business.ViewModels
+@{
+    ViewBag.Title = "Volunteers";
+    if (Model != null)
+    {      
+        <section>
+            <table>
+            @foreach (var user in Model.PagedList)
+            {
+                @Html.Partial("_VolunteerDetailsPartial", user.Map<VolunteerViewModel>())
+            }
+            </table>
+            @Html.Partial("_PagesPartial", Model)
+        </section>
+    }
+}
+

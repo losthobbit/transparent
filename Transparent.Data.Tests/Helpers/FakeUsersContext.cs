@@ -31,6 +31,8 @@ namespace Transparent.Data.Tests.Helpers
             Subscriptions = new FakeDbSet<Subscription>();
             Arguments = new FakeDbSet<Argument>();
             TicketUserVotes = new FakeDbSet<TicketUserVote>();
+            UsersInRoles = new FakeDbSet<UserInRole>();
+            Roles = new FakeDbSet<Role>();
         }
 
         public IDbSet<UserProfile> UserProfiles { get; private set; }
@@ -47,6 +49,8 @@ namespace Transparent.Data.Tests.Helpers
         public IDbSet<Subscription> Subscriptions { get; set; }
         public IDbSet<Argument> Arguments { get; set; }
         public IDbSet<TicketUserVote> TicketUserVotes { get; private set; }
+        public IDbSet<UserInRole> UsersInRoles { get; private set; }
+        public IDbSet<Role> Roles { get; private set; }
 
         public IQueryable<UserProfile> FullUserProfiles
         {

@@ -89,6 +89,7 @@
     <Compile Include="Interfaces\IProgressTickets.cs" />
     <Compile Include="Interfaces\ITickets.cs" />
     <Compile Include="Interfaces\IUser.cs" />
+    <Compile Include="Interfaces\IVolunteers.cs" />
     <Compile Include="Maps\DataToViewMappingExtensions.cs" />
     <Compile Include="Maps\Dependencies.cs" />
     <Compile Include="Maps\ViewToDataMappingExtensions.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Services\ProgressTickets.cs" />
     <Compile Include="Services\Tickets.cs" />
     <Compile Include="Services\User.cs" />
+    <Compile Include="Services\Volunteers.cs" />
     <Compile Include="ViewModels\AnsweredTests.cs" />
     <Compile Include="ViewModels\CreateTicketViewModel.cs" />
     <Compile Include="ViewModels\ArgumentViewModel.cs" />
@@ -108,6 +110,7 @@
     <Compile Include="ViewModels\TicketTagViewModel.cs" />
     <Compile Include="ViewModels\UserSummaryViewModel.cs" />
     <Compile Include="ViewModels\UserTagViewModel.cs" />
+    <Compile Include="ViewModels\VolunteersViewModel.cs" />
     <Compile Include="ViewModels\VolunteerViewModel.cs" />
     <Compile Include="ViewModels\VoteViewModel.cs" />
     <Compile Include="Windsor\Installer.cs" />

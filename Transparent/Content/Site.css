@@ -9,6 +9,10 @@ td {
     vertical-align:top
 }
 
+.underlined {
+    border-bottom: 1px solid #606060;
+}
+
 .gap-above {
     margin-top: 15px;
 }

@@ -31,6 +31,8 @@ namespace Transparent.Data
         public IDbSet<Subscription> Subscriptions { get; set; }
         public IDbSet<Argument> Arguments { get; set; }
         public IDbSet<TicketUserVote> TicketUserVotes { get; set; }
+        public IDbSet<UserInRole> UsersInRoles { get; set; }
+        public IDbSet<Role> Roles { get; set; }
 
         /// <summary>
         /// UserProfiles with eagerly loaded information.

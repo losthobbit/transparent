@@ -1,0 +1,9 @@
+﻿@model Transparent.Business.ViewModels.VolunteerViewModel
+<tr class="underlined">
+    <td class="metadata float-left">
+        @Html.DisplayFor(model => model.UserSummary)
+    </td>
+    <td class="display-field">
+        @Html.DisplayFor(model => model.Services, "TextToHtml")
+    </td>
+</tr>

@@ -262,37 +262,6 @@ namespace Transparent.Controllers
             return RedirectToAction("MarkTests");
         }
 
-        [HttpGet]
-        public ActionResult Volunteer()
-        {
-            var volunteerViewModel = new VolunteerViewModel
-            {
-                Volunteer = User.IsInRole(Constants.VolunteerRole),
-                Services = db.UserProfiles.Single(user => user.UserName == User.Identity.Name).Services
-            };
-
-            return View(volunteerViewModel);
-        }
-
-        [HttpPost]
-        public ActionResult Volunteer(VolunteerViewModel volunteerViewModel)
-        {
-            bool wasVolunteer = User.IsInRole(Constants.VolunteerRole);
-            if(volunteerViewModel.Volunteer && !wasVolunteer)
-            {
-                Roles.AddUserToRole(User.Identity.Name, Constants.VolunteerRole);
-            }
-            else
-                if(!volunteerViewModel.Volunteer && wasVolunteer)
-                {
-                    Roles.RemoveUserFromRole(User.Identity.Name, Constants.VolunteerRole);
-                }
-            db.UserProfiles.Single(user => user.UserName == User.Identity.Name).Services = volunteerViewModel.Services;
-            db.SaveChanges();
-
-            return View(volunteerViewModel);
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (db is IDisposable)

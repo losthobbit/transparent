@@ -65,6 +65,16 @@ namespace Transparent.Business.Maps
             };
         }
 
+        public static VolunteerViewModel Map<T>(this Data.Models.UserProfile source)
+            where T : VolunteerViewModel
+        {
+            return new VolunteerViewModel
+            {
+                Services = source.Services,
+                UserSummary = source.Map()
+            };
+        }
+
         public static IEnumerable<ArgumentViewModel> Map(this IEnumerable<Data.Models.Argument> source)
         {
             if (source == null)
