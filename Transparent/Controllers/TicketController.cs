@@ -80,6 +80,20 @@ namespace Transparent.Controllers
             return PartialView("_VotePartial", vote);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public PartialViewResult _SetAssign(AssignViewModel assign)
+        {
+            var newVote = tickets.Assign(assign, WebSecurity.CurrentUserId);
+            return PartialView("_AssignPartial", assign);
+        }
+
+        [HttpGet]
+        public PartialViewResult _Assign(AssignViewModel assign)
+        {
+            return PartialView("_AssignPartial", assign);
+        }
+
         public PartialViewResult _TicketTags(TicketTagsViewModel ticket)
         {
             return PartialView("_TicketTagsPartial", ticket);

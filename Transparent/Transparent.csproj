@@ -379,6 +379,7 @@
     <Content Include="Views\Ticket\Accepted.cshtml" />
     <Content Include="Views\Volunteer\Volunteers.cshtml" />
     <Content Include="Views\Volunteer\_VolunteerDetailsPartial.cshtml" />
+    <Content Include="Views\Ticket\_AssignPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

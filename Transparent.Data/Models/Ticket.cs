@@ -48,6 +48,7 @@ namespace Transparent.Data.Models
         }
 
         public virtual ICollection<TicketUserVote> UserVotes { get; set; }
+        public virtual ICollection<TicketHistory> History { get; set; }
 
         [Required]
         public int VotesFor { get; set; }

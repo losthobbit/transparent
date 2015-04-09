@@ -43,21 +43,22 @@ a { text-decoration:none }
     color: silver;
 }
 
-.inset.for {
-    color: green;
-}
-
-.inset.against {
-    color: red;
+.outset {
+    border-style: outset;
 }
 
 .inset {
     border-style: inset;
+    color: green;
 }
 
-.outset {
-    border-style: outset;
-}
+    .inset.for {
+        color: green;
+    }
+
+    .inset.against {
+        color: red;
+    }
 
 button {
     border-radius: 3px;

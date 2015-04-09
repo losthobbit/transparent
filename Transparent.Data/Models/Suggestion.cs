@@ -19,6 +19,8 @@ namespace Transparent.Data.Models
             TicketState.Completed
         };
 
+
+
         public override TicketType TicketType
         {
             get

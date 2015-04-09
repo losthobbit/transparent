@@ -100,6 +100,7 @@
     <Compile Include="Services\User.cs" />
     <Compile Include="Services\Volunteers.cs" />
     <Compile Include="ViewModels\AnsweredTests.cs" />
+    <Compile Include="ViewModels\AssignViewModel.cs" />
     <Compile Include="ViewModels\CreateTicketViewModel.cs" />
     <Compile Include="ViewModels\ArgumentViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ICreateTicketViewModel.cs" />

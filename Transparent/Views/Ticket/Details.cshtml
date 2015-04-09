@@ -2,6 +2,7 @@
 @using Transparent.Business.ViewModels;
 @using Transparent.Business.Maps;
 @using Transparent.Data.Models;
+@using Transparent.Data;
 @using Common;
 
 @{
@@ -16,6 +17,13 @@
 {
     <div id="votePartial" class="lighter">   
     @Html.Action("_Vote", Model.Vote)
+    </div>
+}
+
+@if (Model.State >= TicketState.Accepted && User.IsInRole(Constants.VolunteerRole))
+{
+    <div id="assignPartial" class="lighter">   
+    @Html.Action("_Assign", new AssignViewModel { TicketId = Model.Id, TicketState = Model.State, Username = Model.AssignedName })
     </div>
 }
 

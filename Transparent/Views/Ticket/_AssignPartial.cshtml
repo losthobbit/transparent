@@ -1,0 +1,29 @@
+﻿@model Transparent.Business.ViewModels.AssignViewModel
+@using Transparent.Data.Models
+@using Transparent.Extensions
+@using (Ajax.BeginForm("_SetAssign", new AjaxOptions { UpdateTargetId = "assignPartial" }))
+{
+    @Html.AntiForgeryToken();
+    @Html.HiddenFor(m => m.TicketId);
+    var states = new []
+    {
+        new { State = TicketState.Accepted, Unselected = "Drop", Selected = "Ready" },
+        new { State = TicketState.InProgress, Unselected = "Pick up", Selected = "In progress" },
+        new { State = TicketState.Completed, Unselected = "Complete", Selected = "Completed" }
+    };
+    <table>
+        <tr>
+            <td>
+                @Model.TicketState.DisplayName() (@(Model.Username ?? "Unassigned"))
+            </td>
+            @foreach(var state in states)
+            {
+                var selected = Model.TicketState == state.State;
+                var buttonClass = selected ? "inset" : "outset";
+                <td class="@buttonClass">
+                    <button name="ticketState" class="@buttonClass" title="@state.State" value="@state.State">@(selected ? state.Selected : state.Unselected)</button>
+                </td>
+            }
+        </tr>
+    </table>
+}

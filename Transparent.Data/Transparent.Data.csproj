@@ -117,6 +117,14 @@
     <Compile Include="Migrations\201504030910082_AddTicketUserVotesTable.Designer.cs">
       <DependentUpon>201504030910082_AddTicketUserVotesTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504072011233_AddTicketHistoryTable.cs" />
+    <Compile Include="Migrations\201504072011233_AddTicketHistoryTable.Designer.cs">
+      <DependentUpon>201504072011233_AddTicketHistoryTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504092208485_AddTicketHistoryTableStateColumn.cs" />
+    <Compile Include="Migrations\201504092208485_AddTicketHistoryTableStateColumn.Designer.cs">
+      <DependentUpon>201504092208485_AddTicketHistoryTableStateColumn.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Argument.cs" />
     <Compile Include="Models\Interfaces\IArgument.cs" />
     <Compile Include="Interfaces\IConfiguration.cs" />
@@ -176,6 +184,7 @@
     <Compile Include="Models\StatefulPagedList.cs" />
     <Compile Include="Models\Subscription.cs" />
     <Compile Include="Models\Suggestion.cs" />
+    <Compile Include="Models\TicketHistory.cs" />
     <Compile Include="Models\Test.cs" />
     <Compile Include="Models\TestMarking.cs" />
     <Compile Include="Models\TicketState.cs" />
@@ -245,6 +254,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504030910082_AddTicketUserVotesTable.resx">
       <DependentUpon>201504030910082_AddTicketUserVotesTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504072011233_AddTicketHistoryTable.resx">
+      <DependentUpon>201504072011233_AddTicketHistoryTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504092208485_AddTicketHistoryTableStateColumn.resx">
+      <DependentUpon>201504092208485_AddTicketHistoryTableStateColumn.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

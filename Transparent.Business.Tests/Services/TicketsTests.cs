@@ -1323,5 +1323,70 @@ namespace Transparent.Business.Tests.Services
         }
 
         #endregion SetVote
+
+        #region Assign
+
+        private AssignViewModel assignViewModel;
+
+        private void ArrangeAssign(TicketState state = TicketState.Completed)
+        {
+            TestData.JoesCriticalThinkingSuggestion.State = TicketState.InProgress;
+            assignViewModel = new AssignViewModel
+            {
+                TicketId = TestData.JoesCriticalThinkingSuggestion.Id,
+                TicketState = state,
+                Username = null
+            };
+        }
+
+        [TestCase(TicketState.Accepted)]
+        [TestCase(TicketState.Completed)]
+        public void Assign_with_valid_parameters_sets_state(TicketState state)
+        {
+            //Arrange
+            ArrangeAssign(state);
+            var actualState = TestData.JoesCriticalThinkingSuggestion.State;
+            TestData.UsersContext.SavedChanges += context => actualState = TestData.JoesCriticalThinkingSuggestion.State;
+
+            //Act
+            target.Assign(assignViewModel, TestData.Stephen.UserId);
+
+            //Assert
+            Assert.AreEqual(state, actualState);
+        }
+
+        [Test]
+        public void Assign_with_valid_parameters_returns_username()
+        {
+            //Arrange
+            ArrangeAssign();
+
+            //Act
+            var actual = target.Assign(assignViewModel, TestData.Stephen.UserId);
+
+            //Assert
+            Assert.AreEqual(TestData.Stephen.UserName, actual.Username);
+        }
+       
+        [TestCase(TicketState.Accepted)]
+        [TestCase(TicketState.Completed)]
+        public void Assign_with_valid_parameters_creates_history_with_state_and_userId(TicketState state)
+        {
+            //Arrange
+            ArrangeAssign(state);
+            TicketHistory actualHistory = null;
+            TestData.UsersContext.SavedChanges += context => actualHistory =
+                TestData.JoesCriticalThinkingSuggestion.History.Last();
+
+            //Act
+            target.Assign(assignViewModel, TestData.Stephen.UserId);
+
+            //Assert
+            AssertModifiedDateSet(actualHistory.Date);
+            Assert.AreEqual(TestData.Stephen.UserId, actualHistory.FkUserId);
+            Assert.AreEqual(state, actualHistory.State);
+        }
+
+        #endregion Assign
     }
 }

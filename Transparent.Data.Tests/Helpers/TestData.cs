@@ -452,6 +452,18 @@ namespace Transparent.Data.Tests.Helpers
             {
                 ticket.TicketTags = UsersContext.TicketTags.Where(ticketTag => ticketTag.Ticket == ticket).ToList();
                 ticket.Arguments = UsersContext.Arguments.Where(argument => argument.Ticket == ticket).ToList();
+                if(ticket.History != null)
+                    foreach (var history in ticket.History)
+                    {
+                        if (history.Ticket == null)
+                        {
+                            history.FkTicketId = ticket.Id;
+                            history.Ticket = ticket;
+                            if (!UsersContext.TicketHistory.Contains(history))
+                                UsersContext.TicketHistory.Add(history);
+                        }
+                    }
+                ticket.History = UsersContext.TicketHistory.Where(history => history.Ticket == ticket).ToList();
             }
 
             foreach (var userPoint in UsersContext.UserPoints)

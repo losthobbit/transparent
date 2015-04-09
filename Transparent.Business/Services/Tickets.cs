@@ -202,6 +202,27 @@ namespace Transparent.Business.Services
         }
 
         /// <summary>
+        /// Assigns a ticket to in progress, completed or accepted.
+        /// </summary>
+        public AssignViewModel Assign(AssignViewModel assign, int userId)
+        {
+            var ticket = db.Tickets.Single(t => t.Id == assign.TicketId);
+            ticket.State = assign.TicketState;
+            ticket.History.Add
+            (
+                new TicketHistory
+                {
+                    Date = DateTime.UtcNow,
+                    FkUserId = userId,
+                    State = assign.TicketState
+                }
+            );
+            assign.Username = db.UserProfiles.Single(user => user.UserId == userId).UserName;
+            db.SaveChanges();
+            return assign;
+        }
+
+        /// <summary>
         /// Adjusts the votes of the ticket based on the user's stance.
         /// </summary>
         /// <exception cref="NotSupportedException">Ticket not in the voting state or user is not competent.</exception>

@@ -86,5 +86,10 @@ namespace Transparent.Business.Interfaces
         /// Adjusts the votes of the ticket based on the user's stance.
         /// </summary>
         VoteViewModel SetVote(int ticketId, Stance stance, int userId);
+
+        /// <summary>
+        /// Assigns a ticket to in progress, completed or accepted.
+        /// </summary>
+        AssignViewModel Assign(AssignViewModel assign, int userId);
     }
 }

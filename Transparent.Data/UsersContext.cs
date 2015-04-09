@@ -33,6 +33,7 @@ namespace Transparent.Data
         public IDbSet<TicketUserVote> TicketUserVotes { get; set; }
         public IDbSet<UserInRole> UsersInRoles { get; set; }
         public IDbSet<Role> Roles { get; set; }
+        public IDbSet<TicketHistory> TicketHistory { get; set; }
 
         /// <summary>
         /// UserProfiles with eagerly loaded information.
