@@ -376,7 +376,7 @@ namespace Transparent.Business.Tests.Services
             //Assert
             mockDataService.Verify(x => x.AddPoints(It.IsAny<IUsersContext>(), ticket.FkUserId, 
                 TestData.DemocraticIntelligenceTag.Id, TestConfiguration.DiPointsForAcceptedTicket, 
-                PointReason.TicketAccepted, null), Times.Once());
+                PointReason.TicketAccepted, null, ticket.Id), Times.Once());
         }
 
         [TestCase(2, 2, 51)]
@@ -408,7 +408,7 @@ namespace Transparent.Business.Tests.Services
             //Assert
             mockDataService.Verify(x => x.AddPoints(It.IsAny<IUsersContext>(), ticket.FkUserId,
                 TestData.DemocraticIntelligenceTag.Id, TestConfiguration.DiPointsForAcceptedTicket,
-                PointReason.TicketAccepted, null), Times.Never());
+                PointReason.TicketAccepted, It.IsAny<int?>(), null), Times.Never());
         }
 
         [Test]

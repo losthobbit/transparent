@@ -115,7 +115,7 @@ namespace Transparent.Business.Services
                     dataService.SetNextState(ticket, accepted ? TicketState.Accepted : TicketState.Rejected);
                     if (accepted)
                         dataService.AddPoints(db, ticket.FkUserId, tags.ApplicationTag.Id, configuration.DiPointsForAcceptedTicket,
-                            PointReason.TicketAccepted);
+                            PointReason.TicketAccepted, ticketId:ticket.Id);
                 }
                 db.SaveChanges();
             }

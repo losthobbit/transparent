@@ -31,7 +31,8 @@ namespace Transparent.Data.Interfaces
         /// <remarks>
         /// Does not call DbContext.SaveChanges.
         /// </remarks>
-        void AddPoints(IUsersContext db, IEnumerable<int> userId, int tagId, int points, PointReason reason, int? testId = null);
+        void AddPoints(IUsersContext db, IEnumerable<int> userId, int tagId, int points, PointReason reason, int? testId = null,
+            int? ticketId = null);
 
         /// <summary>
         /// Adds points to the UserPoint and UserTag.
@@ -39,7 +40,7 @@ namespace Transparent.Data.Interfaces
         /// <remarks>
         /// Does not call DbContext.SaveChanges.
         /// </remarks>
-        void AddPoints(IUsersContext db, int userId, int tagId, int points, PointReason reason, int? testId = null);
+        void AddPoints(IUsersContext db, int userId, int tagId, int points, PointReason reason, int? testId = null, int? ticketId = null);
 
         /// <summary>
         /// Adjusts the rank of the ticket based on the user's stance.

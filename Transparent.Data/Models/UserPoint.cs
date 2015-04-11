@@ -44,6 +44,10 @@ namespace Transparent.Data.Models
 
         public Badge? Badge { get; set; }
 
+        [ForeignKey("Ticket")]
+        public int? FkTicketId { get; set; }
+        public virtual Ticket Ticket { get; set; }
+
         // This section only applies to points that are gained or lost through taking a test
         // I suppose it would have made more sense to have a class that inherited from UserPoint
         // but I couldn't be bothered.  Feel free to refactor this.
