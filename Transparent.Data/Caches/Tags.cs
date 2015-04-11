@@ -26,9 +26,11 @@ namespace Transparent.Data.Caches
 
             var tags = context.Tags.Include(tag => tag.Children).Include(tag => tag.Parents).ToList();
             Root = tags.Single(tag => tag.Name == Constants.CriticalThinkingTagName);
+            ApplicationTag = tags.Single(tag => tag.Name == Constants.ApplicationName);
         }
 
         public Tag Root { get; private set; }
+        public Tag ApplicationTag { get; private set; }
 
         public Tag Find(int id)
         {

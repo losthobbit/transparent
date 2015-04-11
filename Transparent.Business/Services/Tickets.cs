@@ -613,12 +613,16 @@ namespace Transparent.Business.Services
             // Deduct markers' points in the case of a tie, or minority
             dataService.AddPoints(db, testAnswer.TestMarkings
                 .Where(testMarking => testPassed == null || testMarking.Passed != testPassed.Value)
-                .Select(marking => marking.FkUserId), testAnswer.FkTagId, testAnswer.FkTestId, -configuration.PointsMarkersLoseForDisagreeingATestResult, PointReason.MarkedTest);
+                .Select(marking => marking.FkUserId), testAnswer.FkTagId, 
+                -configuration.PointsMarkersLoseForDisagreeingATestResult, PointReason.MarkedTest,
+                testAnswer.FkTestId);
 
             // Increase markers' points in the case of a majority
             dataService.AddPoints(db, testAnswer.TestMarkings
                 .Where(testMarking => testPassed.HasValue && testMarking.Passed == testPassed.Value)
-                .Select(marking => marking.FkUserId), testAnswer.FkTagId, testAnswer.FkTestId, configuration.PointsMarkersGainForAgreeingATestResult, PointReason.MarkedTest);
+                .Select(marking => marking.FkUserId), testAnswer.FkTagId,  
+                configuration.PointsMarkersGainForAgreeingATestResult, PointReason.MarkedTest,
+                testAnswer.FkTestId);
         }
 
         /// <exception cref="NotSupportedException">User may not verify tag.</exception>

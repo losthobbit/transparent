@@ -31,6 +31,10 @@ namespace Transparent.Data.Services
         public int PointsRequiredToBeCompetent { get; set; }
         public int PointsRequiredToBeAnExpert { get; set; }
 
+        public int DiPointsForAcceptedTicket { get; set; }
+        public int DiPointsForVolunteering { get; set; }
+        public int DiPointsForFirstBadge { get; set; }
+
         #endregion Points
 
         #region Progressing tickets
@@ -90,6 +94,10 @@ namespace Transparent.Data.Services
 
             PointsRequiredToBeCompetent = int.Parse(configuration.GetValue("PointsRequiredToBeCompetent"));
             PointsRequiredToBeAnExpert = int.Parse(configuration.GetValue("PointsRequiredToBeAnExpert"));
+
+            DiPointsForAcceptedTicket = int.Parse(configuration.GetValue("DiPointsForAcceptedTicket"));
+            DiPointsForVolunteering = int.Parse(configuration.GetValue("DiPointsForVolunteering"));
+            DiPointsForFirstBadge = int.Parse(configuration.GetValue("DiPointsForFirstBadge"));
 
             MaxPositionToAdvanceState = int.Parse(configuration.GetValue("MaxPositionToAdvanceState"));
             DelayAfterValidatingTags = TimeSpan.Parse(configuration.GetValue("DelayAfterValidatingTags"));

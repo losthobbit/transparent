@@ -49,11 +49,11 @@ namespace Transparent.Data.Services
         /// <remarks>
         /// Does not call DbContext.SaveChanges.
         /// </remarks>
-        public void AddPoints(IUsersContext db, IEnumerable<int> userId, int tagId, int testId, int points, PointReason reason)
+        public void AddPoints(IUsersContext db, IEnumerable<int> userId, int tagId, int points, PointReason reason, int? testId = null)
         {
             foreach (var user in userId)
             {
-                AddPoints(db, user, tagId, testId, points, reason);
+                AddPoints(db, user, tagId, points, reason, testId);
             }
         }
 
@@ -63,9 +63,11 @@ namespace Transparent.Data.Services
         /// <remarks>
         /// Does not call DbContext.SaveChanges.
         /// </remarks>
-        private void AddPoints(IUsersContext db, int userId, int tagId, int testId, int points, PointReason reason)
+        public void AddPoints(IUsersContext db, int userId, int tagId, int points, PointReason reason, int? testId = null)
         {
-            var userPoint = db.UserPoints.SingleOrDefault(point => point.FkUserId == userId && point.FkTagId == tagId && point.FkTestId == testId);
+            var userPoint = testId.HasValue 
+                ? db.UserPoints.SingleOrDefault(point => point.FkUserId == userId && point.FkTagId == tagId && point.FkTestId == testId)
+                : null;
             if (userPoint == null)
             {
                 userPoint = new UserPoint { FkUserId = userId, FkTagId = tagId, FkTestId = testId, Reason = reason };

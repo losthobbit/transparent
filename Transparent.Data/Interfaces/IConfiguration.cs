@@ -20,6 +20,10 @@ namespace Transparent.Data.Interfaces
         int PointsRequiredToBeCompetent { get; set; }
         int PointsRequiredToBeAnExpert { get; set; }
 
+        int DiPointsForAcceptedTicket { get; set; }
+        int DiPointsForVolunteering { get; set; }
+        int DiPointsForFirstBadge { get; set; }
+
         /// <summary>
         /// The maximum position (based on highest ranked within a state) that a ticket can
         /// be in before being allowed to advance to the next state via a timed event.

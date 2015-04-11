@@ -28,7 +28,7 @@ namespace Transparent.Business.Tests.Services
 
             mockDataService = new Mock<IDataService>();
 
-            target = new ProgressTickets(() => UsersContext, mockDataService.Object, TestConfiguration);
+            target = new ProgressTickets(() => UsersContext, mockDataService.Object, TestConfiguration, MockTags.Object);
         }
 
         #region ProgressTicketsWithVerifiedTags
@@ -363,6 +363,22 @@ namespace Transparent.Business.Tests.Services
             mockDataService.Verify(x => x.SetNextState(ticket, (TicketState?)TicketState.Accepted), Times.Once);
         }
 
+        [TestCase(61, 39, 60)]
+        public void ProgressTicketsWithVotes_with_a_high_percentage_of_for_votes_adds_DI_points
+            (int forVotes, int againstVotes, int requiredPercentage)
+        {
+            //Arrange
+            var ticket = ProgressTicketsWithVotes(forVotes, againstVotes, configuredPercentOfVotesRequiredToAccept: requiredPercentage);
+
+            //Act
+            target.ProgressTicketsWithVotes();
+
+            //Assert
+            mockDataService.Verify(x => x.AddPoints(It.IsAny<IUsersContext>(), ticket.FkUserId, 
+                TestData.DemocraticIntelligenceTag.Id, TestConfiguration.DiPointsForAcceptedTicket, 
+                PointReason.TicketAccepted, null), Times.Once());
+        }
+
         [TestCase(2, 2, 51)]
         [TestCase(59, 41, 60)]
         [TestCase(0, 0, 50)]
@@ -377,6 +393,22 @@ namespace Transparent.Business.Tests.Services
 
             //Assert
             mockDataService.Verify(x => x.SetNextState(ticket, (TicketState?)TicketState.Rejected), Times.Once);
+        }
+
+        [TestCase(0, 0, 50)]
+        public void ProgressTicketsWithVotes_with_a_low_percentage_of_for_votes_does_not_add_DI_points
+            (int forVotes, int againstVotes, int requiredPercentage)
+        {
+            //Arrange
+            var ticket = ProgressTicketsWithVotes(forVotes, againstVotes, configuredPercentOfVotesRequiredToAccept: requiredPercentage);
+
+            //Act
+            target.ProgressTicketsWithVotes();
+
+            //Assert
+            mockDataService.Verify(x => x.AddPoints(It.IsAny<IUsersContext>(), ticket.FkUserId,
+                TestData.DemocraticIntelligenceTag.Id, TestConfiguration.DiPointsForAcceptedTicket,
+                PointReason.TicketAccepted, null), Times.Never());
         }
 
         [Test]

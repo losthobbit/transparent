@@ -49,9 +49,9 @@ namespace Transparent.Business.Tests.Services
             var dataService = new DataService();
             mockDataService.Setup(x => x.AddPoints(It.IsAny<UserPoint>(), It.IsAny<UserTag>(), It.IsAny<int>()))
                 .Callback<UserPoint, UserTag, int>(dataService.AddPoints);
-            mockDataService.Setup(x => x.AddPoints(It.IsAny<IUsersContext>(), It.IsAny<IEnumerable<int>>(), It.IsAny<int>(), It.IsAny<int>(),
-                It.IsAny<int>(), It.IsAny<PointReason>()))
-                .Callback<IUsersContext, IEnumerable<int>, int, int, int, PointReason>(dataService.AddPoints);
+            mockDataService.Setup(x => x.AddPoints(It.IsAny<IUsersContext>(), It.IsAny<IEnumerable<int>>(), It.IsAny<int>(),
+                It.IsAny<int>(), It.IsAny<PointReason>(), It.IsAny<int?>()))
+                .Callback<IUsersContext, IEnumerable<int>, int, int, PointReason, int?>(dataService.AddPoints);
         }
 
         #region MyQueue

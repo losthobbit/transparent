@@ -9,6 +9,9 @@ namespace Transparent.Data.Models
     public enum PointReason
     {
         TookTest = 0,
-        MarkedTest = 1
+        MarkedTest = 1,
+        Badge = 2,
+        TicketAccepted = 3,
+        Volunteered = 4
     }
 }

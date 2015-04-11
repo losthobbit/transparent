@@ -125,7 +125,12 @@
     <Compile Include="Migrations\201504092208485_AddTicketHistoryTableStateColumn.Designer.cs">
       <DependentUpon>201504092208485_AddTicketHistoryTableStateColumn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504111144376_AddBadges.cs" />
+    <Compile Include="Migrations\201504111144376_AddBadges.Designer.cs">
+      <DependentUpon>201504111144376_AddBadges.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Argument.cs" />
+    <Compile Include="Models\Badge.cs" />
     <Compile Include="Models\Interfaces\IArgument.cs" />
     <Compile Include="Interfaces\IConfiguration.cs" />
     <Compile Include="Interfaces\ITags.cs" />
@@ -260,6 +265,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504092208485_AddTicketHistoryTableStateColumn.resx">
       <DependentUpon>201504092208485_AddTicketHistoryTableStateColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504111144376_AddBadges.resx">
+      <DependentUpon>201504111144376_AddBadges.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

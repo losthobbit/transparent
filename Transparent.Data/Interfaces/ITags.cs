@@ -19,6 +19,7 @@ namespace Transparent.Data.Interfaces
     {
         Tag Root { get; }
         Tag Find(int id);
+        Tag ApplicationTag { get; }
 
         /// <summary>
         /// List of tags and their indentation level

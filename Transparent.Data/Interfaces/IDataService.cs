@@ -26,12 +26,20 @@ namespace Transparent.Data.Interfaces
         void AddPoints(UserPoint userPoint, UserTag userTag, int points);
 
         /// <summary>
-        /// Adds points to the UserPoints and UserTags.
+        /// Adds points to the UserPoints and UserTags for multiple users.
         /// </summary>
         /// <remarks>
         /// Does not call DbContext.SaveChanges.
         /// </remarks>
-        void AddPoints(IUsersContext db, IEnumerable<int> userId, int tagId, int testId, int points, PointReason reason);
+        void AddPoints(IUsersContext db, IEnumerable<int> userId, int tagId, int points, PointReason reason, int? testId = null);
+
+        /// <summary>
+        /// Adds points to the UserPoint and UserTag.
+        /// </summary>
+        /// <remarks>
+        /// Does not call DbContext.SaveChanges.
+        /// </remarks>
+        void AddPoints(IUsersContext db, int userId, int tagId, int points, PointReason reason, int? testId = null);
 
         /// <summary>
         /// Adjusts the rank of the ticket based on the user's stance.

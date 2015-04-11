@@ -20,12 +20,15 @@ namespace Transparent.Business.Services
         private readonly Func<IUsersContext> getUsersContext;
         private readonly IConfiguration configuration;
         private readonly IDataService dataService;
+        private readonly ITags tags;
 
-        public ProgressTickets(Func<IUsersContext> getUsersContext, IDataService dataService, IConfiguration configuration)
+        public ProgressTickets(Func<IUsersContext> getUsersContext, IDataService dataService, IConfiguration configuration,
+            ITags tags)
         {
             this.getUsersContext = getUsersContext;
             this.dataService = dataService;
             this.configuration = configuration;
+            this.tags = tags;
         }
 
         /// <summary>
@@ -110,6 +113,9 @@ namespace Transparent.Business.Services
                     var totalVotes = ticket.VotesFor + ticket.VotesAgainst;
                     var accepted = totalVotes > 0 && ((double)ticket.VotesFor / (double)totalVotes >= (double)configuration.PercentOfVotesRequiredToAccept / 100d);
                     dataService.SetNextState(ticket, accepted ? TicketState.Accepted : TicketState.Rejected);
+                    if (accepted)
+                        dataService.AddPoints(db, ticket.FkUserId, tags.ApplicationTag.Id, configuration.DiPointsForAcceptedTicket,
+                            PointReason.TicketAccepted);
                 }
                 db.SaveChanges();
             }

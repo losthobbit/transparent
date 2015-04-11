@@ -33,6 +33,8 @@ namespace Transparent.Data.Models
 
         public string Services { get; set; }
 
+        public int Badges { get; set; }
+
         public virtual ICollection<UserTag> Tags { get; set; }
     }
 

@@ -23,6 +23,10 @@ namespace Transparent.Data.Tests.Helpers
             PointsRequiredToBeCompetent = 5;
             PointsRequiredToBeAnExpert = 10;
 
+            DiPointsForAcceptedTicket = 2;
+            DiPointsForVolunteering = 10;
+            DiPointsForFirstBadge = 2;
+
             MaxPositionToAdvanceState = 2;
             DelayAfterValidatingTags = TimeSpan.FromSeconds(2);
             MinimumNumberOfArgumentsToAdvanceState = 2;
@@ -42,6 +46,10 @@ namespace Transparent.Data.Tests.Helpers
 
         public int PointsRequiredToBeCompetent { get; set; }
         public int PointsRequiredToBeAnExpert { get; set; }
+
+        public int DiPointsForAcceptedTicket { get; set; }
+        public int DiPointsForVolunteering { get; set; }
+        public int DiPointsForFirstBadge { get; set; }
 
         public int MaxPositionToAdvanceState { get; set; }
         public TimeSpan DelayAfterValidatingTags { get; set; }
