@@ -69,6 +69,20 @@ namespace Transparent.Data.Tests.Helpers
             return 0;
         }
 
+        public ChangingValue PostSaveAssert(Func<bool> getPostSaveValue)
+        {
+            var changingValue = new ChangingValue();
+            SavedChanges += context => changingValue.GetValue = getPostSaveValue;
+            return changingValue;
+        }
+
+        public ChangingAssert PostSaveAssert(Action assertion)
+        {
+            var changingAssert = new ChangingAssert();
+            SavedChanges += context => changingAssert.Assertion = assertion;
+            return changingAssert;
+        }
+
         public DbEntityEntry Entry(object entity)
         {
             throw new NotImplementedException();

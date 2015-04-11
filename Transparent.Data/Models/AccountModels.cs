@@ -36,6 +36,16 @@ namespace Transparent.Data.Models
         public int Badges { get; set; }
 
         public virtual ICollection<UserTag> Tags { get; set; }
+
+        public bool HasBadge(Badge badge)
+        {
+            return ((Badge)Badges & badge) == badge;
+        }
+
+        public void SetBadge(Badge badge)
+        {
+            Badges = ((int)badge | Badges);
+        }
     }
 
     public class RegisterExternalLoginModel

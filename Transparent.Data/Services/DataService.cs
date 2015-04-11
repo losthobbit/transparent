@@ -71,14 +71,23 @@ namespace Transparent.Data.Services
         /// <remarks>
         /// Does not call DbContext.SaveChanges.
         /// </remarks>
-        public void AddPoints(IUsersContext db, int userId, int tagId, int points, PointReason reason, int? testId = null, int? ticketId = null)
+        public void AddPoints(IUsersContext db, int userId, int tagId, int points, PointReason reason, int? testId = null, int? ticketId = null,
+            Badge? badge = null)
         {
             var userPoint = testId.HasValue 
                 ? db.UserPoints.SingleOrDefault(point => point.FkUserId == userId && point.FkTagId == tagId && point.FkTestId == testId)
                 : null;
             if (userPoint == null)
             {
-                userPoint = new UserPoint { FkUserId = userId, FkTagId = tagId, FkTestId = testId, Reason = reason, FkTicketId = ticketId };
+                userPoint = new UserPoint 
+                { 
+                    FkUserId = userId, 
+                    FkTagId = tagId, 
+                    FkTestId = testId, 
+                    Reason = reason, 
+                    FkTicketId = ticketId,
+                    Badge = badge 
+                };
                 db.UserPoints.Add(userPoint);
             }
 
@@ -92,6 +101,17 @@ namespace Transparent.Data.Services
         }
 
         /// <summary>
+        /// Adds badge application points to the UserPoint and UserTag.
+        /// </summary>
+        /// <remarks>
+        /// Does not call DbContext.SaveChanges.
+        /// </remarks>
+        public void AddApplicationPoints(IUsersContext db, int userId, int points, Badge badge, int? ticketId = null)
+        {
+            AddPoints(db, userId, tags.ApplicationTag.Id, points, PointReason.Badge, ticketId: ticketId, badge: badge);
+        }
+
+        /// <summary>
         /// Adds application points to the UserPoint and UserTag.
         /// </summary>
         /// <remarks>
@@ -101,6 +121,7 @@ namespace Transparent.Data.Services
         {
             AddPoints(db, userId, tags.ApplicationTag.Id, points, reason, ticketId);
         }
+
 
         /// <summary>
         /// Adjusts the votes of the ticket based on the user's stance.

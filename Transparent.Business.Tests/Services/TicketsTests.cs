@@ -416,8 +416,15 @@ namespace Transparent.Business.Tests.Services
 
         #region AnswerTest
 
+        private int answerTest_TestId;
+        private int answerTest_UserId;
+        private string answerTest_Answer;
+
         private void ArrangeAnswerTest()
         {
+            answerTest_TestId = TestData.CriticalThinkingTestThatJoeStarted.Id;
+            answerTest_UserId = TestData.Joe.UserId;
+            answerTest_Answer = Fixture.Create<string>();
         }
 
         [Test]
@@ -425,16 +432,46 @@ namespace Transparent.Business.Tests.Services
         {
             //Arrange
             ArrangeAnswerTest();
-            var testId = TestData.CriticalThinkingTestThatJoeStarted.Id;
-            var userId = TestData.Joe.UserId;
-            var userPoint = TestData.UsersContext.UserPoints.SingleOrDefault(point => point.FkTestId == testId && point.FkUserId == userId);
-            var answer = Fixture.Create<string>();
+            var postSaveAssert = UsersContext.PostSaveAssert(() =>
+                answerTest_Answer == TestData.UsersContext.UserPoints.SingleOrDefault(point => 
+                    point.FkTestId == answerTest_TestId && point.FkUserId == answerTest_UserId).Answer);
 
             //Act
-            target.AnswerTest(testId, answer, userId);
+            target.AnswerTest(answerTest_TestId, answerTest_Answer, answerTest_UserId);
 
             //Assert
-            Assert.AreEqual(answer, userPoint.Answer);
+            postSaveAssert.AssertIsTrue();
+        }
+
+        [Test]
+        public void AnswerTest_without_badge_adds_badge()
+        {
+            //Arrange
+            ArrangeAnswerTest();
+            var postSaveAssert = UsersContext.PostSaveAssert(() => TestData.Joe.HasBadge(Badge.FirstTestAnswered));
+
+            //Act
+            target.AnswerTest(answerTest_TestId, answerTest_Answer, answerTest_UserId);
+
+            //Assert
+            postSaveAssert.AssertIsTrue();
+        }
+
+        [Test]
+        public void AnswerTest_without_badge_adds_badge_points()
+        {
+            //Arrange
+            ArrangeAnswerTest();
+            var postSaveAssert = UsersContext.PostSaveAssert(() =>
+                mockDataService.Verify(x => x.AddApplicationPoints(UsersContext, TestData.Joe.UserId,
+                    TestConfiguration.DiPointsForFirstBadge, Badge.FirstTestAnswered, null), Times.Once())
+            );
+
+            //Act
+            target.AnswerTest(answerTest_TestId, answerTest_Answer, answerTest_UserId);
+
+            //Assert
+            postSaveAssert.Try();
         }
 
         #endregion AnswerTest
@@ -621,6 +658,37 @@ namespace Transparent.Business.Tests.Services
 
             //Assert
             Assert.IsFalse(markTest_UserPoint.MarkingComplete);
+        }
+
+        [Test]
+        public void MarkTest_without_badge_adds_badge()
+        {
+            //Arrange
+            ArrangeMarkTest();
+            var postSaveAssert = UsersContext.PostSaveAssert(() => TestData.Admin.HasBadge(Badge.FirstTestMarked));
+
+            //Act
+            target.MarkTest(markTest_UserPoint.Id, Fixture.Create<bool>(), TestData.Admin.UserId);
+
+            //Assert
+            postSaveAssert.AssertIsTrue();
+        }
+
+        [Test]
+        public void MarkTest_without_badge_adds_badge_points()
+        {
+            //Arrange
+            ArrangeMarkTest();
+            var postSaveAssert = UsersContext.PostSaveAssert(() =>
+                mockDataService.Verify(x => x.AddApplicationPoints(UsersContext, TestData.Admin.UserId,
+                    TestConfiguration.DiPointsForFirstBadge, Badge.FirstTestMarked, null), Times.Once())
+            );
+
+            //Act
+            target.MarkTest(markTest_UserPoint.Id, Fixture.Create<bool>(), TestData.Admin.UserId);
+
+            //Assert
+            postSaveAssert.Try();
         }
 
         [TestCase(3)]
@@ -1056,14 +1124,21 @@ namespace Transparent.Business.Tests.Services
         #endregion StartTest
 
         #region Create
-       
+
+        private Ticket createTicket;
+
+        private void ArrangeCreate()
+        {
+            createTicket = new Question
+            {
+            };
+        }
+
         [Test]
         public void Create_with_valid_parameters_sets_ModifiedDate()
         {
-            //Arrange
-            var ticket = new Question
-            {
-            };
+            //Arrange    
+            ArrangeCreate();
             Ticket actualTicket = null;
             UsersContext.SavedChanges += context =>
             {
@@ -1071,10 +1146,41 @@ namespace Transparent.Business.Tests.Services
             };            
 
             //Act
-            target.Create(ticket, TestData.Stephen.UserId);
+            target.Create(createTicket, TestData.Stephen.UserId);
 
             //Assert
             AssertModifiedDateSet(actualTicket.ModifiedDate);
+        }
+       
+        [Test]
+        public void Create_without_badge_adds_badge()
+        {
+            //Arrange
+            ArrangeCreate();
+            var postSaveAssert = UsersContext.PostSaveAssert(() => TestData.Stephen.HasBadge(Badge.FirstTicketCreated));
+
+            //Act
+            target.Create(createTicket, TestData.Stephen.UserId);
+
+            //Assert
+            postSaveAssert.AssertIsTrue();
+        }
+
+        [Test]
+        public void Create_without_badge_adds_badge_points()
+        {
+            //Arrange
+            ArrangeCreate();
+            var postSaveAssert = UsersContext.PostSaveAssert(() =>
+                mockDataService.Verify(x => x.AddApplicationPoints(UsersContext, TestData.Stephen.UserId, 
+                    TestConfiguration.DiPointsForFirstBadge,Badge.FirstTicketCreated, createTicket.Id), Times.Once())
+            );
+
+            //Act
+            target.Create(createTicket, TestData.Stephen.UserId);
+
+            //Assert
+            postSaveAssert.Try();
         }
 
         #endregion Create
@@ -1194,12 +1300,15 @@ namespace Transparent.Business.Tests.Services
             setArgument_Ticket = TestData.JoesScubaDivingSuggestion;
             setArgument_Ticket.State = TicketState.Discussion;
 
-            setArgument_ExistingArgument = new Argument
+            if (existingArgument)
             {
-                FkTicketId = TestData.JoesScubaDivingSuggestion.Id,
-                FkUserId = TestData.Admin.UserId
-            };
-            TestData.UsersContext.Arguments.Add(setArgument_ExistingArgument);
+                setArgument_ExistingArgument = new Argument
+                {
+                    FkTicketId = TestData.JoesScubaDivingSuggestion.Id,
+                    FkUserId = TestData.Admin.UserId
+                };
+                TestData.UsersContext.Arguments.Add(setArgument_ExistingArgument);
+            }
          }
 
         [Test]
@@ -1220,6 +1329,37 @@ namespace Transparent.Business.Tests.Services
             Assert.AreEqual("hello", newArgument.Body);
             Assert.AreEqual(TestData.Admin.UserId, TestData.Admin.UserId);
             AssertModifiedDateSet(TestData.JoesScubaDivingSuggestion.ModifiedDate);
+        }
+
+        [Test]
+        public void SetArgument_without_argument_and_badge_adds_badge()
+        {
+            //Arrange
+            ArrangeSetArgument();
+            var postSaveAssert = UsersContext.PostSaveAssert(() => TestData.Admin.HasBadge(Badge.FirstArgument));
+
+            //Act
+            target.SetArgument(setArgument_Ticket.Id, TestData.Admin.UserId, "hello");
+
+            //Assert
+            postSaveAssert.AssertIsTrue();
+        }
+
+        [Test]
+        public void SetArgument_without_argument_and_adds_badge_points()
+        {
+            //Arrange
+            ArrangeSetArgument();
+            var postSaveAssert = UsersContext.PostSaveAssert(() =>
+                mockDataService.Verify(x => x.AddApplicationPoints(UsersContext, TestData.Admin.UserId,
+                    TestConfiguration.DiPointsForFirstBadge, Badge.FirstArgument, setArgument_Ticket.Id), Times.Once())
+            );
+
+            //Act
+            target.SetArgument(setArgument_Ticket.Id, TestData.Admin.UserId, "hello");
+
+            //Assert
+            postSaveAssert.Try();
         }
       
         [Test]

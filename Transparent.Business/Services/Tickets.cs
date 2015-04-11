@@ -77,6 +77,7 @@ namespace Transparent.Business.Services
             ticket.CreatedDate = DateTime.UtcNow;
             ticket.ModifiedDate = DateTime.UtcNow;
             db.Tickets.Add(ticket);
+            CreateFirstBadge(Badge.FirstTicketCreated, userId, ticket.Id);
             db.SaveChanges();
         }
 
@@ -331,6 +332,7 @@ namespace Transparent.Business.Services
             if (userPoint.Answer != null)
                 throw new NotSupportedException("The test has already been answered.  It cannot be answered again.");
             userPoint.Answer = answer;
+            CreateFirstBadge(Badge.FirstTestAnswered, userId);
             db.SaveChanges();
         }
 
@@ -447,12 +449,29 @@ namespace Transparent.Business.Services
             {
                 TestMarkingCompleted(userPoint);
             }
+            CreateFirstBadge(Badge.FirstTestMarked, markersUserId);
             db.SaveChanges();
         }
 
         public Ticket FindTicket(int id)
         {
             return db.Tickets.Find(id);
+        }
+
+        /// <summary>
+        /// Creates a first badge and adds points if the user doesn't already have the badge.
+        /// </summary>
+        /// <remarks>
+        /// Does not call SaveChanges
+        /// </remarks>
+        private void CreateFirstBadge(Badge badge, int userId, int? ticketId = null)
+        {
+            var user = db.UserProfiles.Single(u => u.UserId == userId);
+            if (!user.HasBadge(badge))
+            {
+                user.SetBadge(badge);
+                dataService.AddApplicationPoints(db, userId, configuration.DiPointsForFirstBadge, badge, ticketId);
+            }
         }
 
         private TicketTagViewModel GetTicketTagInfo(TicketState ticketState,
@@ -535,11 +554,11 @@ namespace Transparent.Business.Services
             if (!UserHasExpertise(ticketId, userId))
                 throw new NotSupportedException("User is not an expert in any of the ticket tags and cannot answer the ticket.");
 
-            var argumentRow = db.Arguments.SingleOrDefault(arg => arg.FkTicketId == ticketId
-                && arg.FkUserId == userId);
+            var argumentRow = db.Arguments.SingleOrDefault(arg => arg.FkTicketId == ticketId && arg.FkUserId == userId);
             if (argumentRow == null)
             {
                 db.Arguments.Add(new Argument { FkTicketId = ticketId, FkUserId = userId, Body = argument });
+                CreateFirstBadge(Badge.FirstArgument, userId, ticketId);
             }
             else
             {

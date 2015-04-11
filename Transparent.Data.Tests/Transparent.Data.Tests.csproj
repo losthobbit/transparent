@@ -68,11 +68,13 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Helpers\BaseTests.cs" />
+    <Compile Include="Helpers\ChangingAssert.cs" />
     <Compile Include="Helpers\FakeTicketDbSet.cs" />
     <Compile Include="Helpers\FakeUsersContext.cs" />
     <Compile Include="Helpers\TestConfig.cs" />
     <Compile Include="Helpers\TestData.cs" />
     <Compile Include="Models\StatefulTests.cs" />
+    <Compile Include="Helpers\ChangingValue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DataServiceTests.cs" />
   </ItemGroup>
