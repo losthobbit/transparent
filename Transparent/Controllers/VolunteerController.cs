@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,6 +9,7 @@ using Transparent.Business.Interfaces;
 using Transparent.Business.ViewModels;
 using Transparent.Data;
 using Transparent.Data.Models;
+using WebMatrix.WebData;
 
 namespace Transparent.Controllers
 {
@@ -30,17 +32,20 @@ namespace Transparent.Controllers
         public ActionResult Volunteer(VolunteerViewModel volunteerViewModel)
         {
             bool wasVolunteer = User.IsInRole(Constants.VolunteerRole);
+            Relative changedVolunteerStatus = Relative.EqualTo;
             if (volunteerViewModel.Volunteer && !wasVolunteer)
             {
                 Roles.AddUserToRole(User.Identity.Name, Constants.VolunteerRole);
+                changedVolunteerStatus = Relative.GreaterThan;
             }
             else
                 if (!volunteerViewModel.Volunteer && wasVolunteer)
                 {
                     Roles.RemoveUserFromRole(User.Identity.Name, Constants.VolunteerRole);
+                    changedVolunteerStatus = Relative.LessThan;
                 }
 
-            volunteers.SetServices(User.Identity.Name, volunteerViewModel.Services);
+            volunteers.Set(User.Identity.Name, volunteerViewModel.Services, changedVolunteerStatus);
 
             return View(volunteerViewModel);
         }

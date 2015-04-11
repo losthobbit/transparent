@@ -20,7 +20,7 @@ namespace Transparent.Data.Tests.Services
         {
             base.SetUp();
 
-            target = new DataService();
+            target = new DataService(MockTags.Object);
         }
 
         #region SetNextState

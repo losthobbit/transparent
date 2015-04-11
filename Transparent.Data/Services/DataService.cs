@@ -16,6 +16,13 @@ namespace Transparent.Data.Services
     /// </remarks>
     public class DataService : IDataService
     {
+        private readonly ITags tags;
+
+        public DataService(ITags tags)
+        {
+            this.tags = tags;
+        }
+
         /// <summary>
         /// Adds points to the UserPoint and UserTag.
         /// </summary>
@@ -82,6 +89,17 @@ namespace Transparent.Data.Services
                 db.UserTags.Add(userTag);
             }
             AddPoints(userPoint, userTag, points);
+        }
+
+        /// <summary>
+        /// Adds application points to the UserPoint and UserTag.
+        /// </summary>
+        /// <remarks>
+        /// Does not call DbContext.SaveChanges.
+        /// </remarks>
+        public void AddApplicationPoints(IUsersContext db, int userId, int points, PointReason reason, int? ticketId = null)
+        {
+            AddPoints(db, userId, tags.ApplicationTag.Id, points, reason, ticketId);
         }
 
         /// <summary>

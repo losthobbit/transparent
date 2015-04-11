@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace Transparent.Business.Interfaces
     public interface IVolunteers
     {
         VolunteerViewModel GetVolunteer(string username, bool hasVolunteerRole);
-        void SetServices(string username, string services);
+        void Set(string username, string services, Relative changedVolunteerStatus);
         UsersContainer GetVolunteers(UsersContainer filter);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,10 +22,14 @@ namespace Transparent.Business.Services
     public class Volunteers: IVolunteers
     {
         private readonly IUsersContext db;
+        private readonly IDataService dataService;
+        private readonly IConfiguration configuration;
 
-        public Volunteers(IUsersContext db)
+        public Volunteers(IUsersContext db, IDataService dataService, IConfiguration configuration)
         {
             this.db = db;
+            this.dataService = dataService;
+            this.configuration = configuration;
         }
 
         public VolunteerViewModel GetVolunteer(string username, bool hasVolunteerRole)
@@ -36,9 +41,15 @@ namespace Transparent.Business.Services
             };
         }
 
-        public void SetServices(string username, string services)
+        public void Set(string username, string services, Relative changedVolunteerStatus)
         {
-            db.UserProfiles.Single(user => user.UserName == username).Services = services;
+            var user = db.UserProfiles.Single(u => u.UserName == username);
+            user.Services = services;
+            if (changedVolunteerStatus != Relative.EqualTo)
+            {
+                dataService.AddApplicationPoints(db, user.UserId, configuration.DiPointsForVolunteering * (int)changedVolunteerStatus,
+                    PointReason.Volunteered);
+            }
             db.SaveChanges();
         }
 

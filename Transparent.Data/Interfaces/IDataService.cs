@@ -43,6 +43,14 @@ namespace Transparent.Data.Interfaces
         void AddPoints(IUsersContext db, int userId, int tagId, int points, PointReason reason, int? testId = null, int? ticketId = null);
 
         /// <summary>
+        /// Adds application points to the UserPoint and UserTag.
+        /// </summary>
+        /// <remarks>
+        /// Does not call DbContext.SaveChanges.
+        /// </remarks>
+        void AddApplicationPoints(IUsersContext db, int userId, int points, PointReason reason, int? ticketId = null);
+
+        /// <summary>
         /// Adjusts the rank of the ticket based on the user's stance.
         /// </summary>
         /// <remarks>
