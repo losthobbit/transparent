@@ -1,4 +1,8 @@
 ﻿/* Custom */
+.fw {
+    width:100%;
+}
+
 .lighter {
     background-color:rgba(50,50,60,0.4);
     border-radius: 3px;
@@ -34,6 +38,10 @@ a { text-decoration:none }
     color: #d2d2d2; 
     font-size: .8em;
 }
+
+    .metadata.narrow {
+        width:220px;
+    }
 
 .Expert {
     color: gold;
@@ -183,6 +191,7 @@ h3 {
 
 h4 {
     font-size: 1.1em;
+    margin-top: 0px;
 }
 
 h5, h6 {

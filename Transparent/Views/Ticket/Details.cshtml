@@ -27,6 +27,7 @@
     </div>
 }
 
+<table class="fw">
 @{
     var args = Model.Arguments;
     var currentUsersArg = args.SingleOrDefault(arg => arg.FkUserId == WebSecurity.CurrentUserId);
@@ -35,6 +36,7 @@
         @Html.Partial("_DiscussViewPartial", argument)
     }
 }
+</table>
 
 @if (Model.State == TicketState.Discussion && Model.TagInfo.Any(info => info.UserIsExpert))
 {
