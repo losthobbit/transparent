@@ -104,9 +104,9 @@ namespace Transparent.Business.Services
                                                       orderby ticket.Rank descending
                                                       select ticket).Take(configuration.MaxPositionToAdvanceState);
 
-                var votingTickets = from ticket in highestRankedVotingTickets
+                var votingTickets = (from ticket in highestRankedVotingTickets
                                     where ticket.ModifiedDate <= lastModified
-                                    select ticket;
+                                    select ticket).ToList();
 
                 foreach (var ticket in votingTickets)
                 {

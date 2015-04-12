@@ -113,10 +113,57 @@ namespace Transparent.Business.Tests.Services
             ticketsContainer.PagedList.Single(ticket => ticket == TestData.JoesCriticalThinkingSuggestion);
         }
 
-        [TestCase(TicketState.Draft)]
-        [TestCase(TicketState.Rejected)]
         [TestCase(TicketState.Accepted)]
         [TestCase(TicketState.InProgress)]
+        public void MyQueue_returns_tickets_in_accepted_or_in_progress_state_that_are_assigned_to_me(TicketState ticketState)
+        {
+            // Arrange
+            ArrangeMyQueue();
+            TestData.JoesCriticalThinkingSuggestion.State = ticketState;
+            TestData.JoesCriticalThinkingSuggestion.FkAssignedUserId = TestData.Stephen.UserId;
+            TestData.JoesCriticalThinkingSuggestion.AssignedUser = TestData.Stephen;
+            TestData.JoesCriticalThinkingSuggestion.History = new List<TicketHistory>
+            {
+                new TicketHistory { Id = 1, User = TestData.Joe, FkUserId = TestData.Joe.UserId },
+                new TicketHistory { Id = 2, User = TestData.Stephen, FkUserId = TestData.Stephen.UserId },
+            };
+
+            // Act
+            var ticketsContainer = target.MyQueue(new TicketsContainer(), TestData.Stephen.UserId);
+
+            // Assert
+            ticketsContainer.PagedList.Single(ticket => ticket == TestData.JoesCriticalThinkingSuggestion);
+        }
+
+        [TestCase(TicketState.Accepted, true)]
+        [TestCase(TicketState.InProgress, true)]
+        [TestCase(TicketState.Accepted, false)]
+        public void MyQueue_does_not_return_tickets_in_accepted_or_in_progress_state_that_are_not_assigned_to_me(TicketState ticketState,
+            bool anyHistory)
+        {
+            // Arrange
+            ArrangeMyQueue();
+            TestData.JoesCriticalThinkingSuggestion.State = ticketState;
+            if (anyHistory)
+            {
+                TestData.JoesCriticalThinkingSuggestion.FkAssignedUserId = TestData.Joe.UserId;
+                TestData.JoesCriticalThinkingSuggestion.AssignedUser = TestData.Joe;
+            }
+            TestData.JoesCriticalThinkingSuggestion.History = anyHistory ? new List<TicketHistory>
+            {
+                new TicketHistory { Id = 2, User = TestData.Joe, FkUserId = TestData.Joe.UserId },
+                new TicketHistory { Id = 1, User = TestData.Stephen, FkUserId = TestData.Stephen.UserId },
+            } : new List<TicketHistory>();
+
+            // Act
+            var ticketsContainer = target.MyQueue(new TicketsContainer(), TestData.Stephen.UserId);
+
+            // Assert
+            Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == TestData.JoesCriticalThinkingSuggestion));
+        }
+
+        [TestCase(TicketState.Draft)]
+        [TestCase(TicketState.Rejected)]
         [TestCase(TicketState.Completed)]
         public void MyQueue_does_not_return_tickets_in_non_public_state(TicketState ticketState)
         {
@@ -1493,6 +1540,37 @@ namespace Transparent.Business.Tests.Services
 
             //Assert
             Assert.AreEqual(state, actualState);
+        }
+
+        [TestCase(TicketType.Question)]
+        [TestCase(TicketType.Test)]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void Assign_with_ticket_not_suggestion_throws_NotSupportedException(TicketType ticketType)
+        {
+            //Arrange
+            ArrangeAssign();
+            assignViewModel.TicketId = ticketType == TicketType.Question
+                ? TestData.StephensCriticalThinkingQuestion.Id
+                : TestData.CriticalThinkingTestThatJoeTook.Id;
+
+            //Act
+            target.Assign(assignViewModel, TestData.Stephen.UserId);
+        }
+
+        [TestCase(TicketState.Accepted)]
+        [TestCase(TicketState.Completed)]
+        public void Assign_with_valid_parameters_sets_assigned_user(TicketState state)
+        {
+            //Arrange
+            ArrangeAssign(state);
+            var postSaveAssert = UsersContext.PostSaveAssert(() => 
+                TestData.JoesCriticalThinkingSuggestion.FkAssignedUserId == TestData.Stephen.UserId);
+
+            //Act
+            target.Assign(assignViewModel, TestData.Stephen.UserId);
+
+            //Assert
+            postSaveAssert.AssertIsTrue();
         }
 
         [Test]

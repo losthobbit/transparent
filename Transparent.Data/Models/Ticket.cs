@@ -50,6 +50,16 @@ namespace Transparent.Data.Models
         public virtual ICollection<TicketUserVote> UserVotes { get; set; }
         public virtual ICollection<TicketHistory> History { get; set; }
 
+        /// <summary>
+        /// The user that the ticket is assigned to (or last changed the state of the ticket)
+        /// </summary>
+        /// <remarks>
+        /// Not to be set without adding to History.
+        /// </remarks>
+        [ForeignKey("AssignedUser")]
+        public int? FkAssignedUserId { get; set; }
+        public virtual UserProfile AssignedUser { get; set; }
+
         [Required]
         public int VotesFor { get; set; }
 

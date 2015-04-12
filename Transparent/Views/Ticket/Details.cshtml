@@ -13,14 +13,14 @@
 
 @Html.Partial("_DetailsPartial", Model.Map(), new ViewDataDictionary {{ "TagInfo", Model.TagInfo }})
 
-@if (Model.State >= TicketState.Voting)
+@if (Model.TicketType != TicketType.Question && Model.State >= TicketState.Voting)
 {
     <div id="votePartial" class="lighter">   
     @Html.Action("_Vote", Model.Vote)
     </div>
 }
 
-@if (Model.State >= TicketState.Accepted && User.IsInRole(Constants.VolunteerRole))
+@if (Model.TicketType == TicketType.Suggestion && Model.State >= TicketState.Accepted && User.IsInRole(Constants.VolunteerRole))
 {
     <div id="assignPartial" class="lighter">   
     @Html.Action("_Assign", new AssignViewModel { TicketId = Model.Id, TicketState = Model.State, Username = Model.AssignedName })

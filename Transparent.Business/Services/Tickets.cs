@@ -86,15 +86,24 @@ namespace Transparent.Business.Services
         /// </summary>
         public TicketsContainer MyQueue(TicketsContainer filter, int userId)
         {
+            var ticketSet = TicketSet(filter);
+
+            var assignedTickets = from ticket in ticketSet
+                                  where new[] { TicketState.Accepted, TicketState.InProgress }.Contains(ticket.State)
+                                  && ticket.FkAssignedUserId == userId
+                                  select ticket;
+
+            var publicTickets = from ticket in ticketSet.GetPublic()
+                                join ticketTag in db.TicketTags on ticket equals ticketTag.Ticket
+                                join userTag in db.UserTags on ticketTag.Tag equals userTag.Tag
+                                where userTag.FkUserId == userId && userTag.TotalPoints >= configuration.PointsRequiredToBeCompetent
+                                select ticket;
+
             return filter.Initialize
             (
                 filter.ApplyFilter
                 (
-                    from ticket in TicketSet(filter).GetPublic()
-                    join ticketTag in db.TicketTags on ticket equals ticketTag.Ticket
-                    join userTag in db.UserTags on ticketTag.Tag equals userTag.Tag
-                    where userTag.FkUserId == userId && userTag.TotalPoints >= configuration.PointsRequiredToBeCompetent
-                    select ticket
+                    assignedTickets.Union(publicTickets)
                 ).OrderByDescending(ticket => ticket.Rank)                
             );
         }
@@ -205,21 +214,30 @@ namespace Transparent.Business.Services
         /// <summary>
         /// Assigns a ticket to in progress, completed or accepted.
         /// </summary>
+        /// <exception cref="NotSupportedException">Ticket is not a suggestion.</exception>
         public AssignViewModel Assign(AssignViewModel assign, int userId)
         {
             var ticket = db.Tickets.Single(t => t.Id == assign.TicketId);
-            ticket.State = assign.TicketState;
-            ticket.History.Add
-            (
-                new TicketHistory
-                {
-                    Date = DateTime.UtcNow,
-                    FkUserId = userId,
-                    State = assign.TicketState
-                }
-            );
-            assign.Username = db.UserProfiles.Single(user => user.UserId == userId).UserName;
-            db.SaveChanges();
+
+            if (ticket.TicketType != TicketType.Suggestion)
+                throw new NotSupportedException("Only suggestions can be assigned.");
+
+            if (ticket.State != assign.TicketState || ticket.FkAssignedUserId != userId)
+            {
+                ticket.State = assign.TicketState;
+                ticket.FkAssignedUserId = userId;
+                ticket.History.Add
+                (
+                    new TicketHistory
+                    {
+                        Date = DateTime.UtcNow,
+                        FkUserId = userId,
+                        State = assign.TicketState
+                    }
+                );
+                db.SaveChanges();
+            }
+            assign.Username = db.UserProfiles.Single(u => u.UserId == userId).UserName;
             return assign;
         }
 

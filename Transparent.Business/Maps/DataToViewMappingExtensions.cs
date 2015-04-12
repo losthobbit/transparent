@@ -50,9 +50,9 @@ namespace Transparent.Business.Maps
         {
             var viewModel = Map((Data.Models.BaseTicket)source);
             viewModel.Vote = source.Map<VoteViewModel>(userId);
-            if (viewModel.State >= TicketState.Accepted)
+            if (viewModel.State >= TicketState.Accepted && source.AssignedUser != null)
             {
-                viewModel.Map(source.History);
+                viewModel.AssignedName = source.AssignedUser.UserName;
             }
             return viewModel;
         }
@@ -132,16 +132,6 @@ namespace Transparent.Business.Maps
         public static TicketDetailsViewModel Map(this TicketDetailsViewModel destination, Data.Models.Stance source)
         {
             destination.UserRank = source;
-            return destination;
-        }
-
-        public static TicketDetailsViewModel Map(this TicketDetailsViewModel destination, IEnumerable<TicketHistory> source)
-        {
-            var latestHistory = source.OrderBy(history => history.Id).LastOrDefault();
-            if (latestHistory != null)
-            {
-                destination.AssignedName = latestHistory.User.UserName;
-            }
             return destination;
         }
     }
