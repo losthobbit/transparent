@@ -65,7 +65,9 @@ namespace Transparent.Business.Maps
                 TicketId = source.Id,
                 UserVote = source.GetUserVote(userId),
                 VotesFor = source.VotesFor,
-                VotesAgainst = source.VotesAgainst
+                VotesAgainst = source.VotesAgainst,
+                UserMayVote = source.State == TicketState.Voting && 
+                    Dependencies.TicketsFactory.Create().UserHasCompetence(source.Id, userId)
             };
         }
 

@@ -9,13 +9,27 @@
     <table>
         <tr>
             <td>
-                Vote&nbsp;
+                @(Model.UserMayVote?"Vote":"Votes")&nbsp;
             </td>
             <td class="@buttonClass">
+            @if(Model.UserMayVote)
+            {
                 <button name="newVote" class="@buttonClass" title="For" value="@(Model.UserVote == Stance.For ? Stance.Neutral : Stance.For)">For</button>
+            }
+            else
+            {
+                <text>For</text>
+            }
             </td>
             <td class="@buttonClass2">
+            @if(Model.UserMayVote)
+            {
                 <button name="newVote" class="@buttonClass2" title="Against" value="@(Model.UserVote == Stance.Against ? Stance.Neutral : Stance.Against)">Against</button>
+            }
+            else
+            {
+                <text>Against</text>
+            }
             </td>
         </tr>
         <tr>

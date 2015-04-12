@@ -244,7 +244,8 @@ namespace Transparent.Business.Services
                  TicketId = ticketId,
                  UserVote = vote,
                  VotesFor = ticket.VotesFor,
-                 VotesAgainst = ticket.VotesAgainst
+                 VotesAgainst = ticket.VotesAgainst,
+                 UserMayVote = true
             };
         }
 

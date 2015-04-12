@@ -14,5 +14,6 @@ namespace Transparent.Business.ViewModels
         public int VotesAgainst { get; set; }
         public Stance UserVote { get; set; }
         public Stance NewVote { get; set; }
+        public bool UserMayVote { get; set; }
     }
 }

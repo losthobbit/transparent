@@ -13,7 +13,7 @@
 
 @Html.Partial("_DetailsPartial", Model.Map(), new ViewDataDictionary {{ "TagInfo", Model.TagInfo }})
 
-@if (Model.State == TicketState.Voting)
+@if (Model.State >= TicketState.Voting)
 {
     <div id="votePartial" class="lighter">   
     @Html.Action("_Vote", Model.Vote)

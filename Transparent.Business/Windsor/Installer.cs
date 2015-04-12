@@ -12,6 +12,7 @@ using Transparent.Business.Interfaces;
 using Transparent.Business.Services;
 using Common.Windsor;
 using Transparent.Business.Maps;
+using Castle.Facilities.TypedFactory;
 
 namespace Transparent.Business.Windsor
 {
@@ -28,7 +29,8 @@ namespace Transparent.Business.Windsor
                 Component.For<IVolunteers>().ImplementedBy<Volunteers>().LifeStyle.Transient,
                 Component.For<IGeneral>().ImplementedBy<General>().LifeStyle.Singleton,
                 Component.For<IProgressTickets>().ImplementedBy<ProgressTickets>().LifeStyle.Singleton,
-                Component.For<Dependencies>().LifeStyle.Singleton
+                Component.For<Dependencies>().LifeStyle.Singleton,
+                Component.For<ITicketsFactory>().AsFactory()
             );
             DataToViewMappingExtensions.Dependencies = container.Resolve<Dependencies>();
         }

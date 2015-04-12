@@ -18,6 +18,7 @@ namespace Transparent
     using Transparent.Windsor;
     using System.Web.Http.Dispatcher;
     using Castle.MicroKernel.Resolvers.SpecializedResolvers;
+    using Castle.Facilities.TypedFactory;
     
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
@@ -62,6 +63,7 @@ namespace Transparent
         {
             container = new WindsorContainer();
             container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));
+            container.Kernel.AddFacility<TypedFactoryFacility>();
 
             // Just a way of loading the assembly, so that its installer is called
             Business.Windsor.Installer x;

@@ -91,5 +91,7 @@ namespace Transparent.Business.Interfaces
         /// Assigns a ticket to in progress, completed or accepted.
         /// </summary>
         AssignViewModel Assign(AssignViewModel assign, int userId);
+
+        bool UserHasCompetence(int ticketId, int userId);
     }
 }
