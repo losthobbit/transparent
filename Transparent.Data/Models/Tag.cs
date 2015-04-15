@@ -29,6 +29,16 @@ namespace Transparent.Data.Models
         [DataType(DataType.Html)]
         public string Description { get; set; }
 
+        /// <summary>
+        /// The number of points a user must have in a tag to be considered competent.
+        /// </summary>
+        public int CompetentPoints { get; set; }
+
+        /// <summary>
+        /// The number of points a user must have in a tag to be considered an expert.
+        /// </summary>
+        public int ExpertPoints { get; set; }
+
         public ICollection<Tag> Parents { get; set; }
         public ICollection<Tag> Children { get; set; }
     }

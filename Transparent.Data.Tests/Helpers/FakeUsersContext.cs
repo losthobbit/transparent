@@ -76,6 +76,13 @@ namespace Transparent.Data.Tests.Helpers
             return changingValue;
         }
 
+        public ChangingValue PostSaveAssert(Func<FakeUsersContext, bool> getPostSaveValue)
+        {
+            var changingValue = new ChangingValue();
+            SavedChanges += context => changingValue.GetValue = () => getPostSaveValue(context);
+            return changingValue;
+        }
+
         public ChangingAssert PostSaveAssert(Action assertion)
         {
             var changingAssert = new ChangingAssert();

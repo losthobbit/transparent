@@ -30,6 +30,10 @@ namespace Transparent.Data.Tests.Helpers
         public Tag ScubaDivingTag = new Tag { Id = 2, Name = "Scuba Diving" };
         public Tag BungeeJumpingTag = new Tag { Id = 3, Name = "Bungee Jumping" };
         public Tag DemocraticIntelligenceTag = new Tag { Id = 4, Name = Constants.ApplicationName };
+        /// <summary>
+        /// No-one has points for this tag.
+        /// </summary>
+        public Tag UnusedTag = new Tag { Id = 5, Name = "Unused Tag" };
 
         #endregion Tags
 
@@ -228,7 +232,8 @@ namespace Transparent.Data.Tests.Helpers
                     testData.CriticalThinkingTag,
                     testData.ScubaDivingTag,
                     testData.BungeeJumpingTag,
-                    testData.DemocraticIntelligenceTag
+                    testData.DemocraticIntelligenceTag,
+                    testData.UnusedTag
                 },
                 UserProfiles =
                 {

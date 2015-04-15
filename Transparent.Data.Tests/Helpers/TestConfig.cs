@@ -23,6 +23,14 @@ namespace Transparent.Data.Tests.Helpers
             PointsRequiredToBeCompetent = 5;
             PointsRequiredToBeAnExpert = 10;
 
+            CompetentPercentOfHighestScore = 50;
+            MinPercentCompetents = 50;
+            MinCompetents = 2;
+
+            ExpertPercentOfHighestScore = 75;
+            MinPercentExperts = 20;
+            MinExperts = 2;
+
             DiPointsForAcceptedTicket = 2;
             DiPointsForVolunteering = 10;
             DiPointsForFirstBadge = 2;
@@ -44,8 +52,36 @@ namespace Transparent.Data.Tests.Helpers
         public int PointsMarkersGainForAgreeingATestResult { get; set; }
         public int PointsMarkersLoseForDisagreeingATestResult { get; set; }
 
+        [Obsolete("To be replaced by points on a tag")]
         public int PointsRequiredToBeCompetent { get; set; }
+        [Obsolete("To be replaced by points on a tag")]
         public int PointsRequiredToBeAnExpert { get; set; }
+
+        /// <summary>
+        /// Percent of highest score in a tag that will guarantee competent level.
+        /// </summary>
+        public int CompetentPercentOfHighestScore { get; set; }
+        /// <summary>
+        /// Percent of people with who will be considered competent for a tag.
+        /// </summary>
+        public int MinPercentCompetents { get; set; }
+        /// <summary>
+        /// Minimum number of users who will be considered competent for a tag.
+        /// </summary>
+        public int MinCompetents { get; set; }
+
+        /// <summary>
+        /// Percent of highest score in a tag that will guarantee expert level.
+        /// </summary>
+        public int ExpertPercentOfHighestScore { get; set; }
+        /// <summary>
+        /// Percent of users who will be considered experts for a tag.
+        /// </summary>
+        public int MinPercentExperts { get; set; }
+        /// <summary>
+        /// Minimum number of users who will be considered experts for a tag.
+        /// </summary>
+        public int MinExperts { get; set; }
 
         public int DiPointsForAcceptedTicket { get; set; }
         public int DiPointsForVolunteering { get; set; }

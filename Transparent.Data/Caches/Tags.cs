@@ -12,8 +12,16 @@ namespace Transparent.Data.Caches
     using System.Data.Entity;
     using System.Web;
 
+    /// <summary>
+    /// A cache for the tags.
+    /// </summary>
+    /// <remarks>
+    /// Can be a singleton.
+    /// </remarks>
     public class Tags : ITags
     {
+        private object _lock = new object();
+
         private readonly IUsersContext context;
         private readonly Dictionary<int, IHtmlString> serializedTags = new Dictionary<int, IHtmlString>();
         private IHtmlString serializedIndentedTags;
@@ -24,13 +32,27 @@ namespace Transparent.Data.Caches
         {
             this.context = context;
 
-            var tags = context.Tags.Include(tag => tag.Children).Include(tag => tag.Parents).ToList();
-            Root = tags.Single(tag => tag.Name == Constants.CriticalThinkingTagName);
-            ApplicationTag = tags.Single(tag => tag.Name == Constants.ApplicationName);
+            Refresh();
         }
 
         public Tag Root { get; private set; }
         public Tag ApplicationTag { get; private set; }
+
+        /// <summary>
+        /// Reload everything from the database.
+        /// </summary>
+        public void Refresh()
+        {
+            lock (_lock)
+            {
+                var tags = context.Tags.Include(tag => tag.Children).Include(tag => tag.Parents).ToList();
+                Root = tags.Single(tag => tag.Name == Constants.CriticalThinkingTagName);
+                ApplicationTag = tags.Single(tag => tag.Name == Constants.ApplicationName);
+                indentedTags = new List<IndentedTag>();
+                BuildIndentedTags(indentedTags);
+                serializedIndentedTags = JavaScriptRoutines.SerializeObject(IndentedTags);
+            }
+        }
 
         public Tag Find(int id)
         {
@@ -55,11 +77,6 @@ namespace Transparent.Data.Caches
         {
             get 
             {
-                if (indentedTags == null)
-                {
-                    indentedTags = new List<IndentedTag>();
-                    BuildIndentedTags(indentedTags);
-                }
                 return indentedTags;
             }
         }
@@ -129,8 +146,6 @@ namespace Transparent.Data.Caches
         {
             get 
             {
-                if (serializedIndentedTags == null)
-                    serializedIndentedTags = JavaScriptRoutines.SerializeObject(IndentedTags);
                 return serializedIndentedTags;
             }
         }

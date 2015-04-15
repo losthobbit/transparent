@@ -17,8 +17,36 @@ namespace Transparent.Data.Interfaces
         int PointsMarkersGainForAgreeingATestResult { get; set; }
         int PointsMarkersLoseForDisagreeingATestResult { get; set; }
 
+        [Obsolete("To be replaced by points on a tag")]
         int PointsRequiredToBeCompetent { get; set; }
+        [Obsolete("To be replaced by points on a tag")]
         int PointsRequiredToBeAnExpert { get; set; }
+
+        /// <summary>
+        /// Percent of highest score in a tag that will guarantee competent level.
+        /// </summary>
+        int CompetentPercentOfHighestScore { get; set; }
+        /// <summary>
+        /// Minimum percent of users who will be considered competent for a tag.
+        /// </summary>
+        int MinPercentCompetents { get; set; }
+        /// <summary>
+        /// Minimum number of users who will be considered competent for a tag.
+        /// </summary>
+        int MinCompetents { get; set; }
+
+        /// <summary>
+        /// Percent of highest score in a tag that will guarantee expert level.
+        /// </summary>
+        int ExpertPercentOfHighestScore { get; set; }
+        /// <summary>
+        /// Minimum percent of users who will be considered experts for a tag.
+        /// </summary>
+        int MinPercentExperts { get; set; }
+        /// <summary>
+        /// Minimum number of users who will be considered experts for a tag.
+        /// </summary>
+        int MinExperts { get; set; }
 
         int DiPointsForAcceptedTicket { get; set; }
         int DiPointsForVolunteering { get; set; }

@@ -24,6 +24,7 @@ namespace Transparent.Business.Windsor
                 Component.For<IEvent>().ImplementedBy<CompleteTagValidationEvent>().LifeStyle.Singleton,
                 Component.For<IEvent>().ImplementedBy<CompleteDiscussionEvent>().LifeStyle.Singleton,
                 Component.For<IEvent>().ImplementedBy<CompleteVotingEvent>().LifeStyle.Singleton,
+                Component.For<IEvent>().ImplementedBy<UpdateTagsEvent>().LifeStyle.Singleton,
                 Component.For<ITickets>().ImplementedBy<Tickets>().LifeStyle.Transient,
                 Component.For<IUser>().ImplementedBy<User>().LifeStyle.Transient,
                 Component.For<IVolunteers>().ImplementedBy<Volunteers>().LifeStyle.Transient,

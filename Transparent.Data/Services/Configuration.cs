@@ -28,8 +28,36 @@ namespace Transparent.Data.Services
 
         #endregion Tests
 
+        [Obsolete("To be replaced by points on a tag")]
         public int PointsRequiredToBeCompetent { get; set; }
+        [Obsolete("To be replaced by points on a tag")]
         public int PointsRequiredToBeAnExpert { get; set; }
+
+        /// <summary>
+        /// Percent of highest score in a tag that will guarantee competent level.
+        /// </summary>
+        public int CompetentPercentOfHighestScore { get; set; }
+        /// <summary>
+        /// Percent of people with who will be considered competent for a tag.
+        /// </summary>
+        public int MinPercentCompetents { get; set; }
+        /// <summary>
+        /// Minimum number of users who will be considered competent for a tag.
+        /// </summary>
+        public int MinCompetents { get; set; }
+
+        /// <summary>
+        /// Percent of highest score in a tag that will guarantee expert level.
+        /// </summary>
+        public int ExpertPercentOfHighestScore { get; set; }
+        /// <summary>
+        /// Percent of users who will be considered experts for a tag.
+        /// </summary>
+        public int MinPercentExperts { get; set; }
+        /// <summary>
+        /// Minimum number of users who will be considered experts for a tag.
+        /// </summary>
+        public int MinExperts { get; set; }
 
         public int DiPointsForAcceptedTicket { get; set; }
         public int DiPointsForVolunteering { get; set; }
@@ -94,6 +122,14 @@ namespace Transparent.Data.Services
 
             PointsRequiredToBeCompetent = int.Parse(configuration.GetValue("PointsRequiredToBeCompetent"));
             PointsRequiredToBeAnExpert = int.Parse(configuration.GetValue("PointsRequiredToBeAnExpert"));
+
+            CompetentPercentOfHighestScore = int.Parse(configuration.GetValue("CompetentPercentOfHighestScore"));
+            MinPercentCompetents = int.Parse(configuration.GetValue("MinPercentCompetents"));
+            MinCompetents = int.Parse(configuration.GetValue("MinCompetents"));
+
+            ExpertPercentOfHighestScore = int.Parse(configuration.GetValue("ExpertPercentOfHighestScore"));
+            MinPercentExperts = int.Parse(configuration.GetValue("MinPercentExperts"));
+            MinExperts = int.Parse(configuration.GetValue("MinExperts"));
 
             DiPointsForAcceptedTicket = int.Parse(configuration.GetValue("DiPointsForAcceptedTicket"));
             DiPointsForVolunteering = int.Parse(configuration.GetValue("DiPointsForVolunteering"));

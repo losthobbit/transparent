@@ -32,5 +32,10 @@ namespace Transparent.Data.Interfaces
 
         IHtmlString SerializeTag(Tag tag);
         IHtmlString SerializeAndIndentTags(int[] tagIds);
+
+        /// <summary>
+        /// Reload everything from the database.
+        /// </summary>
+        void Refresh();
     }
 }

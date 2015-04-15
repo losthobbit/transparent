@@ -137,6 +137,10 @@
     <Compile Include="Migrations\201504122151449_AddTicketsTableFkAssignedUserIdColumn.Designer.cs">
       <DependentUpon>201504122151449_AddTicketsTableFkAssignedUserIdColumn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504152046271_AddTagsTableCompetentAndExpertPoints.cs" />
+    <Compile Include="Migrations\201504152046271_AddTagsTableCompetentAndExpertPoints.Designer.cs">
+      <DependentUpon>201504152046271_AddTagsTableCompetentAndExpertPoints.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Argument.cs" />
     <Compile Include="Models\Badge.cs" />
     <Compile Include="Models\Interfaces\IArgument.cs" />
@@ -282,6 +286,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504122151449_AddTicketsTableFkAssignedUserIdColumn.resx">
       <DependentUpon>201504122151449_AddTicketsTableFkAssignedUserIdColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504152046271_AddTagsTableCompetentAndExpertPoints.resx">
+      <DependentUpon>201504152046271_AddTagsTableCompetentAndExpertPoints.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

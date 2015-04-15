@@ -85,6 +85,7 @@
     <Compile Include="Events\CompleteDiscussionEvent.cs" />
     <Compile Include="Events\CompleteTagValidationEvent.cs" />
     <Compile Include="Events\CompleteVotingEvent.cs" />
+    <Compile Include="Events\UpdateTagsEvent.cs" />
     <Compile Include="Interfaces\IGeneral.cs" />
     <Compile Include="Interfaces\IProgressTickets.cs" />
     <Compile Include="Interfaces\ITickets.cs" />
