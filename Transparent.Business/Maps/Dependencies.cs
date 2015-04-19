@@ -16,13 +16,15 @@ namespace Transparent.Business.Maps
     /// </remarks>
     public class Dependencies
     {
-        public Dependencies(IConfiguration configuration, ITicketsFactory ticketsFactory)
+        public Dependencies(IConfiguration configuration, ITicketsFactory ticketsFactory, ITags tags)
         {
             Configuration = configuration;
             TicketsFactory = ticketsFactory;
+            Tags = tags;
         }
 
         public IConfiguration Configuration { get; set; }
         public ITicketsFactory TicketsFactory { get; set; }
+        public ITags Tags { get; set; }
     }
 }

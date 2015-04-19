@@ -1,5 +1,5 @@
 ﻿@model Transparent.Data.Models.UserProfile
-
+@using Transparent.Data.Models;
 @{
     ViewBag.Title = "User Profile";
 }
@@ -14,7 +14,7 @@
             <td class="display-label">
                  @Html.DisplayNameFor(model => model.UserName)
             </td>
-            <td class="display-field">
+            <td class="display-field" colspan="3">
                 @Html.DisplayFor(model => model.UserName)
             </td>
         </tr>
@@ -22,11 +22,25 @@
             <td class="display-label">
                  @Html.DisplayNameFor(model => model.Email)
             </td>
-            <td class="display-field">
+            <td class="display-field" colspan="3">
                 @Html.DisplayFor(model => model.Email)
             </td>
         </tr>
-        @Html.DisplayFor(model => model.Tags)
+        <tr>
+            <th class="display-label">
+                Points
+            </th>
+            <th>
+                @Html.DisplayFor(model => model.UserName)
+            </th>
+            <th class="display-label @KnowledgeLevel.Competent">
+                Competent level
+            </th>
+            <th class="display-label @KnowledgeLevel.Expert">
+                Expert level
+            </th>
+        </tr>
+        @Html.DisplayFor(model => model.Tags, new { ShowRequiredPointsColumn = true })
         <tr>
             <td class="display-label">
                  Total points

@@ -37,5 +37,7 @@ namespace Transparent.Data.Interfaces
         /// Reload everything from the database.
         /// </summary>
         void Refresh();
+
+        KnowledgeLevel GetKnowledgeLevel(UserTag userTag);
     }
 }

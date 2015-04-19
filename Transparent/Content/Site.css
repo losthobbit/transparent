@@ -9,10 +9,6 @@
     padding-left:10px;
 }
 
-td {
-    vertical-align:top
-}
-
 .underlined {
     border-bottom: 1px solid #606060;
 }
@@ -709,7 +705,7 @@ th {
     font-size: 1.2em;
     text-align: left;
     border: none 0px;
-    padding-left: 0;
+    padding: 0.25em 2em 0.25em 0em;
 }
 
     th a {
@@ -749,6 +745,7 @@ th {
     }
 
 td {
+    vertical-align:top;
     padding: 0.25em 2em 0.25em 0em;
     border: 0 none;
 }

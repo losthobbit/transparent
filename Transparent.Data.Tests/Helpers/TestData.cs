@@ -26,10 +26,10 @@ namespace Transparent.Data.Tests.Helpers
 
         #region Tags
 
-        public Tag CriticalThinkingTag = new Tag { Id = 1, Name = "Critical Thinking" };
-        public Tag ScubaDivingTag = new Tag { Id = 2, Name = "Scuba Diving" };
-        public Tag BungeeJumpingTag = new Tag { Id = 3, Name = "Bungee Jumping" };
-        public Tag DemocraticIntelligenceTag = new Tag { Id = 4, Name = Constants.ApplicationName };
+        public Tag CriticalThinkingTag = new Tag { Id = 1, Name = "Critical Thinking", CompetentPoints = 5, ExpertPoints = 10 };
+        public Tag ScubaDivingTag = new Tag { Id = 2, Name = "Scuba Diving", CompetentPoints = 6, ExpertPoints = 11 };
+        public Tag BungeeJumpingTag = new Tag { Id = 3, Name = "Bungee Jumping", CompetentPoints = 4, ExpertPoints = 9 };
+        public Tag DemocraticIntelligenceTag = new Tag { Id = 4, Name = Constants.ApplicationName, CompetentPoints = 2, ExpertPoints = 4 };
         /// <summary>
         /// No-one has points for this tag.
         /// </summary>
@@ -406,7 +406,7 @@ namespace Transparent.Data.Tests.Helpers
 
             testData.CriticalThinkingTag.Children = new List<Tag> { testData.ScubaDivingTag, testData.BungeeJumpingTag };
             testData.ScubaDivingTag.Parents = new List<Tag> { testData.CriticalThinkingTag };
-            testData.BungeeJumpingTag.Parents = new List<Tag> { testData.BungeeJumpingTag };
+            testData.BungeeJumpingTag.Parents = new List<Tag> { testData.CriticalThinkingTag };
 
             testData.ResolveRelationships();
 

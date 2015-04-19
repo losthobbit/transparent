@@ -17,11 +17,6 @@ namespace Transparent.Data.Interfaces
         int PointsMarkersGainForAgreeingATestResult { get; set; }
         int PointsMarkersLoseForDisagreeingATestResult { get; set; }
 
-        [Obsolete("To be replaced by points on a tag")]
-        int PointsRequiredToBeCompetent { get; set; }
-        [Obsolete("To be replaced by points on a tag")]
-        int PointsRequiredToBeAnExpert { get; set; }
-
         /// <summary>
         /// Percent of highest score in a tag that will guarantee competent level.
         /// </summary>

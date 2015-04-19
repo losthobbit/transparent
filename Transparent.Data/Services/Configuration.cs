@@ -28,11 +28,6 @@ namespace Transparent.Data.Services
 
         #endregion Tests
 
-        [Obsolete("To be replaced by points on a tag")]
-        public int PointsRequiredToBeCompetent { get; set; }
-        [Obsolete("To be replaced by points on a tag")]
-        public int PointsRequiredToBeAnExpert { get; set; }
-
         /// <summary>
         /// Percent of highest score in a tag that will guarantee competent level.
         /// </summary>
@@ -119,9 +114,6 @@ namespace Transparent.Data.Services
             MarkersRequiredPerTest = int.Parse(configuration.GetValue("MarkersRequiredPerTest"));
             PointsMarkersGainForAgreeingATestResult = int.Parse(configuration.GetValue("PointsMarkersGainForAgreeingATestResult"));
             PointsMarkersLoseForDisagreeingATestResult = int.Parse(configuration.GetValue("PointsMarkersLoseForDisagreeingATestResult"));
-
-            PointsRequiredToBeCompetent = int.Parse(configuration.GetValue("PointsRequiredToBeCompetent"));
-            PointsRequiredToBeAnExpert = int.Parse(configuration.GetValue("PointsRequiredToBeAnExpert"));
 
             CompetentPercentOfHighestScore = int.Parse(configuration.GetValue("CompetentPercentOfHighestScore"));
             MinPercentCompetents = int.Parse(configuration.GetValue("MinPercentCompetents"));

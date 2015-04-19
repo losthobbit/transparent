@@ -3,7 +3,7 @@
     <td class="display-label">
         @Html.ActionLink(Model.Name, "Details", "Tag", new { id = Model.Id }, new { })
     </td>
-    <td class="display-field @Model.KnowledgeLevel.ToString()">
+    <td class="display-field @Model.KnowledgeLevel">
         @Html.DisplayFor(model => model.TotalPoints)
     </td>
 </tr>

@@ -1,9 +1,25 @@
 ﻿@model Transparent.Data.Models.UserTag
+@using Castle.Windsor
+@using Transparent.Data.Models
+@{
+var container = ((IContainerAccessor)Context.ApplicationInstance).Container;
+var tags = container.Resolve<Transparent.Data.Interfaces.ITags>();
+var tag = tags.Find(Model.FkTagId);
+}
 <tr>
     <td class="display-label">
-        @Html.ActionLink(Model.Tag.Name, "Details", "Tag", new { id = Model.Tag.Id }, new { })
+        @Html.ActionLink(tag.Name, "Details", "Tag", new { id = Model.Tag.Id }, new { })
     </td>
-    <td class="display-field">
+    <td class="display-field @tags.GetKnowledgeLevel(Model)">
         @Html.DisplayFor(model => model.TotalPoints)
     </td>
+    @if (ViewBag.ShowRequiredPointsColumn)
+    {
+        <td class="@KnowledgeLevel.Competent">
+            @tag.CompetentPoints
+        </td>
+        <td class="@KnowledgeLevel.Expert">
+            @tag.ExpertPoints
+        </td>        
+    }
 </tr>

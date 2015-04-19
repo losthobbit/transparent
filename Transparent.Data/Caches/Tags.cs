@@ -149,5 +149,11 @@ namespace Transparent.Data.Caches
                 return serializedIndentedTags;
             }
         }
+
+        public KnowledgeLevel GetKnowledgeLevel(UserTag userTag)
+        {
+            var tag = Find(userTag.FkTagId);
+            return userTag.TotalPoints.ToKnowledgeLevel(tag.CompetentPoints, tag.ExpertPoints);
+        }
     }
 }

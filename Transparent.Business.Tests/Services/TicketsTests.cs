@@ -58,7 +58,7 @@ namespace Transparent.Business.Tests.Services
 
         private void ArrangeMyQueue()
         {
-            TestData.StephensCriticalThinkingTag.TotalPoints = TestConfiguration.PointsRequiredToBeCompetent;
+            TestData.StephensCriticalThinkingTag.TotalPoints = TestData.CriticalThinkingTag.CompetentPoints;
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace Transparent.Business.Tests.Services
         public void MyQueue_with_ticket_and_user_with_same_tag_and_less_than_minimum_points_does_not_return_ticket()
         {
             // Arrange
-            TestData.StephensCriticalThinkingTag.TotalPoints = TestConfiguration.PointsRequiredToBeCompetent - 1;
+            TestData.StephensCriticalThinkingTag.TotalPoints = TestData.CriticalThinkingTag.CompetentPoints - 1;
 
             // Act
             var ticketsContainer = target.MyQueue(new TicketsContainer(), TestData.Stephen.UserId);
@@ -591,6 +591,13 @@ namespace Transparent.Business.Tests.Services
         public void TestsToBeMarked_returns_only_tests_for_which_the_user_has_sufficient_points()
         {
             //Arrange
+            foreach (var userTag in TestData.Stephen.Tags)
+            {
+                if (userTag.Tag == TestData.BungeeJumpingTag)
+                {
+                    userTag.TotalPoints = userTag.Tag.CompetentPoints - 1;
+                }
+            }
 
             //Act
             var actual = target.GetTestsToBeMarked(new AnsweredTests(), TestData.Stephen.UserId);
@@ -673,7 +680,7 @@ namespace Transparent.Business.Tests.Services
             TestConfiguration.MarkersRequiredPerTest = markersRequiredPerTest;
 
             markTest_UserPoint = TestData.PointForCriticalThinkingTestThatJoeTookThatStephenMarked;
-            var adminUserTag = TestData.AddUserTag(TestData.Admin, TestData.CriticalThinkingTag, TestConfiguration.PointsRequiredToBeCompetent);
+            var adminUserTag = TestData.AddUserTag(TestData.Admin, TestData.CriticalThinkingTag, TestData.CriticalThinkingTag.CompetentPoints);
             markTest_Markers_UserTags.Add(adminUserTag);
             markTest_PassMarkers_UserTags.Add(adminUserTag);
             var testsMarked = 0;
@@ -681,7 +688,7 @@ namespace Transparent.Business.Tests.Services
             {
                 bool pass = fails == null ? Fixture.Create<bool>() : testsMarked >= fails.Value;
                 var user = TestData.CreateUser();
-                var userTag = TestData.AddUserTag(user, TestData.CriticalThinkingTag, TestConfiguration.PointsRequiredToBeCompetent);
+                var userTag = TestData.AddUserTag(user, TestData.CriticalThinkingTag, TestData.CriticalThinkingTag.CompetentPoints);
                 markTest_Markers_UserTags.Add(userTag);
                 if (pass)
                     markTest_PassMarkers_UserTags.Add(userTag);
@@ -921,9 +928,9 @@ namespace Transparent.Business.Tests.Services
         )
         {
             TestData.StephensCriticalThinkingTag.TotalPoints = 
-                (knowledgeLevel == KnowledgeLevel.Competent 
-                ? TestConfiguration.PointsRequiredToBeCompetent
-                : TestConfiguration.PointsRequiredToBeAnExpert)
+                (knowledgeLevel == KnowledgeLevel.Competent
+                ? TestData.CriticalThinkingTag.CompetentPoints
+                : TestData.CriticalThinkingTag.ExpertPoints)
                 + (int)userPointsForTag;
 
             getTicketTagInfoList_Ticket = new Suggestion
@@ -1434,7 +1441,7 @@ namespace Transparent.Business.Tests.Services
         {
             //Arrange
             ArrangeSetArgument();
-            TestData.AdminsScubaDivingTag.TotalPoints = TestConfiguration.PointsRequiredToBeAnExpert - 1;
+            TestData.AdminsScubaDivingTag.TotalPoints = TestData.ScubaDivingTag.ExpertPoints - 1;
 
             //Act
             target.SetArgument(setArgument_Ticket.Id, TestData.Admin.UserId, "hello");
@@ -1465,7 +1472,7 @@ namespace Transparent.Business.Tests.Services
         {
             setVote_Ticket = TestData.JoesScubaDivingSuggestion;
             setVote_Ticket.State = TicketState.Voting;
-            TestData.AdminsScubaDivingTag.TotalPoints = TestConfiguration.PointsRequiredToBeCompetent + new Random().Next(3);
+            TestData.AdminsScubaDivingTag.TotalPoints = TestData.ScubaDivingTag.CompetentPoints + new Random().Next(3);
             mockDataService.Setup(x => x.SetVote(setVote_Ticket, It.IsAny<Stance>(), TestData.Admin.UserId))
                 .Callback(() => setVoteCalled = true);
             UsersContext.SavedChanges += context => setVoteCalledAndSaved = setVoteCalled;
@@ -1503,7 +1510,7 @@ namespace Transparent.Business.Tests.Services
         {
             //Arrange
             ArrangeSetVote();
-            TestData.AdminsScubaDivingTag.TotalPoints = TestConfiguration.PointsRequiredToBeCompetent - 1;
+            TestData.AdminsScubaDivingTag.TotalPoints = TestData.ScubaDivingTag.CompetentPoints - 1;
 
             //Act
             target.SetVote(setVote_Ticket.Id, Fixture.Create<Stance>(), TestData.Admin.UserId);

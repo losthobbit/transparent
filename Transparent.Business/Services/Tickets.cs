@@ -33,13 +33,15 @@ namespace Transparent.Business.Services
         private readonly IDataService dataService;
         private readonly IConfiguration configuration;
         private readonly IUser userService;
+        //private readonly ITags tags;
 
-        public Tickets(IUsersContext db, IDataService dataService, IConfiguration configuration, IUser userService)
+        public Tickets(IUsersContext db, IDataService dataService, IConfiguration configuration, IUser userService/*, ITags tags*/)
         {
             this.db = db;
             this.dataService = dataService;
             this.configuration = configuration;
             this.userService = userService;
+            //this.tags = tags;
         }
 
         private IQueryable<Ticket> TicketsByType(TicketType? ticketType)
@@ -96,7 +98,7 @@ namespace Transparent.Business.Services
             var publicTickets = from ticket in ticketSet.GetPublic()
                                 join ticketTag in db.TicketTags on ticket equals ticketTag.Ticket
                                 join userTag in db.UserTags on ticketTag.Tag equals userTag.Tag
-                                where userTag.FkUserId == userId && userTag.TotalPoints >= configuration.PointsRequiredToBeCompetent
+                                where userTag.FkUserId == userId && userTag.TotalPoints >= userTag.Tag.CompetentPoints
                                 select ticket;
 
             return filter.Initialize
@@ -382,7 +384,7 @@ namespace Transparent.Business.Services
         public IQueryable<Tag> GetCompetentTags(int userId)
         {
             return db.UserTags
-            .Where(userTag => userTag.FkUserId == userId && userTag.TotalPoints >= configuration.PointsRequiredToBeCompetent)
+            .Where(userTag => userTag.FkUserId == userId && userTag.TotalPoints >= userTag.Tag.CompetentPoints)
             .Select(userTag => userTag.Tag);
         }
 
@@ -395,7 +397,7 @@ namespace Transparent.Business.Services
         public IQueryable<Tag> GetExpertTags(int userId)
         {
             return db.UserTags
-            .Where(userTag => userTag.FkUserId == userId && userTag.TotalPoints >= configuration.PointsRequiredToBeAnExpert)
+            .Where(userTag => userTag.FkUserId == userId && userTag.TotalPoints >= userTag.Tag.ExpertPoints)
             .Select(userTag => userTag.Tag);
         }
 

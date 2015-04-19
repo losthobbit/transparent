@@ -20,9 +20,6 @@ namespace Transparent.Data.Tests.Helpers
             PointsMarkersGainForAgreeingATestResult = 1;
             PointsMarkersLoseForDisagreeingATestResult = 1;
 
-            PointsRequiredToBeCompetent = 5;
-            PointsRequiredToBeAnExpert = 10;
-
             CompetentPercentOfHighestScore = 50;
             MinPercentCompetents = 50;
             MinCompetents = 2;
@@ -51,11 +48,6 @@ namespace Transparent.Data.Tests.Helpers
         public int MarkersRequiredPerTest { get; set; }
         public int PointsMarkersGainForAgreeingATestResult { get; set; }
         public int PointsMarkersLoseForDisagreeingATestResult { get; set; }
-
-        [Obsolete("To be replaced by points on a tag")]
-        public int PointsRequiredToBeCompetent { get; set; }
-        [Obsolete("To be replaced by points on a tag")]
-        public int PointsRequiredToBeAnExpert { get; set; }
 
         /// <summary>
         /// Percent of highest score in a tag that will guarantee competent level.

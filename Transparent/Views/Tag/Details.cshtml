@@ -26,7 +26,7 @@
 
         $("#takeTestButton").click(function(e) {
             e.preventDefault();
-            var deductPoints = @Json.Encode(pointsForTag > configuration.PointsRequiredToBeCompetent);
+            var deductPoints = @Json.Encode(pointsForTag >= configuration.PointsRequiredBeforeDeductingPoints);
             if(deductPoints)
                 TakeTestPrompt();
             else
@@ -47,7 +47,10 @@
     <legend>Tag</legend>
     <div class="display-field">
         <h2>@Html.DisplayFor(model => model.Name)</h2>
-        <p>You have @pointsForTag points for @Model.Name</p>
+        <p>You have @pointsForTag points for @Model.Name.<br />
+            <span class="metadata">@Model.CompetentPoints points is considered <span class="@KnowledgeLevel.Competent">competent level</span>, and @Model.ExpertPoints points is considered <span class="@KnowledgeLevel.Expert">expert level</span>.</span>
+        </p>
+        
         @{
         if(inCompetentParentsTags.Any())
         {

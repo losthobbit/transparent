@@ -124,8 +124,7 @@ namespace Transparent.Business.Maps
                 Id = source.Tag.Id,
                 Name = source.Tag.Name,
                 TotalPoints = source.TotalPoints,
-                KnowledgeLevel = source.TotalPoints.ToKnowledgeLevel(Dependencies.Configuration.PointsRequiredToBeCompetent,
-                    Dependencies.Configuration.PointsRequiredToBeAnExpert)
+                KnowledgeLevel = Dependencies.Tags.GetKnowledgeLevel(source)
             };
         }
 

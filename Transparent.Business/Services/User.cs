@@ -41,7 +41,7 @@ namespace Transparent.Business.Services
             var parents = tags.Find(tagId).Parents;
             return parents == null
                 ? new List<Tag>()
-                : parents.Where(p => GetPointsForTag(userId, p.Id) < configuration.PointsRequiredToBeCompetent).ToList();
+                : parents.Where(p => GetPointsForTag(userId, p.Id) < p.CompetentPoints).ToList();
         }
     }
 }
