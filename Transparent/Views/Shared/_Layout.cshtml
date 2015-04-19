@@ -47,8 +47,8 @@
             </div>
             <div class="content-wrapper">
                 <div class="float-left">
-                    <h3>@Html.ActionLink("Main goal: " + Constants.Goal + ".", "About", "Home")</h3>
-                    @Html.ActionLink("Current subgoal: " + configuration.CurrentSubGoal + ".", "About", "Home")
+                    <h3>@Html.ActionLink("Main goal: " + Constants.Goal + ".", "MainGoal", "Home")</h3>
+                    @Html.ActionLink("Current subgoal: " + configuration.CurrentSubgoal + ".", "Subgoal", "Home")
                 </div>
                 <div class="float-right gap-above">
                     @Html.Partial("_NonTicketMenuPartial")

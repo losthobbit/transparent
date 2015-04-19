@@ -11,7 +11,7 @@ namespace Transparent.Data.Tests.Helpers
     {
         public TestConfig()
         {
-            CurrentSubGoal = "Increase the number of registered users.";
+            CurrentSubgoal = "Increase the number of registered users.";
 
             PointsRequiredBeforeDeductingPoints = 3;
             PointsToDeductWhenStartingTest = 2;
@@ -40,7 +40,7 @@ namespace Transparent.Data.Tests.Helpers
             PercentOfVotesRequiredToAccept = 60;
         }
 
-        public string CurrentSubGoal { get; set; }
+        public string CurrentSubgoal { get; set; }
 
         public int PointsRequiredBeforeDeductingPoints { get; set; }
         public int PointsToDeductWhenStartingTest { get; set; }

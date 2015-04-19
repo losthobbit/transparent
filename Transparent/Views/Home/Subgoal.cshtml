@@ -1,0 +1,69 @@
+﻿@using Transparent.Data
+@using Castle.Windsor
+@using Transparent.Data.Interfaces
+@using Transparent.Business.Interfaces
+
+@{
+    var container = ((IContainerAccessor)Context.ApplicationInstance).Container;
+    var configuration = container.Resolve<IConfiguration>();
+    var general = container.Resolve<IGeneral>();
+    ViewBag.Title = "Current Subgoal";
+}
+
+@Html.Partial("_StatsPartial", general.GetStats())
+
+<hgroup class="title">
+    <h1>@ViewBag.Title.</h1>
+</hgroup>
+
+<article>
+    <p>
+        The @Html.ActionLink("main goal", "MainGoal") of this website is <strong>massive</strong>!  In order to bring this project one
+        step closer to Earth, I've introduced the concept of a <i>subgoal</i>.  The subgoal allows users
+        to focus on something a bit more tangible, that they can observe and influence quite easily.
+    </p>
+    <p>
+        You may wonder why I chose the number 100,000.  I think that, when the number of users becomes
+        large enough that there is decent daily activity on the site, and useful suggestions are regularly
+        implemented, the site's value will become self evident, and it will grow quickly with less specific
+        focus on growth, and instead more focus on actually doing things to improve happiness and unity.
+        I estimate that to be at about 10,000 registered users.
+    </p>
+    <p>
+        I decided to go with the number 100,000 instead, since it is 10 times larger, and 10 times more exciting.
+        At 10,000 registered users, this site will be great.  At 100,000 it will be <strong>amazing</strong>!  
+        Hopefully the idea of such a massive number will give you the motivation you need to be a pioneer in
+        bringing like minded people together to improve the world!
+        If you think 1,000,000 is a better number to focus on, simply create a suggestion to suggest it.
+    </p>
+    <p>
+        I realize that, at the start, there is a chance this site, in its immaturity, will not grow very quickly at all
+        and helping to grow the site to 100,000 users may seem like a bigger task than you've ever done before, but
+        don't worry.  You're not alone.  You don't have to find all 100,000 users by yourself.
+    </p>
+    <p>
+        Here is a suggestion, for using your intelligence, to come up with creative ideas for helping with this goal:
+    </p>
+    <p>
+            Firstly, you may need motivation.  Begin by thinking about what global happiness and unity would be like to you.
+            Maybe write down some ideas, and find some pictures on the internet to describe your favourite things, like
+            travel destinations, good food, a healthy lifestyle, friends, family, games, movies, or whatever else this means to you.
+            You can create a scrap book, if you like, or simply copy the pictures and thoughts into a blog or spreadsheet.
+    </p>
+    <p>
+            Also think about the problems in the world.  Write down, and get pictures of all the problems that mean something to
+            you, that you would like to change.  Perhaps terrorism or poverty or a specific disease or global warming.
+            Maybe it's violent pornography or animal abuse.
+    </p>
+    <p>
+            Now decide on a personal goal:  A goal that is so big, that it will be incredibly exciting for you to achieve.
+            It needs to be very specific, so that you know when you've achieved it.  Something like,
+            "Before @DateTime.Now.AddYears(1).ToShortDateString(), I will have shared enough videos about @Constants.ApplicationName,
+            that over 10,000 people will have learned about it."
+            Alternatively you could create a composite goal that specifically uses @Constants.ApplicationName, like
+            "Before @DateTime.Now.AddYears(1).ToShortDateString(), I will have used @Constants.ApplicationName to
+            create at least twenty suggestions on how to increase the number of users, that have been accepted
+            and completed.  I have also volunteered and completed at least twenty suggestions and created at least
+            twenty tests."
+     </p>
+</article>

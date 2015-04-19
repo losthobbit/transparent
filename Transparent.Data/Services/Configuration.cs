@@ -11,7 +11,7 @@ namespace Transparent.Data.Services
     {
         #region General
 
-        public string CurrentSubGoal { get; set; }
+        public string CurrentSubgoal { get; set; }
 
         #endregion General
 
@@ -106,7 +106,7 @@ namespace Transparent.Data.Services
 
         public Configuration(Common.Interfaces.IConfiguration configuration)
         {
-            CurrentSubGoal = configuration.GetValue("CurrentSubGoal");
+            CurrentSubgoal = configuration.GetValue("CurrentSubGoal");
 
             PointsRequiredBeforeDeductingPoints = int.Parse(configuration.GetValue("PointsRequiredBeforeDeductingPoints"));
             PointsToDeductWhenStartingTest = int.Parse(configuration.GetValue("PointsToDeductWhenStartingTest"));

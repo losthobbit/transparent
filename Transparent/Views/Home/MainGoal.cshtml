@@ -7,7 +7,7 @@
     var container = ((IContainerAccessor)Context.ApplicationInstance).Container;
     var configuration = container.Resolve<IConfiguration>();
     var general = container.Resolve<IGeneral>();
-    ViewBag.Title = "About";
+    ViewBag.Title = "Main Goal";
 }
 
 @Html.Partial("_StatsPartial", general.GetStats())

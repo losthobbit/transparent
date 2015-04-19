@@ -8,7 +8,7 @@ namespace Transparent.Data.Interfaces
 {
     public interface IConfiguration
     {
-        string CurrentSubGoal { get; set; }
+        string CurrentSubgoal { get; set; }
 
         int PointsRequiredBeforeDeductingPoints { get; set; }
         int PointsToDeductWhenStartingTest { get; set; }
