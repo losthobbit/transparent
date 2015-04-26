@@ -385,7 +385,8 @@ namespace Transparent.Business.Services
         {
             return db.UserTags
             .Where(userTag => userTag.FkUserId == userId && userTag.TotalPoints >= userTag.Tag.CompetentPoints)
-            .Select(userTag => userTag.Tag);
+            .Select(userTag => userTag.Tag)
+            .Union(db.Tags.Where(tag => tag.CompetentPoints == 0));
         }
 
         /// <summary>
@@ -398,7 +399,8 @@ namespace Transparent.Business.Services
         {
             return db.UserTags
             .Where(userTag => userTag.FkUserId == userId && userTag.TotalPoints >= userTag.Tag.ExpertPoints)
-            .Select(userTag => userTag.Tag);
+            .Select(userTag => userTag.Tag)
+            .Union(db.Tags.Where(tag => tag.ExpertPoints == 0));
         }
 
         public IQueryable<TestAndAnswerViewModel> GetTestsToBeMarked(int markersUserId, IQueryable<UserPoint> userPoints)

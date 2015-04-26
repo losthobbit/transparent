@@ -1613,5 +1613,150 @@ namespace Transparent.Business.Tests.Services
         }
 
         #endregion Assign
+
+        #region GetCompetentTags
+
+        [TestCase(1)]
+        [TestCase(0)]
+        public void GetCompetentTags_with_UserTags_higher_than_or_equal_to_competence_level_returns_tags(int higherBy)
+        {
+            //Arrange
+            TestData.StephensCriticalThinkingTag.TotalPoints = TestData.CriticalThinkingTag.CompetentPoints + higherBy;
+
+            //Act
+            var tags = target.GetCompetentTags(TestData.Stephen.UserId);
+
+            //Assert
+            tags.Single(t => t == TestData.CriticalThinkingTag);
+        }
+
+        [TestCase(1)]
+        [TestCase(2)]
+        public void GetCompetentTags_with_UserTags_lower_than_competence_level_does_not_return_tags(int lowerBy)
+        {
+            //Arrange
+            TestData.StephensCriticalThinkingTag.TotalPoints = TestData.CriticalThinkingTag.CompetentPoints - lowerBy;
+
+            //Act
+            var tags = target.GetCompetentTags(TestData.Stephen.UserId);
+
+            //Assert
+            Assert.IsFalse(tags.Contains(TestData.CriticalThinkingTag));
+        }
+
+        [Test]
+        public void GetCompetentTags_without_UserTags_with_competence_level_of_0_returns_tags()
+        {
+            //Arrange
+            TestData.ScubaDivingTag.CompetentPoints = 0;
+
+            //Act
+            var tags = target.GetCompetentTags(TestData.Stephen.UserId);
+
+            //Assert
+            tags.Single(t => t == TestData.ScubaDivingTag);
+        }
+
+        [Test]
+        public void GetCompetentTags_with_UserTags_with_competence_level_of_0_returns_single_instance_of_tag()
+        {
+            //Arrange
+            TestData.CriticalThinkingTag.CompetentPoints = 0;
+
+            //Act
+            var tags = target.GetCompetentTags(TestData.Stephen.UserId);
+
+            //Assert
+            tags.Single(t => t == TestData.CriticalThinkingTag);
+        }
+
+        [TestCase(1)]
+        [TestCase(2)]
+        public void GetCompetentTags_without_UserTags_with_competence_level_greater_than_0_does_not_return_tags(int competentPoints)
+        {
+            //Arrange
+            TestData.ScubaDivingTag.CompetentPoints = competentPoints;
+
+            //Act
+            var tags = target.GetCompetentTags(TestData.Stephen.UserId);
+
+            //Assert
+            Assert.IsFalse(tags.Contains(TestData.ScubaDivingTag));
+        }
+
+        #endregion GetCompetentTags
+
+        #region GetExpertTags
+
+        [TestCase(1)]
+        [TestCase(0)]
+        public void GetExpertTags_with_UserTags_higher_than_or_equal_to_competence_level_returns_tags(int higherBy)
+        {
+            //Arrange
+            TestData.StephensCriticalThinkingTag.TotalPoints = TestData.CriticalThinkingTag.ExpertPoints + higherBy;
+
+            //Act
+            var tags = target.GetExpertTags(TestData.Stephen.UserId);
+
+            //Assert
+            tags.Single(t => t == TestData.CriticalThinkingTag);
+        }
+
+        [TestCase(1)]
+        [TestCase(2)]
+        public void GetExpertTags_with_UserTags_lower_than_ExpertPoints_level_does_not_return_tags(int lowerBy)
+        {
+            //Arrange
+            TestData.StephensCriticalThinkingTag.TotalPoints = TestData.CriticalThinkingTag.ExpertPoints - lowerBy;
+
+            //Act
+            var tags = target.GetExpertTags(TestData.Stephen.UserId);
+
+            //Assert
+            Assert.IsFalse(tags.Contains(TestData.CriticalThinkingTag));
+        }
+
+        [Test]
+        public void GetExpertTags_without_UserTags_with_ExpertPoints_level_of_0_returns_tags()
+        {
+            //Arrange
+            TestData.ScubaDivingTag.ExpertPoints = 0;
+
+            //Act
+            var tags = target.GetExpertTags(TestData.Stephen.UserId);
+
+            //Assert
+            tags.Single(t => t == TestData.ScubaDivingTag);
+        }
+
+        [Test]
+        public void GetExpertTags_with_UserTags_with_ExpertPoints_level_of_0_returns_single_instance_of_tag()
+        {
+            //Arrange
+            TestData.CriticalThinkingTag.ExpertPoints = 0;
+
+            //Act
+            var tags = target.GetExpertTags(TestData.Stephen.UserId);
+
+            //Assert
+            tags.Single(t => t == TestData.CriticalThinkingTag);
+        }
+
+        [TestCase(1)]
+        [TestCase(2)]
+        public void GetExpertTags_without_UserTags_with_competence_level_greater_than_0_does_not_return_tags(int expertPoints)
+        {
+            //Arrange
+            TestData.ScubaDivingTag.ExpertPoints = expertPoints;
+
+            //Act
+            var tags = target.GetExpertTags(TestData.Stephen.UserId);
+
+            //Assert
+            Assert.IsFalse(tags.Contains(TestData.ScubaDivingTag));
+        }
+
+        #endregion GetExpertTags
+
     }
 }
