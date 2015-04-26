@@ -79,6 +79,19 @@ namespace Transparent.Data.Migrations
                     TicketTags = new Collection<TicketTag> { new TicketTag { Tag = criticalThinkingTag } },
                     State = TicketState.Completed
                 });
+
+            var promotionTag = context.Tags.Single(tag => tag.Name == PromotionTagName);
+            body = "Write what you would consider to be the two most important characteristics of a video, in order to make it go viral.";
+            if (!context.Tests.Any(test => test.Body == body))
+                context.Tests.Add(new Test
+                {
+                    User = testUser,
+                    CreatedDate = DateTime.Now,
+                    Heading = "Viral videos",
+                    Body = body,
+                    TicketTags = new Collection<TicketTag> { new TicketTag { Tag = promotionTag } },
+                    State = TicketState.Completed
+                });
         }
 
         private UserProfile SetupAdministrator(UsersContext context)
@@ -188,8 +201,16 @@ namespace Transparent.Data.Migrations
             var applicationTag = new Tag
             {
                 Name = Constants.ApplicationName,
-                Description = "Use this tag for questions and suggestions related to this system.<br/>" +
-                                "Increase your points by using the site positively and volunteering."
+                Description = "<p>Use this tag for questions and suggestions related to this system.  " +
+                                "Increase your points by using the site positively and volunteering.  " +
+                                "Here are some of the ways that you can earn points:</p>" + 
+                                "<ul>" + 
+                                "<li>Create your first ticket</li>" + 
+                                "<li>Answer your first test</li>" +
+                                "<li>Mark your first test</li>" +
+                                "<li>Write your first answer to a question or argument for a suggestion</li>" +
+                                "<li>Create suggestion which are accepted and completed</li>" +
+                                "<li>Volunteer</li>"
             };
 
             var shelterTag = new Tag
@@ -218,7 +239,13 @@ namespace Transparent.Data.Migrations
                 new Tag
                 {
                     Name = PromotionTagName,
-                    Description = "Use this tag for suggestions related to promotion of the goals of " + Constants.ApplicationName + "."
+                    Description = "<p>Use this tag for suggestions related to promotion of the goals of " + Constants.ApplicationName + ".  " +
+                        "In order to earn points about promotion you need to answer or mark tests related to promoting ideas.  " +
+                        "I don't know of any particularly good books on the subject, so feel free to suggest some.  " +
+                        "Until we have a specific list of books, and while the site is still immature, you can probably " +
+                        "simply lookup the answers to the questions while you answer them.  If, however, you'd like to " + 
+                        "be more prepared, you can read up on the internet about viral videos, and internet advertising " +
+                        "options, like Google Adwords.</p>"
                 },
                 new Tag
                 {
