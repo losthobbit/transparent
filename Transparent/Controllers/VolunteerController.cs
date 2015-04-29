@@ -22,13 +22,13 @@ namespace Transparent.Controllers
             this.volunteers = volunteers;
         }
 
-        [HttpGet]
+        [HttpGet, Authorize]
         public ActionResult Volunteer()
         {
             return View(volunteers.GetVolunteer(User.Identity.Name, User.IsInRole(Constants.VolunteerRole)));
         }
 
-        [HttpPost]
+        [HttpPost, Authorize]
         public ActionResult Volunteer(VolunteerViewModel volunteerViewModel)
         {
             bool wasVolunteer = User.IsInRole(Constants.VolunteerRole);

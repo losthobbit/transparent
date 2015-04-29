@@ -40,6 +40,11 @@ namespace Transparent.Controllers
             return View();
         }
 
+        public ActionResult HowItWorks()
+        {
+            return View();
+        }
+
         public ActionResult Contact()
         {
             return View();

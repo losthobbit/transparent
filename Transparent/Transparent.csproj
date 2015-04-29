@@ -413,6 +413,7 @@
     <Content Include="Views\Ticket\_AssignPartial.cshtml" />
     <Content Include="Views\Home\MainGoal.cshtml" />
     <Content Include="Views\Home\Subgoal.cshtml" />
+    <Content Include="Views\Home\HowItWorks.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

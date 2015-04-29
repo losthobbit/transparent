@@ -1,0 +1,49 @@
+﻿@using Castle.Windsor
+@using Transparent.Data.Interfaces
+@using Transparent.Data
+
+@{
+    var container = ((IContainerAccessor)Context.ApplicationInstance).Container;
+    var configuration = container.Resolve<IConfiguration>();
+    ViewBag.Title = "How it works";
+}
+
+<hgroup class="title">
+    <h1>@ViewBag.Title.</h1>
+</hgroup>
+
+<nav class="float-right">
+    <a href="#suggest">Create a suggestion</a><br />
+    <a href="#volunteer">Volunteer</a><br />
+    <a href="#ask">Ask a question</a><br />
+    <a href="#createTest">Create a test</a><br />
+    <a href="#answerTest">Answer a test</a><br />
+    <a href="#markTest">Mark a test</a><br />
+</nav>
+
+<article class="float-left">
+    <a name="top" />
+    <p>
+        @Constants.ApplicationName is a group decision making system which currently consists of the features below.
+    </p>
+    <a name="volunteer" /><a class="float-right" href="#top">back to top</a>
+    <h3>Volunteer</h3>
+    <p>
+        Volunteers are all users who are willing to take the lead on implementing an accepted suggestion.  This could be
+        pretty much anything.  Examples might be sending an email, updating the source code of this website,
+        voting for a political party, making a video or leading a project.  It is really entirely up to the volunteer
+        to decide what they're willing to do, and which suggestions they'd like to implement.
+    </p>
+    <p>
+        In the general usage of this site, a volunteer would be anyone, however, should this site be used by a government
+        or non-profit organization, it could actually be someone who is paid to implement suggestions.
+    </p>
+    <p>
+        Volunteer by clicking @Html.ActionLink("here", "Volunteer", "Volunteer") and fill in details about any particular skills
+        that you'd like to volunteer and, if you'd like to volunteer for other general things, feel free to write something like,
+        "Will also help with accepted suggestions that don't require a particular skill."
+    </p>
+    <p>
+        Click the <i>save</i> button when you're done.
+    </p>
+</article>
