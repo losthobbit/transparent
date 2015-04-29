@@ -17,6 +17,14 @@
     margin-top: 15px;
 }
 
+.sideMenu {
+    float: right;
+}
+
+    .sideMenu ul {
+        margin-top: 0px;
+    }
+
 a { text-decoration:none }
 
 .actionLinkUI { float: left; margin-right: 2px; }

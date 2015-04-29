@@ -8,26 +8,68 @@
     ViewBag.Title = "How it works";
 }
 
+<a name="top" />
 <hgroup class="title">
     <h1>@ViewBag.Title.</h1>
 </hgroup>
 
-<nav class="float-right">
+<nav class="sideMenu">
     <a href="#suggest">Create a suggestion</a><br />
+    <ul>
+        <li><a href="#rankSuggestion">Rank a suggestion</a></li>
+        <li><a href="#verifySuggestion">Verify a suggestion</a></li>
+        <li><a href="#argue">Write an argument</a></li>
+        <li><a href="#voteSuggestion">Vote for a suggestion</a></li>
+    </ul>
     <a href="#volunteer">Volunteer</a><br />
+    <ul>
+        <li><a href="#pickUp">Pick up a suggestion</a></li>
+        <li><a href="#complete">Complete a suggestion</a></li>
+    </ul>
     <a href="#ask">Ask a question</a><br />
+    <ul>
+        <li><a href="#rankQuestion">Rank a question</a></li>
+        <li><a href="#answer">Answer a question</a></li>
+    </ul>
     <a href="#createTest">Create a test</a><br />
+    <ul>
+        <li><a href="#voteTest">Vote for a test</a></li>
+    </ul>
     <a href="#answerTest">Answer a test</a><br />
     <a href="#markTest">Mark a test</a><br />
 </nav>
 
-<article class="float-left">
-    <a name="top" />
+<article>
     <p>
         @Constants.ApplicationName is a group decision making system which currently consists of the features below.
     </p>
+    <a name="suggest" /><a class="float-right" href="#top">back to top</a>
+    <h2>Create a suggestion</h2>
+    <p>
+        To be completed...
+    </p>
+    <a name="rankSuggestion" /><a class="float-right" href="#top">back to top</a>
+    <h3>Rank a suggestion</h3>
+    <p>
+        To be completed...
+    </p>
+    <a name="verifySuggestion" /><a class="float-right" href="#top">back to top</a>
+    <h3>Verify a suggestion</h3>
+    <p>
+        To be completed...
+    </p>
+    <a name="argue" /><a class="float-right" href="#top">back to top</a>
+    <h3>Write an argument</h3>
+    <p>
+        To be completed...
+    </p>
+    <a name="voteSuggestion" /><a class="float-right" href="#top">back to top</a>
+    <h3>Vote for a suggestion</h3>
+    <p>
+        To be completed...
+    </p>
     <a name="volunteer" /><a class="float-right" href="#top">back to top</a>
-    <h3>Volunteer</h3>
+    <h2>Volunteer</h2>
     <p>
         Volunteers are all users who are willing to take the lead on implementing an accepted suggestion.  This could be
         pretty much anything.  Examples might be sending an email, updating the source code of this website,
@@ -45,5 +87,57 @@
     </p>
     <p>
         Click the <i>save</i> button when you're done.
+    </p>
+    <a name="pickUp" /><a class="float-right" href="#top">back to top</a>
+    <h3>Pick up an accepted suggestion</h3>
+    <p>
+        Click the @Html.ActionLink("accepted", "Accepted", "Ticket") button to see a list of suggestions which have been accepted.
+        When you find one that you'd like to take responsibility for, click suggestion and then the <i>Pick up</i> button.  You
+        may then proceed to implement the suggestion.
+    </p>
+    <a name="complete" /><a class="float-right" href="#top">back to top</a>
+    <h3>Complete an <i>in progress</i> suggestion</h3>
+    <p>
+        Click the @Html.ActionLink("accepted", "Accepted", "Ticket") button, and then the <i>In Progress</i> button to see a list
+        of suggestions which are being implemented.
+        When you find one that you have completed, click the suggestion and then the <i>Complete</i> button.
+    </p>
+    <p>
+        You can also find suggestions that you are working on in @Html.ActionLink("my queue", "MyQueue", "Ticket").
+    </p>
+    <a name="ask" /><a class="float-right" href="#top">back to top</a>
+    <h2>Ask a question</h2>
+    <p>
+        To be completed...
+    </p>
+    <a name="rankQuestion" /><a class="float-right" href="#top">back to top</a>
+    <h3>Rank a question</h3>
+    <p>
+        To be completed...
+    </p>
+    <a name="answer" /><a class="float-right" href="#top">back to top</a>
+    <h3>Answer a question</h3>
+    <p>
+        To be completed...
+    </p>
+    <a name="createTest" /><a class="float-right" href="#top">back to top</a>
+    <h2>Create a test</h2>
+    <p>
+        To be completed...
+    </p>
+    <a name="voteTest" /><a class="float-right" href="#top">back to top</a>
+    <h3>Vote for a test</h3>
+    <p>
+        To be completed...
+    </p>
+    <a name="answerTest" /><a class="float-right" href="#top">back to top</a>
+    <h2>Answer a test</h2>
+    <p>
+        To be completed...
+    </p>
+    <a name="markTest" /><a class="float-right" href="#top">back to top</a>
+    <h2>Mark a test</h2>
+    <p>
+        To be completed...
     </p>
 </article>
