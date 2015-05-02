@@ -848,7 +848,7 @@ namespace Transparent.Business.Tests.Services
         }
 
         [TestCase(5, 7, 2)]
-        public void MarkTest_with_all_markers_and_majority_of_markers_passed_increases_markers_points(int markersRequiredPerTest, int pointsToGain, int numberOfFails)
+        public void MarkTest_with_all_markers_and_majority_of_markers_passed_increases_learners_points(int markersRequiredPerTest, int pointsToGain, int numberOfFails)
         {
             //Arrange
             TestConfiguration.PointsForPassingATest = pointsToGain;
@@ -874,7 +874,7 @@ namespace Transparent.Business.Tests.Services
         }
 
         [TestCase(5, 3)]
-        public void MarkTest_with_all_markers_and_majority_of_markers_failed_doesnt_change_markers_points(int markersRequiredPerTest, int numberOfFails)
+        public void MarkTest_with_all_markers_and_majority_of_markers_failed_doesnt_change_learners_points(int markersRequiredPerTest, int numberOfFails)
         {
             //Arrange
             ArrangeMarkTest(markersRequiredPerTest, markersRequiredPerTest - 1, numberOfFails);
@@ -891,7 +891,7 @@ namespace Transparent.Business.Tests.Services
         }
 
         [TestCase(6, 3)]
-        public void MarkTest_with_all_markers_and_50_50_split_resets_markers_points(int markersRequiredPerTest, int numberOfFails)
+        public void MarkTest_with_all_markers_and_50_50_split_resets_learners_points(int markersRequiredPerTest, int numberOfFails)
         {
             //Arrange
             ArrangeMarkTest(markersRequiredPerTest, markersRequiredPerTest - 1, numberOfFails);

@@ -14,6 +14,11 @@
 </hgroup>
 
 <nav class="sideMenu">
+    <a href="#points">Points</a><br />
+    <ul>
+        <li><a href="#competent">Competent level</a></li>
+        <li><a href="#expert">Expert level</a></li>
+    </ul>
     <a href="#suggest">Create a suggestion</a><br />
     <ul>
         <li><a href="#rankSuggestion">Rank a suggestion</a></li>
@@ -37,36 +42,145 @@
     </ul>
     <a href="#answerTest">Answer a test</a><br />
     <a href="#markTest">Mark a test</a><br />
+    <a href="#tags">Tags</a><br />
 </nav>
 
 <article>
     <p>
         @Constants.ApplicationName is a group decision making system which currently consists of the features below.
     </p>
+    <a name="points" /><a class="float-right" href="#top">back to top</a>
+    <h2>Points</h2>
+    <p>
+        Each user has points for each tag.  Points are used to encourage users to use the system often and well, and to
+        distinguish between levels of competency.  These levels change dynamically, depending on the number of users on
+        the system and the number of points that they have.  When the system starts out, everyone will be considered
+        to be experts on all tags.  As more people accumulate points the number of points required to be considered
+        competent or an expert will go up.
+    </p>
+    <p>
+        Points are acquired by using the system and especially by <a href="#answerTest">passing</a> and <a href="#markTest">marking</a> tests.
+    </p>
+    <p>
+        A user can see their points by clicking on their name at the top of the screen.
+    </p>
+    <a name="competent" /><a class="float-right" href="#top">back to top</a>
+    <h3>Competent Level</h3>
+    <p>
+        If a user has a certain number of points in a tag, they are considered to be competent.  The number of points
+        required per tag is calculated as the minimum of the following:
+        <ul>
+            <li>The score of the user @configuration.MinPercentCompetents% from the top.</li>
+            <li>The score of the user at @configuration.MinCompetents position from the top.</li>
+            <li>@configuration.CompetentPercentOfHighestScore% of the highest score for that tag.</li>
+        </ul>
+    </p>
+    <a name="expert" /><a class="float-right" href="#top">back to top</a>
+    <h3>Expert Level</h3>
+    <p>
+        If a user has a certain number of points in a tag, they are considered to be an expert.  The number of points
+        required per tag is calculated as the minimum of the following:
+        <ul>
+            <li>The score of the user @configuration.MinPercentExperts% from the top.</li>
+            <li>The score of the user at @configuration.MinExperts position from the top.</li>
+            <li>@configuration.ExpertPercentOfHighestScore% of the highest score for that tag.</li>
+        </ul>
+    </p>
     <a name="suggest" /><a class="float-right" href="#top">back to top</a>
     <h2>Create a suggestion</h2>
     <p>
-        To be completed...
+        All users can create a suggestion by clicking on the @Html.ActionLink("Create", "Create", "Ticket") button and 
+        ensuring that <i>Suggestion</i> is selected.
+    </p>
+    <p>
+        A suggestion can be anything that will help towards achieving the main goal or subgoal, either
+        directly or indirectly.  Consider the following criteria for a good suggestion before creating one:
+        <ul>
+            <li>
+                The suggestion should either not have been previously created, or, if it has,
+                there should be a good reason for creating it again, such as different circumstances, or because
+                it worked well last time and should be tried again.
+            </li>
+            <li>
+                A suggestion should be as efficient as possible.  Try to use numbers
+                where you can, to consider the effectiveness of your suggestion.  In order to think out of the box, 
+                try to think of a suggestion that could be 10 times as effective or 10 times quicker to implement.  If you can,
+                try and think of a suggestion that's 10 times better than the better suggestion.  
+            </li>
+            <li>
+                A suggestion should be accurate.  Try to give enough detail so that the volunteers who implement it
+                know exactly what to do.
+            </li>
+        </ul>
+        Choose all tags from the drop down lists that relate to the suggestion.  A tag defines knowledge that a
+        person needs to have in order to decide whether or not it is a good suggestion.  Choose the
+        @Constants.ApplicationName tag for any improvements to this system.
+    </p>
+    <p>
+        Click the <i>Create</i> button at the bottom when you're happy with the suggestion.  It will then go into the <a href="#verifySuggestion">verification</a> state.
     </p>
     <a name="rankSuggestion" /><a class="float-right" href="#top">back to top</a>
     <h3>Rank a suggestion</h3>
     <p>
-        To be completed...
+        The rank indicates how important a suggestion is to users.
+        Click the up or down arrows on the left of a suggestion to indicate how important the suggestion is to you.
+        The highest ranked suggestions will go to the top of some lists and therefore usually get implemented first. 
     </p>
     <a name="verifySuggestion" /><a class="float-right" href="#top">back to top</a>
     <h3>Verify a suggestion</h3>
     <p>
-        To be completed...
+        If a suggestion is in the verification state, it means that competent users need to check that the tags are appropriate
+        for the ticket.  Competent users can add, remove or verify a tag.
+        If you are competent in a tag, click the tick to verify it, the x to remove it, or select a new tag if you think it
+        should be there.
+        A user cannot verify their own tag.
+        Once all tags have been verified, the system waits for @configuration.DelayAfterValidatingTags before moving it to the
+        discussion state, where experts can write arguments.
     </p>
     <a name="argue" /><a class="float-right" href="#top">back to top</a>
     <h3>Write an argument</h3>
     <p>
-        To be completed...
+        If you are an expert in a tag on a suggestion, you can write an argument giving evidence as to why a suggestion
+        should be accepted or rejected.  Consider the following criteria for a good argument before writing one:
+        <ul>
+            <li>
+                It should be objective and unbiased.
+            </li>
+            <li>
+                It should refer to reliable sources where they are used.
+            </li>
+            <li>
+                It should not contain any <a href="https://yourlogicalfallacyis.com/">logical fallacies</a>.
+            </li>
+            <li>
+                It should be based on evidence where possible.
+            </li>
+            <li>
+                It should be respectful.
+            </li>
+            <li>
+                It should show <a href="https://www.youtube.com/watch?v=T69TOuqaqXI">open mindedness</a>.
+            </li>
+            <li>
+                It should not already be written.
+            </li>
+        </ul>
+        A suggestion will go into the voting state once sufficient time (@configuration.DelayAfterDiscussion) has passed
+        since the last argument was written.  This allows time for updating arguments based on other arguments.
     </p>
     <a name="voteSuggestion" /><a class="float-right" href="#top">back to top</a>
     <h3>Vote for a suggestion</h3>
     <p>
-        To be completed...
+        If your points are at the competent level for a tag on a suggestion in the <i>Voting</i> state, you can vote for or against
+        that suggestion by clicking on the suggestion and then clicking either the <i>For</i> or <i>Against</i> button.
+        It is important to be open minded and read the arguments, being careful to spot any <a href="https://yourlogicalfallacyis.com/">logical fallacies</a>
+        in the arguments, before deciding how to vote.
+    </p>
+    <p>
+        Once @configuration.DelayForVoting has passed since the suggestion moved to the voting state, it is either
+        accepted or rejected.  A suggestion is accepted if at least @configuration.PercentOfVotesRequiredToAccept% of the
+        votes are positive.  The reason it is higher than fifty percent is because change should only occur if the
+        value of the change outweighs the effort to make the change.  An accepted suggestion can be picked up by a volunteer.
     </p>
     <a name="volunteer" /><a class="float-right" href="#top">back to top</a>
     <h2>Volunteer</h2>
@@ -108,36 +222,169 @@
     <a name="ask" /><a class="float-right" href="#top">back to top</a>
     <h2>Ask a question</h2>
     <p>
-        To be completed...
+        All users can ask a question by clicking on the @Html.ActionLink("Create", "Create", "Ticket") button and 
+        ensuring that <i>Question</i> is selected.
+    </p>
+    <p>
+        Asking questions is not the primary focus of this website, but it is included to allow people to ask questions to help
+        them use the site or create more appropriate suggestions.  It can, however, be used for any question, relating to anything,
+        and may be useful for attracting users.  The system is designed to attract well informed answers, and I hope that, as
+        the system matures, it will have much better answers than sites like Quora and Yahoo Answers.
+    </p>
+    <p>
+        Choose all tags from the drop down lists that relate to the question.  A tag defines knowledge that a
+        person needs to have in order answer the question.  Choose the
+        @Constants.ApplicationName tag for any questions about this system.
+    </p>
+    <p>
+        Click the <i>Create</i> button at the bottom when you're happy with the question.
+        It will then go into the <a href="#answer">discussion</a> state.
     </p>
     <a name="rankQuestion" /><a class="float-right" href="#top">back to top</a>
     <h3>Rank a question</h3>
     <p>
-        To be completed...
+        The rank indicates how important a question is to users.
+        Click the up or down arrows on the left of a question to indicate how important the question is to you.
+        The highest ranked questions will go to the top of some lists and therefore usually get answered first. 
     </p>
     <a name="answer" /><a class="float-right" href="#top">back to top</a>
     <h3>Answer a question</h3>
     <p>
-        To be completed...
+        If you are an expert in a tag on a question, you can write an answer to a question.  Consider the
+        following criteria for a good answer before writing one:
+        <ul>
+            <li>
+                It should be objective and unbiased.
+            </li>
+            <li>
+                It should refer to reliable sources where they are used.
+            </li>
+            <li>
+                It should not contain any <a href="https://yourlogicalfallacyis.com/">logical fallacies</a>.
+            </li>
+            <li>
+                It should be based on evidence where possible.
+            </li>
+            <li>
+                It should be respectful.
+            </li>
+            <li>
+                It should show <a href="https://www.youtube.com/watch?v=T69TOuqaqXI">open mindedness</a>.
+            </li>
+            <li>
+                It should not already be written.
+            </li>
+        </ul>
+        A question will go into the <i>Completed</i> state once sufficient time (@configuration.DelayAfterDiscussion) has passed
+        since the last answer was written.  This allows time for updating answers based on other answers.
+    </p>
+    <p>
+        Answered questions can be viewed by clicking the @Html.ActionLink("Answered", "Answered", "Ticket") button.
     </p>
     <a name="createTest" /><a class="float-right" href="#top">back to top</a>
     <h2>Create a test</h2>
     <p>
-        To be completed...
+        All users can create a test by clicking on the @Html.ActionLink("Create", "Create", "Ticket") button and 
+        ensuring that <i>Test</i> is selected.
+    </p>
+    <p>
+        A test is a single question relating to a single tag, which a user can answer to earn points for that tag.
+        Consider the following criteria for a good test before creating one:
+        <ul>
+            <li>
+                The test should not have been previously created.
+            </li>
+            <li>
+                Ideally, the answer should not be easy to find by typing the question into Google.
+                However, it's better to have tests
+                that are easy to find the answers to, than not having any tests at all.
+                To do this, one can describe a scenario
+                and ask the user what is wrong with it, or to explain what the scenario is an example of.
+            </li>
+        </ul>
+        Choose the tag from the drop down list that relates to the test.  A tag defines knowledge that a
+        person needs to have in order to answer the test.
+    </p>
+    <p>
+        Click the <i>Create</i> button at the bottom when you're happy with the test.  It will then go into the 
+        <a href="#voteTest">voting</a> state.
     </p>
     <a name="voteTest" /><a class="float-right" href="#top">back to top</a>
     <h3>Vote for a test</h3>
     <p>
-        To be completed...
+        If your points are at the competent level for a tag on a test in the <i>Voting</i> state, you can vote for or against
+        that test by clicking on the test and then clicking either the <i>For</i> or <i>Against</i> button.
+        Consider the following criteria for a good test before voting:
+        <ul>
+            <li>
+                The test should not have been previously created.
+            </li>
+            <li>
+                Ideally, the answer should not be easy to find on Google.  However, it's better to have tests
+                that are easy to find the answers to, than not having any tests at all.
+            </li>
+        </ul>        
+    </p>
+    <p>
+        Once @configuration.DelayForVoting has passed since the test moved to the voting state, it is either
+        accepted or rejected.  A test is accepted if at least @configuration.PercentOfVotesRequiredToAccept% of the
+        votes are positive.  An accepted test can be answered by a user.
     </p>
     <a name="answerTest" /><a class="float-right" href="#top">back to top</a>
     <h2>Answer a test</h2>
     <p>
-        To be completed...
+        Tests can be found by clicking the @Html.ActionLink("Learn", "Details", "Tag") button and choosing the appropriate tag.
+        A user needs to be competent in all of a tag's parents before being able to answer questions for it.
+        If any appropriate tests are available, the <i>Take a test</i> button will be displayed, allowing you take a test.
+    </p>
+    <p>
+        In order to encourage users to first learn about the topic before answering tests, @configuration.PointsToDeductWhenStartingTest
+        may be deducted when starting a test (if the user has sufficient points) and then given back to the user when at least of 
+        @configuration.MarkersRequiredPerTest markers have agreed that the answer is good.
+        If the majority of markers agree that the answer is good, then the user gets an additional @configuration.PointsForPassingATest
+        points.
+    </p>
+    <p>
+        Fill in an answer which shows that you understand the subject and click the <i>Submit</i> button.  The test will then be available
+        for competent users to mark.
     </p>
     <a name="markTest" /><a class="float-right" href="#top">back to top</a>
     <h2>Mark a test</h2>
     <p>
-        To be completed...
+        Marking a test is an easy way for users who are already at the competent level in a tag to earn more points for a tag.  
+        @configuration.MarkersRequiredPerTest markers will mark a test,
+        and if the majority of them agree with your decision to pass or fail the test, then you will earn @configuration.PointsMarkersGainForAgreeingATestResult 
+        points for the test's tag.
+        If not, then instead you will lose @configuration.PointsMarkersLoseForDisagreeingATestResult points.
+    </p>
+    <p>
+        To mark a test, click on the @Html.ActionLink("Mark Tests", "MarkTests", "Ticket") button.  If any tests are ready to be
+        marked, they will be shown there.  Click a test, and then click the <i>Pass</i> button if you think the
+        user understands the subject and knows the answer, otherwise the <i>Fail</i> button.
+    </p>
+    <a name="tags" /><a class="float-right" href="#top">back to top</a>
+    <h2>Tags</h2>
+    <p>
+        A tag defines an area of knowledge.  All the available tags can be viewed by clicking the @Html.ActionLink("Learn", "Details", "Tag") button.
+    </p>
+    <p>
+        Tags are arranged in a hierarchy, with the <i>@Constants.CriticalThinkingTagName</i> tag as the root.
+        All other tags are children of @Constants.CriticalThinkingTagName, and some tags can have children of their own.
+        It is also possible for a tag to have multiple parents.
+    </p>
+    <p>
+        What this means is that, in order to learn a child tag, one should learn a parent tag first.  This rule is only
+        enforced when the system grows large enough that there is a range of competencies in a parent tag.
+    </p>
+    <p>
+        The reason that the <i>@Constants.CriticalThinkingTagName</i> tag is at the root is an important one, and
+        something that may not be apparent to all users, so here's why:  
+    </p>
+    <p>
+        I think of critical thinking as a bag full of the best of hundreds of years of thinking principles.
+        These principles are vital to understand in order to write good arguments, be less biased and make
+        fewer mistakes.  It comprises important topics like logical fallacies, differentiating between good and bad statistics, 
+        cognitive dissonance, open mindedness and the scientific method.  If I could change one thing about education,
+        it would probably be for critical thinking to be a compulsory subject for everyone.
     </p>
 </article>
