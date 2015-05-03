@@ -19,7 +19,7 @@ namespace Transparent.Data.Models
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
         [Required]
-        [Display(Name = "Name")]
+        [Display(Name = "Username")]
         [StringLength(100)]
         [Index(IsUnique = true)]
         public string UserName { get; set; }
@@ -51,7 +51,7 @@ namespace Transparent.Data.Models
     public class RegisterExternalLoginModel
     {
         [Required]
-        [Display(Name = "User name")]
+        [Display(Name = "Username")]
         public string UserName { get; set; }
 
         public string ExternalLoginData { get; set; }
@@ -109,7 +109,7 @@ namespace Transparent.Data.Models
     public class RegisterModel
     {
         [Required]
-        [Display(Name = "Name")]
+        [Display(Name = "Username")]
         [StringLength(100)]
         public string UserName { get; set; }
 
