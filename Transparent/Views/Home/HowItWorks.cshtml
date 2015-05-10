@@ -34,6 +34,7 @@
     <a href="#ask">Ask a question</a><br />
     <ul>
         <li><a href="#rankQuestion">Rank a question</a></li>
+        <li><a href="#verifyQuestion">Verify a question</a></li>
         <li><a href="#answer">Answer a question</a></li>
     </ul>
     <a href="#createTest">Create a test</a><br />
@@ -247,9 +248,21 @@
         Click the up or down arrows on the left of a question to indicate how important the question is to you.
         The highest ranked questions will go to the top of some lists and therefore usually get answered first. 
     </p>
+    <a name="verifyQuestion" /><a class="float-right" href="#top">back to top</a>
+    <h3>Verify a question</h3>
+    <p>
+        If a question is in the verification state, it means that competent users need to check that the tags are appropriate
+        for the ticket.  Competent users can add, remove or verify a tag.
+        If you are competent in a tag, click the tick to verify it, the x to remove it, or select a new tag if you think it
+        should be there.
+        A user cannot verify their own tag.
+        Once all tags have been verified, the system waits for @configuration.DelayAfterValidatingTags before moving it to the
+        <i>Discussion</i> state, where experts can write answers.
+    </p>
     <a name="answer" /><a class="float-right" href="#top">back to top</a>
     <h3>Answer a question</h3>
     <p>
+        Questions in the <i>Discussion</i> state can be answered.
         If you are an expert in a tag on a question, you can write an answer to a question.  Consider the
         following criteria for a good answer before writing one:
         <ul>
