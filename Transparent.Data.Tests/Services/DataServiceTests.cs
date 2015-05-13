@@ -23,6 +23,44 @@ namespace Transparent.Data.Tests.Services
             target = new DataService(MockTags.Object);
         }
 
+        #region AddPoints
+
+        
+        [Test]
+        public void AddPoints_with_existing_test_and_PointReason_TookTest_updates_existing_test_points()
+        {
+            //Arrange
+            const int additionalPoints = 10;
+            var existingUserPoint = TestData.UsersContext.UserPoints.Single(point => point.Tag == TestData.CriticalThinkingTag
+                && point.TestTaken == TestData.CriticalThinkingTestThatStephenTook);
+            var expectedPoints = existingUserPoint.Quantity + additionalPoints;
+
+            //Act
+            target.AddPoints(UsersContext, TestData.Stephen.UserId, TestData.CriticalThinkingTag.Id, additionalPoints,
+                PointReason.TookTest, TestData.CriticalThinkingTestThatStephenTook.Id);
+
+            //Assert
+            Assert.AreEqual(expectedPoints, existingUserPoint.Quantity);
+        }
+
+        [Test]
+        public void AddPoints_with_existing_test_and_PointReason_MarkedTest_updates_new_test_points()
+        {
+            //Arrange
+            int numberOfUserPointRecords = UsersContext.UserPoints.Count();
+            const int expectedPoints = 10;
+
+            //Act
+            target.AddPoints(UsersContext, TestData.Stephen.UserId, TestData.CriticalThinkingTag.Id, expectedPoints,
+                PointReason.MarkedTest, TestData.CriticalThinkingTestThatStephenTook.Id);
+
+            //Assert
+            Assert.AreEqual(numberOfUserPointRecords + 1, UsersContext.UserPoints.Count());
+            Assert.AreEqual(expectedPoints, UsersContext.UserPoints.Last().Quantity);
+        }
+
+        #endregion AddPoints
+
         #region SetNextState
 
         [TestCase(TicketState.InProgress)]

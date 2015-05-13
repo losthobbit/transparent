@@ -278,7 +278,7 @@ namespace Transparent.Business.Services
             var untakenTests = from test in db.Tests
                                where test.State == TicketState.Completed && test.TicketTags.Any(tag => tag.FkTagId == tagId)
                                from userPoint in db.UserPoints
-                                    .Where(point => point.TestTaken == test && point.FkUserId == userId)
+                                    .Where(point => point.TestTaken == test && point.FkUserId == userId && point.Reason == PointReason.TookTest)
                                     .DefaultIfEmpty()
                                where userPoint == null
                                select test;
@@ -309,7 +309,10 @@ namespace Transparent.Business.Services
             if (userService.GetIncompetentParentsTags(userId, test.TagId).Any())
                 throw new NotSupportedException("User is not competent in parent tag.");
 
-            var userPoint = db.UserPoints.SingleOrDefault(point => point.FkTestId == test.Id && point.FkUserId == userId);
+            var userPoint = db.UserPoints.SingleOrDefault(point => 
+                point.FkTestId == test.Id && 
+                point.FkUserId == userId &&
+                point.Reason == PointReason.TookTest);
             if (userPoint == null)
             {
                 var user = db.UserProfiles.Single(userProfile => userProfile.UserId == userId);
@@ -347,7 +350,10 @@ namespace Transparent.Business.Services
         /// <exception cref="NotSupportedException">Test not started or already completed.</exception>
         public void AnswerTest(int testId, string answer, int userId)
         {
-            var userPoint = db.UserPoints.SingleOrDefault(point => point.FkTestId == testId && point.FkUserId == userId);
+            var userPoint = db.UserPoints.SingleOrDefault(point => 
+                point.FkTestId == testId && 
+                point.FkUserId == userId &&
+                point.Reason == PointReason.TookTest);
             if (userPoint == null)
                 throw new NotSupportedException("The test has not started.  It cannot be answered.");
             if (userPoint.Answer != null)

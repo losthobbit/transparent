@@ -435,7 +435,10 @@ namespace Transparent.Business.Tests.Services
             var tag = TestData.CriticalThinkingTag;
             var userId = TestData.Stephen.UserId;
             var stephensPoints = TestData.UsersContext.UserPoints.Where(userPoints => userPoints.User == TestData.Stephen);
-            var testsStephenTook = stephensPoints.Select(point => point.TestTaken).Where(test => test != null).ToList();
+            var testsStephenTook = stephensPoints
+                .Where(point => point.Reason == PointReason.TookTest)
+                .Select(point => point.TestTaken)
+                .Where(test => test != null).ToList();
             Assert.IsTrue(testsStephenTook.Any());
 
             // Act
@@ -444,6 +447,27 @@ namespace Transparent.Business.Tests.Services
             // Assert
             Assert.IsTrue(actualTests.Any());
             Assert.IsTrue(actualTests.All(test => !testsStephenTook.Contains(test)));
+        }
+
+        [Test]
+        public void GetUntakenTests_returns_tests_that_were_marked_by_the_user()
+        {
+            // Arrange
+            ArrangeGetUntakenTests();
+            var tag = TestData.CriticalThinkingTag;
+            var userId = TestData.Stephen.UserId;
+            var stephensPoints = TestData.UsersContext.UserPoints.Where(userPoints => userPoints.User == TestData.Stephen);
+            var testsStephenMarked = stephensPoints
+                .Where(point => point.Reason == PointReason.MarkedTest)
+                .Select(point => point.TestTaken)
+                .Where(test => test != null).ToList();
+            Assert.IsTrue(testsStephenMarked.Any());
+
+            // Act
+            var actualTests = target.GetUntakenTests(tag.Id, userId);
+
+            // Assert
+            Assert.IsTrue(actualTests.Intersect(testsStephenMarked).Any());
         }
 
         [Test]

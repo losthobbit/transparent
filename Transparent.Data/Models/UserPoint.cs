@@ -55,6 +55,11 @@ namespace Transparent.Data.Models
 
         [ForeignKey("TestTaken")]
         public int? FkTestId { get; set; }
+
+        /// <summary>
+        /// This could be a test that was taken or a test that was marked.  See Reason to
+        /// determine which one.
+        /// </summary>
         public Test TestTaken { get; set; }
 
         public string Answer { get; set; }

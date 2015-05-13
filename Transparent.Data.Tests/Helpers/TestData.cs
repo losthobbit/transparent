@@ -218,7 +218,8 @@ namespace Transparent.Data.Tests.Helpers
                 Id = 5, Answer = "42", Quantity = 1, FkTagId = CriticalThinkingTag.Id,
                 FkTestId = CriticalThinkingTestThatJoeTookThatStephenMarked.Id, FkUserId = Joe.UserId,
                 Tag = CriticalThinkingTag, TestTaken = CriticalThinkingTestThatJoeTookThatStephenMarked,
-                User = Joe
+                User = Joe,
+                Reason = PointReason.TookTest
             };
         }
 
@@ -335,28 +336,32 @@ namespace Transparent.Data.Tests.Helpers
                         Id = 1, Answer = "I have no idea.", Quantity = -2, FkTagId = testData.CriticalThinkingTag.Id,
                         FkTestId = testData.CriticalThinkingTestThatJoeTook.Id, FkUserId = testData.Joe.UserId,
                         Tag = testData.CriticalThinkingTag, TestTaken = testData.CriticalThinkingTestThatJoeTook,
-                        User = testData.Joe
+                        User = testData.Joe,
+                        Reason = PointReason.TookTest
                     },
                     new UserPoint
                     {
                         Id = 2, Answer = "Air.", Quantity = 1, FkTagId = testData.ScubaDivingTag.Id,
                         FkTestId = testData.ScubaDivingTestThatJoeTook.Id, FkUserId = testData.Joe.UserId,
                         Tag = testData.ScubaDivingTag, TestTaken = testData.ScubaDivingTestThatJoeTook,
-                        User = testData.Joe
+                        User = testData.Joe,
+                        Reason = PointReason.TookTest
                     },
                     new UserPoint
                     {
                         Id = 3, Answer = "Yes.", Quantity = 1, FkTagId = testData.CriticalThinkingTag.Id,
                         FkTestId = testData.CriticalThinkingTestThatStephenTook.Id, FkUserId = testData.Stephen.UserId,
                         Tag = testData.CriticalThinkingTag, TestTaken = testData.CriticalThinkingTestThatStephenTook,
-                        User = testData.Stephen
+                        User = testData.Stephen,
+                        Reason = PointReason.TookTest
                     },
                     new UserPoint
                     {
                         Id = 4, Answer = "That thing.", Quantity = -1, FkTagId = testData.CriticalThinkingTag.Id,
                         FkTestId = testData.CriticalThinkingTestThatJoeTookThatHasBeenMarkedCompletely.Id, FkUserId = testData.Joe.UserId,
                         Tag = testData.CriticalThinkingTag, TestTaken = testData.CriticalThinkingTestThatJoeTookThatHasBeenMarkedCompletely,
-                        User = testData.Joe, MarkingComplete = true
+                        User = testData.Joe, MarkingComplete = true,
+                        Reason = PointReason.TookTest
                     },
                     testData.PointForCriticalThinkingTestThatJoeTookThatStephenMarked,
                     new UserPoint
@@ -364,14 +369,24 @@ namespace Transparent.Data.Tests.Helpers
                         Id = 6, Answer = null, Quantity = -2, FkTagId = testData.CriticalThinkingTag.Id,
                         FkTestId = testData.CriticalThinkingTestThatJoeStarted.Id, FkUserId = testData.Joe.UserId,
                         Tag = testData.CriticalThinkingTag, TestTaken = testData.CriticalThinkingTestThatJoeStarted,
-                        User = testData.Joe
+                        User = testData.Joe,
+                        Reason = PointReason.TookTest
                     },
                     new UserPoint
                     {
                         Id = 7, Answer = "Something.", Quantity = 1, FkTagId = testData.ScubaDivingTag.Id,
                         FkTestId = testData.BungeeJumpingTestThatJoeTook.Id, FkUserId = testData.Joe.UserId,
                         Tag = testData.BungeeJumpingTag, TestTaken = testData.BungeeJumpingTestThatJoeTook,
-                        User = testData.Joe
+                        User = testData.Joe,
+                        Reason = PointReason.TookTest
+                    },
+                    new UserPoint
+                    {
+                        Id = 8, Quantity = 2, FkTagId = testData.CriticalThinkingTag.Id,
+                        FkTestId = testData.CriticalThinkingTestThatJoeTookThatStephenMarked.Id, FkUserId = testData.Stephen.UserId,
+                        Tag = testData.CriticalThinkingTag, TestTaken = testData.CriticalThinkingTestThatJoeTookThatStephenMarked,
+                        User = testData.Stephen,
+                        Reason = PointReason.MarkedTest
                     }
                 },
                 TestMarkings =
