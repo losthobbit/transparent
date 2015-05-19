@@ -90,7 +90,22 @@ namespace Transparent.Data.Models
         }
 
         [NotMapped]
-        protected abstract IEnumerable<TicketState> States { get; }
+        protected IEnumerable<TicketState> States { get { return StateHints.Keys; } }
+
+        [NotMapped]
+        public override Hint StateHint
+        {
+            get 
+            {
+                return StateHints[State];
+            }
+        }
+
+        /// <summary>
+        /// Key is state, value is hint associated with that state
+        /// </summary>
+        [NotMapped]
+        protected abstract Dictionary<TicketState, Hint> StateHints { get; }
 
         [NotMapped]
         protected TicketState StartingState { get { return States.First(); } }

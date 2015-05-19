@@ -35,6 +35,7 @@ namespace Transparent.Business.Maps
                 TicketType = source.TicketType,
                 TicketTags = source.TicketTags,
                 State = source.State,
+                StateHint = source.StateHint,
                 TextForArgument = source.TextForArgument,
                 Arguments = Map(source.Arguments).ToList()
             };

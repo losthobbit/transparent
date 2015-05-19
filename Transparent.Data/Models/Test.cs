@@ -10,11 +10,30 @@ namespace Transparent.Data.Models
 {
     public class Test : Ticket
     {
-        private static TicketState[] states = new[]
+        private static Dictionary<TicketState, Hint> stateHints = new Dictionary<TicketState, Hint>
         {
-            TicketState.Voting, 
-            TicketState.Rejected, 
-            TicketState.Completed
+            {
+                TicketState.Voting, new Hint
+                (
+                    "Competent level users can vote for or against creating this test.  After a time period has elapsed, this test will either " +
+                    "move to the Rejected or Completed state, based on whether the ratio of for to against votes reached the target ratio.  " +
+                    "If it goes into the Completed state, users will be able to take the test.",
+                    "/Home/HowItWorks#voteTest"
+                )
+            }, 
+            {
+                TicketState.Rejected, new Hint
+                (
+                    "The ratio of for to against votes did not reach the target ratio.",
+                    "/Home/HowItWorks#voteTest"
+                )
+            },             
+            { 
+                TicketState.Completed, new Hint
+                (
+                    showState: false
+                )
+            }
         };
 
         public override TicketType TicketType
@@ -55,9 +74,9 @@ namespace Transparent.Data.Models
             }
         }
 
-        protected override IEnumerable<TicketState> States
+        protected override Dictionary<TicketState, Hint> StateHints
         {
-            get { return states; }
+            get { return stateHints; }
         }
 
         public override void TrySetState(TicketState state)

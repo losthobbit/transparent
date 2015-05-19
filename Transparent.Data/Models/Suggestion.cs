@@ -8,17 +8,61 @@ namespace Transparent.Data.Models
 {
     public class Suggestion : Ticket
     {
-        private static TicketState[] states = new[]
+        private static Dictionary<TicketState, Hint> stateHints = new Dictionary<TicketState, Hint>
         {
-            TicketState.Verification,
-            TicketState.Discussion,
-            TicketState.Voting,
-            TicketState.Rejected,
-            TicketState.Accepted,
-            TicketState.InProgress,
-            TicketState.Completed
+            { 
+                TicketState.Verification, new Hint
+                ( 
+                    "Once competent level users have verified the tags and a time period has passed, this suggestion will move to the Discussion " +
+                    "state and expert level users will be able to discuss it.",
+                    "/Home/HowItWorks#verifySuggestion" 
+                ) 
+            },
+            { 
+                TicketState.Discussion, new Hint
+                (
+                    "Expert level users can discuss this suggestion.  After a time period has passed without any further arguments, this suggestion " +
+                    "will move to the Voting state.",
+                    "/Home/HowItWorks#argue"
+                )
+            },
+            {
+                TicketState.Voting, new Hint
+                (
+                    "Competent level users can vote for or against this suggestion.  After a time period has elapsed, this suggestion will either " +
+                    "move to the Rejected or Accepted state, based on whether the ratio of for to against votes reached the target ratio.",
+                    "/Home/HowItWorks#voteSuggestion"
+                )
+            }, 
+            {
+                TicketState.Rejected, new Hint
+                (
+                    "The ratio of for to against votes did not reach the target ratio.",
+                    "/Home/HowItWorks#voteSuggestion"
+                )
+            },             
+            {
+                TicketState.Accepted, new Hint
+                (
+                    "The ratio of for to against votes did reached the target ratio.  When it is picked up by a volunteer, it will move to the " +
+                    "in progress state.",
+                    "/Home/HowItWorks#voteSuggestion"
+                )
+            },             
+            {
+                TicketState.InProgress, new Hint
+                (
+                    "A volunteer has taken responsibility for implementing this suggestion.  When they have completed, they will move it to the " +
+                    "Completed state."
+                )
+            }, 
+            { 
+                TicketState.Completed, new Hint
+                (
+                    "A volunteer has implemented this suggestion."
+                )
+            }
         };
-
 
 
         public override TicketType TicketType
@@ -33,9 +77,9 @@ namespace Transparent.Data.Models
             }
         }
 
-        protected override IEnumerable<TicketState> States
+        protected override Dictionary<TicketState, Hint> StateHints
         {
-            get { return states; }
+            get { return stateHints; }
         }
     }
 }

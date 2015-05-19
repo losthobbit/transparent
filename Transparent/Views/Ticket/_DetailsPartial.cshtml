@@ -15,7 +15,25 @@
     <div class="display-field">
         <h3>@Html.DisplayFor(model => model.TicketType): @Html.DisplayFor(model => model.Heading)</h3>
     </div>
-    <div>
+    <div class="metadata">
+    @if (Model.StateHint != null)
+    {
+        if(Model.StateHint.ShowState)
+        {
+            <b>@Model.State.DisplayName()&nbsp;state.&nbsp;&nbsp;</b>
+        }
+        if(Model.StateHint.Details != null) 
+        {
+            @Model.StateHint.Details
+            <text>&nbsp;&nbsp;</text>
+        }
+        if (Model.StateHint.Url != null)
+        {
+            <a href="@Model.StateHint.Url" target="_blank">more...</a>
+        }
+    }
+    </div>
+    <div class="gap-above">
         @if (ViewBag.ShowRank == null || ViewBag.ShowRank)
         {
         <div id="rankPartial" class="float-left display-field" style="text-align:center">    

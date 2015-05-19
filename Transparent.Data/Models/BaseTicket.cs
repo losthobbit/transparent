@@ -46,6 +46,9 @@ namespace Transparent.Data.Models
         [Index]
         public TicketState State { get; set; }
 
+        [NotMapped]
+        public abstract Hint StateHint { get; }
+
         /// <summary>
         /// Date that information about the ticket was updated.
         /// </summary>

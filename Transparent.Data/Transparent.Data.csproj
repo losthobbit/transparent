@@ -205,6 +205,7 @@
     <Compile Include="Models\Test.cs" />
     <Compile Include="Models\TestMarking.cs" />
     <Compile Include="Models\TicketState.cs" />
+    <Compile Include="Models\Hint.cs" />
     <Compile Include="Models\TicketType.cs" />
     <Compile Include="Models\TicketUserVote.cs" />
     <Compile Include="Models\UserPoint.cs" />

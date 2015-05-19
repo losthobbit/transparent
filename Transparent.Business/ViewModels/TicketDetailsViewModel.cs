@@ -43,6 +43,7 @@ namespace Transparent.Business.ViewModels
         public ICollection<TicketTag> TicketTags { get; set; }
 
         public TicketState State { get; set; }
+        public Hint StateHint { get; set; }
 
         public string AssignedName { get; set; }
     }
