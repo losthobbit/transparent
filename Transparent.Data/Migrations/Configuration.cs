@@ -191,8 +191,8 @@ namespace Transparent.Data.Migrations
                                 "<ul>" +
                                 "<li><a href=\"https://www.youtube.com/watch?v=6OLPL5p0fMg\">Critical thinking</a></li>" +
                                 "<li><a href=\"https://www.youtube.com/watch?v=T69TOuqaqXI\">Open mindedness</a></li>" +
-                                "<li><a href=\"https://www.youtube.com/watch?v=KayBys8gaJY\">Burdon of proof</a></li>" +
-                                "<li><a href=\"https://www.youtube.com/watch?v=8T_jwq9ph8k\">Why do people believe wierd things</a></li>" +
+                                "<li><a href=\"https://www.youtube.com/watch?v=KayBys8gaJY\">Burden of proof</a></li>" +
+                                "<li><a href=\"https://www.youtube.com/watch?v=8T_jwq9ph8k\">Why do people believe weird things</a></li>" +
                                 "<li><a href=\"https://www.youtube.com/watch?v=hJmRbSX8Rqo\">Baloney detection kit</a></li>" +
                                 "</ul>" +
                                 "<p>Also, take a look at <a href=\"https://yourlogicalfallacyis.com/\">this website</a>, which lists 24 logical fallacies with examples.</p>",
