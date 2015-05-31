@@ -91,6 +91,7 @@
     <Compile Include="Interfaces\ITickets.cs" />
     <Compile Include="Interfaces\ITicketsFactory.cs" />
     <Compile Include="Interfaces\IUser.cs" />
+    <Compile Include="Interfaces\IUserFactory.cs" />
     <Compile Include="Interfaces\IVolunteers.cs" />
     <Compile Include="Maps\DataToViewMappingExtensions.cs" />
     <Compile Include="Maps\Dependencies.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="ViewModels\ArgumentViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ICreateTicketViewModel.cs" />
     <Compile Include="ViewModels\StatsViewModel.cs" />
+    <Compile Include="ViewModels\TagViewModel.cs" />
     <Compile Include="ViewModels\TestAndAnswerViewModel.cs" />
     <Compile Include="ViewModels\TicketDetailsViewModel.cs" />
     <Compile Include="ViewModels\TicketTagsViewModel.cs" />

@@ -234,7 +234,7 @@ namespace Transparent.Controllers
         {
             tickets.AnswerTest(testAndAnswerViewModel.Test.Id, testAndAnswerViewModel.Answer, WebSecurity.CurrentUserId);
 
-            return RedirectToAction("Details", "Tag", new { Id = testAndAnswerViewModel.Test.TagId });
+            return RedirectToAction("TestTaken", "Tag", new { Id = testAndAnswerViewModel.Test.TagId });
         }
 
         [HttpGet]

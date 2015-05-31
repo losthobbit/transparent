@@ -118,15 +118,35 @@ namespace Transparent.Business.Maps
             return source.Select(Map);
         }
 
-        public static UserTagViewModel Map(this Data.Models.UserTag source)
+        public static UserTagViewModel Map(this Data.Models.Tag tag)
         {
             return new UserTagViewModel
             {
-                Id = source.Tag.Id,
-                Name = source.Tag.Name,
-                TotalPoints = source.TotalPoints,
-                KnowledgeLevel = Dependencies.Tags.GetKnowledgeLevel(source)
+                Id = tag.Id,
+                Name = tag.Name,
+                Description = tag.Description,
+                CompetentPoints = tag.CompetentPoints,
+                ExpertPoints = tag.ExpertPoints
             };
+        }
+
+        public static UserTagViewModel Map(this Data.Models.Tag tag, int userId)
+        {
+            var userTagViewModel = tag.Map();
+            var userTag = Dependencies.UserFactory.Create().GetUserTag(userId, tag.Id);
+            return userTagViewModel.Map(userTag);
+        }
+
+        public static UserTagViewModel Map(this Data.Models.UserTag source)
+        {
+            return source.Tag.Map().Map(source);
+        }
+
+        public static UserTagViewModel Map(this UserTagViewModel destination, Data.Models.UserTag source)
+        {
+            destination.TotalPoints = source == null ? 0 : source.TotalPoints;
+            destination.KnowledgeLevel = Dependencies.Tags.GetKnowledgeLevel(source);
+            return destination;
         }
 
         public static TicketDetailsViewModel Map(this TicketDetailsViewModel destination, Data.Models.Stance source)

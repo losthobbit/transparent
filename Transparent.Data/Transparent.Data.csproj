@@ -190,6 +190,7 @@
     <Compile Include="Models\BaseTicket.cs" />
     <Compile Include="Models\Extensions.cs" />
     <Compile Include="Models\Interfaces\IBaseTicket.cs" />
+    <Compile Include="Models\Interfaces\ITag.cs" />
     <Compile Include="Models\Interfaces\ITestAnswer.cs" />
     <Compile Include="Models\Interfaces\IUserPoint.cs" />
     <Compile Include="Models\Interfaces\IUserProfile.cs" />

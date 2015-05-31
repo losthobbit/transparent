@@ -6,9 +6,12 @@ using System.Web.Mvc;
 using Transparent.Data;
 using Transparent.Data.Interfaces;
 using Transparent.Data.Models;
+using Transparent.Business.Maps;
+using WebMatrix.WebData;
 
 namespace Transparent.Controllers
 {
+    [Authorize]
     public class TagController : Controller
     {
         private ITags tags;
@@ -28,7 +31,12 @@ namespace Transparent.Controllers
             {
                 return HttpNotFound();
             }
-            return View(tag);
+            return View(tag.Map(WebSecurity.CurrentUserId));
+        }
+
+        public ActionResult TestTaken(int id)
+        {
+            return View(tags.Find(id).Map(WebSecurity.CurrentUserId));
         }
     }
 }

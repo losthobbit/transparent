@@ -1,0 +1,59 @@
+﻿@model Transparent.Business.ViewModels.UserTagViewModel
+@using Castle.Windsor
+@using Transparent.Data.Interfaces
+@using Transparent.Business.Interfaces
+@using Transparent.Data.Models
+
+@{
+    var container = ((IContainerAccessor)Context.ApplicationInstance).Container;
+    var tickets = container.Resolve<ITickets>();
+    var user = container.Resolve<IUser>();
+    var configuration = container.Resolve<IConfiguration>();
+    var pointsForTag = user.GetPointsForTag(WebSecurity.CurrentUserId, Model.Id);
+    var inCompetentParentsTags = user.GetIncompetentParentsTags(WebSecurity.CurrentUserId, Model.Id);   
+}
+<script>
+    $(function () {
+        $("#takeTestButton").click(function(e) {
+            e.preventDefault();
+            var deductPoints = @Json.Encode(pointsForTag >= configuration.PointsRequiredBeforeDeductingPoints);
+            if(deductPoints)
+                TakeTestPrompt();
+            else
+                TakeTest();
+        });
+    });
+
+    function TakeTest() {
+        window.location.href = "@Url.Action("TakeTest", "Ticket", new { tagId = Model.Id })";
+    }
+
+    function TakeTestPrompt() {
+        if(confirm("Taking a test deducts @configuration.PointsToDeductWhenStartingTest points, which you get back when your answer is marked as good.\nAre you ready?"))
+            TakeTest();
+    }
+</script>
+<div class="display-field">
+    <h3>@Html.DisplayFor(model => model.Name)</h3>
+    <p>You have @pointsForTag points for @Html.ActionLink(Model.Name, "Details", new { Id = Model.Id}).<br />
+        <span class="metadata">@Model.CompetentPoints points is considered <span class="@KnowledgeLevel.Competent">competent level</span>, and @Model.ExpertPoints points is considered <span class="@KnowledgeLevel.Expert">expert level</span>.</span>
+    </p>
+    @{
+    if(inCompetentParentsTags.Any())
+    {
+        <i>Take more tests to show your competence in @String.Join(", ", inCompetentParentsTags.Select(tag => tag.Name)) before taking tests in @Model.Name</i>
+    }
+    else
+    {
+        var numberOfTests = tickets.CountUntakenTestsRemaining(Model.Id, WebSecurity.CurrentUserId);
+        if (numberOfTests > 0)
+        {
+            <a id="takeTestButton" class="button">Take a test</a><text>(</text>@Html.Raw(numberOfTests)<text> remaining)</text>
+        }
+        else
+        {
+            <i>All tests have been taken.</i>
+        }
+    }
+    }
+</div>

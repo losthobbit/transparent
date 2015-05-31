@@ -31,7 +31,8 @@ namespace Transparent.Business.Windsor
                 Component.For<IGeneral>().ImplementedBy<General>().LifeStyle.Singleton,
                 Component.For<IProgressTickets>().ImplementedBy<ProgressTickets>().LifeStyle.Singleton,
                 Component.For<Dependencies>().LifeStyle.Singleton,
-                Component.For<ITicketsFactory>().AsFactory()
+                Component.For<ITicketsFactory>().AsFactory(),
+                Component.For<IUserFactory>().AsFactory()
             );
             DataToViewMappingExtensions.Dependencies = container.Resolve<Dependencies>();
         }

@@ -30,6 +30,7 @@ namespace Transparent.Data.Interfaces
         IEnumerable<IndentedTag> IndentedTags { get; }
         IHtmlString SerializedIndentedTags { get; }
 
+        IHtmlString SerializeTag(int id);
         IHtmlString SerializeTag(Tag tag);
         IHtmlString SerializeAndIndentTags(int[] tagIds);
 

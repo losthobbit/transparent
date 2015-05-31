@@ -122,6 +122,11 @@ namespace Transparent.Data.Caches
             public ICollection<SerializableSubTag> Children { get; private set; }
         }
 
+        public IHtmlString SerializeTag(int id)
+        {
+            return SerializeTag(Find(id));
+        }
+
         public IHtmlString SerializeTag(Tag tag)
         {
             IHtmlString json;
@@ -152,6 +157,8 @@ namespace Transparent.Data.Caches
 
         public KnowledgeLevel GetKnowledgeLevel(UserTag userTag)
         {
+            if (userTag == null)
+                return KnowledgeLevel.Beginner;
             var tag = Find(userTag.FkTagId);
             return userTag.TotalPoints.ToKnowledgeLevel(tag.CompetentPoints, tag.ExpertPoints);
         }

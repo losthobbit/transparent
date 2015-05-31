@@ -10,6 +10,7 @@ namespace Transparent.Business.Interfaces
     public interface IUser
     {
         int GetPointsForTag(int userId, int tagId);
+        UserTag GetUserTag(int userId, int tagId);
         List<Tag> GetIncompetentParentsTags(int userId, int tagId);
     }
 }

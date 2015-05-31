@@ -32,8 +32,13 @@ namespace Transparent.Business.Services
 
         public int GetPointsForTag(int userId, int tagId)
         {
-            var userTag = db.UserTags.SingleOrDefault(tag => tag.FkUserId == userId && tag.FkTagId == tagId);
+            var userTag = GetUserTag(userId, tagId);
             return userTag == null ? 0 : userTag.TotalPoints;
+        }
+
+        public UserTag GetUserTag(int userId, int tagId)
+        {
+            return db.UserTags.SingleOrDefault(tag => tag.FkUserId == userId && tag.FkTagId == tagId);
         }
 
         public List<Tag> GetIncompetentParentsTags(int userId, int tagId)

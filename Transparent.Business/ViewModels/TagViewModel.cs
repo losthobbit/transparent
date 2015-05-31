@@ -1,25 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Transparent.Data.Models.Interfaces;
 
-namespace Transparent.Data.Models
+namespace Transparent.Business.ViewModels
 {
-    /// <summary>
-    /// Also known as a tag or category
-    /// </summary>
     [MetadataType(typeof(ITag))]
-    public class Tag: ITag
+    public class TagViewModel: ITag
     {
-        [Key]
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        /// <summary>
+        /// Tag ID
+        /// </summary>
         public int Id { get; set; }
 
-        [Index(IsUnique = true)]
+        /// <summary>
+        /// Tag name
+        /// </summary>
         public string Name { get; set; }
 
         public string Description { get; set; }
@@ -33,8 +32,5 @@ namespace Transparent.Data.Models
         /// The number of points a user must have in a tag to be considered an expert.
         /// </summary>
         public int ExpertPoints { get; set; }
-
-        public ICollection<Tag> Parents { get; set; }
-        public ICollection<Tag> Children { get; set; }
     }
 }

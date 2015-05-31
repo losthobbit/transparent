@@ -1,0 +1,31 @@
+﻿@model Transparent.Business.ViewModels.UserTagViewModel
+@using Castle.Windsor
+@using Transparent.Data.Interfaces
+@{
+    var container = ((IContainerAccessor)Context.ApplicationInstance).Container;
+    var configuration = container.Resolve<IConfiguration>();
+}
+<h2>Test Taken</h2>
+
+<p>
+    Thank you for taking the test.
+    @if(configuration.MarkersRequiredPerTest == 1)
+    {
+        <text>A competent user can now mark the test.  If they decide that your answer shows that you understand the
+        subject being tested, you will receive points.</text>
+    }
+    else
+    if(configuration.MarkersRequiredPerTest == 2)
+    {
+        @configuration.MarkersRequiredPerTest<text> competent users can now mark the test.  If they agree that your
+        answer shows that you understand the subject being tested, you will receive points.
+        </text>
+    }
+    else
+    {
+        @configuration.MarkersRequiredPerTest<text> competent users can now mark the test.  If the majority agree that your
+        answer shows that you understand the subject being tested, you will receive points.
+        </text>
+    }
+</p>
+@Html.Partial("_TakeTestPartial", Model)   
