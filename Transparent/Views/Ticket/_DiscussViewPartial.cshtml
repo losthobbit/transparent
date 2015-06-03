@@ -5,7 +5,7 @@
     <fieldset class="long">
         <legend>@Model.Caption</legend>
         <div class="editor-field gap-above">
-            @Html.DisplayFor(model => model.Body)
+            @Html.DisplayFor(model => model.Body, "TextToHtml")
         </div>
     </fieldset>
     </td>
