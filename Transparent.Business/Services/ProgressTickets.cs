@@ -17,15 +17,15 @@ namespace Transparent.Business.Services
     /// </remarks>
     public class ProgressTickets : IProgressTickets
     {
-        private readonly Func<IUsersContext> getUsersContext;
+        private readonly IUsersContextFactory usersContextFactory;
         private readonly IConfiguration configuration;
         private readonly IDataService dataService;
         private readonly ITags tags;
 
-        public ProgressTickets(Func<IUsersContext> getUsersContext, IDataService dataService, IConfiguration configuration,
+        public ProgressTickets(IUsersContextFactory usersContextFactory, IDataService dataService, IConfiguration configuration,
             ITags tags)
         {
-            this.getUsersContext = getUsersContext;
+            this.usersContextFactory = usersContextFactory;
             this.dataService = dataService;
             this.configuration = configuration;
             this.tags = tags;
@@ -37,7 +37,7 @@ namespace Transparent.Business.Services
         /// </summary>
         public void ProgressTicketsWithVerifiedTags()
         {
-            using (var db = getUsersContext())
+            using (var db = usersContextFactory.Create())
             {
                 var lastModified = DateTime.UtcNow - configuration.DelayAfterValidatingTags;
 
@@ -66,7 +66,7 @@ namespace Transparent.Business.Services
         /// </summary>
         public void ProgressTicketsWithArguments()
         {
-            using (var db = getUsersContext())
+            using (var db = usersContextFactory.Create())
             {
                 var lastModified = DateTime.UtcNow - configuration.DelayAfterDiscussion;
                 var minNumberOfArguments = configuration.MinimumNumberOfArgumentsToAdvanceState;
@@ -95,7 +95,7 @@ namespace Transparent.Business.Services
         /// </summary>
         public void ProgressTicketsWithVotes()
         {
-            using (var db = getUsersContext())
+            using (var db = usersContextFactory.Create())
             {
                 var lastModified = DateTime.UtcNow - configuration.DelayForVoting;
 

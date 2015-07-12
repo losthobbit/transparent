@@ -18,15 +18,15 @@ namespace Transparent.Business.Events
     public class UpdateTagsEvent: Event
     {
         private readonly ITags tags;
-        private readonly Func<IUsersContext> getUsersContext;
+        private readonly IUsersContextFactory usersContextFactory;
         private readonly IConfiguration configuration;
 
-        public UpdateTagsEvent(Common.Interfaces.IConfiguration commonConfiguration, ITags tags, Func<IUsersContext> getUsersContext,
+        public UpdateTagsEvent(Common.Interfaces.IConfiguration commonConfiguration, ITags tags, IUsersContextFactory usersContextFactory,
             IConfiguration configuration)
             : base(TimeSpan.Parse(commonConfiguration.GetValue("UpdateTagsEventInterval")))
         {
             this.tags = tags;
-            this.getUsersContext = getUsersContext;
+            this.usersContextFactory = usersContextFactory;
             this.configuration = configuration;
         }
 
@@ -49,7 +49,7 @@ namespace Transparent.Business.Events
         /// </remarks>
         public void UpdateCompetencyLevels()
         {
-            using (var db = getUsersContext())
+            using (var db = usersContextFactory.Create())
             {
                 var userCount = db.UserProfiles.Count();
                 var competentPosition = Math.Max(

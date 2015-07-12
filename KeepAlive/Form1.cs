@@ -49,16 +49,16 @@ namespace KeepAlive
             //{
                 using (var client = new WebClient())
                 {
-                    WebException webException = null;
+                    Exception exception = null;
                     string response;
                     stopWatch.Restart();
                     try
                     {
                         response = client.DownloadString(UrlTextBox.Text);
                     }
-                    catch (WebException ex)
+                    catch (Exception ex)
                     {
-                        webException = ex;
+                        exception = ex;
                         response = ex.Message;
                     }
                     stopWatch.Stop();

@@ -10,6 +10,7 @@ using Transparent.Data.Caches;
 using Transparent.Data.Interfaces;
 using Transparent.Data.Services;
 using Common.Windsor;
+using Castle.Facilities.TypedFactory;
 
 namespace Transparent.Data.Windsor
 {
@@ -21,11 +22,9 @@ namespace Transparent.Data.Windsor
                 Component.For<IUsersContext>().ImplementedBy<UsersContext>().LifeStyle.Transient,
                 Component.For<ITags>().ImplementedBy<Tags>().LifeStyle.Singleton,
                 Component.For<IConfiguration>().ImplementedBy<Configuration>().LifeStyle.Singleton,
-                Component.For<IDataService>().ImplementedBy<DataService>().LifeStyle.Singleton
+                Component.For<IDataService>().ImplementedBy<DataService>().LifeStyle.Singleton,
+                Component.For<IUsersContextFactory>().AsFactory()
             );
-
-            Func<IUsersContext> usersContextFactory = () => container.Resolve<IUsersContext>();
-            container.Register(Component.For<Func<IUsersContext>>().Instance(usersContextFactory));
         }
     }
 }

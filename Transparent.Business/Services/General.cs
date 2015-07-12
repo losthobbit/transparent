@@ -18,16 +18,16 @@ namespace Transparent.Business.Services
     /// </remarks>
     public class General: IGeneral
     {
-        private readonly Func<IUsersContext> getUsersContext;
+        private readonly IUsersContextFactory usersContextFactory;
 
-        public General(Func<IUsersContext> getUsersContext)
+        public General(IUsersContextFactory usersContextFactory)
         {
-            this.getUsersContext = getUsersContext;
+            this.usersContextFactory = usersContextFactory;
         }
 
         public StatsViewModel GetStats()
         {
-            using (var dbContext = getUsersContext())
+            using (var dbContext = usersContextFactory.Create())
             {
                 return new StatsViewModel
                 {

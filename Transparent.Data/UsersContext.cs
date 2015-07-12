@@ -55,7 +55,7 @@ namespace Transparent.Data
             .Map<Suggestion>(s => s.Requires("TicketType").HasValue((int)TicketType.Suggestion))
             .Map<Test>(t => t.Requires("TicketType").HasValue((int)TicketType.Test))
             .ToTable("dbo.Tickets");
-
+            
             modelBuilder.Entity<Tag>().
               HasMany(c => c.Parents).
               WithMany(p => p.Children).

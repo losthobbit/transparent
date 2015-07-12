@@ -68,7 +68,7 @@
             this.ResponseTimeTextBox.Name = "ResponseTimeTextBox";
             this.ResponseTimeTextBox.Size = new System.Drawing.Size(50, 20);
             this.ResponseTimeTextBox.TabIndex = 3;
-            this.ResponseTimeTextBox.Text = "5000";
+            this.ResponseTimeTextBox.Text = "1000";
             this.ResponseTimeTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // label1
@@ -88,7 +88,7 @@
             this.UrlTextBox.Name = "UrlTextBox";
             this.UrlTextBox.Size = new System.Drawing.Size(606, 20);
             this.UrlTextBox.TabIndex = 1;
-            this.UrlTextBox.Text = "http://democraticintelligence.org/home/ping";
+            this.UrlTextBox.Text = "https://democraticintelligence.org/home/ping";
             // 
             // panel2
             // 
@@ -113,7 +113,7 @@
             // PingTimer
             // 
             this.PingTimer.Enabled = true;
-            this.PingTimer.Interval = 299000;
+            this.PingTimer.Interval = 250000;
             this.PingTimer.Tick += new System.EventHandler(this.PingTimer_Tick);
             // 
             // Form1

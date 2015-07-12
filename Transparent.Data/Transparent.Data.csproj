@@ -109,6 +109,7 @@
     <Compile Include="Extensions\TicketExtensions.cs" />
     <Compile Include="InitDatabase.cs" />
     <Compile Include="Interfaces\IDataService.cs" />
+    <Compile Include="Interfaces\IUsersContextFactory.cs" />
     <Compile Include="Migrations\201503182143357_AddArgumentTable.cs" />
     <Compile Include="Migrations\201503182143357_AddArgumentTable.Designer.cs">
       <DependentUpon>201503182143357_AddArgumentTable.cs</DependentUpon>
