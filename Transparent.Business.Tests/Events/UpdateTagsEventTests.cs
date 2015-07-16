@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Transparent.Business.Events;
+using Transparent.Data.Interfaces;
 using Transparent.Data.Models;
 using Transparent.Data.Tests.Helpers;
 
@@ -17,6 +18,7 @@ namespace Transparent.Business.Tests.Events
         private UpdateTagsEvent target;
 
         private Mock<Common.Interfaces.IConfiguration> mockConfiguration;
+        private Mock<IUsersContextFactory> mockUsersContextFactory;
 
         [SetUp]
         public override void SetUp()
@@ -26,7 +28,10 @@ namespace Transparent.Business.Tests.Events
             mockConfiguration = new Mock<Common.Interfaces.IConfiguration>();
             mockConfiguration.Setup(x => x.GetValue("UpdateTagsEventInterval")).Returns("00:01:00");
 
-            target = new UpdateTagsEvent(mockConfiguration.Object, MockTags.Object, () => UsersContext, TestConfiguration);
+            mockUsersContextFactory = new Mock<IUsersContextFactory>();
+            mockUsersContextFactory.Setup(x => x.Create()).Returns(UsersContext);
+
+            target = new UpdateTagsEvent(mockConfiguration.Object, MockTags.Object, mockUsersContextFactory.Object, TestConfiguration);
         }
 
         #region UpdateCompetencyLevels

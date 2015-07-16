@@ -20,6 +20,7 @@ namespace Transparent.Business.Tests.Services
         ProgressTickets target;
 
         private Mock<IDataService> mockDataService;
+        private Mock<IUsersContextFactory> mockUsersContextFactory;
 
         [SetUp]
         public override void SetUp()
@@ -28,7 +29,10 @@ namespace Transparent.Business.Tests.Services
 
             mockDataService = new Mock<IDataService>();
 
-            target = new ProgressTickets(() => UsersContext, mockDataService.Object, TestConfiguration, MockTags.Object);
+            mockUsersContextFactory = new Mock<IUsersContextFactory>();
+            mockUsersContextFactory.Setup(x => x.Create()).Returns(UsersContext);
+
+            target = new ProgressTickets(mockUsersContextFactory.Object, mockDataService.Object, TestConfiguration, MockTags.Object);
         }
 
         #region ProgressTicketsWithVerifiedTags
