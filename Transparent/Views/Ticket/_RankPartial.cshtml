@@ -1,6 +1,6 @@
 ﻿@model Transparent.Business.ViewModels.TicketDetailsViewModel
 @using Transparent.Data.Models
-@using (Ajax.BeginForm("_SetRank", new AjaxOptions { UpdateTargetId = "rankPartial" }))
+@using (Ajax.BeginForm("_SetRank", new AjaxOptions { OnSuccess = "ajaxAuthorizationAttempted", UpdateTargetId = "rankPartial" }))
 {
     @Html.AntiForgeryToken();
     @Html.HiddenFor(m => m.Id);

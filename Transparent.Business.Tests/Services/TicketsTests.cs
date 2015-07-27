@@ -1006,7 +1006,7 @@ namespace Transparent.Business.Tests.Services
         }
 
         [Test]
-        public void GetTicketTagInfoList_verified_returns_UserCanValidate_is_false()
+        public void GetTicketTagInfoList_verified_returns_UserMayVerify_is_false()
         {
             //Arrange
             ArrangeGetTicketInfoTagList();
@@ -1020,7 +1020,7 @@ namespace Transparent.Business.Tests.Services
         }
 
         [Test]
-        public void GetTicketTagInfoList_created_by_user_returns_UserCanValidate_is_false()
+        public void GetTicketTagInfoList_created_by_user_returns_UserMayVerify_is_false()
         {
             //Arrange
             ArrangeGetTicketInfoTagList();
@@ -1090,6 +1090,47 @@ namespace Transparent.Business.Tests.Services
 
             //Assert
             Assert.IsTrue(actual.UserIsExpert);
+        }
+
+        [Test]
+        public void GetTicketTagInfoList_userId_is_minus_1_returns_UserMayDelete_is_false()
+        {
+            //Arrange
+            ArrangeGetTicketInfoTagList();
+
+            //Act
+            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, -1).Single();
+
+            //Assert
+            Assert.IsFalse(actual.UserMayDelete);
+        }
+
+        [Test]
+        public void GetTicketTagInfoList_userId_is_minus_1_returns_UserMayVerify_is_false()
+        {
+            //Arrange
+            ArrangeGetTicketInfoTagList();
+            getTicketTagInfoList_Ticket.TicketTags.Single().CreatedBy = null;
+            getTicketTagInfoList_Ticket.TicketTags.Single().FkCreatedById = null;
+
+            //Act
+            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, -1).Single();
+
+            //Assert
+            Assert.IsFalse(actual.UserMayVerify);
+        }
+
+        [Test]
+        public void GetTicketTagInfoList_userId_is_minus_1_returns_UserIsExpert_is_false()
+        {
+            //Arrange
+            ArrangeGetTicketInfoTagList();
+
+            //Act
+            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, -1).Single();
+
+            //Assert
+            Assert.IsFalse(actual.UserIsExpert);
         }
 
         #endregion GetTicketTagInfoList
@@ -1707,6 +1748,16 @@ namespace Transparent.Business.Tests.Services
             //Assert
             Assert.IsFalse(tags.Contains(TestData.ScubaDivingTag));
         }
+        
+        [Test]
+        public void GetCompetentTags_with_userId_equal_to_minus_1_returns_no_tags()
+        {
+            //Act
+            var competentTags = target.GetCompetentTags(-1);
+
+            //Assert
+            Assert.IsFalse(competentTags.Any());
+        }
 
         #endregion GetCompetentTags
 
@@ -1778,6 +1829,16 @@ namespace Transparent.Business.Tests.Services
 
             //Assert
             Assert.IsFalse(tags.Contains(TestData.ScubaDivingTag));
+        }
+
+        [Test]
+        public void GetExpertTags_with_userId_equal_to_minus_1_returns_no_tags()
+        {
+            //Act
+            var expertTags = target.GetExpertTags(-1);
+
+            //Assert
+            Assert.IsFalse(expertTags.Any());
         }
 
         #endregion GetExpertTags

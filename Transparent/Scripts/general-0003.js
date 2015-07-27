@@ -25,6 +25,12 @@ function repeat(stringToRepeat, count)
     return result;
 }
 
+var ajaxAuthorizationAttempted = function (result) {
+    if (result.unauthorized) {
+        window.location.href = "/Account/Login?returnUrl=" + location.pathname;
+    }
+}
+
 function ignoreScreenSize() {
     setCookie("ignoreScreenSize", 1, 30);
     window.location.href = window.location.href;

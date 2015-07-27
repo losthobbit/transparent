@@ -384,29 +384,41 @@ namespace Transparent.Business.Services
         /// <summary>
         /// Gets tags that the user is competent in.
         /// </summary>
+        /// <param name="userId">ID of the user.  -1 is not logged in.</param>
         /// <remarks>
         /// For performance purposes, GetExpertTags and GetCompetentTags could be combined into one DB call.
         /// </remarks>
         public IQueryable<Tag> GetCompetentTags(int userId)
         {
-            return db.UserTags
-            .Where(userTag => userTag.FkUserId == userId && userTag.TotalPoints >= userTag.Tag.CompetentPoints)
-            .Select(userTag => userTag.Tag)
-            .Union(db.Tags.Where(tag => tag.CompetentPoints == 0));
+            var usersCompetentTags =
+                db.UserTags
+                .Where(userTag => userTag.FkUserId == userId && userTag.TotalPoints >= userTag.Tag.CompetentPoints)
+                .Select(userTag => userTag.Tag);
+
+            if(userId > -1)
+                return usersCompetentTags.Union(db.Tags.Where(tag => tag.CompetentPoints == 0));
+
+            return usersCompetentTags;
         }
 
         /// <summary>
         /// Gets tags that the user is an expert in.
         /// </summary>
+        /// <param name="userId">ID of the user.  -1 is not logged in.</param>
         /// <remarks>
         /// For performance purposes, GetExpertTags and GetCompetentTags could be combined into one DB call.
         /// </remarks>
         public IQueryable<Tag> GetExpertTags(int userId)
         {
-            return db.UserTags
-            .Where(userTag => userTag.FkUserId == userId && userTag.TotalPoints >= userTag.Tag.ExpertPoints)
-            .Select(userTag => userTag.Tag)
-            .Union(db.Tags.Where(tag => tag.ExpertPoints == 0));
+            var usersExpertTags =
+                db.UserTags
+                .Where(userTag => userTag.FkUserId == userId && userTag.TotalPoints >= userTag.Tag.ExpertPoints)
+                .Select(userTag => userTag.Tag);
+
+            if(userId > -1)
+                return usersExpertTags.Union(db.Tags.Where(tag => tag.ExpertPoints == 0));
+
+            return usersExpertTags;
         }
 
         public IQueryable<TestAndAnswerViewModel> GetTestsToBeMarked(int markersUserId, IQueryable<UserPoint> userPoints)
@@ -503,6 +515,10 @@ namespace Transparent.Business.Services
             }
         }
 
+        /// <summary>
+        /// Returns information about the ticket tag.
+        /// </summary>
+        /// <param name="userId">ID of the user.  -1 means not logged in, therefore no privileges.</param>
         private TicketTagViewModel GetTicketTagInfo(TicketState ticketState,
             TicketTag ticketTag, int ticketUserId, int userId,
             IEnumerable<Tag> competentTags, IEnumerable<Tag> expertTags = null)
@@ -528,6 +544,10 @@ namespace Transparent.Business.Services
             return GetTicketTagInfoList(db.Tickets.Single(ticket => ticket.Id == ticketId), userId);
         }
 
+        /// <summary>
+        /// Returns information about the ticket tags for the ticket.
+        /// </summary>
+        /// <param name="userId">ID of the user.  -1 means not logged in, therefore no privileges.</param>
         public IEnumerable<TicketTagViewModel> GetTicketTagInfoList(Ticket ticket, int userId)
         {
             var competentTags = GetCompetentTags(userId).ToList();

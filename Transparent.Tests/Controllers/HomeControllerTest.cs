@@ -11,12 +11,15 @@ using System.Web;
 using System.Web.Routing;
 using Transparent.Data.Interfaces;
 using Transparent.Business.Interfaces;
+using Ploeh.AutoFixture;
 
 namespace Transparent.Tests.Controllers
 {
     [TestClass]
     public class HomeControllerTest
     {
+        private IFixture fixture;
+
         private HomeController target;
         private Mock<HttpRequestBase> mockRequest;
         private Mock<IGeneral> mockGeneral;
@@ -24,6 +27,8 @@ namespace Transparent.Tests.Controllers
         [TestInitialize()]
         public void Initialize()
         {
+            fixture = new Fixture();
+
             mockRequest = new Mock<HttpRequestBase>();
             mockGeneral = new Mock<IGeneral>();
 
@@ -37,21 +42,10 @@ namespace Transparent.Tests.Controllers
         #region Index
 
         [TestMethod]
-        public void Index_with_unauthenticated_request_redirects_to_account_login()
-        {
-            // Act
-            var result = target.Index() as RedirectToRouteResult;
-
-            // Assert
-            Assert.AreEqual("Account", result.RouteValues["controller"]);
-            Assert.AreEqual("Login", result.RouteValues["action"]);
-        }
-
-        [TestMethod]
-        public void Index_with_authenticated_request_redirects_to_highest_ranked_tickets()
+        public void Index_redirects_to_highest_ranked_tickets()
         {
             // Arrange
-            mockRequest.SetupGet(x => x.IsAuthenticated).Returns(true);
+            mockRequest.SetupGet(x => x.IsAuthenticated).Returns(fixture.Create<bool>());
 
             // Act
             var result = target.Index() as RedirectToRouteResult;

@@ -16,7 +16,6 @@ using WebMatrix.WebData;
 
 namespace Transparent.Controllers
 {
-    [Authorize]
     public class TicketController : Controller
     {
         private IUsersContext db;
@@ -35,6 +34,7 @@ namespace Transparent.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("_Discuss")]
+        [Authorize]
         public PartialViewResult Post_Discuss(ArgumentViewModel discuss)
         {
             if (ModelState.IsValid)
@@ -54,8 +54,11 @@ namespace Transparent.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public PartialViewResult _SetRank(TicketDetailsViewModel ticket)
+        public ActionResult _SetRank(TicketDetailsViewModel ticket)
         {
+            if(!WebSecurity.IsAuthenticated)
+                return Json(new { unauthorized = true });
+
             var newRank = tickets.SetRank(ticket.Id, ticket.NewRank, WebSecurity.CurrentUserId);
             ticket.Rank = newRank;
             ticket.UserRank = ticket.NewRank;
@@ -69,6 +72,7 @@ namespace Transparent.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public PartialViewResult _SetVote(VoteViewModel vote)
         {
             var newVote = tickets.SetVote(vote.TicketId, vote.NewVote, WebSecurity.CurrentUserId);
@@ -82,6 +86,7 @@ namespace Transparent.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public PartialViewResult _SetAssign(AssignViewModel assign)
         {
             var newVote = tickets.Assign(assign, WebSecurity.CurrentUserId);
@@ -101,6 +106,7 @@ namespace Transparent.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public PartialViewResult _VerifyTag(TicketTagsViewModel ticket)
         {
             var userId = WebSecurity.CurrentUserId;
@@ -122,11 +128,13 @@ namespace Transparent.Controllers
             return View(tickets.NewestPublic(ticketsContainer));
         }
 
+        [Authorize]
         public ActionResult RaisedByMe(TicketsContainer ticketsContainer)
         {
             return View(tickets.RaisedBy(ticketsContainer, WebSecurity.CurrentUserId));
         }
 
+        [Authorize]
         public ActionResult MyQueue(TicketsContainer ticketsContainer)
         {
             return View(tickets.MyQueue(ticketsContainer, WebSecurity.CurrentUserId));
@@ -189,15 +197,13 @@ namespace Transparent.Controllers
         //
         // GET: /Ticket/Create
 
+        [Authorize]
         public ActionResult Create(TicketType ticketType = TicketType.Suggestion)
         {
             ViewBag.FkUserId = new SelectList(db.UserProfiles, "UserId", "UserName");
             return View("Create", new CreateTicketViewModel(ticketType));
         }
 
-        //
-        // POST: /Ticket/Create
-        
         private ActionResult Create<TTicket>(TTicket ticket)
             where TTicket : Ticket, new()
         {
@@ -212,24 +218,28 @@ namespace Transparent.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult CreateQuestion(CreateTicketViewModel<Question> question)
         {
             return Create(question.Ticket);
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult CreateSuggestion(CreateTicketViewModel<Suggestion> suggestion)
         {
             return Create(suggestion.Ticket);
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult CreateTest(CreateTicketViewModel<Test> test)
         {
             return Create(test.Ticket);
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult TakeTest(TestAndAnswerViewModel testAndAnswerViewModel)
         {
             tickets.AnswerTest(testAndAnswerViewModel.Test.Id, testAndAnswerViewModel.Answer, WebSecurity.CurrentUserId);
@@ -238,6 +248,7 @@ namespace Transparent.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult TakeTest(int tagId)
         {
             // find a random test that the user has not yet taken
@@ -255,11 +266,13 @@ namespace Transparent.Controllers
         /// Get a list of tests that the user can mark.
         /// </summary>
         /// <returns>A list of tests that the user can mark.</returns>
+        [Authorize]
         public ActionResult MarkTests(AnsweredTests answeredTests)
         {
             return View(tickets.GetTestsToBeMarked(answeredTests, WebSecurity.CurrentUserId));
         }
 
+        [Authorize]
         public ActionResult MarkTest(int userPointId)
         {
             var test = tickets.GetTestToBeMarked(userPointId, WebSecurity.CurrentUserId);
@@ -269,6 +282,7 @@ namespace Transparent.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult MarkTest(TestAndAnswerViewModel testAndAnswer)
         {
             tickets.MarkTest(testAndAnswer.Id, testAndAnswer.Passed.Value, WebSecurity.CurrentUserId);

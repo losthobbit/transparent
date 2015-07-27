@@ -314,7 +314,7 @@
     <Content Include="mstile-70x70.png" />
     <Content Include="Scripts\controls-0001.js" />
     <Content Include="Scripts\custom.validation-0001.js" />
-    <Content Include="Scripts\general-0002.js" />
+    <Content Include="Scripts\general-0003.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
