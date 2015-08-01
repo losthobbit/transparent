@@ -64,12 +64,17 @@ namespace Transparent.Business.Services
         /// Progresses tickets which are in the Discussion state, and were last modified
         /// the specified amount of time ago.
         /// </summary>
-        public void ProgressTicketsWithArguments()
+        /// <remarks>
+        /// Questions may require answers, based on the value of MinimumNumberOfAnswersToAdvanceState
+        /// Suggestions may require arguments, based on the value of MinimumNumberOfArgumentsToAdvanceState.
+        /// </remarks>
+        public void ProgressTicketsInDiscussionState()
         {
             using (var db = usersContextFactory.Create())
             {
                 var lastModified = DateTime.UtcNow - configuration.DelayAfterDiscussion;
                 var minNumberOfArguments = configuration.MinimumNumberOfArgumentsToAdvanceState;
+                var minNumberOfAnswers = configuration.MinimumNumberOfAnswersToAdvanceState;
 
                 var highestRankedDiscussionTickets = (from ticket in db.Tickets
                                                       where ticket.State == TicketState.Discussion
@@ -78,7 +83,10 @@ namespace Transparent.Business.Services
 
                 var discussedTickets = from ticket in highestRankedDiscussionTickets
                                        where ticket.ModifiedDate <= lastModified &&
-                                       ticket.Arguments.Count >= minNumberOfArguments
+                                       (
+                                        ticket is Suggestion && ticket.Arguments.Count >= minNumberOfArguments ||
+                                        ticket is Question && ticket.Arguments.Count >= minNumberOfAnswers
+                                       )
                                        select ticket;
 
                 foreach (var ticket in discussedTickets)

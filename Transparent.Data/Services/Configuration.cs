@@ -80,6 +80,7 @@ namespace Transparent.Data.Services
         public TimeSpan DelayAfterValidatingTags { get; set; }
 
         public int MinimumNumberOfArgumentsToAdvanceState { get; set; }
+        public int MinimumNumberOfAnswersToAdvanceState { get; set; }
 
         /// <summary>
         /// Delay after the required number of arguments have been presented before moving a ticket to the next state.
@@ -130,6 +131,7 @@ namespace Transparent.Data.Services
             MaxPositionToAdvanceState = int.Parse(configuration.GetValue("MaxPositionToAdvanceState"));
             DelayAfterValidatingTags = TimeSpan.Parse(configuration.GetValue("DelayAfterValidatingTags"));
             MinimumNumberOfArgumentsToAdvanceState = int.Parse(configuration.GetValue("MinimumNumberOfArgumentsToAdvanceState"));
+            MinimumNumberOfAnswersToAdvanceState = int.Parse(configuration.GetValue("MinimumNumberOfAnswersToAdvanceState"));
             DelayAfterDiscussion = TimeSpan.Parse(configuration.GetValue("DelayAfterDiscussion"));
             DelayForVoting = TimeSpan.Parse(configuration.GetValue("DelayForVoting"));
             PercentOfVotesRequiredToAccept = int.Parse(configuration.GetValue("PercentOfVotesRequiredToAccept"));

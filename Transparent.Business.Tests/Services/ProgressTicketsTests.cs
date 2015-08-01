@@ -37,9 +37,11 @@ namespace Transparent.Business.Tests.Services
 
         #region ProgressTicketsWithVerifiedTags
 
-        private Ticket ProgressTicketsWithVerifiedTags()
+        private Ticket ProgressTicketsWithVerifiedTags(TicketType ticketType = TicketType.Suggestion)
         {
-            var ticket = TestData.JoesCriticalThinkingSuggestion;
+            var ticket = ticketType == TicketType.Suggestion
+                ? (Ticket)TestData.JoesCriticalThinkingSuggestion
+                : (Ticket)TestData.JoesCriticalThinkingQuestion;
             ticket.State = TicketState.Verification;
             ticket.TicketTags.ForEach(tag => tag.Verified = true);
             TestConfiguration.DelayAfterValidatingTags = TimeSpan.FromSeconds(10);
@@ -159,11 +161,14 @@ namespace Transparent.Business.Tests.Services
 
         #endregion ProgressTicketsWithVerifiedTags
 
-        #region ProgressTicketsWithArguments
+        #region ProgressTicketsInDiscussionState
 
-        private Ticket ProgressTicketsWithArguments(int numberOfArguments = 1)
+        private Ticket ProgressTicketsInDiscussionState(int numberOfArguments = 1, TicketType ticketType = TicketType.Suggestion,
+            int requiredNumberOfArguments = 2, int requiredNumberOfAnswers = 1)
         {
-            var ticket = ProgressTicketsWithVerifiedTags();
+            var ticket = ProgressTicketsWithVerifiedTags(ticketType);
+            TestConfiguration.MinimumNumberOfArgumentsToAdvanceState = requiredNumberOfArguments;
+            TestConfiguration.MinimumNumberOfAnswersToAdvanceState = requiredNumberOfAnswers;
             ticket.State = TicketState.Discussion;
             TestConfiguration.DelayAfterDiscussion = TimeSpan.FromSeconds(20);
             ticket.ModifiedDate = DateTime.UtcNow.AddSeconds(-21);
@@ -179,12 +184,15 @@ namespace Transparent.Business.Tests.Services
             return ticket;
         }
 
-        [TestCase(2)]
-        [TestCase(5)]
-        public void ProgressTicketsWithArguments_with_sufficient_arguments_changes_ticket_state(int numberOfArgumentsRequired)
+        [TestCase(2, 2, 6, TicketType.Suggestion)]
+        [TestCase(5, 4, 6, TicketType.Suggestion)]
+        [TestCase(2, 6, 2, TicketType.Question)]
+        [TestCase(5, 6, 4, TicketType.Question)]
+        public void ProgressTicketsInDiscussionState_with_sufficient_arguments_changes_ticket_state(int numberOfArguments, 
+            int requiredNumberOfArguments, int requiredNumberOfAnswers, TicketType ticketType)
         {
             //Arrange
-            var ticket = ProgressTicketsWithArguments(numberOfArgumentsRequired);
+            var ticket = ProgressTicketsInDiscussionState(numberOfArguments, ticketType, requiredNumberOfArguments, requiredNumberOfAnswers);
             bool setNextStateCalled = false;
             bool setNextStateCalledAndSaved = false;
             Action updateTicket = () =>
@@ -197,7 +205,7 @@ namespace Transparent.Business.Tests.Services
                 .Callback(() => { setNextStateCalled = true; });
 
             //Act
-            target.ProgressTicketsWithArguments();
+            target.ProgressTicketsInDiscussionState();
 
             //Assert
             Assert.IsTrue(setNextStateCalledAndSaved);
@@ -205,11 +213,11 @@ namespace Transparent.Business.Tests.Services
 
         [TestCase(2)]
         [TestCase(5)]
-        public void ProgressTicketsWithArguments_with_enough_higher_ranked_tickets_in_the_same_ticket_state_doesnt_change_state(
+        public void ProgressTicketsInDiscussionState_with_enough_higher_ranked_tickets_in_the_same_ticket_state_doesnt_change_state(
             int numberOfHigherRankedTickets)
         {
             //Arrange
-            var ticket = ProgressTicketsWithArguments();
+            var ticket = ProgressTicketsInDiscussionState();
             for (var i = 0; i < numberOfHigherRankedTickets; i++)
             {
                 var higherRankedTicket = new Question
@@ -223,62 +231,65 @@ namespace Transparent.Business.Tests.Services
             TestConfiguration.MaxPositionToAdvanceState = numberOfHigherRankedTickets;
 
             //Act
-            target.ProgressTicketsWithArguments();
+            target.ProgressTicketsInDiscussionState();
 
             //Assert
             Assert.AreEqual(TicketState.Discussion, ticket.State);
         }
 
         [TestCase(TicketState.Verification)]
-        public void ProgressTicketsWithArguments_with_non_discussion_ticket_does_not_change_ticket_state(TicketState ticketState)
+        public void ProgressTicketsInDiscussionState_with_non_discussion_ticket_does_not_change_ticket_state(TicketState ticketState)
         {
             //Arrange
-            var ticket = ProgressTicketsWithArguments();
+            var ticket = ProgressTicketsInDiscussionState();
             ticket.State = ticketState;
 
             //Act
-            target.ProgressTicketsWithArguments();
+            target.ProgressTicketsInDiscussionState();
 
             //Assert
             Assert.AreEqual(ticketState, ticket.State);
         }
 
-        [TestCase(2)]
-        [TestCase(5)]
-        public void ProgressTicketsWithArguments_with_insufficient_arguments_does_not_change_ticket_state(int numberOfArgumentsRequired)
+        [TestCase(2, 3, 0, TicketType.Suggestion)]
+        [TestCase(5, 6, 0, TicketType.Suggestion)]
+        [TestCase(2, 0, 3, TicketType.Question)]
+        [TestCase(5, 0, 6, TicketType.Question)]
+        public void ProgressTicketsInDiscussionState_with_insufficient_arguments_does_not_change_ticket_state(int numberOfArguments,
+            int requiredNumberOfArguments, int requiredNumberOfAnswers, TicketType ticketType)
         {
             //Arrange
-            var ticket = ProgressTicketsWithArguments(numberOfArgumentsRequired - 1);
+            var ticket = ProgressTicketsInDiscussionState(numberOfArguments, ticketType, requiredNumberOfArguments, requiredNumberOfAnswers);
 
             //Act
-            target.ProgressTicketsWithArguments();
+            target.ProgressTicketsInDiscussionState();
 
             //Assert
-            Assert.AreEqual(TicketState.Discussion, ticket.State);
+            mockDataService.Verify(x => x.SetNextState(ticket, It.IsAny<TicketState?>()), Times.Never);
         }
 
         [Test]
-        public void ProgressTicketsWithArguments_with_recently_modified_ticket_does_not_change_ticket_state()
+        public void ProgressTicketsInDiscussionState_with_recently_modified_ticket_does_not_change_ticket_state()
         {
             //Arrange
-            var ticket = ProgressTicketsWithArguments();
+            var ticket = ProgressTicketsInDiscussionState();
             ticket.ModifiedDate = DateTime.UtcNow.AddSeconds(-18);
 
             //Act
-            target.ProgressTicketsWithArguments();
+            target.ProgressTicketsInDiscussionState();
 
             //Assert
             Assert.AreEqual(TicketState.Discussion, ticket.State);
         }
 
-        #endregion ProgressTicketsWithArguments
+        #endregion ProgressTicketsInDiscussionState
 
         #region ProgressTicketsWithVotes
 
         private Ticket ProgressTicketsWithVotes(int numberOfForVotes = 1, int numberOfAgainstVotes = 1, int secondsSinceModified = 16,
             int configuredSecondsForVoting = 15, int configuredPercentOfVotesRequiredToAccept = 60)
         {
-            var ticket = ProgressTicketsWithArguments();
+            var ticket = ProgressTicketsInDiscussionState();
             ticket.State = TicketState.Voting;
             TestConfiguration.DelayForVoting = TimeSpan.FromSeconds(configuredSecondsForVoting);
             TestConfiguration.PercentOfVotesRequiredToAccept = configuredPercentOfVotesRequiredToAccept;

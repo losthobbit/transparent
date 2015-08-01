@@ -23,7 +23,7 @@ namespace Transparent.Business.Events
 
         public override void Action()
         {
-            progressTicketsService.ProgressTicketsWithArguments();
+            progressTicketsService.ProgressTicketsInDiscussionState();
         }
     }
 }

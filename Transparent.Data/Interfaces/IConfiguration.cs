@@ -65,6 +65,7 @@ namespace Transparent.Data.Interfaces
         TimeSpan DelayAfterValidatingTags { get; set; }
 
         int MinimumNumberOfArgumentsToAdvanceState { get; set; }
+        int MinimumNumberOfAnswersToAdvanceState { get; set; }
 
         /// <summary>
         /// Delay after the required number of arguments have been presented before moving a ticket to the next state.

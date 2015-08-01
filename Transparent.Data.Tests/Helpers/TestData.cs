@@ -61,6 +61,7 @@ namespace Transparent.Data.Tests.Helpers
 
             #region Questions
 
+            public Question JoesCriticalThinkingQuestion;
             public Question StephensCriticalThinkingQuestion;
 
             #endregion Questions
@@ -92,6 +93,7 @@ namespace Transparent.Data.Tests.Helpers
 
             JoesCriticalThinkingSuggestion = new Suggestion { Id = 1, FkUserId = Joe.UserId, User = Joe, Heading = "Hello", Body = "My name is Joe" };
             JoesScubaDivingSuggestion = new Suggestion { Id = 2, FkUserId = Joe.UserId, User = Joe, Heading = "Scuba", Body = "I like to dive" };
+            JoesCriticalThinkingQuestion = new Question { Id = 3, FkUserId = Joe.UserId, User = Joe, Heading = "Hello", Body = "What is up?" };
 
             CriticalThinkingTestThatJoeTook = new Test 
             { 
@@ -249,6 +251,7 @@ namespace Transparent.Data.Tests.Helpers
                     testData.JoesScubaDivingSuggestion,
                     // Questions
                     testData.StephensCriticalThinkingQuestion,
+                    testData.JoesCriticalThinkingQuestion,
                     // Tests
                     testData.CriticalThinkingTestThatJoeTook,
                     testData.CriticalThinkingTestThatStephenTook,
@@ -313,6 +316,11 @@ namespace Transparent.Data.Tests.Helpers
                     new TicketTag
                     {
                         Ticket = testData.StephensCriticalThinkingQuestion, FkTicketId = testData.StephensCriticalThinkingQuestion.Id,
+                        Tag = testData.CriticalThinkingTag, FkTagId = testData.CriticalThinkingTag.Id
+                    },
+                    new TicketTag
+                    {
+                        Ticket = testData.JoesCriticalThinkingQuestion, FkTicketId = testData.JoesCriticalThinkingQuestion.Id,
                         Tag = testData.CriticalThinkingTag, FkTagId = testData.CriticalThinkingTag.Id
                     }
                 },
