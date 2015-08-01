@@ -37,12 +37,24 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.OutputTextBox = new System.Windows.Forms.TextBox();
             this.PingTimer = new System.Windows.Forms.Timer(this.components);
+            this.startTimePicker = new System.Windows.Forms.DateTimePicker();
+            this.stopTimePicker = new System.Windows.Forms.DateTimePicker();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.intervalTextBox = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label5);
+            this.panel1.Controls.Add(this.intervalTextBox);
+            this.panel1.Controls.Add(this.label4);
+            this.panel1.Controls.Add(this.label3);
+            this.panel1.Controls.Add(this.stopTimePicker);
+            this.panel1.Controls.Add(this.startTimePicker);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.ResponseTimeTextBox);
             this.panel1.Controls.Add(this.label1);
@@ -50,7 +62,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(656, 64);
+            this.panel1.Size = new System.Drawing.Size(704, 64);
             this.panel1.TabIndex = 2;
             // 
             // label2
@@ -86,7 +98,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.UrlTextBox.Location = new System.Drawing.Point(38, 6);
             this.UrlTextBox.Name = "UrlTextBox";
-            this.UrlTextBox.Size = new System.Drawing.Size(606, 20);
+            this.UrlTextBox.Size = new System.Drawing.Size(654, 20);
             this.UrlTextBox.TabIndex = 1;
             this.UrlTextBox.Text = "https://democraticintelligence.org/home/ping";
             // 
@@ -96,7 +108,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 64);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(656, 200);
+            this.panel2.Size = new System.Drawing.Size(704, 200);
             this.panel2.TabIndex = 3;
             // 
             // OutputTextBox
@@ -106,7 +118,7 @@
             this.OutputTextBox.Multiline = true;
             this.OutputTextBox.Name = "OutputTextBox";
             this.OutputTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.OutputTextBox.Size = new System.Drawing.Size(656, 200);
+            this.OutputTextBox.Size = new System.Drawing.Size(704, 200);
             this.OutputTextBox.TabIndex = 2;
             this.OutputTextBox.VisibleChanged += new System.EventHandler(this.OutputTextBox_VisibleChanged);
             // 
@@ -116,11 +128,67 @@
             this.PingTimer.Interval = 250000;
             this.PingTimer.Tick += new System.EventHandler(this.PingTimer_Tick);
             // 
+            // startTimePicker
+            // 
+            this.startTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.startTimePicker.Location = new System.Drawing.Point(282, 32);
+            this.startTimePicker.Name = "startTimePicker";
+            this.startTimePicker.ShowUpDown = true;
+            this.startTimePicker.Size = new System.Drawing.Size(72, 20);
+            this.startTimePicker.TabIndex = 5;
+            this.startTimePicker.Value = new System.DateTime(2015, 8, 1, 0, 10, 0, 0);
+            // 
+            // stopTimePicker
+            // 
+            this.stopTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.stopTimePicker.Location = new System.Drawing.Point(432, 32);
+            this.stopTimePicker.Name = "stopTimePicker";
+            this.stopTimePicker.ShowUpDown = true;
+            this.stopTimePicker.Size = new System.Drawing.Size(72, 20);
+            this.stopTimePicker.TabIndex = 6;
+            this.stopTimePicker.Value = new System.DateTime(2015, 8, 1, 23, 50, 0, 0);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(210, 35);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(66, 13);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "Start pinging";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(360, 35);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(66, 13);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "Stop pinging";
+            // 
+            // intervalTextBox
+            // 
+            this.intervalTextBox.Location = new System.Drawing.Point(580, 32);
+            this.intervalTextBox.Name = "intervalTextBox";
+            this.intervalTextBox.Size = new System.Drawing.Size(49, 20);
+            this.intervalTextBox.TabIndex = 9;
+            this.intervalTextBox.Text = "250000";
+            this.intervalTextBox.TextChanged += new System.EventHandler(this.intervalTextBox_TextChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(510, 35);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(64, 13);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "Interval (ms)";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(656, 264);
+            this.ClientSize = new System.Drawing.Size(704, 264);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Name = "Form1";
@@ -143,6 +211,12 @@
         private System.Windows.Forms.Timer PingTimer;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox ResponseTimeTextBox;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.DateTimePicker stopTimePicker;
+        private System.Windows.Forms.DateTimePicker startTimePicker;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox intervalTextBox;
     }
 }
 

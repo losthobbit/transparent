@@ -42,8 +42,22 @@ namespace KeepAlive
             }
         }
 
+        public int Interval
+        {
+            get
+            {
+                return Int32.Parse(intervalTextBox.Text);
+            }
+            set
+            {
+                intervalTextBox.Text = value.ToString();
+            }
+        }
+
         private void PingTimer_Tick(object sender, EventArgs e)
         {
+            if (DateTime.Now.TimeOfDay < startTimePicker.Value.TimeOfDay || DateTime.Now.TimeOfDay > stopTimePicker.Value.TimeOfDay)
+                return;
             //PingTimer.Enabled = false;
             //try
             //{
@@ -63,14 +77,14 @@ namespace KeepAlive
                     }
                     stopWatch.Stop();
                     Output(String.Format("Time: {0}  Ping interval: {1}   Download time: {2}   Response: {3}",
-                        DateTime.Now.TimeOfDay, PingTimer.Interval, stopWatch.Elapsed, response));
+                        DateTime.Now.TimeOfDay, Interval, stopWatch.Elapsed, response));
             //        if (webException != null || stopWatch.ElapsedMilliseconds > RequiredResponseTime)
             //        {
-            //            PingTimer.Interval = (int)((double)PingTimer.Interval * reducer);
+            //            Interval = (int)((double)Interval * reducer);
             //        }
             //        else
             //        {
-            //            PingTimer.Interval = (int)((double)PingTimer.Interval * increaser);
+            //            Interval = (int)((double)Interval * increaser);
             //        }
                 }
             //    Normalize(false, ref reducer);
@@ -111,6 +125,11 @@ namespace KeepAlive
                 OutputTextBox.SelectionStart = OutputTextBox.TextLength;
                 OutputTextBox.ScrollToCaret();
             }
+        }
+
+        private void intervalTextBox_TextChanged(object sender, EventArgs e)
+        {
+            PingTimer.Interval = Interval;
         }
     }
 }
