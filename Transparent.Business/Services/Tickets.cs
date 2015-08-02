@@ -123,29 +123,37 @@ namespace Transparent.Business.Services
             );
         }
 
-        public TicketsContainer NewestPublic(TicketsContainer filter)
+        /// <summary>
+        /// Returns tickets based on the filter's TicketType and TicketState, sorted by created date in descending order.
+        /// </summary>
+        /// <returns>Tickets based on the filter's TicketType and TicketState, sorted by created date in descending order</returns>
+        public TicketsContainer Newest(TicketsContainer filter, bool publicOnly = false)
         {
             return filter.Initialize
             (
                 filter.ApplyFilter
                 (
-                    TicketSet(filter)
-                    .GetPublic()
+                    publicOnly
+                        ? TicketSet(filter).GetPublic()
+                        : TicketSet(filter)
                 )
                 .OrderByDescending(ticket => ticket.CreatedDate)
             );
         }
 
-        public TicketsContainer HighestRanked(TicketsContainer filter)
+        public TicketsContainer HighestRanked(TicketsContainer filter, bool publicOnly = false)
         {
             return filter.Initialize
             (
                 filter.ApplyFilter
                 (
-                    TicketSet(filter)
-                    .GetPublic()
+                    publicOnly 
+                        ? TicketSet(filter).GetPublic()
+                        : TicketSet(filter)
                 )
                 .OrderByDescending(ticket => ticket.Rank)
+                .ThenByDescending(ticket => ticket.State)
+                .ThenByDescending(ticket => ticket.ModifiedDate)
             );
         }
 
@@ -163,22 +171,6 @@ namespace Transparent.Business.Services
                     from ticket in TicketSet(filter)
                     where ticket.State == TicketState.Completed
                     select ticket
-                )
-                .OrderByDescending(ticket => ticket.CreatedDate)
-            );
-        }
-
-        /// <summary>
-        /// Returns tickets based on the filter's TicketType and TicketState, sorted by created date in descending order.
-        /// </summary>
-        /// <returns>Tickets based on the filter's TicketType and TicketState, sorted by created date in descending order</returns>
-        public TicketsContainer Newest(TicketsContainer filter)
-        {
-            return filter.Initialize
-            (
-                filter.ApplyFilter
-                (
-                    TicketSet(filter)
                 )
                 .OrderByDescending(ticket => ticket.CreatedDate)
             );

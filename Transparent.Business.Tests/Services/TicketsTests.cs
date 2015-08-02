@@ -185,7 +185,22 @@ namespace Transparent.Business.Tests.Services
         [TestCase(TicketState.Verification)]
         [TestCase(TicketState.Discussion)]
         [TestCase(TicketState.Voting)]
-        public void HighestRanked_returns_tickets_in_public_state(TicketState ticketState)
+        public void HighestRanked_with_publicOnly_true_returns_tickets_in_public_state(TicketState ticketState)
+        {
+            // Arrange
+            TestData.JoesScubaDivingSuggestion.State = ticketState;
+
+            // Act
+            var ticketsContainer = target.HighestRanked(new TicketsContainer(), true);
+
+            // Assert
+            ticketsContainer.PagedList.Single(ticket => ticket == TestData.JoesScubaDivingSuggestion);
+        }
+
+        [TestCase(TicketState.Verification)]
+        [TestCase(TicketState.Accepted)]
+        [TestCase(TicketState.Completed)]
+        public void HighestRanked_returns_tickets_in_public_and_non_public_states(TicketState ticketState)
         {
             // Arrange
             TestData.JoesScubaDivingSuggestion.State = ticketState;
@@ -202,13 +217,13 @@ namespace Transparent.Business.Tests.Services
         [TestCase(TicketState.Accepted)]
         [TestCase(TicketState.InProgress)]
         [TestCase(TicketState.Completed)]
-        public void HighestRanked_does_not_return_tickets_in_non_public_state(TicketState ticketState)
+        public void HighestRanked_with_publicOnly_true_does_not_return_tickets_in_non_public_state(TicketState ticketState)
         {
             // Arrange
             TestData.JoesScubaDivingSuggestion.State = ticketState;
 
             // Act
-            var ticketsContainer = target.HighestRanked(new TicketsContainer());
+            var ticketsContainer = target.HighestRanked(new TicketsContainer(), true);
 
             // Assert
             Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == TestData.JoesScubaDivingSuggestion));
@@ -216,18 +231,33 @@ namespace Transparent.Business.Tests.Services
 
         #endregion HighestRanked
 
-        #region NewestPublic
+        #region Newest
 
         [TestCase(TicketState.Verification)]
         [TestCase(TicketState.Discussion)]
         [TestCase(TicketState.Voting)]
-        public void NewestPublic_returns_tickets_in_public_state(TicketState ticketState)
+        public void Newest_with_publicOnly_true_returns_tickets_in_public_state(TicketState ticketState)
         {
             // Arrange
             TestData.JoesScubaDivingSuggestion.State = ticketState;
 
             // Act
-            var ticketsContainer = target.NewestPublic(new TicketsContainer());
+            var ticketsContainer = target.Newest(new TicketsContainer(), true);
+
+            // Assert
+            ticketsContainer.PagedList.Single(ticket => ticket == TestData.JoesScubaDivingSuggestion);
+        }
+
+        [TestCase(TicketState.Verification)]
+        [TestCase(TicketState.Accepted)]
+        [TestCase(TicketState.Completed)]
+        public void Newest_returns_tickets_in_public_and_non_public_states(TicketState ticketState)
+        {
+            // Arrange
+            TestData.JoesScubaDivingSuggestion.State = ticketState;
+
+            // Act
+            var ticketsContainer = target.Newest(new TicketsContainer());
 
             // Assert
             ticketsContainer.PagedList.Single(ticket => ticket == TestData.JoesScubaDivingSuggestion);
@@ -238,19 +268,33 @@ namespace Transparent.Business.Tests.Services
         [TestCase(TicketState.Accepted)]
         [TestCase(TicketState.InProgress)]
         [TestCase(TicketState.Completed)]
-        public void NewestPublic_does_not_return_tickets_in_non_public_state(TicketState ticketState)
+        public void Newest_with_publicOnly_true_does_not_return_tickets_in_non_public_state(TicketState ticketState)
         {
             // Arrange
             TestData.JoesScubaDivingSuggestion.State = ticketState;
 
             // Act
-            var ticketsContainer = target.NewestPublic(new TicketsContainer());
+            var ticketsContainer = target.Newest(new TicketsContainer(), true);
 
             // Assert
             Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == TestData.JoesScubaDivingSuggestion));
         }
 
-        #endregion NewestPublic
+        [TestCase(TicketType.Suggestion, TicketState.Verification)]
+        [TestCase(TicketType.Suggestion, TicketState.Accepted)]
+        [TestCase(TicketType.Question, TicketState.Discussion)]
+        public void Newest_only_returns_tickets_with_the_specified_type_and_state(TicketType type, TicketState state)
+        {
+            // Arrange
+
+            // Act
+            var ticketsContainer = target.Newest(new TicketsContainer { TicketType = type, TicketState = state });
+
+            // Assert
+            Assert.IsTrue(ticketsContainer.PagedList.All(ticket => ticket.TicketType == type && ticket.State == state));
+        }
+
+        #endregion Newest
 
         #region Answered
 
@@ -282,24 +326,6 @@ namespace Transparent.Business.Tests.Services
         }
 
         #endregion Answered
-
-        #region Newest
-
-        [TestCase(TicketType.Suggestion, TicketState.Verification)]
-        [TestCase(TicketType.Suggestion, TicketState.Discussion)]
-        [TestCase(TicketType.Question, TicketState.Discussion)]
-        public void Newest_only_returns_tickets_with_the_specified_type_and_state(TicketType type, TicketState state)
-        {
-            // Arrange
-
-            // Act
-            var ticketsContainer = target.Newest(new TicketsContainer { TicketType = type, TicketState = state });
-
-            // Assert
-            Assert.IsTrue(ticketsContainer.PagedList.All(ticket => ticket.TicketType == type && ticket.State == state));
-        }
-
-        #endregion Newest
 
         #region Search
 

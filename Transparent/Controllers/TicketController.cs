@@ -125,7 +125,7 @@ namespace Transparent.Controllers
 
         public ActionResult Newest(TicketsContainer ticketsContainer)
         {
-            return View(tickets.NewestPublic(ticketsContainer));
+            return View(tickets.Newest(ticketsContainer, true));
         }
 
         [Authorize]
@@ -142,7 +142,7 @@ namespace Transparent.Controllers
 
         public ActionResult HighestRanked(TicketsContainer ticketsContainer)
         {
-            return View(tickets.HighestRanked(ticketsContainer));
+            return View(tickets.HighestRanked(ticketsContainer, true));
         }
 
         public ActionResult Search(Search search)
@@ -164,7 +164,7 @@ namespace Transparent.Controllers
             ticketsContainer.TicketType = TicketType.Suggestion;
             if (ticketsContainer.TicketState == null)
                 ticketsContainer.TicketState = TicketState.Accepted;
-            return View(tickets.Newest(ticketsContainer));
+            return View(tickets.HighestRanked(ticketsContainer));
         }
 
         /// <summary>
