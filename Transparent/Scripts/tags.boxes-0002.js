@@ -57,13 +57,8 @@ function drawLink(ctx, x, y, href, title) {
 
 // Link hover
 function canvas_mousemove(ev) {
-    var x, y;
-
-    // Get the mouse position relative to the canvas element
-    if (ev.layerX || ev.layerX == 0) { // For Firefox
-        x = ev.layerX;
-        y = ev.layerY;
-    }
+    var x = ev.offsetX;
+    var y = ev.offsetY;
 
     // Link hover
     for (var i = links.length - 1; i >= 0; i--) {
