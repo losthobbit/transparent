@@ -30,19 +30,20 @@
 <table class="fw">
 @{
     var args = Model.Arguments;
-    var currentUsersArg = args.SingleOrDefault(arg => arg.FkUserId == WebSecurity.CurrentUserId);
-    foreach (var argument in args.Where(arg => arg != currentUsersArg))
+    var userCanDiscuss = Model.State == TicketState.Discussion && Model.TagInfo.Any(info => info.UserIsExpert);
+    var usersEditableArg = args.SingleOrDefault(arg => userCanDiscuss && arg.FkUserId == WebSecurity.CurrentUserId);
+    foreach (var argument in args.Where(arg => arg != usersEditableArg))
     {
         @Html.Partial("_DiscussViewPartial", argument)
     }
 }
 </table>
 
-@if (Model.State == TicketState.Discussion && Model.TagInfo.Any(info => info.UserIsExpert))
+@if (userCanDiscuss)
 {
-    <input id="discussButton" style="display:@(currentUsersArg == null?"inline":"none")" type="button" value="Add @Model.TextForArgument.PrefixIndefiniteArticle()"/>
-    <div id="discussAnswer" style="display:@(currentUsersArg == null?"none":"inline")">
-        @Html.Action("_Discuss", currentUsersArg ?? new ArgumentViewModel { FkTicketId = Model.Id, Caption = @Model.TextForArgument.CapitalizeFirstLetter() })
+    <input id="discussButton" style="display:@(usersEditableArg == null?"inline":"none")" type="button" value="Add @Model.TextForArgument.PrefixIndefiniteArticle()"/>
+    <div id="discussAnswer" style="display:@(usersEditableArg == null?"none":"inline")">
+        @Html.Action("_Discuss", usersEditableArg ?? new ArgumentViewModel { FkTicketId = Model.Id, Caption = @Model.TextForArgument.CapitalizeFirstLetter() })
     </div>
     <script>
         $(function () {
