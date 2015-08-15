@@ -1,9 +1,10 @@
 ﻿@model Transparent.Business.ViewModels.VolunteerViewModel
 <tr class="underlined">
+    @{var id = @Guid.NewGuid();}
     <td class="metadata float-left">
         @Html.DisplayFor(model => model.UserSummary)
     </td>
-    <td class="display-field">
-        @Html.DisplayFor(model => model.Services, "TextToHtml")
+    <td id="@id" class="display-field">
+        <script>displayText("@id", "@HttpUtility.JavaScriptStringEncode(Model.Services)", 200)</script>
     </td>
 </tr>
