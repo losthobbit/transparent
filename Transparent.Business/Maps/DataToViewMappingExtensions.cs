@@ -86,7 +86,9 @@ namespace Transparent.Business.Maps
         {
             if (source == null)
                 return null;
-            return source.Select(Map);
+            return source
+                .OrderByDescending(argument => argument.UserWeighting)
+                .Select(Map);
         }
 
         public static ArgumentViewModel Map(this Data.Models.Argument source)
@@ -95,7 +97,8 @@ namespace Transparent.Business.Maps
             {
                 Body = source.Body,
                 FkUserId = source.FkUserId,
-                User = source.User.Map()
+                User = source.User.Map(),
+                UserWeighting = source.UserWeighting
             };
         }
 

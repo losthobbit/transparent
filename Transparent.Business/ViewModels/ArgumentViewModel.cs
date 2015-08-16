@@ -18,5 +18,6 @@ namespace Transparent.Business.ViewModels
         public string Body { get; set; }
         public int FkUserId { get; set; }
         public UserSummaryViewModel User { get; set; }
+        public int UserWeighting { get; set; }
     }
 }
