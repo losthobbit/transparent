@@ -4,6 +4,9 @@
     <h4>@Model.Caption</h4>
     <fieldset class="long">
         <legend>@Model.Caption</legend>
+        <div class="float-left display-field" style="text-align:center" title="User competence weighting">    
+            <h1>@Model.UserWeighting</h1>
+        </div>
         <div class="editor-field gap-above">
             @Html.DisplayFor(model => model.Body, "TextToHtml")
         </div>

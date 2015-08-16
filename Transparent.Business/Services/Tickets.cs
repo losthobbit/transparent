@@ -592,9 +592,6 @@ namespace Transparent.Business.Services
             if (db.Tickets.Single(ticket => ticket.Id == ticketId).State != TicketState.Discussion)
                 throw new NotSupportedException("Argument cannot be set.  Ticket is not in the Discussion state.");
 
-            if (!UserHasExpertise(ticketId, userId))
-                throw new NotSupportedException("User is not an expert in any of the ticket tags and cannot answer the ticket.");
-
             var userWeighting = CalculateWeighting(userId, ticketId);
 
             var argumentRow = db.Arguments.SingleOrDefault(arg => arg.FkTicketId == ticketId && arg.FkUserId == userId);

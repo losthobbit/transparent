@@ -14,14 +14,14 @@ namespace Transparent.Data.Models
                 TicketState.Verification, new Hint
                 ( 
                     "Once competent level users have verified the tags and a time period has passed this question will move to the Discussion " +
-                    "state and expert level users will be able to answer it.",
+                    "state and users will be able to answer it.",
                     "/Home/HowItWorks#verifyQuestion" 
                 ) 
             },
             { 
                 TicketState.Discussion, new Hint
                 (
-                    "Expert level users can answer this question.  After a time period has passed without any further answers, this question " +
+                    "Users can answer this question.  After a time period has passed without any further answers, this question " +
                     "will move to the Completed state.",
                     "/Home/HowItWorks#answer"
                 )

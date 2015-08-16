@@ -1567,18 +1567,6 @@ namespace Transparent.Business.Tests.Services
             AssertModifiedDateSet(TestData.JoesScubaDivingSuggestion.ModifiedDate);
         }
 
-        [Test]
-        [ExpectedException(typeof(NotSupportedException))]
-        public void SetArgument_with_user_who_is_not_an_expert_for_the_ticket_throws_NotSupportedException()
-        {
-            //Arrange
-            ArrangeSetArgument();
-            TestData.AdminsScubaDivingTag.TotalPoints = TestData.ScubaDivingTag.ExpertPoints - 1;
-
-            //Act
-            target.SetArgument(setArgument_Ticket.Id, TestData.Admin.UserId, "hello");
-        }
-
         [TestCase(TicketState.Verification)]
         [TestCase(TicketState.Completed)]
         [ExpectedException(typeof(NotSupportedException))]
