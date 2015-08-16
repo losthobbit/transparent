@@ -32,6 +32,10 @@ namespace Transparent.Data.Tests.Helpers
             DiPointsForVolunteering = 10;
             DiPointsForFirstBadge = 2;
 
+            BeginnerWeighting = 1;
+            CompetentWeighting = 2;
+            ExpertWeighting = 4;
+
             MaxPositionToAdvanceState = 2;
             DelayAfterValidatingTags = TimeSpan.FromSeconds(2);
             MinimumNumberOfArgumentsToAdvanceState = 2;
@@ -79,6 +83,21 @@ namespace Transparent.Data.Tests.Helpers
         public int DiPointsForAcceptedTicket { get; set; }
         public int DiPointsForVolunteering { get; set; }
         public int DiPointsForFirstBadge { get; set; }
+
+        /// <summary>
+        /// Weighting to apply to arguments / answers of beginners
+        /// </summary>
+        public int BeginnerWeighting { get; set; }
+
+        /// <summary>
+        /// Weighting to apply to arguments / answers of competent users
+        /// </summary>
+        public int CompetentWeighting { get; set; }
+
+        /// <summary>
+        /// Weighting to apply to arguments / answers of experts
+        /// </summary>
+        public int ExpertWeighting { get; set; }
 
         public int MaxPositionToAdvanceState { get; set; }
         public TimeSpan DelayAfterValidatingTags { get; set; }

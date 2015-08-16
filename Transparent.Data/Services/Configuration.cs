@@ -60,6 +60,25 @@ namespace Transparent.Data.Services
 
         #endregion Points
 
+        #region Weightings
+
+        /// <summary>
+        /// Weighting to apply to arguments / answers of beginners
+        /// </summary>
+        public int BeginnerWeighting { get; set; }
+
+        /// <summary>
+        /// Weighting to apply to arguments / answers of competent users
+        /// </summary>
+        public int CompetentWeighting { get; set; }
+
+        /// <summary>
+        /// Weighting to apply to arguments / answers of experts
+        /// </summary>
+        public int ExpertWeighting { get; set; }
+
+        #endregion Weightings
+
         #region Progressing tickets
 
         /// <summary>
@@ -127,6 +146,10 @@ namespace Transparent.Data.Services
             DiPointsForAcceptedTicket = int.Parse(configuration.GetValue("DiPointsForAcceptedTicket"));
             DiPointsForVolunteering = int.Parse(configuration.GetValue("DiPointsForVolunteering"));
             DiPointsForFirstBadge = int.Parse(configuration.GetValue("DiPointsForFirstBadge"));
+
+            BeginnerWeighting = int.Parse(configuration.GetValue("BeginnerWeighting"));
+            CompetentWeighting = int.Parse(configuration.GetValue("CompetentWeighting"));
+            ExpertWeighting = int.Parse(configuration.GetValue("ExpertWeighting"));
 
             MaxPositionToAdvanceState = int.Parse(configuration.GetValue("MaxPositionToAdvanceState"));
             DelayAfterValidatingTags = TimeSpan.Parse(configuration.GetValue("DelayAfterValidatingTags"));

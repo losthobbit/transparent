@@ -48,6 +48,21 @@ namespace Transparent.Data.Interfaces
         int DiPointsForFirstBadge { get; set; }
 
         /// <summary>
+        /// Weighting to apply to arguments / answers of beginners
+        /// </summary>
+        int BeginnerWeighting { get; set; }
+
+        /// <summary>
+        /// Weighting to apply to arguments / answers of competent users
+        /// </summary>
+        int CompetentWeighting { get; set; }
+
+        /// <summary>
+        /// Weighting to apply to arguments / answers of experts
+        /// </summary>
+        int ExpertWeighting { get; set; }
+
+        /// <summary>
         /// The maximum position (based on highest ranked within a state) that a ticket can
         /// be in before being allowed to advance to the next state via a timed event.
         /// </summary>

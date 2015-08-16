@@ -28,5 +28,12 @@ namespace Transparent.Data.Models
         public virtual UserProfile User { get; set; }
 
         public string Body { get; set; }
+
+        /// <summary>
+        /// Expertise of the user that created this argument
+        /// </summary>
+        [Required]
+        [Index]
+        public int UserWeighting { get; set; }
     }
 }

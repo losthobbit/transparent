@@ -33,15 +33,15 @@ namespace Transparent.Business.Services
         private readonly IDataService dataService;
         private readonly IConfiguration configuration;
         private readonly IUser userService;
-        //private readonly ITags tags;
+        private readonly ITags tags;
 
-        public Tickets(IUsersContext db, IDataService dataService, IConfiguration configuration, IUser userService/*, ITags tags*/)
+        public Tickets(IUsersContext db, IDataService dataService, IConfiguration configuration, IUser userService, ITags tags)
         {
             this.db = db;
             this.dataService = dataService;
             this.configuration = configuration;
             this.userService = userService;
-            //this.tags = tags;
+            this.tags = tags;
         }
 
         private IQueryable<Ticket> TicketsByType(TicketType? ticketType)
@@ -595,19 +595,42 @@ namespace Transparent.Business.Services
             if (!UserHasExpertise(ticketId, userId))
                 throw new NotSupportedException("User is not an expert in any of the ticket tags and cannot answer the ticket.");
 
+            var userWeighting = CalculateWeighting(userId, ticketId);
+
             var argumentRow = db.Arguments.SingleOrDefault(arg => arg.FkTicketId == ticketId && arg.FkUserId == userId);
             if (argumentRow == null)
             {
-                db.Arguments.Add(new Argument { FkTicketId = ticketId, FkUserId = userId, Body = argument });
+                db.Arguments.Add(new Argument { FkTicketId = ticketId, FkUserId = userId, Body = argument, UserWeighting = userWeighting });
                 CreateFirstBadge(Badge.FirstArgument, userId, ticketId);
             }
             else
             {
                 argumentRow.Body = argument;
+                argumentRow.UserWeighting = userWeighting;
             }
             SetModifiedDate(ticketId);
 
             db.SaveChanges();
+        }
+
+        private int CalculateWeighting(int userId, int ticketId)
+        {
+            // TODO: It may make sense to create a method in the Tags service to get a list of matching tags.
+            var userTags = db.UserProfiles.Single(user => user.UserId == userId).Tags;
+            var ticketTags = db.Tickets.Single(ticket => ticket.Id == ticketId).TicketTags;
+            var matchingTags = userTags.Where(userTag => ticketTags.Any(ticketTag => ticketTag.Tag == userTag.Tag));
+            var weighting = 0;
+            foreach (var userTag in matchingTags)
+            {
+                var knowledgeLevel = tags.GetKnowledgeLevel(userTag);
+                switch (knowledgeLevel)
+                {
+                    case KnowledgeLevel.Beginner: weighting += configuration.BeginnerWeighting; break;
+                    case KnowledgeLevel.Competent: weighting += configuration.CompetentWeighting; break;
+                    case KnowledgeLevel.Expert: weighting += configuration.ExpertWeighting; break;
+                }
+            }
+            return weighting;
         }
 
         private void SetModifiedDate(int ticketId)

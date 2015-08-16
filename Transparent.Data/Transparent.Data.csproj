@@ -142,6 +142,10 @@
     <Compile Include="Migrations\201504152046271_AddTagsTableCompetentAndExpertPoints.Designer.cs">
       <DependentUpon>201504152046271_AddTagsTableCompetentAndExpertPoints.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201508160741100_AddArgumentTableUserWeighting.cs" />
+    <Compile Include="Migrations\201508160741100_AddArgumentTableUserWeighting.Designer.cs">
+      <DependentUpon>201508160741100_AddArgumentTableUserWeighting.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Argument.cs" />
     <Compile Include="Models\Badge.cs" />
     <Compile Include="Models\Interfaces\IArgument.cs" />
@@ -292,6 +296,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504152046271_AddTagsTableCompetentAndExpertPoints.resx">
       <DependentUpon>201504152046271_AddTagsTableCompetentAndExpertPoints.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508160741100_AddArgumentTableUserWeighting.resx">
+      <DependentUpon>201508160741100_AddArgumentTableUserWeighting.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

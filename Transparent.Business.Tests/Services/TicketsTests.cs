@@ -35,7 +35,7 @@ namespace Transparent.Business.Tests.Services
             mockDataService = new Mock<IDataService>();
             mockUserService = new Mock<IUser>();
 
-            target = new Tickets(UsersContext, mockDataService.Object, TestConfiguration, mockUserService.Object);
+            target = new Tickets(UsersContext, mockDataService.Object, TestConfiguration, mockUserService.Object, MockTags.Object);
         }
         
         /// <summary>
@@ -1475,6 +1475,47 @@ namespace Transparent.Business.Tests.Services
             Assert.AreEqual(TestData.Admin.UserId, TestData.Admin.UserId);
             AssertModifiedDateSet(TestData.JoesScubaDivingSuggestion.ModifiedDate);
         }
+        
+        [TestCase(true, KnowledgeLevel.Beginner, KnowledgeLevel.Beginner, KnowledgeLevel.Expert, 1, 2, 4, 6)]
+        [TestCase(false, KnowledgeLevel.Beginner, KnowledgeLevel.Competent, KnowledgeLevel.Expert, 2, 3, 5, 10)]
+        public void SetArgument_sets_UserWeighting(bool existingArgument,
+            KnowledgeLevel bungee, KnowledgeLevel criticalThinking, KnowledgeLevel scuba,
+            int beginnerWeighting, int competentWeighting, int expertWeighting,
+            int expectedWeighting)
+        {
+            //Arrange
+            ArrangeSetArgument(existingArgument);
+            Argument argument = null;
+            UsersContext.SavedChanges += context =>
+            {
+                argument = existingArgument 
+                    ? setArgument_ExistingArgument
+                    : context.Arguments.Last();                
+            };
+            // set ticket tags
+            // ticket already has scuba
+            setArgument_Ticket.TicketTags.Add(new TicketTag { Tag = TestData.BungeeJumpingTag });
+            setArgument_Ticket.TicketTags.Add(new TicketTag { Tag = TestData.CriticalThinkingTag });
+
+            // set user tags and expertise
+            SetKnowledgeLevel(TestData.Admin, TestData.BungeeJumpingTag, bungee);
+            SetKnowledgeLevel(TestData.Admin, TestData.CriticalThinkingTag, criticalThinking);
+            SetKnowledgeLevel(TestData.Admin, TestData.ScubaDivingTag, scuba);
+
+            // add additional tag to user to ensure it's not used in the calculation
+            TestData.AddUserTag(TestData.Admin, TestData.DemocraticIntelligenceTag, int.MaxValue);
+
+            // set configured weightings
+            TestConfiguration.BeginnerWeighting = beginnerWeighting;
+            TestConfiguration.CompetentWeighting = competentWeighting;
+            TestConfiguration.ExpertWeighting = expertWeighting;
+
+            //Act
+            target.SetArgument(setArgument_Ticket.Id, TestData.Admin.UserId, "hello");
+
+            //Assert
+            Assert.AreEqual(expectedWeighting, argument.UserWeighting);
+        }
 
         [Test]
         public void SetArgument_without_argument_and_badge_adds_badge()
@@ -1869,5 +1910,28 @@ namespace Transparent.Business.Tests.Services
 
         #endregion GetExpertTags
 
+        #region Helper Methods
+
+        /// <summary>
+        /// Sets the user's knowledge level for a tag.
+        /// </summary>
+        private void SetKnowledgeLevel(UserProfile user, Tag tag, KnowledgeLevel knowledgeLevel)
+        {
+            var userTag = user.Tags.SingleOrDefault(uTag => uTag.Tag == tag);
+            if (userTag == null)
+            {
+                userTag = new UserTag { FkTagId = tag.Id, FkUserId = user.UserId, Tag = tag, User = user };
+                user.Tags.Add(userTag);
+            }
+            MockTags.Setup(x => x.GetKnowledgeLevel(userTag)).Returns(knowledgeLevel);
+            switch (knowledgeLevel)
+            {
+                case KnowledgeLevel.Beginner: userTag.TotalPoints = tag.CompetentPoints - 1; break;
+                case KnowledgeLevel.Competent: userTag.TotalPoints = tag.CompetentPoints; break;
+                case KnowledgeLevel.Expert: userTag.TotalPoints = tag.ExpertPoints; break;
+            }
+        }
+
+        #endregion Helper Methods
     }
 }
