@@ -30,7 +30,7 @@
 <table class="fw">
 @{
     var args = Model.Arguments;
-    var userCanDiscuss = Model.State == TicketState.Discussion && Model.TagInfo.Any(info => info.UserIsExpert);
+    var userCanDiscuss = Model.State == TicketState.Discussion;
     var usersEditableArg = args.SingleOrDefault(arg => userCanDiscuss && arg.FkUserId == WebSecurity.CurrentUserId);
     foreach (var argument in args.Where(arg => arg != usersEditableArg))
     {
