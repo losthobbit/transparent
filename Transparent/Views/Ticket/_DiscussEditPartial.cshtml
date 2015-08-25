@@ -2,7 +2,7 @@
 
 <h3>@Model.Caption</h3>
 <div id="discussEditPartial" class="display-field">
-@using (Ajax.BeginForm("_Discuss", new AjaxOptions { UpdateTargetId = "discussAnswer" }))
+@using (Ajax.BeginForm("_Discuss", new AjaxOptions { OnSuccess="$(\"#message\").show().delay(2000).fadeOut();", UpdateTargetId = "discussAnswer" }))
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.Caption)
@@ -14,9 +14,9 @@
             @Html.EditorFor(model => model.Body)
             @Html.ValidationMessageFor(model => model.Body)
         </div>
-        <p>
-            <input type="submit" value="Save" />
-        </p>
+        <input class="float-left" type="submit" value="Save" />
+        <div class="message-success" id="message">@Model.Message</div>
+        @{Model.Message = "";}
     </fieldset>
 }
 </div>

@@ -40,6 +40,7 @@ namespace Transparent.Controllers
             if (ModelState.IsValid)
             {
                 tickets.SetArgument(discuss.FkTicketId, WebSecurity.CurrentUserId, discuss.Body);
+                discuss.Message = "Saved";
             }
 
             return PartialView("_DiscussEditPartial", discuss);

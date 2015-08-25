@@ -19,5 +19,10 @@ namespace Transparent.Business.ViewModels
         public int FkUserId { get; set; }
         public UserSummaryViewModel User { get; set; }
         public int UserWeighting { get; set; }
+
+        /// <summary>
+        /// Message to tell user that the argument has been saved.
+        /// </summary>
+        public string Message { get; set; }
     }
 }
