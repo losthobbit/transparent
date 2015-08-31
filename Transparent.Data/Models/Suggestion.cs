@@ -44,7 +44,7 @@ namespace Transparent.Data.Models
             {
                 TicketState.Accepted, new Hint
                 (
-                    "The ratio of for to against votes did reached the target ratio.  When it is picked up by a volunteer, it will move to the " +
+                    "The ratio of for to against votes reached the target ratio.  When it is picked up by a volunteer, it will move to the " +
                     "in progress state.",
                     "/Home/HowItWorks#voteSuggestion"
                 )

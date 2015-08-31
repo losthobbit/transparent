@@ -60,7 +60,9 @@
                 <td class="metadata">@Html.DisplayFor(modelItem => item.State)</td>
                 <td>
                     @Html.ActionLink(item.Heading, "Details", new { id=item.Id })
-                    @Html.Action("_TicketTags", new Transparent.Business.ViewModels.TicketTagsViewModel(item, true))
+                    <div id="ticketTagsPartial" class="metadata">
+                        @Html.Action("_TicketTags", new Transparent.Business.ViewModels.TicketTagsViewModel(item, true))
+                    </div>
                 </td>
                 <td class="metadata">
                     @item.TextForCreated at @Html.DisplayFor(modelItem => item.CreatedDate)

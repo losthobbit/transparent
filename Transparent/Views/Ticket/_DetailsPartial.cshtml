@@ -44,7 +44,7 @@
             @Html.DisplayFor(model => model.Body, "TextToHtml")
         </div>
         <div class="metadata">
-            <div>
+            <div id="ticketTagsPartial">
                 @Html.Action("_TicketTags", new TicketTagsViewModel(Model, 
                ViewBag.EnableTagButton == null || ViewBag.EnableTagButton, (IEnumerable<TicketTagViewModel>)ViewData["TagInfo"]))
             </div>

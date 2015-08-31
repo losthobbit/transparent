@@ -1,5 +1,4 @@
 ﻿@model Transparent.Business.ViewModels.TicketTagsViewModel 
-<div id="ticketTagsPartial" class="display-field">
 @using (Ajax.BeginForm("_VerifyTag", new AjaxOptions { UpdateTargetId = "ticketTagsPartial" }))
 {
     @Html.AntiForgeryToken()
@@ -11,11 +10,11 @@
     {
         if (Model.EnableTagButton)
         {
-            <a class="button float-left selectedTag" href="@Url.Action("Details", "Tag", new { id = ticketTag.TagId })">@ticketTag.Name</a>
+            <a class="button float-left" href="@Url.Action("Details", "Tag", new { id = ticketTag.TagId })">@ticketTag.Name</a>
         }
         else
         {
-            <a class="button float-left selectedTag">@ticketTag.Name</a>
+            <a class="button float-left">@ticketTag.Name</a>
         }    
         if (Model.MultipleTags && ticketTag.UserMayVerify)
         {
@@ -25,5 +24,4 @@
             </div>
         }   
     } 
-}
-</div>
+}    
