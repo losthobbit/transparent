@@ -24,6 +24,7 @@ namespace Transparent.Business.ViewModels
             {
                 foreach (var ticketTagViewModel in tagInfoList)
                 {
+                    ticketTagViewModel.UserMayDelete = source.Any(tagInfo => tagInfo.TagId == ticketTagViewModel.TagId && tagInfo.UserMayDelete);
                     ticketTagViewModel.UserMayVerify = source.Any(tagInfo => tagInfo.TagId == ticketTagViewModel.TagId && tagInfo.UserMayVerify);
                 }
             }

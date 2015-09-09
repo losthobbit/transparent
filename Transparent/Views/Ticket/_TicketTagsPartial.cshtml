@@ -16,11 +16,17 @@
         {
             <a class="button float-left">@ticketTag.Name</a>
         }    
-        if (Model.MultipleTags && ticketTag.UserMayVerify)
+        if (Model.MultipleTags)
         {
             <div class="float-left">
-                <button name="deleteTagId" class="ui-icon-close ui-icon" title="Delete tag" value="@ticketTag.TagId">DeleteTag</button>
-                <button name="verifyTagId" class="ui-icon-check ui-icon" title="Verify tag" value="@ticketTag.TagId">VerifyTag</button>                    
+                @if(ticketTag.UserMayDelete)
+                {
+                    <button name="deleteTagId" class="ui-icon-close ui-icon" title="Delete tag" value="@ticketTag.TagId">DeleteTag</button>
+                }
+                @if(ticketTag.UserMayVerify)
+                {
+                    <button name="verifyTagId" class="ui-icon-check ui-icon" title="Verify tag" value="@ticketTag.TagId">VerifyTag</button>                    
+                }
             </div>
         }   
     } 
