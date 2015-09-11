@@ -1,31 +1,56 @@
-﻿<header>
-    <ul id="menu" class="left main">
-        @{var links = new []
+﻿@{
+    const string controller = "Ticket";
+    var links = new []
+    {
+        new []{ "Create", "Create" },
+        new []{ "Search", "Search" },
+        new []{ "Mark Tests", "MarkTests" }
+    };
+        
+    var ticketLists = new []
+    {
+        new []{ "My Queue", "MyQueue" },
+        new []{ "Highest Ranked", "HighestRanked" },
+        new []{ "New", "Newest" },
+        new []{ "Raised by Me", "RaisedByMe" },
+        new []{ "Accepted", "Accepted" },
+        new []{ "Answered", "Answered" },
+        new []{ "Archive", "Archive" }
+    };
+}
+<header class="menu">
+    <script>
+        $(function () {
+            $("#selectMenu").change(function () {
+                var action = this.value;
+                if (action) {
+                    navigateTo("@controller", action);
+                }                
+            });
+        });
+    </script>
+    @{
+        var listSelected = ticketLists.Any(list => list[0] == ViewBag.Title);
+    }
+    <select id="selectMenu" class="@(listSelected?"selected":"")">
+        <option value="" @(!listSelected?"selected":"") disabled>Choose ticket list</option>
+        @{
+            foreach(var ticketList in ticketLists)
             {
-                new []{ "Create", "Create" },
-                new []{ "My Queue", "MyQueue" },
-                new []{ "Highest Ranked", "HighestRanked" },
-                new []{ "New", "Newest" },
-                new []{ "Raised by Me", "RaisedByMe" },
-                new []{ "Accepted", "Accepted" },
-                new []{ "Answered", "Answered" },
-                new []{ "Search", "Search" },
-                new []{ "Mark Tests", "MarkTests" },
-                new []{ "Archive", "Archive" }
-            };
+                var selected = ViewBag.Title == ticketList[0];
+                <option value="@ticketList[1]" @(selected ? "selected" : "") class="@(selected ? "selected" : "")">@ticketList[0]</option>
+            }
         }
-        @foreach(var link in links)
+    </select>
+    @foreach (var link in links)
+    {
+        if (ViewBag.Title == link[0])
         {
-            <li>
-            @if (ViewBag.Title == link[0])
-            {
-                <b>@MvcHtmlString.Create(link[0])</b>
-            }
-            else
-            {
-                @Html.ActionLink(link[0], link[1], link.Length > 2 ? link[2] : "Ticket");
-            }
-            </li>
+            <span>@MvcHtmlString.Create(link[0])</span>
         }
-    </ul>
+        else
+        {
+            @Html.ActionLink(link[0], link[1], link.Length > 2 ? link[2] : controller);
+        }
+    }
 </header>

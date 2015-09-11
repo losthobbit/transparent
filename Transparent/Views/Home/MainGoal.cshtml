@@ -10,13 +10,8 @@
     ViewBag.Title = "Main Goal";
 }
 
-@Html.Partial("_StatsPartial", general.GetStats())
-
-<hgroup class="title">
-    <h1>@ViewBag.Title.</h1>
-</hgroup>
-
-<article>
+<article class="col-md-8">
+    <h3>@ViewBag.Title</h3>
     <p>
         The idea for this website comes from the winning essay in the <a href="http://londonfuturists.com/previous-meetings/peace-grand-challenge/">Peace Grand Challenge</a>
         on the subject "Innovative solutions for world peace, 2014-2034."  One of the main features of this site is that it is
@@ -50,3 +45,5 @@
         <li>@Html.ActionLink("Volunteer", "Volunteer", "Volunteer") any services that you can provide.</li>
     </ul>
 </article>
+
+@Html.Partial("_StatsPartial", general.GetStats())

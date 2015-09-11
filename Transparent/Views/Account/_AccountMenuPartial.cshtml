@@ -1,14 +1,19 @@
-﻿<header>
-    <ul id="menu" class="left">
-        @{var links = new []
-            {
-                new []{ "User Profile", "UserProfile" },
-                new []{ "Manage Account", "Manage" }
-            };
-        }
-        @foreach(var link in links)
+﻿<header class="menu">
+    @{var links = new []
         {
-            <li>@(ViewBag.Title == link[0] ? MvcHtmlString.Create(link[0]) : Html.ActionLink(link[0], link[1], "Account"))</li>
+            new []{ "User Profile", "UserProfile" },
+            new []{ "Manage Account", "Manage" }
+        };
+    }
+    @foreach(var link in links)
+    {
+        if (ViewBag.Title == link[0])
+        {
+            <span>@MvcHtmlString.Create(link[0])</span>
         }
-    </ul>
+        else
+        {
+            @Html.ActionLink(link[0], link[1], link.Length > 2 ? link[2] : "Account");
+        }
+    }
 </header>

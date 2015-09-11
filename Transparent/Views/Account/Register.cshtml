@@ -3,10 +3,7 @@
     ViewBag.Title = "Register";
 }
 
-<hgroup class="title">
-    <h1>@ViewBag.Title.</h1>
-    <h2>Create a new account.</h2>
-</hgroup>
+<h3>@ViewBag.Title</h3>
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()

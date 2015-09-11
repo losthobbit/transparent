@@ -40,6 +40,10 @@ String.prototype.replaceAll = function (find, replace) {
     return str.split(find).join(replace);
 };
 
+function navigateTo(controller, action) {
+    window.location.href = "/" + controller + "/" + action;
+}
+
 // DISPLAY TEXT
 
 var texts = [];
@@ -95,23 +99,3 @@ function displayText(elementId, text, maxLength) {
     else 
         displayOrWrite(text.substring(0, maxLength - 3) + "<a href='javascript:displayText(\"" + elementId + "\")'>...</a>", element);
 }
-
-// SCREEN SIZE
-
-function ignoreScreenSize() {
-    setCookie("ignoreScreenSize", 1, 30);
-    window.location.href = window.location.href;
-}
-
-function showInvalidScreenSize() {
-    $("html").css("height", "100%");
-    $("body").css("height", "100%").css("display", "flex").css("align-items", "center").css("justify-content", "center")
-        .html("This site has not yet been optimized for a small screen.  Please use a larger screen."+
-        "  <a onclick='ignoreScreenSize()'>Continue anyway</a>");
-}
-
-$(function () {
-    if (screen.width < 1000 && getCookie("ignoreScreenSize") == "") {
-        showInvalidScreenSize();
-    }
-});

@@ -4,8 +4,8 @@
 {
     @Html.AntiForgeryToken();
     @Html.HiddenFor(m => m.TicketId);
-    var buttonClass = (Model.UserVote == Stance.For ? "inset" : "outset") + " for";
-    var buttonClass2 = (Model.UserVote == Stance.Against ? "inset" : "outset") + " against";
+                                    var buttonClass = (Model.UserVote == Stance.For ? "inset" : "outset") + " for";
+                                    var buttonClass2 = (Model.UserVote == Stance.Against ? "inset" : "outset") + " against";
     <table>
         <tr>
             <td>

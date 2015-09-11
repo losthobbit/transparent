@@ -17,13 +17,13 @@
     margin-top: 15px;
 }
 
-.sideMenu {
-    float: right;
+.no-gap-below {
+   margin-bottom: 2px;
 }
 
-    .sideMenu ul {
-        margin-top: 0px;
-    }
+.sideMenu ul {
+    margin-top: 0px;
+}
 
 a { text-decoration:none }
 
@@ -73,6 +73,7 @@ a { text-decoration:none }
     }
 
 button {
+    color: black;
     border-radius: 3px;
 }
 
@@ -92,9 +93,6 @@ p {
     text-align: justify;
 }
 
-header.main {
-}
-
 .button {
     background-color: rgba(255, 255, 255, 0.25);
     border-radius: 3px;
@@ -108,15 +106,13 @@ div {
 }
 
 html {
-    background-image: url(../Images/border/topLeft.png),     url(../Images/border/topRight.png),     url(../Images/border/botLeft.png),     url(../Images/border/botRight.png),     url(../Images/border/top.png),     url(../Images/border/left.png),     url(../Images/border/right.png),     url(../Images/border/bot.png),     url(../Images/border/center.png);
-            
-    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat-x, repeat-y, repeat-y, repeat-x, repeat;    background-position: 0 0, right 0, 0 bottom, right bottom, 0 0, 0 0, right 0, 0 bottom, 0 0;
-    background-attachment: fixed;
     margin: 0;
     padding: 0;
+    background-color: black;
 }
 
 body {
+    background-color: black;
     border-top: solid 10px #000;
     font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
     color: #e2e2e2; 
@@ -189,7 +185,7 @@ h2 {
 
 h3 {
     font-size: 1.2em;
-    margin-bottom: 2px;
+    margin-bottom: 12px;
     margin-top: 12px;
 }
 
@@ -236,17 +232,14 @@ h5, h6 {
         background: url("../Images/heroAccent.png") no-repeat;
     }
 
-header .content-wrapper {
+.top {
+    padding-top: 10px; 
+    height:70px;
+    background-image: url(../Images/blue/left.png), url(../Images/blue/right.png);
+    background-position: left, right;
+    background-repeat: no-repeat;
+    background-size: auto 100%;
 }
-
-    header .top {
-        padding-top: 10px; 
-        height:70px;
-        background-image: url(../Images/blue/left.png), url(../Images/blue/right.png);
-        background-position: left, right;
-        background-repeat: no-repeat;
-        background-size: auto 100%;
-    }
 
 footer {
     clear: both;
@@ -279,7 +272,6 @@ footer {
     display: block;
     font-size: .85em;
     margin: 0 0 10px;
-    text-align: right;
 }
 
     #login a {
@@ -308,12 +300,17 @@ footer {
 
 /* menu
 ----------------------------------------------------------*/
+header.subMenu {
+    margin-top: 10px;
+}
+
 ul#menu {
     font-size: 1.1em;
     font-weight: 600;
     margin: 0 0 5px;
     padding: 0;
     text-align: right;
+    display: inline;
 }
 
     ul#menu.subMenu {
@@ -322,7 +319,7 @@ ul#menu {
     }
 
         ul#menu.subMenu li {
-            margin-right: 20px;
+            margin-right: 5px;
         }
 
     ul#menu.left {
@@ -341,20 +338,49 @@ ul#menu {
             border-radius: 3px;
         }
 
-        ul#menu.main li a {
-            margin: 5px 5px 5px 0px;
-        }
-
-        ul#menu li b {
+        ul#menu li span {
             padding: 5px;
             color: #f00;
             background-color: rgba(255, 255, 255, 0.25);
             border-radius: 3px;
         }
 
-        ul#menu.main li b {
-            margin: 5px 5px 5px 0px;
-        }
+.menu > a, .menu > span, .menu>select {
+    border-radius: 3px;
+    background-color: rgba(255, 255, 255, 0.25);
+    color: #ccc;    
+}
+
+.menu>a, .menu>span {
+    margin: 5px 5px 5px 0px;
+    padding: 5px;
+}
+
+.menu>span {
+    color: #f00;
+}
+
+.menu>select {
+    background-color: rgba(60, 60, 60, 1);
+    margin-right: 1px;
+    border: none;
+    padding: 4px;
+    display: inline;
+    width: 150px;
+    color: #ccc;    
+}
+
+.menu .selected { 
+    color: #f00;
+}
+
+.menu option:not(:checked) { 
+    color: #ccc;    
+}
+
+.menu option{
+    font-size: 0.8em;
+}
 
 /* page elements
 ----------------------------------------------------------*/
@@ -454,17 +480,6 @@ ol.round {
             background: url("../Images/orderedList9.png") no-repeat;
         }
 
-/* content */
-article {
-    float: left;
-    width: 70%;
-}
-
-aside {
-    float: right;
-    width: 25%;
-}
-
     aside ul {
         list-style: none;
         padding: 0;
@@ -474,10 +489,6 @@ aside {
             background: url("../Images/bullet.png") no-repeat 0 50%;
             padding: 2px 0 2px 20px;
         }
-
-.label {
-    font-weight: 700;
-}
 
 /* login page */
 #loginForm {
@@ -567,8 +578,8 @@ fieldset {
 
 label {
     display: block;
-    font-size: 1.2em;
-    font-weight: 600;
+    font-size: 1em;
+    font-weight: 400;
 }
 
 label.checkbox {

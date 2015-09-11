@@ -216,6 +216,10 @@
     <Content Include="apple-touch-icon-precomposed.png" />
     <Content Include="apple-touch-icon.png" />
     <Content Include="browserconfig.xml" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -276,6 +280,8 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="manifest.json" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
     <None Include="Properties\PublishProfiles\Transparent.pubxml" />
     <Content Include="Images\blue\blueLight.png" />
     <Content Include="Images\blue\left.png" />
@@ -311,9 +317,11 @@
     <Content Include="mstile-310x150.png" />
     <Content Include="mstile-310x310.png" />
     <Content Include="mstile-70x70.png" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\controls-0001.js" />
     <Content Include="Scripts\custom.validation-0001.js" />
-    <Content Include="Scripts\general-0004.js" />
+    <Content Include="Scripts\general-0005.js" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />

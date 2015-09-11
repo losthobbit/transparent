@@ -8,45 +8,9 @@
     ViewBag.Title = "How it works";
 }
 
-<a name="top" />
-<hgroup class="title">
-    <h1>@ViewBag.Title.</h1>
-</hgroup>
-
-<nav class="sideMenu">
-    <a href="#points">Points</a><br />
-    <ul>
-        <li><a href="#competent">Competent level</a></li>
-        <li><a href="#expert">Expert level</a></li>
-    </ul>
-    <a href="#suggest">Create a suggestion</a><br />
-    <ul>
-        <li><a href="#rankSuggestion">Rank a suggestion</a></li>
-        <li><a href="#verifySuggestion">Verify a suggestion</a></li>
-        <li><a href="#argue">Write an argument</a></li>
-        <li><a href="#voteSuggestion">Vote for a suggestion</a></li>
-    </ul>
-    <a href="#volunteer">Volunteer</a><br />
-    <ul>
-        <li><a href="#pickUp">Pick up a suggestion</a></li>
-        <li><a href="#complete">Complete a suggestion</a></li>
-    </ul>
-    <a href="#ask">Ask a question</a><br />
-    <ul>
-        <li><a href="#rankQuestion">Rank a question</a></li>
-        <li><a href="#verifyQuestion">Verify a question</a></li>
-        <li><a href="#answer">Answer a question</a></li>
-    </ul>
-    <a href="#createTest">Create a test</a><br />
-    <ul>
-        <li><a href="#voteTest">Vote for a test</a></li>
-    </ul>
-    <a href="#answerTest">Answer a test</a><br />
-    <a href="#markTest">Mark a test</a><br />
-    <a href="#tags">Tags</a><br />
-</nav>
-
-<article>
+<a name="top"></a>
+<article class="col-md-8">
+    <h3>@ViewBag.Title</h3>
     <p>
         @Constants.ApplicationName is a group decision making system which currently consists of the features below.
     </p>
@@ -403,3 +367,36 @@
         it would probably be for critical thinking to be a compulsory subject for everyone.
     </p>
 </article>
+
+<nav class="sideMenu col-md-4">
+    <a href="#points">Points</a><br />
+    <ul>
+        <li><a href="#competent">Competent level</a></li>
+        <li><a href="#expert">Expert level</a></li>
+    </ul>
+    <a href="#suggest">Create a suggestion</a><br />
+    <ul>
+        <li><a href="#rankSuggestion">Rank a suggestion</a></li>
+        <li><a href="#verifySuggestion">Verify a suggestion</a></li>
+        <li><a href="#argue">Write an argument</a></li>
+        <li><a href="#voteSuggestion">Vote for a suggestion</a></li>
+    </ul>
+    <a href="#volunteer">Volunteer</a><br />
+    <ul>
+        <li><a href="#pickUp">Pick up a suggestion</a></li>
+        <li><a href="#complete">Complete a suggestion</a></li>
+    </ul>
+    <a href="#ask">Ask a question</a><br />
+    <ul>
+        <li><a href="#rankQuestion">Rank a question</a></li>
+        <li><a href="#verifyQuestion">Verify a question</a></li>
+        <li><a href="#answer">Answer a question</a></li>
+    </ul>
+    <a href="#createTest">Create a test</a><br />
+    <ul>
+        <li><a href="#voteTest">Vote for a test</a></li>
+    </ul>
+    <a href="#answerTest">Answer a test</a><br />
+    <a href="#markTest">Mark a test</a><br />
+    <a href="#tags">Tags</a><br />
+</nav>

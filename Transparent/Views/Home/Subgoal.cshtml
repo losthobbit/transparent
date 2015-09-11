@@ -10,13 +10,8 @@
     ViewBag.Title = "Current Subgoal";
 }
 
-@Html.Partial("_StatsPartial", general.GetStats())
-
-<hgroup class="title">
-    <h1>@ViewBag.Title.</h1>
-</hgroup>
-
-<article>
+<article class="col-md-8">
+    <h3>@ViewBag.Title</h3>
     <p>
         The @Html.ActionLink("main goal", "MainGoal") of this website is <strong>massive</strong>!  In order to bring this project one
         step closer to Earth, I've introduced the concept of a <i>subgoal</i>.  The subgoal allows users
@@ -67,3 +62,5 @@
             twenty tests."
      </p>
 </article>
+
+@Html.Partial("_StatsPartial", general.GetStats())

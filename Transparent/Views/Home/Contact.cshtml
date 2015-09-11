@@ -2,10 +2,6 @@
     ViewBag.Title = "Contact";
 }
 
-<hgroup class="title">
-    <h1>@ViewBag.Title.</h1>
-</hgroup>
-
 <script>
     function generateEmailLink() {
         return "<a href=\"mail" + "to" + ":los" + "tho" + "bbit" + "@@" + "gma" + "il." + "com\">los" + "tho" + "bbit" + "@@" + "gma" + "il." + "com</a>"
@@ -13,6 +9,7 @@
 </script>
 
 <article>
+    <h3>@ViewBag.Title</h3>
     <p>
         As this website is designed to make group decisions, it doesn't make much sense to
         have contact information here.  You can @Html.ActionLink("post a question or suggestion", "Create", "Ticket")

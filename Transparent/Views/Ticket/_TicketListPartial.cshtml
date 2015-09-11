@@ -6,7 +6,7 @@
     if (Model != null)
     {      
         <section>
-            <header>
+            <header class="subMenu">
             @if(!ViewData.ContainsKey("ShowTicketTypeMenu") || (bool)ViewData["ShowTicketTypeMenu"])
             {
                 <ul id="menu" class="left subMenu">
@@ -16,7 +16,7 @@
                         @{
                             if(Model.TicketType == ticketType.Type)
                             {
-                                <b>@ticketType.PluralDisplayName</b>
+                                <span>@ticketType.PluralDisplayName</span>
                             }
                             else
                             {
@@ -37,7 +37,7 @@
                         @{
                             if(Model.TicketState == state)
                             {
-                                <b>@state.DisplayName()</b>
+                                <span>@state.DisplayName()</span>
                             }
                             else
                             {
