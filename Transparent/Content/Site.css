@@ -25,7 +25,7 @@
     margin-top: 0px;
 }
 
-a { text-decoration:none }
+a { text-decoration:none !important }
 
 .actionLinkUI { float: left; margin-right: 2px; }
 
@@ -225,7 +225,6 @@ h5, h6 {
 
     .main-content {
         padding-left: 10px;
-        padding-top: 30px;
     }
 
     .featured + .main-content {
@@ -233,7 +232,7 @@ h5, h6 {
     }
 
 .top {
-    padding-top: 10px; 
+    padding-top: 3px; 
     height:70px;
     background-image: url(../Images/blue/left.png), url(../Images/blue/right.png);
     background-position: left, right;
@@ -262,7 +261,6 @@ footer {
     background: none;
     color: #c8c8c8;
     outline: none;
-    text-decoration: none;
 }
 
 
@@ -278,14 +276,12 @@ footer {
         margin-left: 10px;
         margin-right: 3px;
         padding: 2px 3px;
-        text-decoration: none;
     }
 
     #login a.username {
         background: none;
         margin: 0;
         padding: 0;
-        text-decoration: underline;
     }
 
     #login ul {
@@ -705,7 +701,6 @@ th {
     th a:link, th a:visited, th a:active, th a:hover {
         color: #333;
         font-weight: 600;
-        text-decoration: none;
         padding: 0;
     }
 
