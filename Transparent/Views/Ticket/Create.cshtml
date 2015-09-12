@@ -12,11 +12,9 @@
 @Html.Partial("_MenuPartial")
 
 <header class="subMenu">
-    <ul id="menu" class="left subMenu">
     @foreach (var value in (TicketType[])Enum.GetValues(typeof(TicketType)))
     {
-        <li>
-        @if(Model.TicketType == value)
+        if(Model.TicketType == value)
         {
             <span>@MvcHtmlString.Create(value.DisplayName())</span>
         }
@@ -24,9 +22,7 @@
         {
             @Html.ActionLink(value.DisplayName(), "Create", new { TicketType = value });
         }
-        </li>
     }
-    </ul>
 </header>    
 
 @using (Html.BeginForm("Create" + Model.TicketType, "Ticket"))

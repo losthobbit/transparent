@@ -304,59 +304,29 @@ header.subMenu {
     margin-top: 10px;
 }
 
-ul#menu {
-    font-size: 1.1em;
-    font-weight: 600;
-    margin: 0 0 5px;
-    padding: 0;
-    text-align: right;
-    display: inline;
-}
-
-    ul#menu.subMenu {
-        font-size: 1em;
-        margin-top: 20px;
-    }
-
-        ul#menu.subMenu li {
-            margin-right: 5px;
-        }
-
-    ul#menu.left {
-        text-align: left;
-    }
-
-    ul#menu li {
-        display: inline;
-        list-style: none;
-    }
-
-        ul#menu li a {
-            padding: 5px;
-            color: #ccc;
-            background-color: rgba(255, 255, 255, 0.25);
-            border-radius: 3px;
-        }
-
-        ul#menu li span {
-            padding: 5px;
-            color: #f00;
-            background-color: rgba(255, 255, 255, 0.25);
-            border-radius: 3px;
-        }
-
-.menu > a, .menu > span, .menu>select {
+.menu>a, .menu>span, .menu>select, .subMenu>a, .subMenu>span {
     border-radius: 3px;
     background-color: rgba(255, 255, 255, 0.25);
     color: #ccc;    
 }
 
 .menu>a, .menu>span {
-    margin: 5px 5px 5px 0px;
     padding: 5px;
 }
 
-.menu>span {
+.subMenu>a, .subMenu>span {
+    padding: 0px 4px 0px 4px;
+}
+
+.menu>a, .subMenu>a {
+    margin: 5px 4px 5px 4px;
+}
+
+.menu>span, .subMenu>span {
+    margin: 0px;
+}
+
+.menu>span, .subMenu>span {
     color: #f00;
 }
 

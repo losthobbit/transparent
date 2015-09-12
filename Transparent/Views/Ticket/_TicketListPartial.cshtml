@@ -9,44 +9,32 @@
             <header class="subMenu">
             @if(!ViewData.ContainsKey("ShowTicketTypeMenu") || (bool)ViewData["ShowTicketTypeMenu"])
             {
-                <ul id="menu" class="left subMenu">
-                @foreach(var ticketType in ModelViewExtensions.TicketTypeInfo)
+                foreach(var ticketType in ModelViewExtensions.TicketTypeInfo)
                 {
-                    <li class="@ticketType.Type.GetClass()">
-                        @{
-                            if(Model.TicketType == ticketType.Type)
-                            {
-                                <span>@ticketType.PluralDisplayName</span>
-                            }
-                            else
-                            {
-                                @Html.ActionLink(ticketType.PluralDisplayName, ViewContext.RouteData.Values["action"].ToString(), Model.GetState(ticketType.Type));
-                            }
-                        }
-                    </li>
+                    if(Model.TicketType == ticketType.Type)
+                    {
+                        <span class="@ticketType.Type.GetClass()">@ticketType.PluralDisplayName</span>
+                    }
+                    else
+                    {
+                        @Html.ActionLink(ticketType.PluralDisplayName, ViewContext.RouteData.Values["action"].ToString(), Model.GetState(ticketType.Type), new {@class = ticketType.Type.GetClass()});
+                    }
                 }
-                </ul>
             }
             @if (ViewData.ContainsKey("States"))
             {
                 var states = (TicketState[])ViewData["States"];
-                <ul id="menu" class="left subMenu">
-                @foreach (var state in states)
+                foreach (var state in states)
                 {
-                    <li>
-                        @{
-                            if(Model.TicketState == state)
-                            {
-                                <span>@state.DisplayName()</span>
-                            }
-                            else
-                            {
-                                @Html.ActionLink(state.DisplayName(), ViewContext.RouteData.Values["action"].ToString(), Model.GetState(state));
-                            }
-                        }
-                    </li>
+                    if(Model.TicketState == state)
+                    {
+                        <span>@state.DisplayName()</span>
+                    }
+                    else
+                    {
+                        @Html.ActionLink(state.DisplayName(), ViewContext.RouteData.Values["action"].ToString(), Model.GetState(state));
+                    }
                 }
-                </ul>                
             }
             </header>
             <table>

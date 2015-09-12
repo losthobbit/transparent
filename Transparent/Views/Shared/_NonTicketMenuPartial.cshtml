@@ -1,4 +1,4 @@
-﻿<ul id="menu">
+﻿<nav class="menu">
     @{var links = new []
         {
             new []{ "Learn", "Details", "Tag" },
@@ -8,8 +8,7 @@
     }
     @foreach(var link in links)
     {
-        <li>
-        @if (ViewBag.Title == link[0])
+        if (ViewBag.Title == link[0])
         {
             <span>@MvcHtmlString.Create(link[0])</span>
         }
@@ -17,6 +16,5 @@
         {
             @Html.ActionLink(link[0], link[1], link[2]);
         }
-        </li>
     }
-</ul>
+</nav>
