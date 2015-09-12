@@ -37,10 +37,10 @@
                 }
             }
             </header>
-            <table>
+            <table class="fw">
             @foreach (var item in Model.PagedList)
             {
-            <tr class="ticket @item.TicketType.GetClass()">
+            <tr class="ticket @item.TicketType.GetClass() underlined">
                 <td>
                     @Html.DisplayFor(modelItem => item.Rank)
                 </td>

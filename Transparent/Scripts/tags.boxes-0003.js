@@ -27,7 +27,7 @@ function calculateBoxTop(row, boxesInColumn, maxBoxes) {
 function drawTag(ctx, tag, row, column, boxesInColumn, maxBoxes, selected, actionUrl) {
     var boxLeft = boxHorizontalPadding + column * (boxHorizontalPadding + boxWidth + arrowLength);
     var boxTop = calculateBoxTop(row, boxesInColumn, maxBoxes);
-    ctx.fillStyle = "#FFFFFF";
+    ctx.fillStyle = "#DDD";
     ctx.roundRect(boxLeft, boxTop, 150, boxHeight, 5).fill()
     ctx.font = "12px Arial";
     ctx.fillStyle = selected ? "#FF0000" : "#000000";
@@ -38,7 +38,7 @@ function drawTag(ctx, tag, row, column, boxesInColumn, maxBoxes, selected, actio
 }
 
 function drawArrow(ctx, row, column, boxesInColumn, maxBoxes) {
-    ctx.strokeStyle = "#FFFFFF";
+    ctx.strokeStyle = "#AAA";
     var x1 = column == 0 ? boxHorizontalPadding * 1.5 + boxWidth : boxHorizontalPadding * 2.5 + boxWidth * 2 + arrowLength * 2;
     var x2 = column == 0 ? x1 + arrowLength : x1 - arrowLength;
     ctx.moveTo(x1, calculateBoxTop(row, boxesInColumn, maxBoxes) + boxHeight / 2);

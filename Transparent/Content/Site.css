@@ -1,4 +1,16 @@
 ﻿/* Custom */
+html {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
+    color: #222222; 
+    margin: 0;
+    padding: 0;
+}
+
 .fw {
     width:100%;
 }
@@ -10,7 +22,7 @@
 }
 
 .underlined {
-    border-bottom: 1px solid #606060;
+    border-bottom: 1px solid #DDD;
 }
 
 .gap-above {
@@ -25,7 +37,30 @@
     margin-top: 0px;
 }
 
-a { text-decoration:none !important }
+a { 
+    text-decoration:none !important;
+    color: #131c4f;
+    outline: none;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+    a:link, a:visited,
+    a:active, a:hover {
+        color: #131c4f;
+    }
+
+    a:hover {
+    background-image: url(../Images/blue/selectVert.png);
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 3px;
+}
+
+p a, li a {
+    font-weight: 500;
+}
 
 .actionLinkUI { float: left; margin-right: 2px; }
 
@@ -39,7 +74,7 @@ a { text-decoration:none !important }
 
 .metadata {
     font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
-    color: #d2d2d2; 
+    color: #222222; 
     font-size: .8em;
 }
 
@@ -48,11 +83,11 @@ a { text-decoration:none !important }
     }
 
 .Expert {
-    color: gold;
+    color: #F6B311;
 }
 
 .Competent {
-    color: silver;
+    color: #B0B0B0;
 }
 
 .outset {
@@ -94,7 +129,8 @@ p {
 }
 
 .button {
-    background-color: rgba(255, 255, 255, 0.25);
+    color: #333;
+    background-color: rgba(0, 128, 128, 0.25);
     border-radius: 3px;
     margin: 5px 5px 5px 0px;
     padding: 3px 5px 3px 5px;
@@ -105,50 +141,9 @@ div {
     margin-bottom: 5px;
 }
 
-html {
-    margin: 0;
-    padding: 0;
-    background-color: black;
-}
-
-body {
-    background-color: black;
-    border-top: solid 10px #000;
-    font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
-    color: #e2e2e2; 
-    margin: 0;
-    padding: 0;
-}
-
-a {
-    color: #d3dcff;
-    outline: none;
-    padding-left: 3px;
-    padding-right: 3px;
-}
-
-    a:link, a:visited,
-    a:active, a:hover {
-        color: #d3dcff;
-    }
-
-    a:hover {
-    background-image: url(../Images/blue/selectVert.png);
-    background-size: 100% 100%;
-    background-position: center;
-    background-repeat: no-repeat;
-    border-radius: 3px;
-}
-
 header, footer, hgroup,
 nav, section {
     display: block;
-}
-
-mark {
-    background-color: #a6dbed;
-    padding-left: 5px;
-    padding-right: 5px;
 }
 
 .float-left {
@@ -198,11 +193,6 @@ h5, h6 {
     font-size: 1em;
 }
 
-    h5 a:link, h5 a:visited, h5 a:active {
-        padding: 0;
-        text-decoration: none;
-    }
-
 #rankPartial {
     margin: 5px 10px 0px 10px;
 }
@@ -232,8 +222,9 @@ h5, h6 {
     }
 
 .top {
-    padding-top: 3px; 
-    height:70px;
+    padding-top: 5px; 
+    height:80px;
+    background-color: #7ac0da;
     background-image: url(../Images/blue/left.png), url(../Images/blue/right.png);
     background-position: left, right;
     background-repeat: no-repeat;
@@ -251,7 +242,7 @@ footer {
 /* site title
 ----------------------------------------------------------*/
 .site-title {
-    color: #c8c8c8;
+    color: #555;
     font-family: Rockwell, Consolas, "Courier New", Courier, monospace;
     font-size: 2.3em;
     margin: 0;
@@ -259,7 +250,7 @@ footer {
 
 .site-title a, .site-title a:hover, .site-title a:active {
     background: none;
-    color: #c8c8c8;
+    color: #444;
     outline: none;
 }
 
@@ -269,7 +260,7 @@ footer {
 #login {
     display: block;
     font-size: .85em;
-    margin: 0 0 10px;
+    margin: 5px 0 10px;
 }
 
     #login a {
@@ -302,8 +293,8 @@ header.subMenu {
 
 .menu>a, .menu>span, .menu>select, .subMenu>a, .subMenu>span {
     border-radius: 3px;
-    background-color: rgba(255, 255, 255, 0.25);
-    color: #ccc;    
+    background-color: rgba(170, 170, 170, 0.25);
+    color: #444;    
 }
 
 .menu>a, .menu>span {
@@ -327,13 +318,13 @@ header.subMenu {
 }
 
 .menu>select {
-    background-color: rgba(60, 60, 60, 1);
+    background-color: rgba(170, 170, 170, 0.25);
     margin-right: 1px;
     border: none;
     padding: 4px;
     display: inline;
     width: 150px;
-    color: #ccc;    
+    color: #333;    
 }
 
 .menu .selected { 
@@ -341,7 +332,7 @@ header.subMenu {
 }
 
 .menu option:not(:checked) { 
-    color: #ccc;    
+    color: #333;    
 }
 
 .menu option{
@@ -350,43 +341,6 @@ header.subMenu {
 
 /* page elements
 ----------------------------------------------------------*/
-/* featured */
-.featured {
-    background-color: #fff;
-}
-
-    .featured .content-wrapper {
-        background-color: #7ac0da;
-        background-image: -ms-linear-gradient(left, #7ac0da 0%, #a4d4e6 100%);
-        background-image: -o-linear-gradient(left, #7ac0da 0%, #a4d4e6 100%);
-        background-image: -webkit-gradient(linear, left top, right top, color-stop(0, #7ac0da), color-stop(1, #a4d4e6));
-        background-image: -webkit-linear-gradient(left, #7ac0da 0%, #a4d4e6 100%);
-        background-image: linear-gradient(left, #7ac0da 0%, #a4d4e6 100%);
-        color: #3e5667;
-        padding: 20px 40px 30px 40px;
-    }
-
-        .featured hgroup.title h1, .featured hgroup.title h2 {
-            color: #fff;
-        }
-
-        .featured p {
-            font-size: 1.1em;
-        }
-
-/* page titles */
-hgroup.title {
-    margin-bottom: 10px;
-}
-
-hgroup.title h1, hgroup.title h2 {
-    display: inline;
-}
-
-hgroup.title h2 {
-    font-weight: normal;
-    margin-left: 3px;
-}
 
 /* features */
 section.feature {
@@ -395,70 +349,19 @@ section.feature {
     padding: 10px;
 }
 
-/* ordered list */
-ol.round {
-    list-style-type: none;
-    padding-left: 0;
+aside ul {
+    list-style: none;
+    padding: 0;
 }
 
-    ol.round li {
-        margin: 25px 0;
-        padding-left: 45px;
+    aside ul li {
+        background: url("../Images/bullet.png") no-repeat 0 50%;
+        padding: 2px 0 2px 20px;
     }
-
-        ol.round li.zero {
-            background: url("../Images/orderedList0.png") no-repeat;
-        }
-
-        ol.round li.one {
-            background: url("../Images/orderedList1.png") no-repeat;
-        }
-
-        ol.round li.two {
-            background: url("../Images/orderedList2.png") no-repeat;
-        }
-
-        ol.round li.three {
-            background: url("../Images/orderedList3.png") no-repeat;
-        }
-
-        ol.round li.four {
-            background: url("../Images/orderedList4.png") no-repeat;
-        }
-
-        ol.round li.five {
-            background: url("../Images/orderedList5.png") no-repeat;
-        }
-
-        ol.round li.six {
-            background: url("../Images/orderedList6.png") no-repeat;
-        }
-
-        ol.round li.seven {
-            background: url("../Images/orderedList7.png") no-repeat;
-        }
-
-        ol.round li.eight {
-            background: url("../Images/orderedList8.png") no-repeat;
-        }
-
-        ol.round li.nine {
-            background: url("../Images/orderedList9.png") no-repeat;
-        }
-
-    aside ul {
-        list-style: none;
-        padding: 0;
-    }
-
-        aside ul li {
-            background: url("../Images/bullet.png") no-repeat 0 50%;
-            padding: 2px 0 2px 20px;
-        }
 
 /* login page */
 #loginForm {
-    border-right: solid 2px #c8c8c8;
+    border-right: solid 2px #383838;
     float: left;
     width: 55%;
 }
@@ -553,8 +456,8 @@ label.checkbox {
 }
 
 input, textarea, select {
-    border: 1px solid #e2e2e2;
-    background-color: #D2D2D2;
+    border: 1px solid #C2C2C2;
+    background-color: #F2F2F2;
     border-radius: 3px;
     color: #333;
     margin: 3px 0 3px 0;
@@ -738,171 +641,3 @@ tr.pager td {
     padding: 0 0.25em 0 0;
 }
 
-
-/********************
-*   Mobile Styles   *
-********************/
-@media only screen and (max-width: 850px) {
-
-    /* header
-    ----------------------------------------------------------*/
-    header .float-left,
-    header .float-right {
-        float: none;
-    }
-
-    /* logo */
-    header .site-title {
-        margin: 10px;
-        text-align: center;
-    }
-
-    /* login */
-    #login {
-        font-size: .85em;
-        margin: 0 0 12px;
-        text-align: center;
-    }
-
-        #login ul {
-            margin: 5px 0;
-            padding: 0;
-        }
-
-        #login li {
-            display: inline;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        #login a {
-            background: none;
-            color: #999;
-            font-weight: 600;
-            margin: 2px;
-            padding: 0;
-        }
-
-        #login a:hover {
-            color: #333;
-        }
-
-    /* menu */
-    nav {
-        margin-bottom: 5px;
-    }
-
-    ul#menu {
-        margin: 0;
-        padding: 0;
-        text-align: center;
-    }
-
-        ul#menu li {
-            margin: 0;
-            padding: 0;
-        }
-
-
-    /* main layout
-    ----------------------------------------------------------*/
-    .main-content,
-    .featured + .main-content {
-        background-position: 10px 0;
-    }
-
-    .content-wrapper {
-        padding-right: 10px;
-        padding-left: 10px;
-    }
-
-    .featured .content-wrapper {
-        padding: 10px;
-    }
-
-    /* page content */
-    article, aside {
-        float: none;
-        width: 100%;
-    }
-
-    /* ordered list */
-    ol.round {
-        list-style-type: none;
-        padding-left: 0;
-    }
-
-        ol.round li {
-            padding-left: 10px;
-            margin: 25px 0;
-        }
-
-            ol.round li.zero,
-            ol.round li.one,
-            ol.round li.two,
-            ol.round li.three,
-            ol.round li.four,
-            ol.round li.five,
-            ol.round li.six,
-            ol.round li.seven,
-            ol.round li.eight,
-            ol.round li.nine {
-                background: none;
-            }
-
-     /* features */
-     section.feature {
-        float: none;
-        padding: 10px;
-        width: auto;
-     }
-
-        section.feature img {
-            color: #999;
-            content: attr(alt);
-            font-size: 1.5em;
-            font-weight: 600;
-        }
-
-    /* forms */
-    input {
-        width: 90%;
-    }
-
-    /* login page */
-    #loginForm {
-        border-right: none;
-        float: none;
-        width: auto;
-    }
-
-        #loginForm .validation-error {
-            display: block;
-            margin-left: 15px;
-        }
-
-    #socialLoginForm {
-        margin-left: 0;
-        float: none;
-        width: auto;
-    }
-
-
-    /* footer
-    ----------------------------------------------------------*/
-    footer .float-left,
-    footer .float-right {
-        float: none;
-    }
-
-    footer {
-        text-align: center;
-        height: auto;
-        padding: 10px 0;
-    }
-
-        footer p {
-            margin: 0;
-        }
-}
