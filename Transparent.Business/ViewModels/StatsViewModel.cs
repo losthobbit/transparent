@@ -12,6 +12,9 @@ namespace Transparent.Business.ViewModels
         [Display(Name = "Registered users")]
         public int RegisteredUsers { get; set; }
 
+        [Display(Name = "Active users")]
+        public int ActiveUsers { get; set; }
+
         [Display(Name = "Suggestions created")]
         public int SuggestionsCreated { get; set; }
 

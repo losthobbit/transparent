@@ -13,6 +13,8 @@ namespace Transparent.Data.Tests.Helpers
         {
             CurrentSubgoal = "Increase the number of registered users.";
 
+            UserActiveTime = new TimeSpan(10, 0, 0, 0);
+
             PointsRequiredBeforeDeductingPoints = 3;
             PointsToDeductWhenStartingTest = 2;
             PointsForPassingATest = 2;
@@ -46,6 +48,11 @@ namespace Transparent.Data.Tests.Helpers
         }
 
         public string CurrentSubgoal { get; set; }
+
+        /// <summary>
+        /// After this period of inactivity, a user is considered inactive.
+        /// </summary>
+        public TimeSpan UserActiveTime { get; set; }
 
         public int PointsRequiredBeforeDeductingPoints { get; set; }
         public int PointsToDeductWhenStartingTest { get; set; }

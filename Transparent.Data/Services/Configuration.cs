@@ -13,6 +13,11 @@ namespace Transparent.Data.Services
 
         public string CurrentSubgoal { get; set; }
 
+        /// <summary>
+        /// After this period of inactivity, a user is considered inactive.
+        /// </summary>
+        public TimeSpan UserActiveTime { get; set; }
+
         #endregion General
 
         #region Points
@@ -127,6 +132,8 @@ namespace Transparent.Data.Services
         public Configuration(Common.Interfaces.IConfiguration configuration)
         {
             CurrentSubgoal = configuration.GetValue("CurrentSubGoal");
+
+            UserActiveTime = TimeSpan.Parse(configuration.GetValue("UserActiveTime"));
 
             PointsRequiredBeforeDeductingPoints = int.Parse(configuration.GetValue("PointsRequiredBeforeDeductingPoints"));
             PointsToDeductWhenStartingTest = int.Parse(configuration.GetValue("PointsToDeductWhenStartingTest"));

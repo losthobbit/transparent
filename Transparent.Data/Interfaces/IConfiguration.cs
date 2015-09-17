@@ -10,6 +10,11 @@ namespace Transparent.Data.Interfaces
     {
         string CurrentSubgoal { get; set; }
 
+        /// <summary>
+        /// After this period of inactivity, a user is considered inactive.
+        /// </summary>
+        TimeSpan UserActiveTime { get; set; }
+
         int PointsRequiredBeforeDeductingPoints { get; set; }
         int PointsToDeductWhenStartingTest { get; set; }
         int PointsForPassingATest { get; set; }
