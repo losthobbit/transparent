@@ -12,5 +12,6 @@ namespace Transparent.Business.Interfaces
         int GetPointsForTag(int userId, int tagId);
         UserTag GetUserTag(int userId, int tagId);
         List<Tag> GetIncompetentParentsTags(int userId, int tagId);
+        void SetLastActionDate(int userId, DateTime dateTime);
     }
 }

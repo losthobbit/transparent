@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Common.Interfaces.Events
 {
-    public interface IEvent
+    public interface ITimedEvent
     {
         DateTime LastRun { get; set; }
         TimeSpan Interval { get; set; }

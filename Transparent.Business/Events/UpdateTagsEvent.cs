@@ -15,7 +15,7 @@ namespace Transparent.Business.Events
     /// <remarks>
     /// Can be a singleton
     /// </remarks>
-    public class UpdateTagsEvent: Event
+    public class UpdateTagsEvent: TimedEvent
     {
         private readonly ITags tags;
         private readonly IUsersContextFactory usersContextFactory;

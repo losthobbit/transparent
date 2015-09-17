@@ -12,13 +12,13 @@ namespace Common.Services.Events
     /// <summary>
     /// For triggering events periodically.
     /// </summary>
-    public class EventRunner: IEventRunner
+    public class TimedEventRunner: ITimedEventRunner
     {
         private readonly object _lock = new object();       
         
-        private List<IEvent> events;
+        private List<ITimedEvent> events;
 
-        public EventRunner(IEnumerable<IEvent> events)
+        public TimedEventRunner(IEnumerable<ITimedEvent> events)
         {
             this.events = events.ToList();
         }
@@ -41,7 +41,7 @@ namespace Common.Services.Events
         /// Run events which are ready.
         /// </summary>
         /// <exception cref="AggregateException">Events threw exceptions.</exception>
-        public void RunEvents(IEnumerable<IEvent> readyEvents = null)
+        public void RunEvents(IEnumerable<ITimedEvent> readyEvents = null)
         {
             var eventsToRun = GetEventsToRun(readyEvents ?? events);
 
@@ -64,12 +64,12 @@ namespace Common.Services.Events
             }
         }
 
-        public void AddEvent(IEvent evt)
+        public void AddEvent(ITimedEvent evt)
         {
             events.Add(evt);
         }
 
-        public void RemoveEvent(IEvent evt)
+        public void RemoveEvent(ITimedEvent evt)
         {
             events.Remove(evt);
         }
@@ -77,7 +77,7 @@ namespace Common.Services.Events
         /// <summary>
         /// Returns an array of events that are ready to run.
         /// </summary>
-        private IEvent[] GetReadyEvents(IEnumerable<IEvent> events)
+        private ITimedEvent[] GetReadyEvents(IEnumerable<ITimedEvent> events)
         {
             return events.Where(evt => evt.LastRun + evt.Interval <= DateTime.Now).ToArray();
         }
@@ -85,7 +85,7 @@ namespace Common.Services.Events
         /// <summary>
         /// Thread safe way of updating event dates and returning those that are going to be run.
         /// </summary>
-        private IEvent[] GetEventsToRun(IEnumerable<IEvent> readyEvents)
+        private ITimedEvent[] GetEventsToRun(IEnumerable<ITimedEvent> readyEvents)
         {
             lock (_lock)
             {

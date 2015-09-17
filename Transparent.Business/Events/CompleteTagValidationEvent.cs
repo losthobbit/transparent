@@ -14,7 +14,7 @@ namespace Transparent.Business.Events
     /// <summary>
     /// Used to move tickets to their next stage after tag validation is completed.
     /// </summary>
-    public class CompleteTagValidationEvent: Event
+    public class CompleteTagValidationEvent: TimedEvent
     {
         private readonly IProgressTickets progressTicketsService;
 

@@ -182,6 +182,7 @@
     <Compile Include="Controllers\VolunteerController.cs" />
     <Compile Include="Extensions\DataAnnotationsExtensions.cs" />
     <Compile Include="Extensions\ModelViewExtensions.cs" />
+    <Compile Include="Filters\UserActionFilterAttribute.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Filters\PeriodicFilterAttribute.cs" />
     <Compile Include="Global.asax.cs">

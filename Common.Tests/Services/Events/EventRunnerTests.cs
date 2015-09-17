@@ -14,16 +14,16 @@ namespace Common.Tests.Services.Events
     [TestFixture]
     public class EventRunnerTests
     {
-        private EventRunner target;
+        private TimedEventRunner target;
 
-        private Mock<IEvent> evt;
+        private Mock<ITimedEvent> evt;
 
         [SetUp]
         public void SetUp()
         {
-            target = new EventRunner(new List<IEvent>());
+            target = new TimedEventRunner(new List<ITimedEvent>());
 
-            evt = new Mock<IEvent>();
+            evt = new Mock<ITimedEvent>();
             evt.SetupGet(x => x.LastRun).Returns(DateTime.Now.AddSeconds(-10));
             evt.SetupGet(x => x.Interval).Returns(TimeSpan.FromSeconds(9));
             target.AddEvent(evt.Object);

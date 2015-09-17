@@ -46,6 +46,9 @@ namespace Transparent.Data.Models
         {
             Badges = ((int)badge | Badges);
         }
+
+        [Index]
+        public DateTime? LastActionDate { get; set; }
     }
 
     public class RegisterExternalLoginModel

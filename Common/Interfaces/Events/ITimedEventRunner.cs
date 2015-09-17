@@ -10,13 +10,13 @@ namespace Common.Interfaces.Events
     /// <summary>
     /// For triggering events periodically.
     /// </summary>
-    public interface IEventRunner
+    public interface ITimedEventRunner
     {
         void RunEventsAsync();
         /// <exception cref="AggregateException">Events threw exceptions.</exception>
-        void RunEvents(IEnumerable<IEvent> readyEvents = null);
+        void RunEvents(IEnumerable<ITimedEvent> readyEvents = null);
 
-        void AddEvent(IEvent evt);
-        void RemoveEvent(IEvent evt);
+        void AddEvent(ITimedEvent evt);
+        void RemoveEvent(ITimedEvent evt);
     }
 }

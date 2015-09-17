@@ -11,7 +11,7 @@ namespace Transparent.Business.Events
     /// <summary>
     /// Used to move tickets to their next stage after voting is completed.
     /// </summary>
-    public class CompleteVotingEvent: Event
+    public class CompleteVotingEvent: TimedEvent
     {
         private readonly IProgressTickets progressTicketsService;
 

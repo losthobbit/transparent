@@ -48,5 +48,11 @@ namespace Transparent.Business.Services
                 ? new List<Tag>()
                 : parents.Where(p => GetPointsForTag(userId, p.Id) < p.CompetentPoints).ToList();
         }
+
+        public void SetLastActionDate(int userId, DateTime dateTime)
+        {
+            db.UserProfiles.Single(user => user.UserId == userId).LastActionDate = dateTime;
+            db.SaveChanges();
+        }
     }
 }

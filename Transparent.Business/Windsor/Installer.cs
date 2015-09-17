@@ -21,10 +21,11 @@ namespace Transparent.Business.Windsor
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             container.Register(
-                Component.For<IEvent>().ImplementedBy<CompleteTagValidationEvent>().LifeStyle.Singleton,
-                Component.For<IEvent>().ImplementedBy<CompleteDiscussionEvent>().LifeStyle.Singleton,
-                Component.For<IEvent>().ImplementedBy<CompleteVotingEvent>().LifeStyle.Singleton,
-                Component.For<IEvent>().ImplementedBy<UpdateTagsEvent>().LifeStyle.Singleton,
+                Component.For<ITimedEvent>().ImplementedBy<CompleteTagValidationEvent>().LifeStyle.Singleton,
+                Component.For<ITimedEvent>().ImplementedBy<CompleteDiscussionEvent>().LifeStyle.Singleton,
+                Component.For<ITimedEvent>().ImplementedBy<CompleteVotingEvent>().LifeStyle.Singleton,
+                Component.For<ITimedEvent>().ImplementedBy<UpdateTagsEvent>().LifeStyle.Singleton,
+                Component.For<IUserActionEvent>().ImplementedBy<SetLastActionDateEvent>().LifeStyle.Singleton,
                 Component.For<ITickets>().ImplementedBy<Tickets>().LifeStyle.Transient,
                 Component.For<IUser>().ImplementedBy<User>().LifeStyle.Transient,
                 Component.For<IVolunteers>().ImplementedBy<Volunteers>().LifeStyle.Transient,

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Common.Services.Events
 {
-    public abstract class Event: IEvent
+    public abstract class TimedEvent: ITimedEvent
     {
-        protected Event(TimeSpan interval)
+        protected TimedEvent(TimeSpan interval)
         {
             Interval = interval;
             LastRun = DateTime.MinValue;

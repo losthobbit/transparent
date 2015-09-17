@@ -146,6 +146,10 @@
     <Compile Include="Migrations\201508160741100_AddArgumentTableUserWeighting.Designer.cs">
       <DependentUpon>201508160741100_AddArgumentTableUserWeighting.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201509162051032_AddUserProfileLastActionDateColumn.cs" />
+    <Compile Include="Migrations\201509162051032_AddUserProfileLastActionDateColumn.Designer.cs">
+      <DependentUpon>201509162051032_AddUserProfileLastActionDateColumn.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Argument.cs" />
     <Compile Include="Models\Badge.cs" />
     <Compile Include="Models\Interfaces\IArgument.cs" />
@@ -299,6 +303,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201508160741100_AddArgumentTableUserWeighting.resx">
       <DependentUpon>201508160741100_AddArgumentTableUserWeighting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509162051032_AddUserProfileLastActionDateColumn.resx">
+      <DependentUpon>201509162051032_AddUserProfileLastActionDateColumn.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

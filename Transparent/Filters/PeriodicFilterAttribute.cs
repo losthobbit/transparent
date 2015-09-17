@@ -21,7 +21,8 @@ namespace Transparent.Filters
     public class PeriodicFilterAttribute : ActionFilterAttribute   
     {
         public ITechnicalConfiguration TechnicalConfiguration { get; set; }
-        public IEventRunner EventRunner { get; set; }
+        public ITimedEventRunner EventRunner { get; set; }
+        public IEnumerable<ITimedEvent> TestEvents { get; set; }
 
         private readonly object _lock = new object();
 

@@ -5,6 +5,7 @@ namespace Transparent.Data.Migrations
     using System.Collections.ObjectModel;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
+    using System.Diagnostics;
     using System.Linq;
     using System.Web.Security;
     using Transparent.Data.Models;
@@ -57,15 +58,16 @@ namespace Transparent.Data.Migrations
             var criticalThinkingTag = context.Tags.Single(tag => tag.Name == Constants.CriticalThinkingTagName);
             var body = "Name a logical fallacy in the following sentence:\n\n" +
                     "I eat herbs because my grandfather ate herbs and lived for a hundred years.";
-            if(!context.Tests.Any(test => test.Body == body))
+            if (!context.Tests.Any(test => test.Body == body))
                 context.Tests.Add(new Test
-                {
+                { 
                     User = testUser,
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = DateTime.UtcNow,
                     Heading = "Name the logical fallacy",
                     Body = body,
                     TicketTags = new Collection<TicketTag> { new TicketTag { Tag = criticalThinkingTag } },
-                    State = TicketState.Completed
+                    State = TicketState.Completed,
+                    ModifiedDate = DateTime.UtcNow
                 });
             body = "Name or explain a logical fallacy in the following:\n\n" +
                     "Either chemotherapy or a miracle cured his cancer.  He didn't have chemotherapy.  Therefore it was a miracle.";
@@ -73,11 +75,12 @@ namespace Transparent.Data.Migrations
                 context.Tests.AddOrUpdate(t => t.Body, new Test
                 {
                     User = testUser,
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = DateTime.UtcNow,
                     Heading = "Name or explain the logical fallacy",
                     Body = body,
                     TicketTags = new Collection<TicketTag> { new TicketTag { Tag = criticalThinkingTag } },
-                    State = TicketState.Completed
+                    State = TicketState.Completed,
+                    ModifiedDate = DateTime.UtcNow
                 });
 
             var promotionTag = context.Tags.Single(tag => tag.Name == PromotionTagName);
@@ -90,7 +93,8 @@ namespace Transparent.Data.Migrations
                     Heading = "Viral videos",
                     Body = body,
                     TicketTags = new Collection<TicketTag> { new TicketTag { Tag = promotionTag } },
-                    State = TicketState.Completed
+                    State = TicketState.Completed,
+                    ModifiedDate = DateTime.UtcNow
                 });
         }
 

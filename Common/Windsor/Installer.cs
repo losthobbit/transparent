@@ -18,7 +18,8 @@ namespace Common.Windsor
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             container.Register(
-                Component.For<IEventRunner>().ImplementedBy<EventRunner>().LifeStyle.Singleton
+                Component.For<ITimedEventRunner>().ImplementedBy<TimedEventRunner>().LifeStyle.Singleton,
+                Component.For<IUserActionEventRunner>().ImplementedBy<UserActionEventRunner>().LifeStyle.Singleton
             );
         }
     }
