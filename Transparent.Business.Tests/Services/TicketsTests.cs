@@ -46,7 +46,7 @@ namespace Transparent.Business.Tests.Services
         /// </remarks>
         private void UseRealDataService()
         {
-            var dataService = new DataService(MockTags.Object);
+            var dataService = new DataService(MockTags.Object, TestConfiguration);
             mockDataService.Setup(x => x.AddPoints(It.IsAny<UserPoint>(), It.IsAny<UserTag>(), It.IsAny<int>()))
                 .Callback<UserPoint, UserTag, int>(dataService.AddPoints);
             mockDataService.Setup(x => x.AddPoints(It.IsAny<IUsersContext>(), It.IsAny<IEnumerable<int>>(), It.IsAny<int>(),

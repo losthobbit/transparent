@@ -17,10 +17,12 @@ namespace Transparent.Data.Services
     public class DataService : IDataService
     {
         private readonly ITags tags;
+        private readonly IConfiguration configuration;
 
-        public DataService(ITags tags)
+        public DataService(ITags tags, IConfiguration configuration)
         {
             this.tags = tags;
+            this.configuration = configuration;
         }
 
         /// <summary>
@@ -216,6 +218,15 @@ namespace Transparent.Data.Services
                 }
             }
             return ticket.Rank;
+        }
+
+        /// <summary>
+        /// Returns users who have been active within a configured period of time.
+        /// </summary>
+        public IQueryable<UserProfile> GetActiveUsers(IUsersContext db)
+        {
+            var lastActiveDate = DateTime.UtcNow - configuration.UserActiveTime;
+            return db.UserProfiles.Where(user => user.LastActionDate >= lastActiveDate);
         }
     }
 }

@@ -19,6 +19,7 @@ namespace Transparent.Business.Tests.Events
 
         private Mock<Common.Interfaces.IConfiguration> mockConfiguration;
         private Mock<IUsersContextFactory> mockUsersContextFactory;
+        private Mock<IDataService> mockDataService;
 
         [SetUp]
         public override void SetUp()
@@ -31,7 +32,10 @@ namespace Transparent.Business.Tests.Events
             mockUsersContextFactory = new Mock<IUsersContextFactory>();
             mockUsersContextFactory.Setup(x => x.Create()).Returns(UsersContext);
 
-            target = new UpdateTagsEvent(mockConfiguration.Object, MockTags.Object, mockUsersContextFactory.Object, TestConfiguration);
+            mockDataService = new Mock<IDataService>();
+
+            target = new UpdateTagsEvent(mockConfiguration.Object, MockTags.Object, mockUsersContextFactory.Object, TestConfiguration,
+                mockDataService.Object);
         }
 
         #region UpdateCompetencyLevels
@@ -40,8 +44,12 @@ namespace Transparent.Business.Tests.Events
 
         private void ArrangeUpdateCompetencyLevels(int[] userPoints)
         {
-            foreach (var user in TestData.UsersContext.UserProfiles.ToList())
-                TestData.UsersContext.UserProfiles.Remove(user);
+            // Remove existing users
+            //foreach (var user in TestData.UsersContext.UserProfiles.ToList())
+            //    TestData.UsersContext.UserProfiles.Remove(user);
+
+            // Create an active user for each point
+            var activeUsers = new List<UserProfile>();
             updateCompetencyLevelsTag = TestData.UnusedTag;
             int userId = 0;
             foreach (var userPoint in userPoints)
@@ -52,6 +60,7 @@ namespace Transparent.Business.Tests.Events
                     Tags = new List<UserTag>()
                 };
                 TestData.UsersContext.UserProfiles.Add(user);
+                activeUsers.Add(user);
                 if (userPoint > 0)
                 {
                     var userTag = new UserTag
@@ -67,6 +76,7 @@ namespace Transparent.Business.Tests.Events
                 }
                 userId++;
             }
+            mockDataService.Setup(x => x.GetActiveUsers(It.IsAny<IUsersContext>())).Returns(activeUsers.AsQueryable);
         }
 
         [TestCase(50, 2, 100, new[] { 0, 0, 0, 10 }, 0)]

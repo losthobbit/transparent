@@ -76,5 +76,10 @@ namespace Transparent.Data.Interfaces
         /// Does not call DbContext.SaveChanges.
         /// </remarks>
         void SetVote(Ticket ticket, Stance vote, int userId);
+
+        /// <summary>
+        /// Returns users who have been active within a configured period of time.
+        /// </summary>
+        IQueryable<UserProfile> GetActiveUsers(IUsersContext db);
     }
 }

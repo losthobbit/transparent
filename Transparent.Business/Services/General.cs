@@ -19,24 +19,22 @@ namespace Transparent.Business.Services
     public class General: IGeneral
     {
         private readonly IUsersContextFactory usersContextFactory;
-        private readonly IConfiguration configuration;
+        private readonly IDataService dataService;
 
-        public General(IUsersContextFactory usersContextFactory, IConfiguration configuration)
+        public General(IUsersContextFactory usersContextFactory, IDataService dataService)
         {
             this.usersContextFactory = usersContextFactory;
-            this.configuration = configuration;
+            this.dataService = dataService;
         }
 
         public StatsViewModel GetStats()
         {
             using (var dbContext = usersContextFactory.Create())
             {
-                var lastActiveDate = DateTime.UtcNow - configuration.UserActiveTime;
-
                 return new StatsViewModel
                 {
                     RegisteredUsers = dbContext.UserProfiles.Count(),
-                    ActiveUsers = dbContext.UserProfiles.Count(user => user.LastActionDate >= lastActiveDate),
+                    ActiveUsers = dataService.GetActiveUsers(dbContext).Count(),
                     SuggestionsCreated = dbContext.Suggestions.Count(),
                     SuggestionsImplemented = dbContext.Suggestions.Count(suggestion => suggestion.State == TicketState.Completed)
                 };

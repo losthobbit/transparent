@@ -20,14 +20,16 @@ namespace Transparent.Business.Events
         private readonly ITags tags;
         private readonly IUsersContextFactory usersContextFactory;
         private readonly IConfiguration configuration;
+        private readonly IDataService dataService;
 
         public UpdateTagsEvent(Common.Interfaces.IConfiguration commonConfiguration, ITags tags, IUsersContextFactory usersContextFactory,
-            IConfiguration configuration)
+            IConfiguration configuration, IDataService dataService)
             : base(TimeSpan.Parse(commonConfiguration.GetValue("UpdateTagsEventInterval")))
         {
             this.tags = tags;
             this.usersContextFactory = usersContextFactory;
             this.configuration = configuration;
+            this.dataService = dataService;
         }
 
         public override void Action()
@@ -41,9 +43,9 @@ namespace Transparent.Business.Events
         /// </summary>
         /// <remarks>
         /// Calculated as follows: a user is competent in a tag if any of the following are true:
-        /// 1. Their score is in the top MinPercentCompetents % of all users.
-        /// 2. Their score is in the top MinCompetents of all users.
-        /// 3. Their score is in the top CompetentPercentOfHighestScore % of the highest score for that tag.
+        /// 1. Their score is in the top MinPercentCompetents % of active users.
+        /// 2. Their score is in the top MinCompetents of active users.
+        /// 3. Their score is in the top CompetentPercentOfHighestScore % of the highest score for that tag for an active user.
         /// 
         /// Expert level is calculated in a similar way.
         /// </remarks>
@@ -51,22 +53,24 @@ namespace Transparent.Business.Events
         {
             using (var db = usersContextFactory.Create())
             {
-                var userCount = db.UserProfiles.Count();
+                var activeUsers = dataService.GetActiveUsers(db);
+                var activeUserCount = activeUsers.Count();
                 var competentPosition = Math.Max(
                     configuration.MinCompetents,
-                    (int)Math.Ceiling(((float)configuration.MinPercentCompetents / 100f) * userCount)
+                    (int)Math.Ceiling(((float)configuration.MinPercentCompetents / 100f) * activeUserCount)
                 );
 
                 var expertPosition = Math.Max(
                     configuration.MinExperts,
-                    (int)Math.Ceiling(((float)configuration.MinPercentExperts / 100f) * userCount)
+                    (int)Math.Ceiling(((float)configuration.MinPercentExperts / 100f) * activeUserCount)
                 );
 
                 var tags = db.Tags.ToList();
 
                 foreach (var tag in tags)
                 {
-                    var orderedUserTags = db.UserTags
+                    var orderedUserTags = activeUsers
+                        .SelectMany(activeUser => activeUser.Tags)
                         .Where(ut => ut.FkTagId == tag.Id)
                         .OrderByDescending(ut => ut.TotalPoints);
 

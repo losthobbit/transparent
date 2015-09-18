@@ -20,7 +20,7 @@ namespace Transparent.Data.Tests.Services
         {
             base.SetUp();
 
-            target = new DataService(MockTags.Object);
+            target = new DataService(MockTags.Object, TestConfiguration);
         }
 
         #region AddPoints
