@@ -12,12 +12,20 @@ using Transparent.Filters;
 using Transparent.Data.Models;
 using System.Data.Linq;
 using Transparent.Data;
+using Transparent.Business.Interfaces;
 
 namespace Transparent.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        private readonly IUserFactory userServiceFactory;
+
+        public AccountController(IUserFactory userServiceFactory)
+        {
+            this.userServiceFactory = userServiceFactory;
+        }
+
         //
         // GET: /Account/Login
 
@@ -36,6 +44,10 @@ namespace Transparent.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel model, string returnUrl)
         {
+            if (model.Action == "ForgottenPassword")
+                return ForgottenPassword(model);
+
+            // If the username is blank, get it from the email address
             if(String.IsNullOrWhiteSpace(model.UserName) && !String.IsNullOrWhiteSpace(model.Email))
                 using(var db = new UsersContext())
                 {
@@ -43,6 +55,8 @@ namespace Transparent.Controllers
                     if(userProfile != null)
                         model.UserName = userProfile.UserName;
                 };
+
+            // Attempt to login and redirect to the required page
             if (ModelState.IsValid && model.UserName != null && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
             {
                 return RedirectToLocal(returnUrl);
@@ -345,6 +359,21 @@ namespace Transparent.Controllers
 
             ViewBag.ShowRemoveButton = externalLogins.Count > 1 || OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
             return PartialView("_RemoveExternalLoginsPartial", externalLogins);
+        }
+
+        private ActionResult ForgottenPassword(LoginModel model)
+        {
+            try
+            {
+                userServiceFactory.Create().ForgottenPassword(model.UserName, model.Email);
+            }
+            catch (ArgumentException)
+            {
+                // Incorrect username or email, redisplay form
+                ModelState.AddModelError("", "The details provided could not be found.");
+                return View(model);
+            }
+            return View("ForgottenPasswordConfirmation");
         }
 
         #region Helpers

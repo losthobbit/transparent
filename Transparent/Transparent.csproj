@@ -430,6 +430,7 @@
     <Content Include="Views\Home\HowItWorks.cshtml" />
     <Content Include="Views\Tag\TestTaken.cshtml" />
     <Content Include="Views\Tag\_TakeTestPartial.cshtml" />
+    <Content Include="Views\Account\ForgottenPasswordConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

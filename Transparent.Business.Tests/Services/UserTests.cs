@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Common.Interfaces;
+using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace Transparent.Business.Tests.Services
         private User target;
 
         private Mock<ITags> mockTags;
+        private Mock<ISecurity> mockSecurity;
 
         [SetUp]
         public override void SetUp()
@@ -24,8 +26,9 @@ namespace Transparent.Business.Tests.Services
             base.SetUp();
 
             mockTags = new Mock<ITags>();
+            mockSecurity = new Mock<ISecurity>();
 
-            target = new User(TestData.UsersContext, TestConfiguration, mockTags.Object);
+            target = new User(TestData.UsersContext, mockTags.Object, mockSecurity.Object);
         }
 
         #region GetIncompetentParentsTags

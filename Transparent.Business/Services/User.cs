@@ -9,6 +9,8 @@ using Transparent.Data.Models;
 
 namespace Transparent.Business.Services
 {
+    using ISecurity = Common.Interfaces.ISecurity;
+
     /// <summary>
     /// Contains methods for getting user info for a user.
     /// </summary>
@@ -20,14 +22,14 @@ namespace Transparent.Business.Services
     public class User: IUser
     {
         private IUsersContext db;
-        private readonly IConfiguration configuration;
         private readonly ITags tags;
+        private readonly ISecurity security;
 
-        public User(IUsersContext db, IConfiguration configuration, ITags tags)
+        public User(IUsersContext db, ITags tags, ISecurity security)
         {
             this.db = db;
-            this.configuration = configuration;
             this.tags = tags;
+            this.security = security;
         }
 
         public int GetPointsForTag(int userId, int tagId)
@@ -53,6 +55,43 @@ namespace Transparent.Business.Services
         {
             db.UserProfiles.Single(user => user.UserId == userId).LastActionDate = dateTime;
             db.SaveChanges();
+        }
+
+        /// <summary>
+        /// Creates temporary password and sends the reset password email.
+        /// </summary>
+        /// <remarks>
+        /// Either username or email must be supplied.
+        /// </remarks>
+        /// <param name="username">The username of the account</param>
+        /// <param name="email">The email address of the account</param>
+        /// <exception cref="ArgumentException">username or email could not be found.</exception>
+        public void ForgottenPassword(string username, string email)
+        {
+            var userProfile = String.IsNullOrWhiteSpace(username)
+                ? db.UserProfiles.SingleOrDefault(user => user.Email == email)
+                : db.UserProfiles.SingleOrDefault(user => user.UserName == username);
+
+            if (userProfile == null)
+                throw new ArgumentException("username or email could not be found");
+
+            CreateTemporaryPassword(userProfile);
+        }
+
+        private string CreateTemporaryPassword(UserProfile userProfile)
+        {
+            var temporaryPassword = Guid.NewGuid().ToString();
+
+            db.TemporaryPasswords.Add(new TemporaryPassword
+            {
+                User = userProfile,
+                ExpiryDate = DateTime.UtcNow.AddDays(1),
+                Hash = security.Hash(temporaryPassword)
+            });
+
+            db.SaveChanges();
+
+            return temporaryPassword;
         }
     }
 }

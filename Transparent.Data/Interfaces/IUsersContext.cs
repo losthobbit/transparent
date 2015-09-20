@@ -28,6 +28,7 @@ namespace Transparent.Data.Interfaces
         IDbSet<UserInRole> UsersInRoles { get; }
         IDbSet<Role> Roles { get; }
         IDbSet<TicketHistory> TicketHistory { get; }
+        IDbSet<TemporaryPassword> TemporaryPasswords { get; }
 
         int SaveChanges();
         DbEntityEntry Entry(object entity);

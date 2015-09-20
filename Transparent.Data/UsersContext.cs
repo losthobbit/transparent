@@ -34,6 +34,7 @@ namespace Transparent.Data
         public IDbSet<UserInRole> UsersInRoles { get; set; }
         public IDbSet<Role> Roles { get; set; }
         public IDbSet<TicketHistory> TicketHistory { get; set; }
+        public IDbSet<TemporaryPassword> TemporaryPasswords { get; set; }
 
         /// <summary>
         /// UserProfiles with eagerly loaded information.

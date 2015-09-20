@@ -19,7 +19,8 @@ namespace Common.Windsor
         {
             container.Register(
                 Component.For<ITimedEventRunner>().ImplementedBy<TimedEventRunner>().LifeStyle.Singleton,
-                Component.For<IUserActionEventRunner>().ImplementedBy<UserActionEventRunner>().LifeStyle.Singleton
+                Component.For<IUserActionEventRunner>().ImplementedBy<UserActionEventRunner>().LifeStyle.Singleton,
+                Component.For<ISecurity>().ImplementedBy<Security>().LifeStyle.Singleton
             );
         }
     }

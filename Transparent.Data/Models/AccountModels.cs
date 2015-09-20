@@ -91,13 +91,14 @@ namespace Transparent.Data.Models
         [Index(IsUnique = true)]
         public string Email { get; set; }
 
-        [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
+
+        public string Action { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
@@ -106,6 +107,11 @@ namespace Transparent.Data.Models
                     this.GetAttributeFrom<DisplayAttribute>("UserName").Name,
                     this.GetAttributeFrom<DisplayAttribute>("Email").Name), 
                     new []{"UserName", "Email"});
+
+            if (Action == "LogIn" && String.IsNullOrWhiteSpace(Password))
+                yield return new ValidationResult(String.Format("{0} must be supplied.",
+                    this.GetAttributeFrom<DisplayAttribute>("Password").Name),
+                    new []{"Password"});
         }
     }
 

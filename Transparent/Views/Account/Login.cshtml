@@ -37,7 +37,8 @@
                 @Html.LabelFor(m => m.RememberMe, new { @class = "checkbox" })
             </li>
         </ol>
-        <input type="submit" value="Log in" />
+        <button name="action" value="LogIn">Log in</button>
+        <button name="action" value="ForgottenPassword">I forgot my password</button>
     </fieldset>
     <p>
         @Html.ActionLink("Register", "Register") if you don't have an account.

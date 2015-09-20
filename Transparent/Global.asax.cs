@@ -65,13 +65,13 @@ namespace Transparent
             container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));
             container.Kernel.AddFacility<TypedFactoryFacility>();
 
-            // Just a way of loading the assembly, so that its installer is called
-            Business.Windsor.Installer x;
-
             container.Install
             (
-                FromAssembly.InThisApplication(), 
-                FromAssembly.Containing<Common.Windsor.Installer>()
+                // Business tier needs to be installed last due to hack.
+                FromAssembly.Containing<Common.Windsor.Installer>(),
+                FromAssembly.Containing<Data.Windsor.Installer>(),
+                FromAssembly.Containing<Windsor.Installer>(),
+                FromAssembly.Containing<Business.Windsor.Installer>()
             );
 
             // Setup dependency injection of MVC controllers
