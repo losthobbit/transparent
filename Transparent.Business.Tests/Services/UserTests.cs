@@ -19,6 +19,7 @@ namespace Transparent.Business.Tests.Services
 
         private Mock<ITags> mockTags;
         private Mock<ISecurity> mockSecurity;
+        private Mock<IEmail> mockEmail;
 
         [SetUp]
         public override void SetUp()
@@ -27,8 +28,9 @@ namespace Transparent.Business.Tests.Services
 
             mockTags = new Mock<ITags>();
             mockSecurity = new Mock<ISecurity>();
+            mockEmail = new Mock<IEmail>();
 
-            target = new User(TestData.UsersContext, mockTags.Object, mockSecurity.Object);
+            target = new User(TestData.UsersContext, mockTags.Object, mockSecurity.Object, mockEmail.Object, TestConfiguration);
         }
 
         #region GetIncompetentParentsTags

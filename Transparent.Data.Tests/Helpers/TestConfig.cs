@@ -12,6 +12,7 @@ namespace Transparent.Data.Tests.Helpers
         public TestConfig()
         {
             CurrentSubgoal = "Increase the number of registered users.";
+            BaseSiteUrl = "https://democraticintelligence.org";
 
             UserActiveTime = new TimeSpan(10, 0, 0, 0);
 
@@ -48,6 +49,8 @@ namespace Transparent.Data.Tests.Helpers
         }
 
         public string CurrentSubgoal { get; set; }
+
+        public string BaseSiteUrl { get; set; }
 
         /// <summary>
         /// After this period of inactivity, a user is considered inactive.

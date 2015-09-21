@@ -13,6 +13,8 @@ namespace Transparent.Data.Services
 
         public string CurrentSubgoal { get; set; }
 
+        public string BaseSiteUrl { get; set; }
+
         /// <summary>
         /// After this period of inactivity, a user is considered inactive.
         /// </summary>
@@ -132,6 +134,7 @@ namespace Transparent.Data.Services
         public Configuration(Common.Interfaces.IConfiguration configuration)
         {
             CurrentSubgoal = configuration.GetValue("CurrentSubGoal");
+            BaseSiteUrl = configuration.GetValue("BaseSiteUrl");
 
             UserActiveTime = TimeSpan.Parse(configuration.GetValue("UserActiveTime"));
 

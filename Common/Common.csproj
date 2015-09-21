@@ -56,11 +56,13 @@
     <Compile Include="Interfaces\Events\IUserActionEventRunner.cs" />
     <Compile Include="Interfaces\IConfiguration.cs" />
     <Compile Include="Interfaces\Events\ITimedEventRunner.cs" />
+    <Compile Include="Interfaces\IEmail.cs" />
     <Compile Include="Interfaces\ISecurity.cs" />
     <Compile Include="JavaScriptRoutines.cs" />
     <Compile Include="LinqExtensions.cs" />
     <Compile Include="Mapping\IMapToExisting.cs" />
     <Compile Include="Mapping\IMapToNew.cs" />
+    <Compile Include="Services\Email.cs" />
     <Compile Include="Services\Events\TimedEvent.cs" />
     <Compile Include="Services\Events\TimedEventRunner.cs" />
     <Compile Include="Services\Events\UserActionEvent.cs" />

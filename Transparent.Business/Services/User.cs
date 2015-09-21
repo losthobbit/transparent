@@ -9,7 +9,9 @@ using Transparent.Data.Models;
 
 namespace Transparent.Business.Services
 {
+    using Common.Interfaces;
     using ISecurity = Common.Interfaces.ISecurity;
+    using IDataConfiguration = Data.Interfaces.IConfiguration;
 
     /// <summary>
     /// Contains methods for getting user info for a user.
@@ -24,12 +26,16 @@ namespace Transparent.Business.Services
         private IUsersContext db;
         private readonly ITags tags;
         private readonly ISecurity security;
+        private readonly IEmail emailService;
+        private readonly IDataConfiguration configuration;
 
-        public User(IUsersContext db, ITags tags, ISecurity security)
+        public User(IUsersContext db, ITags tags, ISecurity security, IEmail emailService, IDataConfiguration configuration)
         {
             this.db = db;
             this.tags = tags;
             this.security = security;
+            this.emailService = emailService;
+            this.configuration = configuration;
         }
 
         public int GetPointsForTag(int userId, int tagId)
@@ -75,7 +81,17 @@ namespace Transparent.Business.Services
             if (userProfile == null)
                 throw new ArgumentException("username or email could not be found");
 
-            CreateTemporaryPassword(userProfile);
+            var temporaryPassword = CreateTemporaryPassword(userProfile);
+
+            SendForgottenPasswordEmail(email, temporaryPassword);
+        }
+
+        private void SendForgottenPasswordEmail(string emailAddress, string temporaryPassword)
+        {
+            emailService.Send("Democratic Intelligence",
+                String.Format(ResourceStrings.ForgottenPasswordEmailTemplate, 
+                configuration.BaseSiteUrl + "/Account/ForgottenPassword?id=" +temporaryPassword),
+                emailAddress);
         }
 
         private string CreateTemporaryPassword(UserProfile userProfile)

@@ -11,6 +11,14 @@ namespace Transparent.Data.Interfaces
         string CurrentSubgoal { get; set; }
 
         /// <summary>
+        /// Base website URL
+        /// </summary>
+        /// <remarks>
+        /// Should be secure, so that it can be used for directing a user to the ForgottenPassword URL.
+        /// </remarks>
+        string BaseSiteUrl { get; set; }
+
+        /// <summary>
         /// After this period of inactivity, a user is considered inactive.
         /// </summary>
         TimeSpan UserActiveTime { get; set; }
