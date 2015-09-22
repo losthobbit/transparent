@@ -150,10 +150,6 @@
     <Compile Include="Migrations\201509162051032_AddUserProfileLastActionDateColumn.Designer.cs">
       <DependentUpon>201509162051032_AddUserProfileLastActionDateColumn.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201509201024339_AddTemporaryPasswordsTable.cs" />
-    <Compile Include="Migrations\201509201024339_AddTemporaryPasswordsTable.Designer.cs">
-      <DependentUpon>201509201024339_AddTemporaryPasswordsTable.cs</DependentUpon>
-    </Compile>
     <Compile Include="Models\Argument.cs" />
     <Compile Include="Models\Badge.cs" />
     <Compile Include="Models\Interfaces\IArgument.cs" />
@@ -239,7 +235,6 @@
     <Compile Include="Security.cs" />
     <Compile Include="Services\Configuration.cs" />
     <Compile Include="Services\DataService.cs" />
-    <Compile Include="Models\TemporaryPassword.cs" />
     <Compile Include="UsersContext.cs" />
     <Compile Include="Validation\ISupportsMultipleTags.cs" />
     <Compile Include="Validation\MaxTagsAttribute.cs" />
@@ -311,9 +306,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509162051032_AddUserProfileLastActionDateColumn.resx">
       <DependentUpon>201509162051032_AddUserProfileLastActionDateColumn.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201509201024339_AddTemporaryPasswordsTable.resx">
-      <DependentUpon>201509201024339_AddTemporaryPasswordsTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

@@ -34,7 +34,6 @@ namespace Transparent.Data.Tests.Helpers
             UsersInRoles = new FakeDbSet<UserInRole>();
             Roles = new FakeDbSet<Role>();
             TicketHistory = new FakeDbSet<TicketHistory>();
-            TemporaryPasswords = new FakeDbSet<TemporaryPassword>();
         }
 
         public IDbSet<UserProfile> UserProfiles { get; private set; }
@@ -54,7 +53,6 @@ namespace Transparent.Data.Tests.Helpers
         public IDbSet<UserInRole> UsersInRoles { get; private set; }
         public IDbSet<Role> Roles { get; private set; }
         public IDbSet<TicketHistory> TicketHistory { get; private set; }
-        public IDbSet<TemporaryPassword> TemporaryPasswords { get; private set; }
 
         public IQueryable<UserProfile> FullUserProfiles
         {

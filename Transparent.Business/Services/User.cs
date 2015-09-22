@@ -12,6 +12,7 @@ namespace Transparent.Business.Services
     using Common.Interfaces;
     using ISecurity = Common.Interfaces.ISecurity;
     using IDataConfiguration = Data.Interfaces.IConfiguration;
+    using WebMatrix.WebData;
 
     /// <summary>
     /// Contains methods for getting user info for a user.
@@ -81,7 +82,7 @@ namespace Transparent.Business.Services
             if (userProfile == null)
                 throw new ArgumentException("username or email could not be found");
 
-            var temporaryPassword = CreateTemporaryPassword(userProfile);
+            var temporaryPassword = WebSecurity.GeneratePasswordResetToken(userProfile.UserName);
 
             SendForgottenPasswordEmail(email, temporaryPassword);
         }
@@ -90,24 +91,8 @@ namespace Transparent.Business.Services
         {
             emailService.Send("Democratic Intelligence",
                 String.Format(ResourceStrings.ForgottenPasswordEmailTemplate, 
-                configuration.BaseSiteUrl + "/Account/ForgottenPassword?id=" +temporaryPassword),
+                configuration.BaseSiteUrl + "/Account/ForgottenPassword?token=" +temporaryPassword),
                 emailAddress);
-        }
-
-        private string CreateTemporaryPassword(UserProfile userProfile)
-        {
-            var temporaryPassword = Guid.NewGuid().ToString();
-
-            db.TemporaryPasswords.Add(new TemporaryPassword
-            {
-                User = userProfile,
-                ExpiryDate = DateTime.UtcNow.AddDays(1),
-                Hash = security.Hash(temporaryPassword)
-            });
-
-            db.SaveChanges();
-
-            return temporaryPassword;
         }
     }
 }

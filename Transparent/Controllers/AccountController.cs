@@ -175,6 +175,7 @@ namespace Transparent.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public ActionResult Manage(LocalPasswordModel model)
         {
             bool hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
@@ -219,7 +220,20 @@ namespace Transparent.Controllers
                 {
                     try
                     {
-                        WebSecurity.CreateAccount(User.Identity.Name, model.NewPassword);
+                        if (String.IsNullOrWhiteSpace(model.Token) && WebSecurity.IsAuthenticated)
+                        {
+                            WebSecurity.CreateAccount(User.Identity.Name, model.NewPassword);
+                        }
+                        else
+                        {
+                            var userId = WebSecurity.GetUserIdFromPasswordResetToken(model.Token);
+                            WebSecurity.ResetPassword(model.Token, model.NewPassword);
+                            using (var db = new UsersContext())
+                            {
+                                var username = db.UserProfiles.Single(user => user.UserId == userId).UserName;
+                                WebSecurity.Login(username, model.NewPassword);
+                            }
+                        }
                         return RedirectToAction("Manage", new { Message = ManageMessageId.SetPasswordSuccess });
                     }
                     catch (Exception e)
@@ -359,6 +373,19 @@ namespace Transparent.Controllers
 
             ViewBag.ShowRemoveButton = externalLogins.Count > 1 || OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
             return PartialView("_RemoveExternalLoginsPartial", externalLogins);
+        }
+
+        //
+        // GET: /Account/ForgottenPassword
+        [AllowAnonymous]
+        public ActionResult ForgottenPassword(string token)
+        {
+            var userId = WebSecurity.GetUserIdFromPasswordResetToken(token);
+            if (userId < 0)
+                return View("TokenExpired");
+            ViewBag.HasLocalPassword = false;
+            ViewBag.ReturnUrl = Url.Action("Manage");
+            return View("Manage", new LocalPasswordModel { Token = token });
         }
 
         private ActionResult ForgottenPassword(LoginModel model)
