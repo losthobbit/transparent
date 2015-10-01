@@ -4,6 +4,11 @@ html {
     padding: 0;
 }
 
+thin {
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
     color: #222222; 
@@ -223,13 +228,24 @@ h5, h6 {
 
 .top {
     padding-top: 5px; 
-    height:80px;
     background-color: #7ac0da;
     background-image: url(../Images/blue/left.png), url(../Images/blue/right.png);
     background-position: left, right;
     background-repeat: no-repeat;
     background-size: auto 100%;
 }
+
+    .top.medium {
+        height: 80px;
+    }
+
+    .top.small {
+        height: 60px;
+    }
+
+    .top.xsmall {
+        height: 95px;
+    }
 
 footer {
     clear: both;
@@ -469,13 +485,33 @@ textarea {
     height: 200px;
 }
 
+.wide20 {
+    width: 20px;
+}
+
+.wide40 {
+    width: 40px;
+}
+
+.wide70 {
+    width: 70px;
+}
+
+.wide120 {
+    width: 120px;
+}
+
+.wide400 {
+    width: 400px;
+}
+
+.wide550 {
+    width: 550px;
+}
+
 .fifth {
     width: 70px;
     margin-right: 0px;
-}
-
-.medium {
-    width: 100px;
 }
 
 input.long,.long input, .long textarea {

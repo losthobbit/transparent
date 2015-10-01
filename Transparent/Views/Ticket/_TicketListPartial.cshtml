@@ -37,28 +37,36 @@
                 }
             }
             </header>
-            <table class="fw">
-            @foreach (var item in Model.PagedList)
-            {
-            <tr class="ticket @item.TicketType.GetClass() underlined">
-                <td>
-                    @Html.DisplayFor(modelItem => item.Rank)
-                </td>
-                <td>@item.TicketType.GetChar()</td>
-                <td class="metadata">@Html.DisplayFor(modelItem => item.State)</td>
-                <td>
-                    @Html.ActionLink(item.Heading, "Details", new { id=item.Id })
-                    <div id="ticketTagsPartial" class="metadata">
-                        @Html.Action("_TicketTags", new Transparent.Business.ViewModels.TicketTagsViewModel(item, true))
+
+            <div class="row gap-above">
+                <div class="col-sm-10 thin">
+                    @foreach (var item in Model.PagedList)
+                    {
+                    <div class="row ticket @item.TicketType.GetClass() underlined">
+                        <div class="col-sm-3">
+                            <div class="float-left wide20">@Html.DisplayFor(modelItem => item.Rank)</div>
+                            <div class="float-left wide40">@item.TicketType.GetChar()</div>
+                            <div class="float-left wide70">@Html.DisplayFor(modelItem => item.State)</div>
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="float-left thin wide550">
+                                @Html.ActionLink(item.Heading, "Details", new { id=item.Id })
+                                <div id="ticketTagsPartial" class="metadata">
+                                    @Html.Action("_TicketTags", new Transparent.Business.ViewModels.TicketTagsViewModel(item, true))
+                                </div>
+                            </div>
+                            <div class="float-right metadata wide100">
+                                @item.TextForCreated at @Html.DisplayFor(modelItem => item.CreatedDate)
+                            </div>
+                        </div>
                     </div>
-                </td>
-                <td class="metadata">
-                    @item.TextForCreated at @Html.DisplayFor(modelItem => item.CreatedDate)
-                </td>
-            </tr>
-            }
-            </table>
+                    }
+                </div>
+                <div class="col-sm-2"></div>
+            </div>
+            <div class="row">
             @Html.Partial("_PagesPartial", Model)
+            </div>
         </section>
     }
 }

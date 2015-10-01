@@ -99,3 +99,23 @@ function displayText(elementId, text, maxLength) {
     else 
         displayOrWrite(text.substring(0, maxLength - 3) + "<a href='javascript:displayText(\"" + elementId + "\")'>...</a>", element);
 }
+
+function checkScreenSize() {
+    var width = $(window).width();
+    if (width < 400) {
+        $(".small, .medium").addClass("xsmall").removeClass("small medium");
+    }
+    else if (width < 992) {
+        $(".xsmall, .medium").addClass("small").removeClass("xsmall medium");
+    }
+    else {
+        $(".xsmall, .small").addClass("medium").removeClass("xsmall small");
+    }
+}
+
+$(function () {
+    checkScreenSize();
+    $(window).resize(function () {
+        checkScreenSize();
+    });
+});

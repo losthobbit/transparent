@@ -37,19 +37,19 @@
         @Scripts.Render("~/bundles/jqueryval")
         @RenderSection("scripts", required: false)
         <script src="/Scripts/bootstrap.min.js"></script>
-        <script src="/Scripts/general-0005.js"></script>
+        <script src="/Scripts/general-0006.js"></script>
         <script src="/Scripts/controls-0001.js"></script>
         <script src="/Scripts/custom.validation-0001.js"></script>
     </head>
     <body>
-        <div class="top" />
+        <div class="top medium" />
         <header class="container">
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-sm-8">
                     <p class="site-title">@Html.ActionLink(Constants.ApplicationName, "Index", "Home")</p>
                     <div class="metadata">A self-improving system for making the changes that you care about.</div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-sm-4">
                     <section id="login">
                         @Html.Partial("_LoginPartial")
                     </section>
@@ -76,11 +76,11 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-sm-8">
                     <h3>@Html.ActionLink("Main goal: " + Constants.Goal + ".", "MainGoal", "Home")</h3>
                     @Html.ActionLink("Current subgoal: " + configuration.CurrentSubgoal + ".", "Subgoal", "Home")
                 </div>
-                <div class="col-md-4">
+                <div class="col-sm-4">
                     @Html.Partial("_NonTicketMenuPartial")
                 </div>
             </div>
