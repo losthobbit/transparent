@@ -13,6 +13,13 @@
 
 @Html.Partial("_DetailsPartial", Model.Map(), new ViewDataDictionary {{ "TagInfo", Model.TagInfo }})
 
+<div
+  class="fb-like"
+  data-share="true"
+  data-width="450"
+  data-show-faces="true">
+</div>
+
 @if (Model.TicketType != TicketType.Question && Model.State >= TicketState.Voting)
 {
     <div id="votePartial" class="lighter">   

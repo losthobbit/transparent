@@ -322,8 +322,8 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\controls-0001.js" />
     <Content Include="Scripts\custom.validation-0001.js" />
-    <Content Include="Scripts\general-0006.js" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
+    <Content Include="Scripts\general-0007.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />
     <Content Include="Scripts\jquery-2.1.4.min.map" />
