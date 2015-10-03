@@ -5,12 +5,15 @@
 
 <h3>@ViewBag.Title</h3>
 
-@using (Html.BeginForm()) {
+@using (Html.BeginForm("Register", "Account")) {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary()
 
     <fieldset>
         <legend>Registration Form</legend>
+        @Html.HiddenFor(m => m.GetFacebookToken)
+        @Html.HiddenFor(m => m.FacebookToken)
+        @Html.HiddenFor(m => m.ReturnUrl)
         <ol>
             <li>
                 @Html.LabelFor(m => m.UserName)
@@ -21,6 +24,8 @@
                 @Html.LabelFor(m => m.Email)
                 @Html.EditorFor(m => m.Email)
             </li>
+            @if (Model == null || Model.GetFacebookToken == null || !Model.GetFacebookToken.Value)
+            {
             <li>
                 @Html.LabelFor(m => m.Password)
                 @Html.PasswordFor(m => m.Password)
@@ -29,6 +34,7 @@
                 @Html.LabelFor(m => m.ConfirmPassword)
                 @Html.PasswordFor(m => m.ConfirmPassword)
             </li>
+            }
         </ol>
         <input type="submit" value="Register" />
     </fieldset>

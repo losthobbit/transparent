@@ -11,46 +11,6 @@ using Transparent.Data.Models.Interfaces;
 
 namespace Transparent.Data.Models
 {
-    [MetadataType(typeof(IUserProfile))]
-    [Table("UserProfile")]
-    public class UserProfile: IUserProfile
-    {
-        [Key]
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-        public int UserId { get; set; }
-        [Required]
-        [Display(Name = "Username")]
-        [StringLength(100)]
-        [Index(IsUnique = true)]
-        public string UserName { get; set; }
-
-        [Required]
-        [DataType(DataType.EmailAddress)]
-        [Display(Name = "Email")]
-        [StringLength(100)]
-        [Index(IsUnique = true)]
-        public string Email { get; set; }
-
-        public string Services { get; set; }
-
-        public int Badges { get; set; }
-
-        public virtual ICollection<UserTag> Tags { get; set; }
-
-        public bool HasBadge(Badge badge)
-        {
-            return ((Badge)Badges & badge) == badge;
-        }
-
-        public void SetBadge(Badge badge)
-        {
-            Badges = ((int)badge | Badges);
-        }
-
-        [Index]
-        public DateTime? LastActionDate { get; set; }
-    }
-
     public class RegisterExternalLoginModel
     {
         [Required]
@@ -102,6 +62,8 @@ namespace Transparent.Data.Models
 
         public string Action { get; set; }
 
+        public string FacebookToken { get; set; }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (String.IsNullOrWhiteSpace(UserName) && String.IsNullOrWhiteSpace(Email))
@@ -117,8 +79,10 @@ namespace Transparent.Data.Models
         }
     }
 
-    public class RegisterModel
+    public class RegisterModel : IValidatableObject
     {
+        private const int MinPasswordLength = 8;
+
         [Required]
         [Display(Name = "Username")]
         [StringLength(100)]
@@ -131,8 +95,7 @@ namespace Transparent.Data.Models
         [Index(IsUnique = true)]
         public string Email { get; set; }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
+        [StringLength(100)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
@@ -141,6 +104,34 @@ namespace Transparent.Data.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        /// <summary>
+        /// Determines whether or not to get the user's Facebook token to register.
+        /// </summary>
+        public bool? GetFacebookToken { get; set; }
+
+        public string FacebookToken { get; set; }
+
+        public string ReturnUrl { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (string.IsNullOrEmpty(FacebookToken))
+            {
+                if (String.IsNullOrWhiteSpace(Password))
+                {
+                    yield return new ValidationResult(String.Format("{0} must be supplied.",
+                        this.GetAttributeFrom<DisplayAttribute>("Password").Name),
+                        new[] { "Password" });
+                }
+                if (Password.Length < MinPasswordLength)
+                {
+                    yield return new ValidationResult(String.Format("The {0} must be at least {1} characters long.",
+                        this.GetAttributeFrom<DisplayAttribute>("Password").Name, MinPasswordLength),
+                        new[] { "Password" });
+                }
+            }
+        }
     }
 
     public class ExternalLogin

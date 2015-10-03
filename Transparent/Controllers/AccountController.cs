@@ -13,6 +13,9 @@ using Transparent.Data.Models;
 using System.Data.Linq;
 using Transparent.Data;
 using Transparent.Business.Interfaces;
+using Facebook;
+using Transparent.Models;
+using System.Data.SqlClient;
 
 namespace Transparent.Controllers
 {
@@ -46,6 +49,9 @@ namespace Transparent.Controllers
         {
             if (model.Action == "ForgottenPassword")
                 return ForgottenPassword(model);
+
+            if (!String.IsNullOrEmpty(model.FacebookToken))
+                return FacebookLogin(model, returnUrl);
 
             // If the username is blank, get it from the email address
             if(String.IsNullOrWhiteSpace(model.UserName) && !String.IsNullOrWhiteSpace(model.Email))
@@ -88,6 +94,12 @@ namespace Transparent.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        public ActionResult RegisterFacebook(RegisterModel model)
+        {
+            return View("Register", model);
+        }
+
         //
         // POST: /Account/Register
 
@@ -101,47 +113,38 @@ namespace Transparent.Controllers
                 // Attempt to register the user
                 try
                 {
-                    WebSecurity.CreateUserAndAccount(model.UserName, model.Password, new { Email = model.Email });
+                    FacebookUser facebookUser = null;
+                    if (!string.IsNullOrEmpty(model.FacebookToken))
+                    {
+                        facebookUser = GetFacebookUser(model.FacebookToken);
+                        model.Password = Guid.NewGuid().ToString();
+                    }
+                    WebSecurity.CreateUserAndAccount(model.UserName, model.Password, new
+                    {
+                        Email = model.Email,
+                        FacebookId = facebookUser == null ? null : facebookUser.Id
+                    });
                     WebSecurity.Login(model.UserName, model.Password);
+                    //if (!String.IsNullOrEmpty(model.ReturnUrl))
+                    //{
+                    //    // TODO: While this is a nice touch, it would be more secure to send an email to
+                    //    // complete registration and do the redirection
+                    //    return RedirectToLocal(model.ReturnUrl);
+                    //}
                     return RedirectToAction("Index", "Home");
                 }
                 catch (MembershipCreateUserException e)
                 {
                     ModelState.AddModelError("", ErrorCodeToString(e.StatusCode));
                 }
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
-
-        //
-        // POST: /Account/Disassociate
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Disassociate(string provider, string providerUserId)
-        {
-            string ownerAccount = OAuthWebSecurity.GetUserName(provider, providerUserId);
-            ManageMessageId? message = null;
-
-            // Only disassociate the account if the currently logged in user is the owner
-            if (ownerAccount == User.Identity.Name)
-            {
-                // Use a transaction to prevent the user from deleting their last login credential
-                using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
+                catch (SqlException e)
                 {
-                    bool hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
-                    if (hasLocalAccount || OAuthWebSecurity.GetAccountsFromUserName(User.Identity.Name).Count > 1)
-                    {
-                        OAuthWebSecurity.DeleteAccount(provider, providerUserId);
-                        scope.Complete();
-                        message = ManageMessageId.RemoveLoginSuccess;
-                    }
+                    // TODO: Remove this and use email to complete registration in future.
+                    ModelState.AddModelError("", "You are already registered");
                 }
             }
-
-            return RedirectToAction("Manage", new { Message = message });
+            // If we got this far, something failed, redisplay form
+            return View(model);
         }
 
         // GET: /Account/UserProfile
@@ -338,44 +341,6 @@ namespace Transparent.Controllers
         }
 
         //
-        // GET: /Account/ExternalLoginFailure
-
-        [AllowAnonymous]
-        public ActionResult ExternalLoginFailure()
-        {
-            return View();
-        }
-
-        [AllowAnonymous]
-        [ChildActionOnly]
-        public ActionResult ExternalLoginsList(string returnUrl)
-        {
-            ViewBag.ReturnUrl = returnUrl;
-            return PartialView("_ExternalLoginsListPartial", OAuthWebSecurity.RegisteredClientData);
-        }
-
-        [ChildActionOnly]
-        public ActionResult RemoveExternalLogins()
-        {
-            ICollection<OAuthAccount> accounts = OAuthWebSecurity.GetAccountsFromUserName(User.Identity.Name);
-            List<ExternalLogin> externalLogins = new List<ExternalLogin>();
-            foreach (OAuthAccount account in accounts)
-            {
-                AuthenticationClientData clientData = OAuthWebSecurity.GetOAuthClientData(account.Provider);
-
-                externalLogins.Add(new ExternalLogin
-                {
-                    Provider = account.Provider,
-                    ProviderDisplayName = clientData.DisplayName,
-                    ProviderUserId = account.ProviderUserId,
-                });
-            }
-
-            ViewBag.ShowRemoveButton = externalLogins.Count > 1 || OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
-            return PartialView("_RemoveExternalLoginsPartial", externalLogins);
-        }
-
-        //
         // GET: /Account/ForgottenPassword
         [AllowAnonymous]
         public ActionResult ForgottenPassword(string token)
@@ -401,6 +366,35 @@ namespace Transparent.Controllers
                 return View(model);
             }
             return View("ForgottenPasswordConfirmation");
+        }
+
+        private ActionResult FacebookLogin(LoginModel model, string returnUrl)
+        {
+            var facebookUser = GetFacebookUser(model.FacebookToken);
+            using (UsersContext db = new UsersContext())
+            {
+                var user = db.UserProfiles.SingleOrDefault(u => u.FacebookId == facebookUser.Id);
+                if (user == null)
+                {
+                    returnUrl = returnUrl != null && returnUrl.ToLower().Contains("login")
+                        ? null
+                        : returnUrl;
+                    return RegisterFacebookUser(returnUrl);
+                }
+                FormsAuthentication.SetAuthCookie(user.UserName, true);
+                return RedirectToLocal(returnUrl);
+            }
+        }
+
+        private FacebookUser GetFacebookUser(string token)
+        {
+            var client = new FacebookClient(token);
+            return new FacebookUser(client.Get("me"));
+        }
+
+        private ActionResult RegisterFacebookUser(string returnUrl)
+        {
+            return RedirectToAction("RegisterFacebook", new RegisterModel { GetFacebookToken = true, ReturnUrl = returnUrl });
         }
 
         #region Helpers

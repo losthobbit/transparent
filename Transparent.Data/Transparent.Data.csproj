@@ -150,6 +150,14 @@
     <Compile Include="Migrations\201509162051032_AddUserProfileLastActionDateColumn.Designer.cs">
       <DependentUpon>201509162051032_AddUserProfileLastActionDateColumn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201510030836296_AddUserProfileFacebookIdColumn.cs" />
+    <Compile Include="Migrations\201510030836296_AddUserProfileFacebookIdColumn.Designer.cs">
+      <DependentUpon>201510030836296_AddUserProfileFacebookIdColumn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510031709546_ChangeUserProfileTableFacebookIdLengthTo32.cs" />
+    <Compile Include="Migrations\201510031709546_ChangeUserProfileTableFacebookIdLengthTo32.Designer.cs">
+      <DependentUpon>201510031709546_ChangeUserProfileTableFacebookIdLengthTo32.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Argument.cs" />
     <Compile Include="Models\Badge.cs" />
     <Compile Include="Models\Interfaces\IArgument.cs" />
@@ -227,6 +235,7 @@
     <Compile Include="Models\Stance.cs" />
     <Compile Include="Models\TicketTag.cs" />
     <Compile Include="Models\TicketUserRank.cs" />
+    <Compile Include="Models\UserProfile.cs" />
     <Compile Include="Models\UsersContainer.cs" />
     <Compile Include="Models\UserInRole.cs" />
     <Compile Include="Models\UserTag.cs" />
@@ -306,6 +315,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509162051032_AddUserProfileLastActionDateColumn.resx">
       <DependentUpon>201509162051032_AddUserProfileLastActionDateColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510030836296_AddUserProfileFacebookIdColumn.resx">
+      <DependentUpon>201510030836296_AddUserProfileFacebookIdColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510031709546_ChangeUserProfileTableFacebookIdLengthTo32.resx">
+      <DependentUpon>201510031709546_ChangeUserProfileTableFacebookIdLengthTo32.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

@@ -124,62 +124,43 @@ $(function () {
 
 // Facebook
 
-// This is called with the results from from FB.getLoginStatus().
-function statusChangeCallback(response) {
-    // The response object is returned with a status field that lets the
-    // app know the current login status of the person.
-    // Full docs on the response object can be found in the documentation
-    // for FB.getLoginStatus().
+function facebookLoginCallback(response) {
     if (response.status === 'connected') {
-        // Logged into your app and Facebook.
-        //response.authResponse.accessToken
-        //{
-        //    status: 'connected',
-        //    authResponse: {
-        //        accessToken: '...',
-        //        expiresIn:'...',
-        //        signedRequest:'...',
-        //        userID:'...'
-        //    }
-        //}
-        FB.api('/me', function (response) {
-            //response.name
-        });
+        $("#FacebookToken").val(response.authResponse.accessToken);
+        $("#loginForm").children()[0].submit();
     };
 }
 
-// This function is called when someone finishes with the Login
-// Button.  See the onlogin handler attached to it in the sample
-// code below.
-function checkLoginState() {
+function facebookLoginAttempted() {
     FB.getLoginStatus(function (response) {
-        statusChangeCallback(response);
+        facebookLoginCallback(response);
+    });
+}
+
+function checkFacebookLoginCallback(response) {
+    if (response.status === 'connected') {
+        $("#FacebookToken").val(response.authResponse.accessToken);
+        FB.api('/me', function(response) {
+            $("#Email").val(response.email);
+        });       
+    };
+}
+
+function getFacebookToken() {
+    FB.getLoginStatus(function (response) {
+        checkFacebookLoginCallback(response);
     });
 }
 
 window.fbAsyncInit = function () {
     FB.init({
         appId: '1508253132827931',
-        cookie: true,  // enable cookies to allow the server to access 
-        // the session
-        xfbml: true,  // parse social plugins on this page
-        version: 'v2.4' // use version 2.2
+        cookie: false,  
+        xfbml: true, 
+        version: 'v2.4'
     });
 
-    // Now that we've initialized the JavaScript SDK, we call 
-    // FB.getLoginStatus().  This function gets the state of the
-    // person visiting this page and can return one of three states to
-    // the callback you provide.  They can be:
-    //
-    // 1. Logged into your app ('connected')
-    // 2. Logged into Facebook, but not your app ('not_authorized')
-    // 3. Not logged into Facebook and can't tell if they are logged into
-    //    your app or not.
-    //
-    // These three cases are handled in the callback function.
-
-    FB.getLoginStatus(function (response) {
-        statusChangeCallback(response);
-    });
-
+    if ($("#GetFacebookToken").length && $("#GetFacebookToken")[0].value == "True") {
+        getFacebookToken();
+    }
 };

@@ -52,6 +52,9 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Facebook">
+      <HintPath>..\packages\Facebook.7.0.6\lib\net45\Facebook.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -190,6 +193,7 @@
     </Compile>
     <Compile Include="HtmlExtensions.cs" />
     <Compile Include="Interfaces\ITechnicalConfiguration.cs" />
+    <Compile Include="Models\FacebookUser.cs" />
     <Compile Include="Models\UpdateTicketTagRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Configuration.cs" />
@@ -323,7 +327,7 @@
     <Content Include="Scripts\controls-0001.js" />
     <Content Include="Scripts\custom.validation-0001.js" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
-    <Content Include="Scripts\general-0007.js" />
+    <Content Include="Scripts\general-0009.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />
     <Content Include="Scripts\jquery-2.1.4.min.map" />
