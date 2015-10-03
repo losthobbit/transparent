@@ -140,7 +140,7 @@ function facebookLoginAttempted() {
 function checkFacebookLoginCallback(response) {
     if (response.status === 'connected') {
         $("#FacebookToken").val(response.authResponse.accessToken);
-        FB.api('/me', function(response) {
+        FB.api('/me', 'get', { access_token: response.authResponse.accessToken, fields: 'email' }, function(response) {
             $("#Email").val(response.email);
         });       
     };
