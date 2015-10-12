@@ -26,9 +26,14 @@ namespace Transparent.Data.Models
         /// If null, assumed to be the Ticket's user ID
         /// </summary>
         [ForeignKey("CreatedBy")]
+        [Obsolete("To be replaced by a weighted voting system")]
         public int? FkCreatedById { get; set; }
+        [Obsolete("To be replaced by a weighted voting system")]
         public UserProfile CreatedBy { get; set; }
 
+        [Obsolete("To be replaced by a weighted voting system")]
         public bool Verified { get; set; }
+
+        public virtual ICollection<TicketTagVote> Votes { get; set; }
     }
 }

@@ -34,6 +34,7 @@ namespace Transparent.Data
         public IDbSet<UserInRole> UsersInRoles { get; set; }
         public IDbSet<Role> Roles { get; set; }
         public IDbSet<TicketHistory> TicketHistory { get; set; }
+        public IDbSet<TicketTagVote> TicketTagVotes { get; set; }
 
         /// <summary>
         /// UserProfiles with eagerly loaded information.
@@ -55,7 +56,7 @@ namespace Transparent.Data
             .Map<Suggestion>(s => s.Requires("TicketType").HasValue((int)TicketType.Suggestion))
             .Map<Test>(t => t.Requires("TicketType").HasValue((int)TicketType.Test))
             .ToTable("dbo.Tickets");
-            
+
             modelBuilder.Entity<Tag>().
               HasMany(c => c.Parents).
               WithMany(p => p.Children).
