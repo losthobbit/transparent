@@ -40,7 +40,6 @@ namespace Transparent.Data.Tests.Helpers
             ExpertWeighting = 4;
 
             MaxPositionToAdvanceState = 2;
-            DelayAfterValidatingTags = TimeSpan.FromSeconds(2);
             MinimumNumberOfArgumentsToAdvanceState = 2;
             MinimumNumberOfAnswersToAdvanceState = 1;
             DelayAfterDiscussion = TimeSpan.FromSeconds(2);
@@ -110,7 +109,6 @@ namespace Transparent.Data.Tests.Helpers
         public int ExpertWeighting { get; set; }
 
         public int MaxPositionToAdvanceState { get; set; }
-        public TimeSpan DelayAfterValidatingTags { get; set; }
         public int MinimumNumberOfArgumentsToAdvanceState { get; set; }
         public int MinimumNumberOfAnswersToAdvanceState { get; set; }
         public TimeSpan DelayAfterDiscussion { get; set; }

@@ -21,7 +21,6 @@ namespace Transparent.Business.Windsor
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             container.Register(
-                Component.For<ITimedEvent>().ImplementedBy<CompleteTagValidationEvent>().LifeStyle.Singleton,
                 Component.For<ITimedEvent>().ImplementedBy<CompleteDiscussionEvent>().LifeStyle.Singleton,
                 Component.For<ITimedEvent>().ImplementedBy<CompleteVotingEvent>().LifeStyle.Singleton,
                 Component.For<ITimedEvent>().ImplementedBy<UpdateTagsEvent>().LifeStyle.Singleton,

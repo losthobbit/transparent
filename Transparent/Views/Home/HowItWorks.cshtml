@@ -1,6 +1,7 @@
 ﻿@using Castle.Windsor
 @using Transparent.Data.Interfaces
 @using Transparent.Data
+@using Common
 
 @{
     var container = ((IContainerAccessor)Context.ApplicationInstance).Container;
@@ -91,22 +92,15 @@
         Click the up or down arrows on the left of a suggestion to indicate how important the suggestion is to you.
         The highest ranked suggestions will go to the top of some lists and therefore usually get implemented first. 
     </p>
-    <a name="verifySuggestion" /><a class="float-right" href="#top">back to top</a>
-    <h3>Verify a suggestion</h3>
-    <p>
-        If a suggestion is in the verification state, it means that competent users need to check that the tags are appropriate
-        for the ticket.  Competent users can add, remove or verify a tag.
-        If you are competent in a tag, click the tick to verify it, the x to remove it, or select a new tag if you think it
-        should be there.
-        A user cannot verify their own tag.
-        Once all tags have been verified, the system waits for @configuration.DelayAfterValidatingTags before moving it to the
-        discussion state, where experts can write arguments.
-    </p>
     <a name="argue" /><a class="float-right" href="#top">back to top</a>
     <h3>Write an argument</h3>
     <p>
         You can write an argument giving evidence as to why a suggestion
         should be accepted or rejected.  Arguments are sorted by the author's competence in the suggestion's tags.
+        Competent users can add, remove or verify a tag.
+        If you are competent in a tag, click the tick to verify it, the x to remove it, or select a new tag if you think it
+        should be there.
+        A user cannot verify their own tag.
         Consider the following criteria for a good argument before writing one:
         <ul>
             <li>
@@ -131,7 +125,7 @@
                 It should not already be written.
             </li>
         </ul>
-        A suggestion will go into the voting state once sufficient time (@configuration.DelayAfterDiscussion) has passed
+        A suggestion will go into the voting state once sufficient time (@configuration.DelayAfterDiscussion.ToFriendlyDisplay(2)) has passed
         since the last argument was written.  This allows time for updating arguments based on other arguments.
     </p>
     <a name="voteSuggestion" /><a class="float-right" href="#top">back to top</a>
@@ -143,7 +137,7 @@
         in the arguments, before deciding how to vote.
     </p>
     <p>
-        Once @configuration.DelayForVoting has passed since the suggestion moved to the voting state, it is either
+        Once @configuration.DelayForVoting.ToFriendlyDisplay(2) has passed since the suggestion moved to the voting state, it is either
         accepted or rejected.  A suggestion is accepted if at least @configuration.PercentOfVotesRequiredToAccept% of the
         votes are positive.  The reason it is higher than fifty percent is because change should only occur if the
         value of the change outweighs the effort to make the change.  An accepted suggestion can be picked up by a volunteer.
@@ -213,23 +207,16 @@
         Click the up or down arrows on the left of a question to indicate how important the question is to you.
         The highest ranked questions will go to the top of some lists and therefore usually get answered first. 
     </p>
-    <a name="verifyQuestion" /><a class="float-right" href="#top">back to top</a>
-    <h3>Verify a question</h3>
-    <p>
-        If a question is in the verification state, it means that competent users need to check that the tags are appropriate
-        for the ticket.  Competent users can add, remove or verify a tag.
-        If you are competent in a tag, click the tick to verify it, the x to remove it, or select a new tag if you think it
-        should be there.
-        A user cannot verify their own tag.
-        Once all tags have been verified, the system waits for @configuration.DelayAfterValidatingTags before moving it to the
-        <i>Discussion</i> state, where experts can write answers.
-    </p>
     <a name="answer" /><a class="float-right" href="#top">back to top</a>
     <h3>Answer a question</h3>
     <p>
         Questions in the <i>Discussion</i> state can be answered.
         You can write an answer to a question.  
         Answers are sorted by the author's competence in the suggestion's tags.
+        Competent users can add, remove or verify a tag.
+        If you are competent in a tag, click the tick to verify it, the x to remove it, or select a new tag if you think it
+        should be there.
+        A user cannot verify their own tag.
         Consider the following criteria for a good answer before writing one:
         <ul>
             <li>
@@ -254,7 +241,7 @@
                 It should not already be written.
             </li>
         </ul>
-        A question will go into the <i>Completed</i> state once sufficient time (@configuration.DelayAfterDiscussion) has passed
+        A question will go into the <i>Completed</i> state once sufficient time (@configuration.DelayAfterDiscussion.ToFriendlyDisplay(2)) has passed
         since the last answer was written.  This allows time for updating answers based on other answers.
     </p>
     <p>
@@ -305,7 +292,7 @@
         </ul>        
     </p>
     <p>
-        Once @configuration.DelayForVoting has passed since the test moved to the voting state, it is either
+        Once @configuration.DelayForVoting.ToFriendlyDisplay(2) has passed since the test moved to the voting state, it is either
         accepted or rejected.  A test is accepted if at least @configuration.PercentOfVotesRequiredToAccept% of the
         votes are positive.  An accepted test can be answered by a user.
     </p>

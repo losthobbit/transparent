@@ -64,7 +64,7 @@ namespace Transparent.Data.Tests.Services
         #region SetNextState
 
         [TestCase(TicketState.InProgress)]
-        [TestCase(TicketState.Verification)]
+        [TestCase(TicketState.Discussion)]
         public void SetNextState_with_ticket_with_next_state_changes_state(TicketState state)
         {
             //Arrange

@@ -84,14 +84,6 @@ namespace Transparent.Data.Interfaces
         /// </remarks>
         int MaxPositionToAdvanceState { get; set; }
 
-        /// <summary>
-        /// Delay after tags have been validated before moving a ticket to the next state.
-        /// </summary>
-        /// <remarks>
-        /// This allows time for tags to be added.
-        /// </remarks>
-        TimeSpan DelayAfterValidatingTags { get; set; }
-
         int MinimumNumberOfArgumentsToAdvanceState { get; set; }
         int MinimumNumberOfAnswersToAdvanceState { get; set; }
 

@@ -51,7 +51,7 @@
             <div id="tagSelectors"></div>
             <script>
                 var tags = @(tags.SerializeAndIndentTags(competentTagIds));
-                var enableAdd = @Json.Encode(Model.MultipleTags && Model.State <= TicketState.Verification);
+                var enableAdd = @Json.Encode(Model.MultipleTags && Model.State <= TicketState.Discussion);
 
                 $(function(){
                     if(tags.length > 0 && enableAdd)

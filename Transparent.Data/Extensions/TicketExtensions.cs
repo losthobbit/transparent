@@ -10,11 +10,11 @@ namespace Transparent.Data.Extensions
     public static class TicketExtensions
     {
         /// <summary>
-        /// Tickets between verification and voting state.
+        /// Tickets between discussion and voting state.
         /// </summary>
         public static IQueryable<Ticket> GetPublic(this IQueryable<Ticket> tickets)
         {
-            return tickets.Where(t => t.State >= TicketState.Verification && t.State <= TicketState.Voting);
+            return tickets.Where(t => t.State >= TicketState.Discussion && t.State <= TicketState.Voting);
         }
 
         public static IQueryable<Ticket> ExcludeComplete(this IQueryable<Ticket> tickets)

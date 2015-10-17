@@ -11,17 +11,9 @@ namespace Transparent.Data.Models
         private static Dictionary<TicketState, Hint> stateHints = new Dictionary<TicketState, Hint>
         {
             { 
-                TicketState.Verification, new Hint
-                ( 
-                    "Once competent level users have verified the tags and a time period has passed, this suggestion will move to the Discussion " +
-                    "state and users will be able to discuss it.",
-                    "/Home/HowItWorks#verifySuggestion" 
-                ) 
-            },
-            { 
                 TicketState.Discussion, new Hint
                 (
-                    "Users can discuss this suggestion.  After a time period has passed without any further arguments, this suggestion " +
+                    "Users can discuss this suggestion and verify the tags.  After a time period has passed without any further arguments, this suggestion " +
                     "will move to the Voting state.",
                     "/Home/HowItWorks#argue"
                 )

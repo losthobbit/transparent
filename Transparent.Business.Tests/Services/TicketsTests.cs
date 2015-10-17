@@ -97,7 +97,6 @@ namespace Transparent.Business.Tests.Services
             Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == TestData.JoesScubaDivingSuggestion));
         }
 
-        [TestCase(TicketState.Verification)]
         [TestCase(TicketState.Discussion)]
         [TestCase(TicketState.Voting)]
         public void MyQueue_returns_tickets_in_public_state(TicketState ticketState)
@@ -182,7 +181,6 @@ namespace Transparent.Business.Tests.Services
 
         #region HighestRanked
 
-        [TestCase(TicketState.Verification)]
         [TestCase(TicketState.Discussion)]
         [TestCase(TicketState.Voting)]
         public void HighestRanked_with_publicOnly_true_returns_tickets_in_public_state(TicketState ticketState)
@@ -197,7 +195,6 @@ namespace Transparent.Business.Tests.Services
             ticketsContainer.PagedList.Single(ticket => ticket == TestData.JoesScubaDivingSuggestion);
         }
 
-        [TestCase(TicketState.Verification)]
         [TestCase(TicketState.Accepted)]
         [TestCase(TicketState.Completed)]
         public void HighestRanked_returns_tickets_in_public_and_non_public_states(TicketState ticketState)
@@ -233,7 +230,6 @@ namespace Transparent.Business.Tests.Services
 
         #region Newest
 
-        [TestCase(TicketState.Verification)]
         [TestCase(TicketState.Discussion)]
         [TestCase(TicketState.Voting)]
         public void Newest_with_publicOnly_true_returns_tickets_in_public_state(TicketState ticketState)
@@ -248,7 +244,6 @@ namespace Transparent.Business.Tests.Services
             ticketsContainer.PagedList.Single(ticket => ticket == TestData.JoesScubaDivingSuggestion);
         }
 
-        [TestCase(TicketState.Verification)]
         [TestCase(TicketState.Accepted)]
         [TestCase(TicketState.Completed)]
         public void Newest_returns_tickets_in_public_and_non_public_states(TicketState ticketState)
@@ -280,7 +275,6 @@ namespace Transparent.Business.Tests.Services
             Assert.IsFalse(ticketsContainer.PagedList.Any(ticket => ticket == TestData.JoesScubaDivingSuggestion));
         }
 
-        [TestCase(TicketType.Suggestion, TicketState.Verification)]
         [TestCase(TicketType.Suggestion, TicketState.Accepted)]
         [TestCase(TicketType.Question, TicketState.Discussion)]
         public void Newest_only_returns_tickets_with_the_specified_type_and_state(TicketType type, TicketState state)
@@ -311,7 +305,7 @@ namespace Transparent.Business.Tests.Services
             Assert.IsTrue(ticketsContainer.PagedList.All(ticket => ticket is Question));
         }
 
-        [TestCase(TicketState.Verification)]
+        [TestCase(TicketState.Draft)]
         [TestCase(TicketState.Discussion)]
         public void Answered_does_not_return_questions_in_non_completed_state(TicketState ticketState)
         {
@@ -368,7 +362,6 @@ namespace Transparent.Business.Tests.Services
             Assert.IsFalse(response.PagedList.Any(ticket => ticket == TestData.CriticalThinkingTestThatJoeTookThatStephenMarked));
         }
 
-        [TestCase(TicketState.Verification)]
         [TestCase(TicketState.Discussion)]
         [TestCase(TicketState.Voting)]
         public void Search_returns_tests_in_public_state(TicketState ticketState)
@@ -1421,9 +1414,9 @@ namespace Transparent.Business.Tests.Services
         }
 
         [TestCase(TicketState.Completed)]
-        [TestCase(TicketState.Discussion)]
+        [TestCase(TicketState.Draft)]
         [ExpectedException(typeof(NotSupportedException))]
-        public void VerifyTicketTag_with_ticket_not_in_verification_state_throws_NotSupportedException(TicketState state)
+        public void VerifyTicketTag_with_ticket_not_in_discussion_state_throws_NotSupportedException(TicketState state)
         {
             //Arrange
             var ticket = TestData.JoesScubaDivingSuggestion;
@@ -1567,7 +1560,7 @@ namespace Transparent.Business.Tests.Services
             AssertModifiedDateSet(TestData.JoesScubaDivingSuggestion.ModifiedDate);
         }
 
-        [TestCase(TicketState.Verification)]
+        [TestCase(TicketState.Draft)]
         [TestCase(TicketState.Completed)]
         [ExpectedException(typeof(NotSupportedException))]
         public void SetArgument_with_ticket_not_in_Discussion_state_throws_NotSupportedException(TicketState state)
@@ -1611,7 +1604,7 @@ namespace Transparent.Business.Tests.Services
             Assert.IsTrue(setVoteCalledAndSaved);
         }
        
-        [TestCase(TicketState.Verification)]
+        [TestCase(TicketState.Draft)]
         [TestCase(TicketState.Discussion)]
         [ExpectedException(typeof(NotSupportedException))]
         public void SetVote_with_ticket_not_in_Voting_state_throws_NotSupportedException(TicketState state)

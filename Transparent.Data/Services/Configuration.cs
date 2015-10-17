@@ -97,14 +97,6 @@ namespace Transparent.Data.Services
         /// </remarks>
         public int MaxPositionToAdvanceState { get; set; }
 
-        /// <summary>
-        /// Delay after tags have been validated before moving a ticket to the next state.
-        /// </summary>
-        /// <remarks>
-        /// This allows time for tags to be added.
-        /// </remarks>
-        public TimeSpan DelayAfterValidatingTags { get; set; }
-
         public int MinimumNumberOfArgumentsToAdvanceState { get; set; }
         public int MinimumNumberOfAnswersToAdvanceState { get; set; }
 
@@ -162,7 +154,6 @@ namespace Transparent.Data.Services
             ExpertWeighting = int.Parse(configuration.GetValue("ExpertWeighting"));
 
             MaxPositionToAdvanceState = int.Parse(configuration.GetValue("MaxPositionToAdvanceState"));
-            DelayAfterValidatingTags = TimeSpan.Parse(configuration.GetValue("DelayAfterValidatingTags"));
             MinimumNumberOfArgumentsToAdvanceState = int.Parse(configuration.GetValue("MinimumNumberOfArgumentsToAdvanceState"));
             MinimumNumberOfAnswersToAdvanceState = int.Parse(configuration.GetValue("MinimumNumberOfAnswersToAdvanceState"));
             DelayAfterDiscussion = TimeSpan.Parse(configuration.GetValue("DelayAfterDiscussion"));

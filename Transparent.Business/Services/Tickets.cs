@@ -520,7 +520,7 @@ namespace Transparent.Business.Services
                 TagId = ticketTag.FkTagId
             };
 
-            info.UserMayDelete = ticketState == TicketState.Verification && !ticketTag.Verified &&
+            info.UserMayDelete = ticketState == TicketState.Discussion && !ticketTag.Verified &&
                 competentTags.Any(competentTag => competentTag.Id == ticketTag.FkTagId);
 
             info.UserMayVerify = info.UserMayDelete && ticketTag.FkCreatedById != userId && 
@@ -567,8 +567,8 @@ namespace Transparent.Business.Services
         /// <exception cref="NotSupportedException">User may not add tag.</exception>
         public void AddTicketTag(int ticketId, int tagId, int userId)
         {
-            if (db.Tickets.Single(ticket => ticket.Id == ticketId).State != TicketState.Verification)
-                throw new NotSupportedException("Unable to add tag because ticket is not in Verification state");
+            if (db.Tickets.Single(ticket => ticket.Id == ticketId).State != TicketState.Discussion)
+                throw new NotSupportedException("Unable to add tag because ticket is not in Discussion state");
 
             if (!GetCompetentTags(userId).Any(tag => tag.Id == tagId))
                 throw new NotSupportedException("User may not add tag");

@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DateTimeRoutines.cs" />
     <Compile Include="Enums\Relative.cs" />
     <Compile Include="Interfaces\Events\ITimedEvent.cs" />
     <Compile Include="Interfaces\Events\IUserActionEvent.cs" />

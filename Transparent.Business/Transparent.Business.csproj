@@ -91,7 +91,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Events\CompleteDiscussionEvent.cs" />
-    <Compile Include="Events\CompleteTagValidationEvent.cs" />
     <Compile Include="Events\CompleteVotingEvent.cs" />
     <Compile Include="Events\SetLastActionDateEvent.cs" />
     <Compile Include="Events\UpdateTagsEvent.cs" />

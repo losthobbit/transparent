@@ -32,35 +32,6 @@ namespace Transparent.Business.Services
         }
 
         /// <summary>
-        /// Progresses tickets which are in the Verification state, and were last modified
-        /// the specified amount of time ago.
-        /// </summary>
-        public void ProgressTicketsWithVerifiedTags()
-        {
-            using (var db = usersContextFactory.Create())
-            {
-                var lastModified = DateTime.UtcNow - configuration.DelayAfterValidatingTags;
-
-                var highestRankedVerificationTickets = (from ticket in db.Tickets
-                                                        where ticket.State == TicketState.Verification
-                                                        orderby ticket.Rank descending
-                                                        select ticket).Take(configuration.MaxPositionToAdvanceState);
-
-                var verifiedTickets = from ticket in highestRankedVerificationTickets
-                                      where ticket.ModifiedDate <= lastModified &&
-                                      ticket.TicketTags.Any() &&
-                                      ticket.TicketTags.All(tag => tag.Verified)
-                                      select ticket;
-
-                foreach (var ticket in verifiedTickets)
-                {
-                    dataService.SetNextState(ticket);
-                }
-                db.SaveChanges();
-            }
-        }
-
-        /// <summary>
         /// Progresses tickets which are in the Discussion state, and were last modified
         /// the specified amount of time ago.
         /// </summary>
