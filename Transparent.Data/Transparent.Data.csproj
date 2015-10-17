@@ -162,6 +162,10 @@
     <Compile Include="Migrations\201510122009274_AddWeightedVoting.Designer.cs">
       <DependentUpon>201510122009274_AddWeightedVoting.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201510171100532_MigrateValidationStateToDiscussionState.cs" />
+    <Compile Include="Migrations\201510171100532_MigrateValidationStateToDiscussionState.Designer.cs">
+      <DependentUpon>201510171100532_MigrateValidationStateToDiscussionState.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Argument.cs" />
     <Compile Include="Models\Badge.cs" />
     <Compile Include="Models\Interfaces\IArgument.cs" />
@@ -330,6 +334,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201510122009274_AddWeightedVoting.resx">
       <DependentUpon>201510122009274_AddWeightedVoting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510171100532_MigrateValidationStateToDiscussionState.resx">
+      <DependentUpon>201510171100532_MigrateValidationStateToDiscussionState.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
