@@ -1,4 +1,5 @@
 ﻿@model Transparent.Business.ViewModels.TicketTagsViewModel 
+@using Transparent.Business.ViewModels.Interfaces
 @using (Ajax.BeginForm("_VerifyTag", new AjaxOptions { UpdateTargetId = "ticketTagsPartial" }))
 {
     @Html.AntiForgeryToken()
@@ -19,14 +20,7 @@
         if (Model.MultipleTags)
         {
             <div class="float-left">
-                @if(ticketTag.UserMayDelete)
-                {
-                    <button name="deleteTagId" class="ui-icon-close ui-icon" title="Delete tag" value="@ticketTag.TagId">DeleteTag</button>
-                }
-                @if(ticketTag.UserMayVerify)
-                {
-                    <button name="verifyTagId" class="ui-icon-check ui-icon" title="Verify tag" value="@ticketTag.TagId">VerifyTag</button>                    
-                }
+                @Html.Partial("_WeightedVotePartial", ticketTag)
             </div>
         }   
     } 

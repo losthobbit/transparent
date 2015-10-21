@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Transparent.Data.Models
 {
-    public class TicketTag
+    public class TicketTag: Voteable<TicketTagVote>
     {
         [Key, Column(Order = 0)]
         [ForeignKey("Ticket")]
@@ -33,7 +33,5 @@ namespace Transparent.Data.Models
 
         [Obsolete("To be replaced by a weighted voting system")]
         public bool Verified { get; set; }
-
-        public virtual ICollection<TicketTagVote> Votes { get; set; }
     }
 }

@@ -117,9 +117,11 @@
     <Compile Include="Services\Volunteers.cs" />
     <Compile Include="ViewModels\AnsweredTests.cs" />
     <Compile Include="ViewModels\AssignViewModel.cs" />
+    <Compile Include="ViewModels\BaseVoteViewModel.cs" />
     <Compile Include="ViewModels\CreateTicketViewModel.cs" />
     <Compile Include="ViewModels\ArgumentViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ICreateTicketViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IVoteViewModel.cs" />
     <Compile Include="ViewModels\StatsViewModel.cs" />
     <Compile Include="ViewModels\TagViewModel.cs" />
     <Compile Include="ViewModels\TestAndAnswerViewModel.cs" />

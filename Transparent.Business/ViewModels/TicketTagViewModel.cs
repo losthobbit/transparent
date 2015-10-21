@@ -5,15 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Transparent.Data.Models;
 using Transparent.Business.Maps;
+using Transparent.Business.ViewModels.Interfaces;
 
 namespace Transparent.Business.ViewModels
 {
-    public class TicketTagViewModel
+    public class TicketTagViewModel: BaseVoteViewModel
     {
         public int TagId { get; set; }
         public string Name { get; set; }
-        public bool UserMayVerify { get; set; }
-        public bool UserMayDelete { get; set; }
         public bool UserIsExpert { get; set; }
 
         public static IEnumerable<TicketTagViewModel> CreateList(BaseTicket ticket, IEnumerable<TicketTagViewModel> source = null)
@@ -24,12 +23,24 @@ namespace Transparent.Business.ViewModels
             {
                 foreach (var ticketTagViewModel in tagInfoList)
                 {
-                    ticketTagViewModel.UserMayDelete = source.Any(tagInfo => tagInfo.TagId == ticketTagViewModel.TagId && tagInfo.UserMayDelete);
-                    ticketTagViewModel.UserMayVerify = source.Any(tagInfo => tagInfo.TagId == ticketTagViewModel.TagId && tagInfo.UserMayVerify);
+                    ticketTagViewModel.UserMayVote = source.Any(tagInfo => tagInfo.TagId == ticketTagViewModel.TagId && tagInfo.UserMayVote);
                 }
             }
 
             return tagInfoList;
+        }
+
+        // TODO: Check if this is correct
+        public override int Id
+        {
+            get
+            {
+                return TagId;
+            }
+            set
+            {
+                TagId = value;
+            }
         }
     }
 

@@ -1006,7 +1006,7 @@ namespace Transparent.Business.Tests.Services
 
             //Assert
             Assert.AreEqual(getTicketTagInfoList_Ticket.TicketTags.Single().FkTagId, actual.TagId);
-            Assert.IsTrue(actual.UserMayVerify);
+            Assert.IsTrue(actual.UserMayVote);
         }
 
         [Test]
@@ -1021,7 +1021,7 @@ namespace Transparent.Business.Tests.Services
             var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, TestData.Stephen.UserId).Single();
 
             //Assert
-            Assert.IsTrue(actual.UserMayVerify);
+            Assert.IsTrue(actual.UserMayVote);
         }
 
         [Test]
@@ -1035,7 +1035,7 @@ namespace Transparent.Business.Tests.Services
             var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, TestData.Stephen.UserId).Single();
 
             //Assert
-            Assert.IsFalse(actual.UserMayVerify);
+            Assert.IsFalse(actual.UserMayVote);
         }
 
         [Test]
@@ -1050,7 +1050,7 @@ namespace Transparent.Business.Tests.Services
             var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, TestData.Stephen.UserId).Single();
 
             //Assert
-            Assert.IsFalse(actual.UserMayVerify);
+            Assert.IsFalse(actual.UserMayVote);
         }
 
         [Test]
@@ -1067,7 +1067,7 @@ namespace Transparent.Business.Tests.Services
             var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, TestData.Stephen.UserId).Single();
 
             //Assert
-            Assert.IsFalse(actual.UserMayVerify);
+            Assert.IsFalse(actual.UserMayVote);
         }
 
         [Test]
@@ -1080,7 +1080,7 @@ namespace Transparent.Business.Tests.Services
             var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, TestData.Stephen.UserId).Single();
 
             //Assert
-            Assert.IsFalse(actual.UserMayVerify);
+            Assert.IsFalse(actual.UserMayVote);
         }
 
         [Test]
@@ -1112,19 +1112,6 @@ namespace Transparent.Business.Tests.Services
         }
 
         [Test]
-        public void GetTicketTagInfoList_userId_is_minus_1_returns_UserMayDelete_is_false()
-        {
-            //Arrange
-            ArrangeGetTicketInfoTagList();
-
-            //Act
-            var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, -1).Single();
-
-            //Assert
-            Assert.IsFalse(actual.UserMayDelete);
-        }
-
-        [Test]
         public void GetTicketTagInfoList_userId_is_minus_1_returns_UserMayVerify_is_false()
         {
             //Arrange
@@ -1136,7 +1123,7 @@ namespace Transparent.Business.Tests.Services
             var actual = target.GetTicketTagInfoList(getTicketTagInfoList_Ticket, -1).Single();
 
             //Assert
-            Assert.IsFalse(actual.UserMayVerify);
+            Assert.IsFalse(actual.UserMayVote);
         }
 
         [Test]

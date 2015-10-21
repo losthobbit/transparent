@@ -110,6 +110,8 @@ namespace Transparent.Controllers
         [Authorize]
         public PartialViewResult _VerifyTag(TicketTagsViewModel ticket)
         {
+            throw new NotImplementedException("Need to change this to use the vote to determine what happens to the tag.");
+
             var userId = WebSecurity.CurrentUserId;
             if (ticket.DeleteTagId != null)
                 tickets.DeleteTicketTag(ticket.TicketId, ticket.DeleteTagId.Value, userId);

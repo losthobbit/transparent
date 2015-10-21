@@ -16,6 +16,7 @@ namespace Transparent.Business.Services
     using Data.Extensions;
     using Transparent.Business.Interfaces;
     using System.Data.Entity.Infrastructure;
+    using Transparent.Business.ViewModels.Interfaces;
 
     /// <summary>
     /// Contains methods for getting tickets.
@@ -520,15 +521,33 @@ namespace Transparent.Business.Services
                 TagId = ticketTag.FkTagId
             };
 
-            info.UserMayDelete = ticketState == TicketState.Discussion && !ticketTag.Verified &&
+            var userMayDelete = ticketState == TicketState.Discussion && !ticketTag.Verified &&
                 competentTags.Any(competentTag => competentTag.Id == ticketTag.FkTagId);
 
-            info.UserMayVerify = info.UserMayDelete && ticketTag.FkCreatedById != userId && 
+            info.UserMayVote = userMayDelete && ticketTag.FkCreatedById != userId && 
                 !(ticketTag.FkCreatedById == null && ticketUserId == userId);
+
+            SetVoteViewModel(ticketTag, userId, info);
 
             info.UserIsExpert = expertTags != null && expertTags.Any(expertTag => expertTag.Id == ticketTag.FkTagId);
 
             return info;
+        }
+
+        /// <summary>
+        /// Copies properties from the Voteable object to the view model.
+        /// </summary>
+        /// <remarks>
+        /// This method could be moved to somewhere specific to voting.
+        /// </remarks>
+        /// <typeparam name="TVote"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="userId"></param>
+        /// <param name="destination"></param>
+        private void SetVoteViewModel<TVote>(Voteable<TVote> source, int userId, IVoteViewModel destination)
+            where TVote : Vote
+        {
+            destination.UserVote = source.GetUserVote(userId);
         }
 
         public IEnumerable<TicketTagViewModel> GetTicketTagInfoList(int ticketId, int userId)
@@ -711,11 +730,11 @@ namespace Transparent.Business.Services
             var ticket = FindTicket(ticketId);
             var ticketTag = ticket.TicketTags.First(tag => tag.FkTagId == tagId);
             var ticketTagInfo = GetTicketTagInfo(ticket.State, ticketTag, ticket.FkUserId, userId, GetCompetentTags(userId));
-            if (userDeletable && !ticketTagInfo.UserMayDelete)
+            if (userDeletable && !ticketTagInfo.UserMayVote)
             {
                 throw new NotSupportedException("User may not delete tag.");
             }
-            if (userVerifyable && !ticketTagInfo.UserMayVerify)
+            if (userVerifyable && !ticketTagInfo.UserMayVote)
             {
                 throw new NotSupportedException("User may not verify tag.");
             }

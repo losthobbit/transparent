@@ -250,6 +250,7 @@
     <Compile Include="Models\UserTag.cs" />
     <Compile Include="Models\TicketsContainer.cs" />
     <Compile Include="Models\Vote.cs" />
+    <Compile Include="Models\Voteable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security.cs" />
     <Compile Include="Services\Configuration.cs" />

@@ -436,6 +436,9 @@
     <Content Include="Views\Tag\_TakeTestPartial.cshtml" />
     <Content Include="Views\Account\ForgottenPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\TokenExpired.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\IVoteViewModel.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\IVoteViewModel.cshtml" />
+    <Content Include="Views\Shared\_WeightedVotePartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

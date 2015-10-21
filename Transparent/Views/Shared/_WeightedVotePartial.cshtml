@@ -1,0 +1,8 @@
+﻿@using Transparent.Data.Models
+@if (Model.UserMayVote)
+{
+    var buttonClassFor = (Model.UserVote == Stance.For ? "inset" : "outset") + " ui-icon-check ui-icon";
+    var buttonClassAgainst = (Model.UserVote == Stance.Against ? "inset" : "outset") + " ui-icon-close ui-icon";
+    <button name="againstId" class="@buttonClassAgainst" title="Delete tag" value="@Model.Id">Against</button>
+    <button name="forId" class="@buttonClassFor" title="Verify tag" value="@Model.Id">For</button>                      
+}

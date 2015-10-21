@@ -4,27 +4,27 @@
 {
     @Html.AntiForgeryToken();
     @Html.HiddenFor(m => m.TicketId);
-                                    var buttonClass = (Model.UserVote == Stance.For ? "inset" : "outset") + " for";
-                                    var buttonClass2 = (Model.UserVote == Stance.Against ? "inset" : "outset") + " against";
+    var buttonClassFor = (Model.UserVote == Stance.For ? "inset" : "outset") + " for";
+    var buttonClassAgainst = (Model.UserVote == Stance.Against ? "inset" : "outset") + " against";
     <table>
         <tr>
             <td>
                 @(Model.UserMayVote?"Vote":"Votes")&nbsp;
             </td>
-            <td class="@buttonClass">
+            <td class="@buttonClassFor">
             @if(Model.UserMayVote)
             {
-                <button name="newVote" class="@buttonClass" title="For" value="@(Model.UserVote == Stance.For ? Stance.Neutral : Stance.For)">For</button>
+                <button name="newVote" class="@buttonClassFor" title="For" value="@(Model.UserVote == Stance.For ? Stance.Neutral : Stance.For)">For</button>
             }
             else
             {
                 <text>For</text>
             }
             </td>
-            <td class="@buttonClass2">
+            <td class="@buttonClassAgainst">
             @if(Model.UserMayVote)
             {
-                <button name="newVote" class="@buttonClass2" title="Against" value="@(Model.UserVote == Stance.Against ? Stance.Neutral : Stance.Against)">Against</button>
+                <button name="newVote" class="@buttonClassAgainst" title="Against" value="@(Model.UserVote == Stance.Against ? Stance.Neutral : Stance.Against)">Against</button>
             }
             else
             {
