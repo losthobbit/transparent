@@ -40,5 +40,22 @@ namespace Transparent.Data.Interfaces
         void Refresh();
 
         KnowledgeLevel GetKnowledgeLevel(UserTag userTag);
+
+        /// <summary>
+        /// Returns the weighting based on the knowledge level of the user for the tag, and the knowledge weightings.
+        /// </summary>
+        /// <param name="userTag">The tag that the user has.</param>
+        /// <param name="knowledgeLevelWeightings">The number of points per knowledge level.</param>
+        /// <returns></returns>
+        int GetWeighting(UserTag userTag, IKnowledgeLevelWeightings knowledgeLevelWeightings);
+
+        /// <summary>
+        /// Returns the weighting based on the knowledge level of the user for the tag, and the knowledge weightings.
+        /// </summary>
+        /// <param name="userId">The user's ID.</param>
+        /// <param name="tagId">The tag's ID.</param>
+        /// <param name="knowledgeLevelWeightings">The number of points per knowledge level.</param>
+        /// <returns></returns>
+        int GetWeighting(int userId, int tagId, IKnowledgeLevelWeightings knowledgeLevelWeightings);
     }
 }

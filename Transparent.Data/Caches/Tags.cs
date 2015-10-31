@@ -162,5 +162,34 @@ namespace Transparent.Data.Caches
             var tag = Find(userTag.FkTagId);
             return userTag.TotalPoints.ToKnowledgeLevel(tag.CompetentPoints, tag.ExpertPoints);
         }
+
+        /// <summary>
+        /// Returns the weighting based on the knowledge level of the user for the tag, and the knowledge weightings.
+        /// </summary>
+        /// <param name="userTag">The tag that the user has.</param>
+        /// <param name="knowledgeLevelWeightings">The number of points per knowledge level.</param>
+        /// <returns></returns>
+        public int GetWeighting(UserTag userTag, IKnowledgeLevelWeightings knowledgeLevelWeightings)
+        {
+            switch (GetKnowledgeLevel(userTag))
+            {
+                case KnowledgeLevel.Beginner: return knowledgeLevelWeightings.BeginnerWeighting;
+                case KnowledgeLevel.Competent: return knowledgeLevelWeightings.CompetentWeighting;
+                case KnowledgeLevel.Expert: return knowledgeLevelWeightings.ExpertWeighting;
+            }
+            return 0;
+        }
+
+        /// <summary>
+        /// Returns the weighting based on the knowledge level of the user for the tag, and the knowledge weightings.
+        /// </summary>
+        /// <param name="userId">The user's ID.</param>
+        /// <param name="tagId">The tag's ID.</param>
+        /// <param name="knowledgeLevelWeightings">The number of points per knowledge level.</param>
+        /// <returns></returns>
+        public int GetWeighting(int userId, int tagId, IKnowledgeLevelWeightings knowledgeLevelWeightings)
+        {
+            return GetWeighting(context.UserTags.SingleOrDefault(userTag => userTag.FkUserId == userId && userTag.FkTagId == tagId), knowledgeLevelWeightings);
+        }
     }
 }

@@ -71,6 +71,10 @@ namespace Transparent.Business.Interfaces
         /// <exception cref="NotSupportedException">User may not verify tag.</exception>
         void VerifyTicketTag(int ticketId, int tagId, int userId);
 
+        /// <exception cref="NotSupportedException">User may not vote for tag.</exception>
+        /// <exception cref="InvalidOperationException">Ticket or ticket tag doesn't exist.</exception>
+        void VoteForTicketTag(Stance stance, int ticketId, int tagId, int userId);
+
         /// <exception cref="NotSupportedException">User may not add tag.</exception>
         void AddTicketTag(int ticketId, int tagId, int userId);
 

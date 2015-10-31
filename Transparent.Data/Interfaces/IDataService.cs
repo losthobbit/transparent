@@ -81,5 +81,13 @@ namespace Transparent.Data.Interfaces
         /// Returns users who have been active within a configured period of time.
         /// </summary>
         IQueryable<UserProfile> GetActiveUsers(IUsersContext db);
+
+        /// <summary>
+        /// Adjusts the votes of the object.
+        /// </summary>
+        /// <remarks>
+        /// Does not call DbContext.SaveChanges.
+        /// </remarks>
+        void SetWeightedVote<TVote>(Voteable<TVote> voteable, int userId, int points) where TVote : Vote, new();
     }
 }

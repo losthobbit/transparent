@@ -110,14 +110,11 @@ namespace Transparent.Controllers
         [Authorize]
         public PartialViewResult _VerifyTag(TicketTagsViewModel ticket)
         {
-            throw new NotImplementedException("Need to change this to use the vote to determine what happens to the tag.");
-
             var userId = WebSecurity.CurrentUserId;
-            if (ticket.DeleteTagId != null)
-                tickets.DeleteTicketTag(ticket.TicketId, ticket.DeleteTagId.Value, userId);
-            else
-                if (ticket.VerifyTagId != null)
-                    tickets.VerifyTicketTag(ticket.TicketId, ticket.VerifyTagId.Value, userId);
+
+            var stanceDetail = new StanceDetail(ticket.ForId, ticket.AgainstId, ticket.NeutralId);
+
+            tickets.VoteForTicketTag(stanceDetail.Stance, ticket.TicketId, stanceDetail.Id, userId);
 
             // Probably the worst way to get this list... guess that happens when one codes past midnight.
             ticket.TagInfo = TicketTagViewModel.CreateList(tickets.FindTicket(ticket.TicketId), 

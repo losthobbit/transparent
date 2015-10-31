@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Transparent.Data.Models;
 using Transparent.Data.Services;
 using Transparent.Data.Tests.Helpers;
+using Ploeh.AutoFixture;
 
 namespace Transparent.Data.Tests.Services
 {
@@ -207,5 +208,90 @@ namespace Transparent.Data.Tests.Services
         }
 
         #endregion SetVote
+
+        #region SetWeightedVote
+
+        [Test]
+        public void SetWeightedVote_with_no_matching_vote_creates_users_vote()
+        {
+            //Arrange
+            const int points = 5;
+            var voteable = new TicketTag { TotalPoints = Fixture.Create<int>(), Votes = new List<TicketTagVote>() };
+            var userId = Fixture.Create<int>();
+
+            //Act
+            target.SetWeightedVote(voteable, userId, points);
+
+            //Assert
+            Assert.AreEqual(points, voteable.Votes.Single(v => v.FkUserId == userId).Points);
+        }
+
+        [Test]
+        public void SetWeightedVote_with_zero_points_removes_users_vote()
+        {
+            //Arrange
+            const int points = 0;
+            var voteable = new TicketTag { TotalPoints = Fixture.Create<int>(), Votes = new List<TicketTagVote>() };
+            var userId = Fixture.Create<int>();
+            voteable.Votes.Add(new TicketTagVote { FkUserId = userId, Points = Fixture.Create<int>(), Id = Fixture.Create<int>() });
+
+            //Act
+            target.SetWeightedVote(voteable, userId, points);
+
+            //Assert
+            Assert.IsNull(voteable.Votes.SingleOrDefault(v => v.FkUserId == userId));
+        }
+
+        [Test]
+        public void SetWeightedVote_with_no_matching_vote_and_zero_points_does_not_add_vote()
+        {
+            //Arrange
+            const int points = 0;
+            var voteable = new TicketTag { TotalPoints = Fixture.Create<int>(), Votes = new List<TicketTagVote>() };
+            var userId = Fixture.Create<int>();
+
+            //Act
+            target.SetWeightedVote(voteable, userId, points);
+
+            //Assert
+            Assert.IsNull(voteable.Votes.SingleOrDefault(v => v.FkUserId == userId));
+        }
+
+        [Test]
+        public void SetWeightedVote_with_matching_vote_sets_users_vote()
+        {
+            //Arrange
+            const int points = 5;
+            var voteable = new TicketTag { TotalPoints = Fixture.Create<int>(), Votes = new List<TicketTagVote>() };
+            var userId = Fixture.Create<int>();
+            voteable.Votes.Add(new TicketTagVote { FkUserId = userId, Points = Fixture.Create<int>(), Id = Fixture.Create<int>() });
+
+            //Act
+            target.SetWeightedVote(voteable, userId, points);
+
+            //Assert
+            Assert.AreEqual(points, voteable.Votes.Single(v => v.FkUserId == userId).Points);
+        }
+
+        [TestCase(50, null, 10, 60)]
+        [TestCase(40, 10, 0, 30)]
+        [TestCase(60, -10, 0, 70)]
+        [TestCase(20, 10, 20, 30)]
+        public void SetWeightedVote_with_valid_arguments_sets_total_vote(int prevTotal, int? prevUserPoints, int newPoints, int expectedTotal)
+        {
+            //Arrange
+            var voteable = new TicketTag { TotalPoints = prevTotal, Votes = new List<TicketTagVote>() };
+            var userId = Fixture.Create<int>();
+            if(prevUserPoints.HasValue)
+                voteable.Votes.Add(new TicketTagVote { FkUserId = userId, Points = prevUserPoints.Value, Id = Fixture.Create<int>() });
+
+            //Act
+            target.SetWeightedVote(voteable, userId, newPoints);
+
+            //Assert
+            Assert.AreEqual(expectedTotal, voteable.TotalPoints);
+        }
+
+        #endregion SetWeightedVote
     }
 }

@@ -19,8 +19,9 @@ namespace Transparent.Business.ViewModels
 
         // Actions
 
-        public int? DeleteTagId { get; set; }
-        public int? VerifyTagId { get; set; }
+        public int? ForId { get; set; }
+        public int? AgainstId { get; set; }
+        public int? NeutralId { get; set; }
 
         public TicketTagsViewModel()
         {

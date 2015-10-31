@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Transparent.Data.Interfaces
 {
-    public interface IConfiguration
+    public interface IConfiguration : IKnowledgeLevelWeightings
     {
         string CurrentSubgoal { get; set; }
 

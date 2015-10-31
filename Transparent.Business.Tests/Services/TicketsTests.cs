@@ -1415,6 +1415,40 @@ namespace Transparent.Business.Tests.Services
 
         #endregion VerifyTicketTag
 
+        #region VoteForTicketTag
+        
+        [Test]
+        public void VoteForTicketTag_with_ticket_in_discussion_state_calls_Vote()
+        {
+            //Arrange
+            var ticket = TestData.JoesScubaDivingSuggestion;
+            var ticketTag = ticket.TicketTags.Single(t => t.FkTagId == TestData.ScubaDivingTag.Id);
+
+            var postSaveAssert = UsersContext.PostSaveAssert(() => mockDataService.Verify(x =>
+                x.SetWeightedVote<TicketTagVote>(ticketTag, TestData.Admin.UserId, It.IsAny<int>()), Times.Once()));
+
+            //Act
+            target.VoteForTicketTag(Fixture.Create<Stance>(), ticket.Id, TestData.ScubaDivingTag.Id, TestData.Admin.UserId);
+
+            //Assert
+            postSaveAssert.Try();
+        }
+
+        [TestCase(TicketState.Completed)]
+        [TestCase(TicketState.Draft)]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void VoteForTicketTag_with_ticket_not_in_discussion_state_throws_NotSupportedException(TicketState state)
+        {
+            //Arrange
+            var ticket = TestData.JoesScubaDivingSuggestion;
+            ticket.State = state;
+
+            //Act
+            target.VoteForTicketTag(Fixture.Create<Stance>(), ticket.Id, TestData.ScubaDivingTag.Id, TestData.Admin.UserId);
+        }
+
+        #endregion VoteForTicketTag
+
         #region SetArgument
 
         private Argument setArgument_ExistingArgument;
@@ -1898,6 +1932,17 @@ namespace Transparent.Business.Tests.Services
                 case KnowledgeLevel.Competent: userTag.TotalPoints = tag.CompetentPoints; break;
                 case KnowledgeLevel.Expert: userTag.TotalPoints = tag.ExpertPoints; break;
             }
+            MockTags.Setup(x => x.GetWeighting(userTag, It.IsAny<IKnowledgeLevelWeightings>())).Returns<UserTag, IKnowledgeLevelWeightings>
+            ((uTag, weightings) => 
+            {
+                switch (MockTags.Object.GetKnowledgeLevel(uTag))
+                {
+                    case KnowledgeLevel.Beginner: return weightings.BeginnerWeighting;
+                    case KnowledgeLevel.Competent: return weightings.CompetentWeighting;
+                    case KnowledgeLevel.Expert: return weightings.ExpertWeighting;
+                }
+                return 0;
+            });
         }
 
         #endregion Helper Methods

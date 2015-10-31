@@ -228,5 +228,16 @@ namespace Transparent.Data.Services
             var lastActiveDate = DateTime.UtcNow - configuration.UserActiveTime;
             return db.UserProfiles.Where(user => user.LastActionDate >= lastActiveDate);
         }
+
+        /// <summary>
+        /// Adjusts the votes of the object.
+        /// </summary>
+        /// <remarks>
+        /// Does not call DbContext.SaveChanges.
+        /// </remarks>
+        public void SetWeightedVote<TVote>(Voteable<TVote> voteable, int userId, int points) where TVote : Vote, new()
+        {
+            voteable.SetUserVote(userId, points);
+        }
     }
 }

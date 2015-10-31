@@ -109,6 +109,7 @@
     <Compile Include="Extensions\TicketExtensions.cs" />
     <Compile Include="InitDatabase.cs" />
     <Compile Include="Interfaces\IDataService.cs" />
+    <Compile Include="Interfaces\IKnowledgeLevelWeightings.cs" />
     <Compile Include="Interfaces\IUsersContextFactory.cs" />
     <Compile Include="Migrations\201503182143357_AddArgumentTable.cs" />
     <Compile Include="Migrations\201503182143357_AddArgumentTable.Designer.cs">
@@ -165,6 +166,10 @@
     <Compile Include="Migrations\201510171100532_MigrateValidationStateToDiscussionState.cs" />
     <Compile Include="Migrations\201510171100532_MigrateValidationStateToDiscussionState.Designer.cs">
       <DependentUpon>201510171100532_MigrateValidationStateToDiscussionState.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510310919594_AddTicketTagTableTotalVotesColumn.cs" />
+    <Compile Include="Migrations\201510310919594_AddTicketTagTableTotalVotesColumn.Designer.cs">
+      <DependentUpon>201510310919594_AddTicketTagTableTotalVotesColumn.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Argument.cs" />
     <Compile Include="Models\Badge.cs" />
@@ -224,6 +229,7 @@
     <Compile Include="Models\PointReason.cs" />
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\Role.cs" />
+    <Compile Include="Models\StanceDetail.cs" />
     <Compile Include="Models\StatefulPagedList.cs" />
     <Compile Include="Models\Subscription.cs" />
     <Compile Include="Models\Suggestion.cs" />
@@ -338,6 +344,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201510171100532_MigrateValidationStateToDiscussionState.resx">
       <DependentUpon>201510171100532_MigrateValidationStateToDiscussionState.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510310919594_AddTicketTagTableTotalVotesColumn.resx">
+      <DependentUpon>201510310919594_AddTicketTagTableTotalVotesColumn.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

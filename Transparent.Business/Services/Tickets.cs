@@ -545,7 +545,7 @@ namespace Transparent.Business.Services
         /// <param name="userId"></param>
         /// <param name="destination"></param>
         private void SetVoteViewModel<TVote>(Voteable<TVote> source, int userId, IVoteViewModel destination)
-            where TVote : Vote
+            where TVote : Vote, new()
         {
             destination.UserVote = source.GetUserVote(userId);
         }
@@ -580,6 +580,18 @@ namespace Transparent.Business.Services
         {
             GetVerifyableTicketTag(ticketId, tagId, userId).Verified = true;
             SetModifiedDate(ticketId);
+            db.SaveChanges();
+        }
+
+        /// <exception cref="NotSupportedException">User may not vote for tag.</exception>
+        /// <exception cref="InvalidOperationException">Ticket or ticket tag doesn't exist.</exception>
+        public void VoteForTicketTag(Stance stance, int ticketId, int tagId, int userId)
+        {
+            var ticket = db.Tickets.Single(t => t.Id == ticketId);
+            if (ticket.State != TicketState.Discussion)
+                throw new NotSupportedException("Unable to set vote, because ticket is not in the Discussion state.");
+            var ticketTag = ticket.TicketTags.Single(t => t.FkTagId == tagId);
+            dataService.SetWeightedVote(ticketTag, userId, tags.GetWeighting(userId, tagId, configuration));
             db.SaveChanges();
         }
 
@@ -635,18 +647,7 @@ namespace Transparent.Business.Services
             var userTags = db.UserProfiles.Single(user => user.UserId == userId).Tags;
             var ticketTags = db.Tickets.Single(ticket => ticket.Id == ticketId).TicketTags;
             var matchingTags = userTags.Where(userTag => ticketTags.Any(ticketTag => ticketTag.Tag == userTag.Tag));
-            var weighting = 0;
-            foreach (var userTag in matchingTags)
-            {
-                var knowledgeLevel = tags.GetKnowledgeLevel(userTag);
-                switch (knowledgeLevel)
-                {
-                    case KnowledgeLevel.Beginner: weighting += configuration.BeginnerWeighting; break;
-                    case KnowledgeLevel.Competent: weighting += configuration.CompetentWeighting; break;
-                    case KnowledgeLevel.Expert: weighting += configuration.ExpertWeighting; break;
-                }
-            }
-            return weighting;
+            return matchingTags.Sum(userTag => tags.GetWeighting(userTag, configuration));
         }
 
         private void SetModifiedDate(int ticketId)
