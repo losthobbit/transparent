@@ -591,7 +591,7 @@ namespace Transparent.Business.Services
             if (ticket.State != TicketState.Discussion)
                 throw new NotSupportedException("Unable to set vote, because ticket is not in the Discussion state.");
             var ticketTag = ticket.TicketTags.Single(t => t.FkTagId == tagId);
-            dataService.SetWeightedVote(ticketTag, userId, tags.GetWeighting(userId, tagId, configuration));
+            dataService.SetWeightedVote(ticketTag, userId, tags.GetWeighting(userId, tagId, configuration) * (int)stance);
             db.SaveChanges();
         }
 

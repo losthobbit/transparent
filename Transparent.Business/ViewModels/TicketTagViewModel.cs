@@ -17,13 +17,26 @@ namespace Transparent.Business.ViewModels
 
         public static IEnumerable<TicketTagViewModel> CreateList(BaseTicket ticket, IEnumerable<TicketTagViewModel> source = null)
         {
-            var tagInfoList = new List<TicketTagViewModel>(ticket.TicketTags.Select(ticketTag => new TicketTagViewModel { TagId = ticketTag.FkTagId, Name = ticketTag.Tag.Name }));
+            // Create a list with all the tags from the ticket
+            var tagInfoList = new List<TicketTagViewModel>(ticket.TicketTags.Select(ticketTag => 
+                new TicketTagViewModel 
+                { 
+                    TagId = ticketTag.FkTagId, 
+                    Name = ticketTag.Tag.Name
+                }));
 
+            // Assign details from the source
             if (source != null)
             {
-                foreach (var ticketTagViewModel in tagInfoList)
+                var tagPairs = from ticketTagViewModel in tagInfoList
+                               join sourceTag in source 
+                               on ticketTagViewModel.TagId equals sourceTag.TagId
+                               select new { Destination = ticketTagViewModel, Source = sourceTag };
+
+                foreach (var tagPair in tagPairs)
                 {
-                    ticketTagViewModel.UserMayVote = source.Any(tagInfo => tagInfo.TagId == ticketTagViewModel.TagId && tagInfo.UserMayVote);
+                    tagPair.Destination.UserMayVote = tagPair.Source.UserMayVote;
+                    tagPair.Destination.UserVote = tagPair.Source.UserVote;
                 }
             }
 

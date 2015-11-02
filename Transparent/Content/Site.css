@@ -108,8 +108,16 @@ p a, li a {
         color: green;
     }
 
+    .inset.ui-icon-check {
+        background-color: lightgreen;
+    }
+
     .inset.against {
         color: red;
+    }
+
+    .inset.ui-icon-close {
+        background-color: #FF6262;
     }
 
 button {
