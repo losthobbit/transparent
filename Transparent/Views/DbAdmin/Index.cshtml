@@ -1,0 +1,22 @@
+﻿@model Transparent.ViewModels.DbAdmin.CsvUploadViewModel
+
+<h2>Upload</h2>
+
+@using (Html.BeginForm())
+{
+    <div>
+        @Html.LabelFor(model => model.TableName)
+        @Html.EditorFor(model => model.TableName)
+    </div>
+    <div>
+        @Html.LabelFor(model => model.Data)
+        @Html.EditorFor(model => model.Data)
+    </div>
+    <p>
+        <input type="submit" value="Upload" />
+    </p>
+    <div>
+        @Html.LabelFor(model => model.Status)
+        @Html.DisplayFor(model => model.Status)
+    </div>
+}

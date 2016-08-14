@@ -97,6 +97,14 @@ namespace Transparent.Data.Tests.Helpers
             throw new NotImplementedException();
         }
 
+        public Database Database
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public void Dispose()
         {
         }

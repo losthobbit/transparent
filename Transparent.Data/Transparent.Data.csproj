@@ -108,6 +108,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Extensions\TicketExtensions.cs" />
     <Compile Include="InitDatabase.cs" />
+    <Compile Include="Interfaces\IDatabaseDirectService.cs" />
     <Compile Include="Interfaces\IDataService.cs" />
     <Compile Include="Interfaces\IKnowledgeLevelWeightings.cs" />
     <Compile Include="Interfaces\IUsersContextFactory.cs" />
@@ -260,6 +261,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security.cs" />
     <Compile Include="Services\Configuration.cs" />
+    <Compile Include="Services\DatabaseDirectService.cs" />
     <Compile Include="Services\DataService.cs" />
     <Compile Include="UsersContext.cs" />
     <Compile Include="Validation\ISupportsMultipleTags.cs" />

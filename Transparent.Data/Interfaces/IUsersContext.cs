@@ -34,5 +34,7 @@ namespace Transparent.Data.Interfaces
         DbEntityEntry Entry(object entity);
 
         IQueryable<UserProfile> FullUserProfiles { get; }
+
+        Database Database { get; }
     }
 }

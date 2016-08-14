@@ -23,6 +23,7 @@ namespace Transparent.Data.Windsor
                 Component.For<ITags>().ImplementedBy<Tags>().LifeStyle.Singleton,
                 Component.For<IConfiguration>().ImplementedBy<Configuration>().LifeStyle.Singleton,
                 Component.For<IDataService>().ImplementedBy<DataService>().LifeStyle.Singleton,
+                Component.For<IDatabaseDirectService>().ImplementedBy<DatabaseDirectService>().LifeStyle.Singleton,
                 Component.For<IUsersContextFactory>().AsFactory()
             );
         }
