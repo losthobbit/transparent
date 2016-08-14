@@ -1,0 +1,1 @@
+﻿Publishes the web site to the local file system and updates the config.
