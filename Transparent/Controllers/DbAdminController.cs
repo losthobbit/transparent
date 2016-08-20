@@ -25,8 +25,13 @@ namespace Transparent.Controllers
             return View();
         }
 
+        public ActionResult CsvUpload()
+        {
+            return View();
+        }
+
         [HttpPost]
-        public ActionResult Index(CsvUploadViewModel viewModel)
+        public ActionResult CsvUpload(CsvUploadViewModel viewModel)
         {
             try
             {

@@ -38,6 +38,15 @@ namespace Transparent.Data.Caches
         public Tag Root { get; private set; }
         public Tag ApplicationTag { get; private set; }
 
+        public int CreateTag(Tag tag, IEnumerable<int> parentIds)
+        {
+            tag.Parents = context.Tags.Where(t => parentIds.Contains(t.Id)).ToList();
+            context.Tags.Add(tag);
+            context.SaveChanges();
+            Refresh();
+            return tag.Id;
+        }
+
         /// <summary>
         /// Reload everything from the database.
         /// </summary>

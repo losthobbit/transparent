@@ -179,6 +179,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\DbAdminController.cs" />
     <Compile Include="Controllers\TicketApiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -200,6 +201,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Configuration.cs" />
     <Compile Include="Services\TechnicalConfiguration.cs" />
+    <Compile Include="ViewModels\Admin\CreateTagViewModel.cs" />
+    <Compile Include="ViewModels\Admin\TagViewModel.cs" />
     <Compile Include="ViewModels\DbAdmin\CsvUploadViewModel.cs" />
     <Compile Include="Windsor\Installer.cs" />
     <Compile Include="Windsor\WindsorActionInvoker.cs" />
@@ -440,7 +443,11 @@
     <Content Include="Views\Account\ForgottenPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\TokenExpired.cshtml" />
     <Content Include="Views\Shared\_WeightedVotePartial.cshtml" />
+    <Content Include="Views\DbAdmin\CsvUpload.cshtml" />
     <Content Include="Views\DbAdmin\Index.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\Tags.cshtml" />
+    <Content Include="Views\Admin\CreateTag.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -41,6 +41,8 @@ namespace Transparent.Data.Interfaces
 
         KnowledgeLevel GetKnowledgeLevel(UserTag userTag);
 
+        int CreateTag(Tag tag, IEnumerable<int> parentIds);
+
         /// <summary>
         /// Returns the weighting based on the knowledge level of the user for the tag, and the knowledge weightings.
         /// </summary>

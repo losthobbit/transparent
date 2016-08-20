@@ -1,0 +1,30 @@
+﻿@model Transparent.ViewModels.Admin.TagViewModel
+@using Castle.Windsor
+@using Transparent.Data.Interfaces
+@using Transparent.Business.Interfaces
+@using Transparent.Data.Models
+
+@{
+    ViewBag.Title = "Tags";
+}
+
+<h2>Tag administration</h2>
+<br/>
+@Html.ActionLink("Create tag", "CreateTag")
+<br/>
+<canvas id="tagDiagram" width="660" height="300" style="border:1px solid #CCC;background-color:#F8F8F8;border-radius:5px;"></canvas>
+<script src="/Scripts/tags.boxes-0003.js"></script>
+<script>
+    $(function () {
+        var model = @Model.Json;
+        var actionUrl = "@Url.Action("Tags", new { id = "" })";
+        drawTags(model, actionUrl);
+    });
+</script>
+<h3>Description</h3>
+<fieldset>
+    <legend>Tag</legend>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Description)
+    </div>
+</fieldset>
