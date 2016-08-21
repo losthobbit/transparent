@@ -118,7 +118,7 @@ namespace Transparent.Controllers
 
             // Probably the worst way to get this list... guess that happens when one codes past midnight.
             ticket.TagInfo = TicketTagViewModel.CreateList(tickets.FindTicket(ticket.TicketId), 
-                tickets.GetTicketTagInfoList(ticket.TicketId, userId));
+                configuration, tickets.GetTicketTagInfoList(ticket.TicketId, userId));
 
             return _TicketTags(ticket);
         }

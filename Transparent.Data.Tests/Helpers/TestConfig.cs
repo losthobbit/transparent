@@ -39,6 +39,9 @@ namespace Transparent.Data.Tests.Helpers
             CompetentWeighting = 2;
             ExpertWeighting = 4;
 
+            FullAcceptanceThreshold = 10;
+            NotAcceptedThreshold = 3;
+
             MaxPositionToAdvanceState = 2;
             MinimumNumberOfArgumentsToAdvanceState = 2;
             MinimumNumberOfAnswersToAdvanceState = 1;
@@ -107,6 +110,16 @@ namespace Transparent.Data.Tests.Helpers
         /// Weighting to apply to arguments / answers of experts
         /// </summary>
         public int ExpertWeighting { get; set; }
+
+        /// <summary>
+        /// The number of points on a tag to indicate that it is 100% accepted.
+        /// </summary>
+        public int FullAcceptanceThreshold { get; set; }
+
+        /// <summary>
+        /// The minimum number of points on a tag to make the tag count.
+        /// </summary>
+        public int NotAcceptedThreshold { get; set; }
 
         public int MaxPositionToAdvanceState { get; set; }
         public int MinimumNumberOfArgumentsToAdvanceState { get; set; }

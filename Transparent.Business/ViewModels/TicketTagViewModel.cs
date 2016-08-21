@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Transparent.Data.Models;
 using Transparent.Business.Maps;
 using Transparent.Business.ViewModels.Interfaces;
+using Transparent.Data.Interfaces;
 
 namespace Transparent.Business.ViewModels
 {
@@ -15,14 +16,18 @@ namespace Transparent.Business.ViewModels
         public string Name { get; set; }
         public bool UserIsExpert { get; set; }
 
-        public static IEnumerable<TicketTagViewModel> CreateList(BaseTicket ticket, IEnumerable<TicketTagViewModel> source = null)
+        public static IEnumerable<TicketTagViewModel> CreateList(BaseTicket ticket,
+            IThresholds thresholds, IEnumerable<TicketTagViewModel> source = null)
         {
             // Create a list with all the tags from the ticket
             var tagInfoList = new List<TicketTagViewModel>(ticket.TicketTags.Select(ticketTag => 
                 new TicketTagViewModel 
                 { 
                     TagId = ticketTag.FkTagId, 
-                    Name = ticketTag.Tag.Name
+                    Name = ticketTag.Tag.Name,
+                    TotalPoints = ticketTag.TotalPoints,
+                    NotAcceptedThreshold = thresholds.NotAcceptedThreshold,
+                    FullAcceptanceThreshold = thresholds.FullAcceptanceThreshold
                 }));
 
             // Assign details from the source

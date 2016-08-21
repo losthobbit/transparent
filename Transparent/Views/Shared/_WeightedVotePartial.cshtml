@@ -1,5 +1,28 @@
 ﻿@model Transparent.Business.ViewModels.Interfaces.IVoteViewModel
 @using Transparent.Data.Models
+@{
+    var imageHeight = 19;
+    var barHeight = imageHeight - (imageHeight * Model.NotAcceptedThreshold / Model.FullAcceptanceThreshold);
+    var pointsHeight = Model.TotalPoints >= Model.FullAcceptanceThreshold
+        ? 0
+        : imageHeight - (imageHeight * Model.TotalPoints / Model.FullAcceptanceThreshold);
+    var remainingRed = 255;
+    var remainingGreen = 0;
+    if(Model.TotalPoints > Model.NotAcceptedThreshold)
+    {
+        remainingRed = 255 - 255 * (Model.TotalPoints - Model.NotAcceptedThreshold) / (Model.FullAcceptanceThreshold - Model.NotAcceptedThreshold);
+        remainingGreen = 255;
+    }
+}
+<span class="field-tip">
+    <svg class="thresholdBar" width="10" height="@imageHeight">
+        <rect x="0" y="0" width="10" height="@pointsHeight" style="fill:rgb(@remainingRed,@remainingGreen,0);stroke-width:1" />
+        <rect x="0" y="@pointsHeight" width="10" height="@imageHeight" style="fill:rgb(0,255,0);stroke-width:1" />
+        <rect x="0" y="0" width="10" height="@imageHeight" style="stroke:black;stroke-width:1" fill="none" />
+        <line x1="0" y1="@barHeight" x2="10" y2="@barHeight" style="stroke:rgb(0,0,0);stroke-width:1" />
+    </svg>
+    <span class="tip-content">@Model.TotalPoints point@(Model.TotalPoints == 1 ? "": "s")</span>
+</span> 
 @if (Model.UserMayVote)
 {
     var buttonClassFor = (Model.UserVote == Stance.For ? "inset" : "outset") + " ui-icon-check ui-icon";

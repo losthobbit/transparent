@@ -112,6 +112,7 @@
     <Compile Include="Interfaces\IDatabaseDirectService.cs" />
     <Compile Include="Interfaces\IDataService.cs" />
     <Compile Include="Interfaces\IKnowledgeLevelWeightings.cs" />
+    <Compile Include="Interfaces\IThresholds.cs" />
     <Compile Include="Interfaces\IUsersContextFactory.cs" />
     <Compile Include="Migrations\201503182143357_AddArgumentTable.cs" />
     <Compile Include="Migrations\201503182143357_AddArgumentTable.Designer.cs">

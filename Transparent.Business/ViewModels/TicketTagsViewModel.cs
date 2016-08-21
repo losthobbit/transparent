@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Transparent.Data.Interfaces;
 using Transparent.Data.Models;
 
 namespace Transparent.Business.ViewModels
@@ -28,13 +29,14 @@ namespace Transparent.Business.ViewModels
 
         }
 
-        public TicketTagsViewModel(BaseTicket ticket, bool enableTagButton, IEnumerable<TicketTagViewModel> tagInfo = null)
+        public TicketTagsViewModel(BaseTicket ticket, bool enableTagButton,
+            IThresholds thresholds, IEnumerable<TicketTagViewModel> tagInfo = null)
         {
             EnableTagButton = enableTagButton;
             MultipleTags = ticket.MultipleTags;
             TicketId = ticket.Id;
 
-            TagInfo = TicketTagViewModel.CreateList(ticket, tagInfo);
+            TagInfo = TicketTagViewModel.CreateList(ticket, thresholds, tagInfo);
         }
     }
 }

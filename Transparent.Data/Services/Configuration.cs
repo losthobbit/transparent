@@ -86,6 +86,20 @@ namespace Transparent.Data.Services
 
         #endregion Weightings
 
+        #region Acceptance thresholds (e.g. tags)
+
+        /// <summary>
+        /// The number of points on a tag to indicate that it is 100% accepted.
+        /// </summary>
+        public int FullAcceptanceThreshold { get; set; }
+
+        /// <summary>
+        /// The minimum number of points on a tag to make the tag count.
+        /// </summary>
+        public int NotAcceptedThreshold { get; set; }
+
+        #endregion Acceptance thresholds
+
         #region Progressing tickets
 
         /// <summary>
@@ -152,6 +166,9 @@ namespace Transparent.Data.Services
             BeginnerWeighting = int.Parse(configuration.GetValue("BeginnerWeighting"));
             CompetentWeighting = int.Parse(configuration.GetValue("CompetentWeighting"));
             ExpertWeighting = int.Parse(configuration.GetValue("ExpertWeighting"));
+
+            FullAcceptanceThreshold = int.Parse(configuration.GetValue("FullAcceptanceThreshold"));
+            NotAcceptedThreshold = int.Parse(configuration.GetValue("NotAcceptedThreshold"));
 
             MaxPositionToAdvanceState = int.Parse(configuration.GetValue("MaxPositionToAdvanceState"));
             MinimumNumberOfArgumentsToAdvanceState = int.Parse(configuration.GetValue("MinimumNumberOfArgumentsToAdvanceState"));

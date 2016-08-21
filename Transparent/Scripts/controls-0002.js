@@ -1,4 +1,6 @@
-﻿var tagSelectors;
+﻿// ------------ TagSelectors ----------------
+
+var tagSelectors;
 
 // TagSelector class
 function TagSelector(element) {

@@ -7,6 +7,7 @@
     var container = ((IContainerAccessor)Context.ApplicationInstance).Container;
     var tags = container.Resolve<Transparent.Data.Interfaces.ITags>();
     var tickets = container.Resolve<Transparent.Business.Interfaces.ITickets>();
+    var configuration = container.Resolve<Transparent.Data.Interfaces.IConfiguration>();
     var competentTagIds = tickets.GetCompetentTags(WebSecurity.CurrentUserId).Select(tag => tag.Id).ToArray();
 }
 <fieldset class="ticket @Model.TicketType.GetClass()">
@@ -46,7 +47,9 @@
         <div class="metadata">
             <div id="ticketTagsPartial">
                 @Html.Action("_TicketTags", new TicketTagsViewModel(Model, 
-               ViewBag.EnableTagButton == null || ViewBag.EnableTagButton, (IEnumerable<TicketTagViewModel>)ViewData["TagInfo"]))
+               ViewBag.EnableTagButton == null || ViewBag.EnableTagButton, 
+               configuration,
+               (IEnumerable<TicketTagViewModel>)ViewData["TagInfo"]))
             </div>
             <div id="tagSelectors"></div>
             <script>
