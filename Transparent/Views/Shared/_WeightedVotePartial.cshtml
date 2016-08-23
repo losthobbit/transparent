@@ -14,7 +14,7 @@
         remainingGreen = 255;
     }
 }
-<span class="field-tip">
+<span class="field-tip float-left">
     <svg class="thresholdBar" width="10" height="@imageHeight">
         <rect x="0" y="0" width="10" height="@pointsHeight" style="fill:rgb(@remainingRed,@remainingGreen,0);stroke-width:1" />
         <rect x="0" y="@pointsHeight" width="10" height="@imageHeight" style="fill:rgb(0,255,0);stroke-width:1" />
@@ -29,6 +29,8 @@
     var buttonClassAgainst = (Model.UserVote == Stance.Against ? "inset" : "outset") + " ui-icon-close ui-icon";
     var buttonNameFor = (Model.UserVote == Stance.For ? "neutralId" : "forId");
     var buttonNameAgainst = (Model.UserVote == Stance.Against ? "neutralId" : "againstId");
-    <button name="@buttonNameAgainst" class="@buttonClassAgainst" title="Delete tag" value="@Model.Id">Against</button>
-    <button name="@buttonNameFor" class="@buttonClassFor" title="Verify tag" value="@Model.Id">For</button>                      
+    <div class="votingButtons float-left">
+        <button name="@buttonNameAgainst" class="@buttonClassAgainst" title="Delete tag" value="@Model.Id">Against</button>
+        <button name="@buttonNameFor" class="@buttonClassFor" title="Verify tag" value="@Model.Id">For</button>
+    </div>
 }
