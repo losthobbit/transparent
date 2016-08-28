@@ -88,6 +88,15 @@ namespace Transparent.Data.Interfaces
         int MinimumNumberOfAnswersToAdvanceState { get; set; }
 
         /// <summary>
+        /// Maximum number of tickets in voting state
+        /// </summary>
+        /// <remarks>
+        /// Prevents suggestions in the discussion state from moving to the voting
+        /// state too quickly.
+        /// </remarks>
+        int MaximumNumberOfTicketsInVotingState { get; set; }
+
+        /// <summary>
         /// Delay after the required number of arguments have been presented before moving a ticket to the next state.
         /// </summary>
         /// <remarks>

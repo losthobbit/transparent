@@ -32,7 +32,7 @@ namespace Transparent.Data.Models
         /// <remarks>
         /// Once a configured number of votes have been cast, and a configured amount of time has passed, the ticket goes to the next state.
         /// Can have more than one possible next state.
-        /// Not applicable to tests
+        /// Not applicable to questions
         /// </remarks>
         Voting = 30,
 

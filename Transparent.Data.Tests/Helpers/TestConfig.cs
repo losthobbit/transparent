@@ -45,6 +45,8 @@ namespace Transparent.Data.Tests.Helpers
             MaxPositionToAdvanceState = 2;
             MinimumNumberOfArgumentsToAdvanceState = 2;
             MinimumNumberOfAnswersToAdvanceState = 1;
+            MaximumNumberOfTicketsInVotingState = 20;
+
             DelayAfterDiscussion = TimeSpan.FromSeconds(2);
             DelayForVoting = TimeSpan.FromSeconds(2);
             PercentOfVotesRequiredToAccept = 60;
@@ -125,6 +127,7 @@ namespace Transparent.Data.Tests.Helpers
         public int MinimumNumberOfArgumentsToAdvanceState { get; set; }
         public int MinimumNumberOfAnswersToAdvanceState { get; set; }
         public TimeSpan DelayAfterDiscussion { get; set; }
+        public int MaximumNumberOfTicketsInVotingState { get; set; }
         public TimeSpan DelayForVoting { get; set; }
         public int PercentOfVotesRequiredToAccept { get; set; }
     }

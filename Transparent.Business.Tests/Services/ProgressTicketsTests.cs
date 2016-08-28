@@ -63,6 +63,47 @@ namespace Transparent.Business.Tests.Services
             return ticket;
         }
 
+        private Ticket CreateTicket(TicketType ticketType = TicketType.Suggestion,
+            int rank = 500, TicketState ticketState = TicketState.Discussion,
+            int numberOfArguments = 0)
+        {
+            Ticket ticket = null;
+            switch(ticketType)
+            {
+                case TicketType.Question:
+                    ticket = new Question();
+                    break;
+                case TicketType.Suggestion:
+                    ticket = new Suggestion();
+                    break;
+                case TicketType.Test:
+                    ticket = new Test();
+                    break;
+            }
+            ticket.Id = TestData.UsersContext.Tickets.Max(t => t.Id) + 1;
+            ticket.FkUserId = TestData.Joe.UserId;
+            ticket.User = TestData.Joe;
+            ticket.Heading = ticketType.ToString() + ticket.Id;
+            ticket.Body = ticket.Heading;
+            ticket.Rank = rank;
+            ticket.TicketTags.ForEach(tag => tag.TotalPoints = 5);
+            ticket.ModifiedDate = DateTime.UtcNow.AddSeconds(-11);
+            ticket.State = ticketState;
+            ticket.ModifiedDate = DateTime.UtcNow.AddSeconds(-21);
+            ticket.Arguments = new List<Argument>();
+            for (int i = 0; i < numberOfArguments; i++)
+            {
+                ticket.Arguments.Add(new Argument
+                {
+                    FkTicketId = ticket.Id,
+                    Ticket = ticket,
+                    Body = Fixture.Create<string>()
+                });
+            }
+            TestData.UsersContext.Tickets.Add(ticket);
+            return ticket;
+        }
+
         [TestCase(2, 2, 6, TicketType.Suggestion)]
         [TestCase(5, 4, 6, TicketType.Suggestion)]
         [TestCase(2, 6, 2, TicketType.Question)]
@@ -88,6 +129,60 @@ namespace Transparent.Business.Tests.Services
 
             //Assert
             Assert.IsTrue(setNextStateCalledAndSaved);
+        }
+
+        [TestCase(3, 3, 0)]
+        [TestCase(4, 5, 1)]
+        [TestCase(5, 7, 2)]
+        public void ProgressTicketsInDiscussionState_only_progresses_enough_suggestions_to_fill_voting_stage(
+            int suggestionsInVotingState,
+            int maximumNumberOfTicketsInVotingState, 
+            int expectedNumberOfSuggestionsToMoveToVoting)
+        {
+            //Arrange
+            TestConfiguration.MaximumNumberOfTicketsInVotingState = maximumNumberOfTicketsInVotingState;
+            TestConfiguration.MinimumNumberOfArgumentsToAdvanceState = 0;
+            TestConfiguration.MaxPositionToAdvanceState = 100;
+            var topRankedDiscussionSuggestions = new List<Suggestion>();
+            for(var i = 0; i < 10; i++)
+            {
+                topRankedDiscussionSuggestions.Add((Suggestion)CreateTicket(rank: 501 + i, ticketState:TicketState.Discussion));
+            }
+            foreach(var votingTicket in TestData.UsersContext.Tickets.Where(t => t.State == TicketState.Voting))
+            {
+                votingTicket.State = TicketState.Draft;
+            }
+            for (var i = 0; i < suggestionsInVotingState; i++)
+            {
+                CreateTicket(rank: 501 + i, ticketState: TicketState.Voting);
+            }
+            bool setNextStateCalledAndSaved = false;
+            int actualNumberOfSuggestionsMoved = 0;
+
+            foreach (var suggestion in topRankedDiscussionSuggestions)
+            {
+                bool setNextStateCalled = false;
+                Action updateTicket = () =>
+                {
+                    setNextStateCalledAndSaved = setNextStateCalled;
+                };
+                updateTicket();
+                UsersContext.SavedChanges += context => updateTicket();
+                mockDataService.Setup(x => x.SetNextState(suggestion, null))
+                    .Callback(() => 
+                    {
+                        setNextStateCalled = true;
+                        actualNumberOfSuggestionsMoved++;
+                    });
+            }
+
+            //Act
+            target.ProgressTicketsInDiscussionState();
+
+            //Assert
+            if(expectedNumberOfSuggestionsToMoveToVoting > 0)
+                Assert.IsTrue(setNextStateCalledAndSaved);
+            Assert.AreEqual(expectedNumberOfSuggestionsToMoveToVoting, actualNumberOfSuggestionsMoved);
         }
 
         [TestCase(2)]

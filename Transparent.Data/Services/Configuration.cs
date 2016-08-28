@@ -115,6 +115,15 @@ namespace Transparent.Data.Services
         public int MinimumNumberOfAnswersToAdvanceState { get; set; }
 
         /// <summary>
+        /// Maximum number of tickets in voting state
+        /// </summary>
+        /// <remarks>
+        /// Prevents suggestions in the discussion state from moving to the voting
+        /// state too quickly.
+        /// </remarks>
+        public int MaximumNumberOfTicketsInVotingState { get; set; }
+
+        /// <summary>
         /// Delay after the required number of arguments have been presented before moving a ticket to the next state.
         /// </summary>
         /// <remarks>
@@ -173,6 +182,7 @@ namespace Transparent.Data.Services
             MaxPositionToAdvanceState = int.Parse(configuration.GetValue("MaxPositionToAdvanceState"));
             MinimumNumberOfArgumentsToAdvanceState = int.Parse(configuration.GetValue("MinimumNumberOfArgumentsToAdvanceState"));
             MinimumNumberOfAnswersToAdvanceState = int.Parse(configuration.GetValue("MinimumNumberOfAnswersToAdvanceState"));
+            MaximumNumberOfTicketsInVotingState = int.Parse(configuration.GetValue("MaximumNumberOfTicketsInVotingState"));
             DelayAfterDiscussion = TimeSpan.Parse(configuration.GetValue("DelayAfterDiscussion"));
             DelayForVoting = TimeSpan.Parse(configuration.GetValue("DelayForVoting"));
             PercentOfVotesRequiredToAccept = int.Parse(configuration.GetValue("PercentOfVotesRequiredToAccept"));

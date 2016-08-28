@@ -33,7 +33,7 @@ namespace Transparent.Business.Services
 
         /// <summary>
         /// Progresses tickets which are in the Discussion state, and were last modified
-        /// the specified amount of time ago.
+        /// the specified amount of time ago, if the next stage is not full.
         /// </summary>
         /// <remarks>
         /// Questions may require answers, based on the value of MinimumNumberOfAnswersToAdvanceState
@@ -52,6 +52,14 @@ namespace Transparent.Business.Services
                                                       orderby ticket.Rank descending
                                                       select ticket).Take(configuration.MaxPositionToAdvanceState);
 
+                var numberOfTicketsInVotingState = (from ticket in db.Tickets
+                                                    where ticket.State == TicketState.Voting
+                                                    select ticket).Count();
+
+                var availableTicketsInVotingState = Math.Max(0,
+                    configuration.MaximumNumberOfTicketsInVotingState -
+                    numberOfTicketsInVotingState);                    
+
                 var discussedTickets = from ticket in highestRankedDiscussionTickets
                                        where ticket.ModifiedDate <= lastModified &&
                                        (
@@ -62,6 +70,17 @@ namespace Transparent.Business.Services
 
                 foreach (var ticket in discussedTickets)
                 {
+                    if (ticket.NextState.HasValue && ticket.NextState == TicketState.Voting)
+                    {
+                        if (availableTicketsInVotingState > 0)
+                        {
+                            availableTicketsInVotingState--;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
                     dataService.SetNextState(ticket);
                 }
                 db.SaveChanges();
