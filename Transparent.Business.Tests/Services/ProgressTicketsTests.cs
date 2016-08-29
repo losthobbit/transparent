@@ -22,10 +22,14 @@ namespace Transparent.Business.Tests.Services
         private Mock<IDataService> mockDataService;
         private Mock<IUsersContextFactory> mockUsersContextFactory;
 
+        private Random random;
+
         [SetUp]
         public override void SetUp()
         {
             base.SetUp();
+
+            random = new Random();
 
             mockDataService = new Mock<IDataService>();
 
@@ -40,9 +44,21 @@ namespace Transparent.Business.Tests.Services
         private Ticket ProgressTicketsInDiscussionState(int numberOfArguments = 1, TicketType ticketType = TicketType.Suggestion,
             int requiredNumberOfArguments = 2, int requiredNumberOfAnswers = 1)
         {
-            var ticket = ticketType == TicketType.Suggestion
-                ? (Ticket)TestData.JoesCriticalThinkingSuggestion
-                : (Ticket)TestData.JoesCriticalThinkingQuestion;
+            Ticket ticket = null;
+            switch(ticketType)
+            {
+                case TicketType.Suggestion:
+                    ticket = TestData.JoesCriticalThinkingSuggestion;
+                    break;
+                case TicketType.Question:
+                    ticket = TestData.JoesCriticalThinkingQuestion;
+                    break;
+                case TicketType.Test:
+                    ticket = TestData.CriticalThinkingTestThatIsInTheVotingStage;
+                    break;
+                default:
+                    throw new NotSupportedException("Unexpected ticket type: " + ticketType);
+            }
             ticket.Rank = 500;
             ticket.TicketTags.ForEach(tag => tag.Verified = true);
             ticket.ModifiedDate = DateTime.UtcNow.AddSeconds(-11);
@@ -261,9 +277,10 @@ namespace Transparent.Business.Tests.Services
         #region ProgressTicketsWithVotes
 
         private Ticket ProgressTicketsWithVotes(int numberOfForVotes = 1, int numberOfAgainstVotes = 1, int secondsSinceModified = 16,
-            int configuredSecondsForVoting = 15, int configuredPercentOfVotesRequiredToAccept = 60)
+            int configuredSecondsForVoting = 15, int configuredPercentOfVotesRequiredToAccept = 60,
+            TicketType ticketType = TicketType.Suggestion)
         {
-            var ticket = ProgressTicketsInDiscussionState();
+            var ticket = ProgressTicketsInDiscussionState(ticketType: ticketType);
             ticket.State = TicketState.Voting;
             TestConfiguration.DelayForVoting = TimeSpan.FromSeconds(configuredSecondsForVoting);
             TestConfiguration.PercentOfVotesRequiredToAccept = configuredPercentOfVotesRequiredToAccept;
@@ -321,6 +338,92 @@ namespace Transparent.Business.Tests.Services
 
             //Assert
             Assert.AreEqual(TicketState.Voting, ticket.State);
+        }
+
+        [TestCase(3, 3, 0)]
+        [TestCase(4, 5, 1)]
+        [TestCase(5, 7, 2)]
+        public void ProgressTicketsInVotingState_only_progresses_enough_suggestions_to_fill_accepted_stage(
+            int suggestionsInAcceptedState,
+            int maximumNumberOfTicketsInAcceptedState,
+            int expectedNumberOfSuggestionsToMoveToAccepted)
+        {
+            //Arrange
+            TestConfiguration.MaximumNumberOfTicketsInAcceptedState = maximumNumberOfTicketsInAcceptedState;
+            TestConfiguration.MinimumNumberOfArgumentsToAdvanceState = 0;
+            TestConfiguration.MaxPositionToAdvanceState = 100;
+            var topRankedVotingSuggestions = new List<Suggestion>();
+            for (var i = 0; i < 10; i++)
+            {
+                var ticket = (Suggestion)CreateTicket(rank: 501 + i, ticketState: TicketState.Voting);
+                ticket.VotesFor = random.Next(1, 10);
+                ticket.VotesAgainst = random.Next(1, 10);
+                topRankedVotingSuggestions.Add
+                (
+                    ticket
+                );
+            }
+            foreach (var acceptedTicket in TestData.UsersContext.Tickets.Where(t => t.State == TicketState.Accepted))
+            {
+                acceptedTicket.State = TicketState.Draft;
+            }
+            for (var i = 0; i < suggestionsInAcceptedState; i++)
+            {
+                CreateTicket(rank: 501 + i, ticketState: TicketState.Accepted);
+            }
+            bool setNextStateCalledAndSaved = false;
+            int actualNumberOfSuggestionsMoved = 0;
+
+            foreach (var suggestion in topRankedVotingSuggestions)
+            {
+                bool setNextStateCalled = false;
+                Action updateTicket = () =>
+                {
+                    setNextStateCalledAndSaved = setNextStateCalled;
+                };
+                updateTicket();
+                UsersContext.SavedChanges += context => updateTicket();
+                mockDataService.Setup(x => x.SetNextState(suggestion, It.IsAny<TicketState?>()))
+                    .Callback(() =>
+                    {
+                        setNextStateCalled = true;
+                        actualNumberOfSuggestionsMoved++;
+                    });
+            }
+
+            //Act
+            target.ProgressTicketsWithVotes();
+
+            //Assert
+            if (expectedNumberOfSuggestionsToMoveToAccepted > 0)
+                Assert.IsTrue(setNextStateCalledAndSaved);
+            Assert.AreEqual(expectedNumberOfSuggestionsToMoveToAccepted, actualNumberOfSuggestionsMoved);
+        }
+
+        [Test]
+        public void ProgressTicketsWithVotes_with_accepted_test_goes_to_completed_state()
+        {
+            //Arrange
+            var ticket = ProgressTicketsWithVotes(10, 0, ticketType: TicketType.Test);
+ 
+            //Act
+            target.ProgressTicketsWithVotes();
+
+            //Assert
+            mockDataService.Verify(x => x.SetNextState(ticket, TicketState.Completed));
+        }
+
+        [Test]
+        public void ProgressTicketsWithVotes_with_rejected_test_goes_to_rejected_state()
+        {
+            //Arrange
+            var ticket = ProgressTicketsWithVotes(0, 10, ticketType: TicketType.Test);
+
+            //Act
+            target.ProgressTicketsWithVotes();
+
+            //Assert
+            mockDataService.Verify(x => x.SetNextState(ticket, TicketState.Rejected));
         }
 
         [TestCase(TicketState.Discussion)]

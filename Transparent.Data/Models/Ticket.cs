@@ -90,7 +90,7 @@ namespace Transparent.Data.Models
         }
 
         [NotMapped]
-        protected IEnumerable<TicketState> States { get { return StateHints.Keys; } }
+        public IEnumerable<TicketState> States { get { return StateHints.Keys; } }
 
         [NotMapped]
         public override Hint StateHint

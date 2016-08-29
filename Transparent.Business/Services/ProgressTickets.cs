@@ -97,6 +97,14 @@ namespace Transparent.Business.Services
             {
                 var lastModified = DateTime.UtcNow - configuration.DelayForVoting;
 
+                var numberOfTicketsInAcceptedState = (from ticket in db.Tickets
+                                                    where ticket.State == TicketState.Accepted
+                                                    select ticket).Count();
+
+                var availableTicketsInAcceptedState = Math.Max(0,
+                    configuration.MaximumNumberOfTicketsInAcceptedState -
+                    numberOfTicketsInAcceptedState);
+
                 var highestRankedVotingTickets = (from ticket in db.Tickets
                                                       where ticket.State == TicketState.Voting
                                                       orderby ticket.Rank descending
@@ -108,9 +116,24 @@ namespace Transparent.Business.Services
 
                 foreach (var ticket in votingTickets)
                 {
+                    if (ticket.States.Contains(TicketState.Accepted))
+                    {
+                        if (availableTicketsInAcceptedState > 0)
+                        {
+                            availableTicketsInAcceptedState--;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+
                     var totalVotes = ticket.VotesFor + ticket.VotesAgainst;
                     var accepted = totalVotes > 0 && ((double)ticket.VotesFor / (double)totalVotes >= (double)configuration.PercentOfVotesRequiredToAccept / 100d);
-                    dataService.SetNextState(ticket, accepted ? TicketState.Accepted : TicketState.Rejected);
+                    var nextState = accepted
+                        ? (ticket.States.Contains(TicketState.Accepted) ? TicketState.Accepted : TicketState.Completed)
+                        : TicketState.Rejected;
+                    dataService.SetNextState(ticket, nextState);
                     if (accepted)
                         dataService.AddPoints(db, ticket.FkUserId, tags.ApplicationTag.Id, configuration.DiPointsForAcceptedTicket,
                             PointReason.TicketAccepted, ticketId:ticket.Id);
