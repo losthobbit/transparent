@@ -164,3 +164,9 @@ window.fbAsyncInit = function () {
         getFacebookToken();
     }
 };
+
+// Bootstrap
+
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+});

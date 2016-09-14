@@ -14,15 +14,13 @@
         remainingGreen = 255;
     }
 }
-<span class="field-tip float-left">
-    <svg class="thresholdBar" width="10" height="@imageHeight">
-        <rect x="0" y="0" width="10" height="@pointsHeight" style="fill:rgb(@remainingRed,@remainingGreen,0);stroke-width:1" />
-        <rect x="0" y="@pointsHeight" width="10" height="@imageHeight" style="fill:rgb(0,255,0);stroke-width:1" />
-        <rect x="0" y="0" width="10" height="@imageHeight" style="stroke:black;stroke-width:1" fill="none" />
-        <line x1="0" y1="@barHeight" x2="10" y2="@barHeight" style="stroke:rgb(0,0,0);stroke-width:1" />
-    </svg>
-    <span class="tip-content">@Model.TotalPoints point@(Model.TotalPoints == 1 ? "": "s")</span>
-</span> 
+<svg class="thresholdBar float-left" width="10" height="@imageHeight" data-toggle="tooltip" data-placement="right" title="@Model.TotalPoints point@(Model.TotalPoints == 1 ? "": "s")">
+    <rect x="0" y="0" width="10" height="@pointsHeight" style="fill:rgb(@remainingRed,@remainingGreen,0);stroke-width:1" />
+    <rect x="0" y="@pointsHeight" width="10" height="@imageHeight" style="fill:rgb(0,255,0);stroke-width:1" />
+    <rect x="0" y="0" width="10" height="@imageHeight" style="stroke:black;stroke-width:1" fill="none" />
+    <line x1="0" y1="@barHeight" x2="10" y2="@barHeight" style="stroke:rgb(0,0,0);stroke-width:1" />
+</svg>
+
 @if (Model.UserMayVote)
 {
     var buttonClassFor = (Model.UserVote == Stance.For ? "inset" : "outset") + " ui-icon-check ui-icon";
