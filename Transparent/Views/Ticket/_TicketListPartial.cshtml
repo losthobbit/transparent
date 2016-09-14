@@ -44,7 +44,7 @@
                 <div class="col-sm-10 thin">
                     @foreach (var item in Model.PagedList)
                     {
-                    <div class="row ticket @item.TicketType.GetClass() underlined">
+                    <div class="row ticket @item.TicketType.GetClass()">
                         <div class="col-sm-3">
                             <div class="float-left wide20">@Html.DisplayFor(modelItem => item.Rank)</div>
                             <div class="float-left wide40">@item.TicketType.GetChar()</div>
@@ -62,11 +62,14 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row col-sm-12">
+                        <div class="underlined"></div>
+                    </div>
                     }
                 </div>
                 <div class="col-sm-2"></div>
             </div>
-            <div class="row">
+            <div class="row col-sm-12">
             @Html.Partial("_PagesPartial", Model)
             </div>
         </section>

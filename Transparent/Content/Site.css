@@ -46,7 +46,6 @@ a {
     text-decoration:none !important;
     color: #131c4f;
     outline: none;
-    padding-left: 3px;
     padding-right: 3px;
 }
 
@@ -232,14 +231,6 @@ h5, h6 {
     clear: both;
     padding-bottom: 35px;
 }
-
-    .main-content {
-        padding-left: 10px;
-    }
-
-    .featured + .main-content {
-        background: url("../Images/heroAccent.png") no-repeat;
-    }
 
 .top {
     padding-top: 5px; 
