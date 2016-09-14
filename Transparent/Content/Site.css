@@ -286,9 +286,7 @@ footer {
 }
 
     #login a {
-        margin-left: 10px;
         margin-right: 3px;
-        padding: 2px 3px;
     }
 
     #login a.username {
@@ -329,6 +327,10 @@ header.subMenu {
 
 .menu>a, .subMenu>a {
     margin: 5px 4px 5px 4px;
+}
+
+.menu>a:first-child, .subMenu>a:first-child {
+    margin-left: 0px;
 }
 
 .menu>span, .subMenu>span {
